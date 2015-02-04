@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="green">#23cf34</color>
+    <color name="orange">#E47833</color>
+    <color name="orange_2">#FFA500</color>
+    <color name="orange_light">#FFCC00</color>
+    <color name="orange_light_2">#FFCC66</color>    
+    <color name="lite_blue">#4E78A0</color>
+    <color name="blue">#0000FF</color>
+    <color name="grey">#FF909090</color>
+    <color name="facebook">#3B5998</color>
+    <color name="silver">#E6E8FA</color>
+    <color name="background_white">#ffffffff</color>
+    <color name="fb_blue">#ff3b5998</color>
+    <color name="header_background_color">#ffdbe4f5</color>
+    <color name="list_item_title">#fff</color>
+    <color name="list_background">#303030</color>
+    <color name="list_background_pressed">#992416</color>
+    <color name="list_divider">#272727</color>
+    <color name="counter_text_bg">#626262</color>
+    <color name="counter_text_color">#c5c4c4</color>    
+	<color name="profile_user_name">#ff333333</color>    
+    <color name="profile_user_sub_title">#ff777777</color>
+    <color name="transparent">#00000000</color>
+    <color name="foursquare_blue">#ff0aaeef</color>
+    <color name="divider_line">#ffc5c0ba</color>
+    <color name="standard_gray_e2e2e0">#ffe2e2e0</color>
+	<color name="silver">#E6E8FA</color> 
+	<color name="light_font">#FBFBFB</color>
+    <color name="grey_font">#ff9e9e9e</color>
+    <color name="text_shadow">#7F000000</color>
+    <color name="text_shadow_white">#FFFFFF</color>    
+</resources>

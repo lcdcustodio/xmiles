@@ -1,0 +1,30 @@
+<resources>
+
+    <!--
+        Base application theme for API 14+. This theme completely replaces
+        AppBaseTheme from BOTH res/values/styles.xml and
+        res/values-v11/styles.xml on API 14+ devices.
+    -->
+    <style name="AppBaseTheme" parent="android:Theme.Holo.Light">
+        <!-- 
+             <style name="AppBaseTheme" parent="android:Theme.Holo.Light">
+              API 14 theme customizations can go here. 
+               <item name="android:background">@drawable/header_bar_blue_background</item>
+               -->
+        
+    </style>
+    
+        
+    <style name="NusProfileUserName">
+        <item name="android:textSize">15.0sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/profile_user_name</item>
+    </style>
+        
+    <style name="NusProfileUserSubTitle">
+        <item name="android:textSize">13.0sp</item>
+        <item name="android:textColor">@color/profile_user_sub_title</item>
+    </style>
+    
+    
+</resources>
