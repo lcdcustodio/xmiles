@@ -32,13 +32,8 @@ import com.xmiles.android.facebook_api_support.SessionEvents.LogoutListener;
 import com.xmiles.android.facebook_api_support.SessionStore;
 import com.xmiles.android.facebook_api_support.Utility;
 
-//public class MainActivity extends Activity {
+
 public class BtnFbLogin_Fragment extends FragmentActivity {
-//public class MainActivity extends android.support.v4.app.FragmentActivity {
-//public class MainActivity extends android.support.v4.app.FragmentActivity implements LoaderManager.LoaderCallbacks<Cursor>  {	
-	
-
-
 	
 	// Your Facebook APP ID	
 	private static final String APP_ID = "844332932270301";
@@ -51,7 +46,7 @@ public class BtnFbLogin_Fragment extends FragmentActivity {
 
     // Instance of Facebook Class	
 	private AsyncFacebookRunner mAsyncRunner;
-	String FILENAME = "AndroidSSO_data";
+	
 
 	
 	// FAcebook LoginButtons	
@@ -70,11 +65,9 @@ public class BtnFbLogin_Fragment extends FragmentActivity {
       // start service
       //alarm.setAlarm(this);
 
-      //mTitle = mDrawerTitle = getTitle();
-
       // enabling action bar app icon and behaving it as toggle button
       //getActionBar().setDisplayHomeAsUpEnabled(true);
-      getActionBar().setTitle(null);
+      //getActionBar().setTitle(null);
       //getActionBar().setHomeButtonEnabled(true);
 
       
@@ -83,10 +76,12 @@ public class BtnFbLogin_Fragment extends FragmentActivity {
       imgbtnFbLogin = (ImageButton) findViewById(R.id.imgbtn_fblogin);
       
       
-	    // Create the Facebook Object using the app id.
-	    Utility.mFacebook = new Facebook(APP_ID);
-      // Instantiate the asynrunner object for asynchronous api calls.
+	  // Create the Facebook Object using the app id.
+	  Utility.mFacebook = new Facebook(APP_ID);
+      
+	  // Instantiate the asynrunner object for asynchronous api calls.
       Utility.mAsyncRunner = new AsyncFacebookRunner(Utility.mFacebook);        
+      
       // restore session if one exists
       SessionStore.restore(Utility.mFacebook, this);
       SessionEvents.addAuthListener(new FbAPIsAuthListener());
@@ -137,87 +132,6 @@ public class BtnFbLogin_Fragment extends FragmentActivity {
 	      super.onDestroy();
 	  }
 
-
-  /**
-   * Diplaying fragment view for selected nav drawer list item
-   * */
-  private void displayView(int position) {
-      // update the main content by replacing fragments
-      Fragment fragment = null;
-
-      switch (position) {
-      // Banner
-      case 0:
-      	//fragment = new HomeFragment();
-          break;
-      // Profile    
-      case 1:
-          //fragment = new FindPeopleFragment();
-      	//fragment = new ProfileFragment();
-      	//fragment = new ProfileFragment_rev02();
-      	break;
-      // Map Header
-      case 2:        	
-          break;
-      // Map Bitmap
-      case 3:
-      	//fragment = new HomeFragment();            
-          break;
-      // Event    
-      case 4:        	
-          break;
-      // Workshops    
-      case 5:
-      	//fragment = new WhatsHotFragment();
-          break;
-      // Palestras    
-      case 6:
-      	//fragment = new HomeFragment();
-          break;
-      // Expositores    
-      case 7:
-      	//fragment = new HomeFragment();
-          break;
-      // People    
-      case 8:        	
-          break;
-      // Amigos    
-      case 9:
-      	//fragment = new FriendsFragment_old5();
-      	//fragment = new FriendsFragment_old4();
-      	//fragment = new FriendsFragment();
-          //fragment = new PhotosFragment();
-          break;
-      // Palestrantes    
-      case 10:
-        //	fragment = new SpeakersFragment();
-          break;
-      // Participantes    
-      case 11:
-       // 	fragment = new HomeFragment();
-          break;
-          
-      default:
-          break;
-      }
-      
-      if (fragment != null) {
-
-          /** TESTE */
-          
-          //-------
-          android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-          android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();        
-          fragmentTransaction.replace(R.id.frame_container, fragment);
-          fragmentTransaction.commit();
-          
-          /** FIM TESTE */
-
-      } else {
-          // error in creating fragment
-          Log.e("MainActivity", "Error in creating fragment");
-      }
-  }
 
 
   /**
@@ -319,12 +233,21 @@ public class BtnFbLogin_Fragment extends FragmentActivity {
       }
   }
   public void requestUserData() {
-		//----
-  	Log.d(TAG, "requestUserData()");
 	  //----
+      Log.d(TAG, "requestUserData()");
       //---------------
 	  // Enable Action Bar
-  	  getActionBar().show();
+  	  getActionBar().show();  	  
+  	  /**
+  	   * Diplaying fragment
+  	   * */
+  	  Fragment fragment = new Profile_Fragment();
+  	  
+
+  	  android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+      android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();        
+      fragmentTransaction.replace(R.id.frame_container, fragment);
+      fragmentTransaction.commit();
 
   }
 }

@@ -44,11 +44,11 @@ public class ImageAdapter extends BaseAdapter {
 
 			String mobile = mobileValues[position];
 
-			if (mobile.equals("Live Fleet")) {
+			if (mobile.equals("Ranking")) {
 				imageView.setImageResource(R.drawable.livefleet);
-			} else if (mobile.equals("Reports")) {
+			} else if (mobile.equals("Histórico")) {
 				imageView.setImageResource(R.drawable.report);
-			} else if (mobile.equals("Alerts")) {
+			} else if (mobile.equals("Rotas")) {
 				imageView.setImageResource(R.drawable.alerts);
 			} else {
 				imageView.setImageResource(R.drawable.dashboard);
