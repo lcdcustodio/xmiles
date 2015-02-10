@@ -21,6 +21,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -140,6 +142,36 @@ public class Profile_Fragment extends Fragment {
         return custom;
         
     }
+	  /*
+	  @Override
+	  public boolean onCreateOptionsMenu(Menu menu) {
+	      // Inflate the menu; this adds items to the action bar if it is present.
+	      getMenuInflater().inflate(R.menu.main, menu);
+	      return true;
+	  }
+  
+	    @Override
+	    public boolean onOptionsItemSelected(MenuItem item) {
+	 
+	        super.onOptionsItemSelected(item);
+	 
+	        switch(item.getItemId()){
+	            case R.id.phone:
+	                Toast.makeText(getActivity(), "You selected Phone", Toast.LENGTH_SHORT).show();
+	                break;
+	 
+	            case R.id.computer:
+	                Toast.makeText(getActivity(), "You selected Computer", Toast.LENGTH_SHORT).show();
+	                break;
+	 
+	            case R.id.gamepad:
+	                Toast.makeText(getActivity(), "You selected Gamepad", Toast.LENGTH_SHORT).show();
+	                break;
+	 
+	            }
+	        return true;
+	    }
+	    */
 	
 	 @Override
 	    public void onDestroyView() {

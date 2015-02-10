@@ -20,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.DialogError;
@@ -31,6 +32,7 @@ import com.xmiles.android.facebook_api_support.SessionEvents.AuthListener;
 import com.xmiles.android.facebook_api_support.SessionEvents.LogoutListener;
 import com.xmiles.android.facebook_api_support.SessionStore;
 import com.xmiles.android.facebook_api_support.Utility;
+
 
 
 public class BtnFbLogin_Fragment extends FragmentActivity {
@@ -61,6 +63,8 @@ public class BtnFbLogin_Fragment extends FragmentActivity {
   protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_main);
+      
+      
       
       // start service
       //alarm.setAlarm(this);
@@ -117,6 +121,47 @@ public class BtnFbLogin_Fragment extends FragmentActivity {
       }
   }
   
+	  @Override
+	  public boolean onCreateOptionsMenu(Menu menu) {
+	      // Inflate the menu; this adds items to the action bar if it is present.
+	      getMenuInflater().inflate(R.menu.main, menu);
+	      return true;
+	  }
+  
+	    @Override
+	    public boolean onOptionsItemSelected(MenuItem item) {
+	 
+	        super.onOptionsItemSelected(item);
+	 
+	        switch(item.getItemId()){
+	            case R.id.phone:
+	                Toast.makeText(getBaseContext(), "You selected Phone", Toast.LENGTH_SHORT).show();
+	                break;
+	 
+	            case R.id.computer:
+	                Toast.makeText(getBaseContext(), "You selected Computer", Toast.LENGTH_SHORT).show();
+	                break;
+	 
+	            case R.id.gamepad:
+	                Toast.makeText(getBaseContext(), "You selected Gamepad", Toast.LENGTH_SHORT).show();
+	                break;
+	            /*    
+	            case R.id.camera:
+	                Toast.makeText(getBaseContext(), "You selected Camera", Toast.LENGTH_SHORT).show();
+	                break;
+	 
+	            case R.id.video:
+	                Toast.makeText(getBaseContext(), "You selected Video", Toast.LENGTH_SHORT).show();
+	                break;
+	 
+	            case R.id.email:
+	                Toast.makeText(getBaseContext(), "You selected EMail", Toast.LENGTH_SHORT).show();
+	                break;
+	            */    
+	            }	            
+	        return true;
+	    }
+	    
 	  @Override
 	  public void onDestroy() {
 	
