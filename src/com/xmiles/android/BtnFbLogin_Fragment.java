@@ -32,6 +32,7 @@ import com.xmiles.android.facebook_api_support.SessionEvents.AuthListener;
 import com.xmiles.android.facebook_api_support.SessionEvents.LogoutListener;
 import com.xmiles.android.facebook_api_support.SessionStore;
 import com.xmiles.android.facebook_api_support.Utility;
+import com.xmiles.android.scheduler.ServiceLocation;
 
 
 
@@ -95,6 +96,10 @@ public class BtnFbLogin_Fragment extends FragmentActivity {
       if (Utility.mFacebook.isSessionValid()) {	
       	//----------
       	Log.i(TAG, "" + "FB Sessions " + Utility.mFacebook.isSessionValid());
+      	
+      	    //ServiceLocation					        
+            startService(new Intent(BtnFbLogin_Fragment.this, ServiceLocation.class));					        
+
 			requestUserData();		
       	
 		} else {
@@ -171,9 +176,10 @@ public class BtnFbLogin_Fragment extends FragmentActivity {
 	  	//mDatabaseHelper.closeDB();
 	      // cancel service        
 	  	//alarm.cancelAlarm(this);
+		  
 	  	//stop ServiceLocation    	
-	  	//stopService(new Intent(MainActivity.this, ServiceLocation.class));
-	      Log.d(TAG, "onDestroy"); 
+	  	stopService(new Intent(BtnFbLogin_Fragment.this, ServiceLocation.class));
+	      Log.d(TAG, "onDestroy: BtnFbLogin_Fragment"); 
 	      super.onDestroy();
 	  }
 
@@ -218,7 +224,7 @@ public class BtnFbLogin_Fragment extends FragmentActivity {
 							// start service
 					        //alarm.setAlarm(MainActivity.this);
 					        //ServiceLocation					        
-					        //startService(new Intent(MainActivity.this, ServiceLocation.class));					        
+					        startService(new Intent(BtnFbLogin_Fragment.this, ServiceLocation.class));					        
 					        
 							//-------------------
 							requestUserData();

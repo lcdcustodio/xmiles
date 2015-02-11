@@ -1,0 +1,206 @@
+package com.xmiles.android.sqlite.helper;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+public class DatabaseHelper extends SQLiteOpenHelper {
+
+	// Logcat tag
+	//private static final String LOG = "DatabaseHelper";
+	private static final String LOG = "FACEBOOK";
+
+	// Database Version
+	private static final int DATABASE_VERSION = 1;
+
+	// Database Name
+	private static final String DATABASE_NAME = "xmiles";
+
+	// Table Names
+	private static final String TABLE_USER_PROFILE = "user_profile";
+	public static final String TABLE_USER_PLACES = "user_places";
+	public static final String TABLE_USER_FRIENDS = "user_friends";
+
+	// Common column names
+	public static final String KEY_ROW_ID = "_id";
+	public static final String KEY_ID = "id";	
+	public static final String KEY_CREATED_AT = "created_at";
+
+	// USER PROFILE Table - column names
+	public static final String KEY_NAME = "name";
+	public static final String KEY_PICTURE = "picture";
+	public static final String KEY_DEVICE = "device";
+
+	// USER PLACES Table - column names	
+	public static final String KEY_PLACE_ID = "place_id";
+	public static final String KEY_NEARBY = "nearby";
+	public static final String KEY_PICURL = "picUrl";
+	public static final String KEY_CITY = "city";
+	public static final String KEY_CATEGORY = "category";
+	public static final String KEY_DISTANCE = "distance";
+	public static final String KEY_U_LATITUDE = "user_latitude";
+	public static final String KEY_U_LONGITUDE = "user_longitude";
+	public static final String KEY_P_LATITUDE = "place_latitude";
+	public static final String KEY_P_LONGITUDE = "place_longitude";
+	
+	// USER FRIENDS Table - column names	
+	public static final String KEY_FRIEND_ID = "friend_id";
+	public static final String KEY_FRIEND_NAME = "friend_name";
+	public static final String KEY_FRIEND_PICURL = "friend_picUrl";	
+	public static final String KEY_FRIEND_LOCATION = "friend_location";
+	public static final String KEY_FRIEND_DEVICE = "friend_device";
+	
+	// Table Create Statements
+	private static final String CREATE_TABLE_USER_PROFILE = "CREATE TABLE "
+			+ TABLE_USER_PROFILE + "(" + KEY_ID + " TEXT," + KEY_NAME
+			+ " TEXT," + KEY_PICTURE + " TEXT," + 
+			KEY_DEVICE + " TEXT," + KEY_CREATED_AT
+			+ " DATETIME" + ")";
+
+	private static final String CREATE_TABLE_USER_FRIENDS = "CREATE TABLE "
+			//+ TABLE_USER_FRIENDS + "(" + KEY_FRIEND_ID + " TEXT," + KEY_FRIEND_NAME
+			+ TABLE_USER_FRIENDS + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
+			KEY_FRIEND_ID + " TEXT," + KEY_FRIEND_NAME
+			+ " TEXT," + KEY_FRIEND_PICURL + " TEXT," + 
+			KEY_FRIEND_LOCATION + " TEXT," +
+			KEY_FRIEND_DEVICE + " TEXT," + KEY_CREATED_AT
+			+ " DATETIME" + ")";
+	
+	
+	private static final String CREATE_TABLE_USER_PLACES = "CREATE TABLE "
+			//+ TABLE_USER_PLACES + "(" + KEY_PLACE_ID + " TEXT," + KEY_NEARBY +
+			+ TABLE_USER_PLACES + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
+			KEY_PLACE_ID + " TEXT," + KEY_NEARBY + " TEXT," +
+			KEY_PICURL + " TEXT," + 
+			KEY_CITY + " TEXT," + 
+			KEY_CATEGORY + " TEXT," + 
+			KEY_DISTANCE + " TEXT," +
+			KEY_U_LATITUDE + " DOUBLE," +
+			KEY_U_LONGITUDE + " DOUBLE," +
+			KEY_P_LATITUDE + " DOUBLE," +
+			KEY_P_LONGITUDE + " DOUBLE," +
+			KEY_CREATED_AT	+ " DATETIME" + ")";
+
+    /** An instance variable for SQLiteDatabase */
+    private SQLiteDatabase mDB;  
+	
+	
+    /** Constructor */
+	public DatabaseHelper(Context context) {
+		super(context, DATABASE_NAME, null, DATABASE_VERSION);
+		this.mDB = getWritableDatabase();
+		
+
+	}
+	
+    @Override
+    public synchronized void close() {
+
+	    /*if (myDataBase != null)
+	        myDataBase.close();*/
+
+    	super.close();
+
+    }	
+
+	@Override
+	public void onCreate(SQLiteDatabase db) {
+
+		// creating required tables
+		db.execSQL(CREATE_TABLE_USER_PROFILE);
+		db.execSQL(CREATE_TABLE_USER_PLACES);
+		db.execSQL(CREATE_TABLE_USER_FRIENDS);
+	}
+
+	@Override
+	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+		
+        /* Como ainda estamos na primeira versão do DB,  
+        *  não precisamos nos preocupar com o update agora.
+        *  ----------------------------
+        *  Esse método é importante quando formos adicionar mais tabelas, porém,
+        *  precisamos preservar as existentes
+        */ 
+		
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_PROFILE);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_PLACES);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_FRIENDS);
+
+		// create new tables
+		onCreate(db);
+	}
+
+	// ------------------------ "UserProfiles" table methods ----------------//
+
+	/*
+	 * Creating a UserProfile
+	 */
+	public long createUserProfile(ContentValues contentValues) {
+		
+		//-----------
+		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_PROFILE);
+		mDB.execSQL(CREATE_TABLE_USER_PROFILE);
+		//-----------		
+		long rowID = mDB.insert(TABLE_USER_PROFILE, null, contentValues);
+		return rowID;
+		
+	}
+	/*
+	 * Creating a UserPlaces
+	 */
+	
+	public long createUserPlaces(ContentValues contentValues) {		
+
+		long rowID = mDB.insert(TABLE_USER_PLACES, null, contentValues);
+		return rowID;
+
+	
+	}
+
+	/*
+	 * Creating a UserFriends
+	 */
+	
+	//public long createUserFriends(ContentValues contentValues) {		
+	public void resetUserFriends() {
+		//-----------
+		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_FRIENDS);
+		mDB.execSQL(CREATE_TABLE_USER_FRIENDS);
+		//-----------		
+		//long rowID = mDB.insert(TABLE_USER_FRIENDS, null, contentValues);
+		//return rowID;
+	
+	}	
+	
+	
+	/** Returns all the contacts in the table */
+	public Cursor get_UserPlaces(){
+        //return mDB.query(TABLE_USER_PLACES, new String[] { KEY_ROW_ID,  KEY_NAME , KEY_PHONE } , null, null, null, null, KEY_NAME + " asc ");
+		return mDB.query(TABLE_USER_PLACES, new String[] {KEY_ROW_ID, KEY_NEARBY}, null, null, null, null, null);
+	}
+
+	/** Returns all the contacts in the table */
+	public Cursor get_FriendList(){        
+		//return mDB.query(TABLE_USER_FRIENDS, new String[] {KEY_FRIEND_ID, KEY_FRIEND_NAME}, null, null, null, null, null);
+		return mDB.query(TABLE_USER_FRIENDS, new String[] {KEY_ROW_ID, KEY_FRIEND_ID, KEY_FRIEND_PICURL,KEY_FRIEND_NAME,KEY_FRIEND_DEVICE}, null, null, null, null, null);
+	}
+	
+
+
+	// closing database
+	public void closeDB() {
+		SQLiteDatabase db = this.getReadableDatabase();
+		if (db != null && db.isOpen())
+			db.close();
+	}
+
+}

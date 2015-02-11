@@ -21,7 +21,8 @@ public class SplashActivity extends Activity {
             @Override
             public void run() {
                 finish();
-                Intent hackbookIntent = new Intent().setClass(SplashActivity.this, Main.class);
+                //Intent hackbookIntent = new Intent().setClass(SplashActivity.this, Main.class);
+                Intent hackbookIntent = new Intent().setClass(SplashActivity.this, Profile_Fragment.class);
                 startActivity(hackbookIntent);               
                 
             }

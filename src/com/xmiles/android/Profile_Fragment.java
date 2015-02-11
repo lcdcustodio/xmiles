@@ -135,7 +135,9 @@ public class Profile_Fragment extends Fragment {
 		//--------------
         
         Bundle params = new Bundle();
-        params.putString("fields", "name, picture,email,gender,relationship_status");
+        
+        //params.putString("fields", "name, picture,email,gender,relationship_status");
+        params.putString("fields", "name, picture,birthday,gender,relationship_status");
         Utility.mAsyncRunner.request("me", params, new URListener());
         //------
         
@@ -214,8 +216,11 @@ public class Profile_Fragment extends Fragment {
 	                json_locat = "Pontuação: 0 km";
 	                
 	                try {
-	                	Log.i(LOG, "email: " + jsonObject.getString("email"));
-	                	json_email = jsonObject.getString("email");
+	                	//Log.i(LOG, "email: " + jsonObject.getString("email"));
+	                	//json_email = jsonObject.getString("email");
+	                	Log.i(LOG, "email: " + jsonObject.getString("gender"));
+	                	json_email = jsonObject.getString("gender");
+
 	                } catch (JSONException e) {
 	                    // TODO Auto-generated catch block
 	                	json_email = "N/A";
