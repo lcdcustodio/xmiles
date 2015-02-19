@@ -537,9 +537,9 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment_login_button=0x7f04001d;
         public static final int com_facebook_usersettingsfragment_logo_image=0x7f04001b;
         public static final int com_facebook_usersettingsfragment_profile_name=0x7f04001c;
-        public static final int computer=0x7f040029;
+        public static final int computer=0x7f04002a;
+        public static final int dialog_listview=0x7f040028;
         public static final int frame_container=0x7f040007;
-        public static final int gamepad=0x7f04002a;
         public static final int gridView1=0x7f04001f;
         public static final int grid_item_image=0x7f040022;
         public static final int grid_item_label=0x7f040023;
@@ -553,10 +553,10 @@ containing a value of this type.
         public static final int name=0x7f040025;
         public static final int none=0x7f040003;
         public static final int normal=0x7f040001;
-        public static final int phone=0x7f040028;
         public static final int picker_subtitle=0x7f040018;
         public static final int profile_pic=0x7f040024;
         public static final int relativeLayout1=0x7f040021;
+        public static final int rotas=0x7f040029;
         public static final int rua=0x7f04002d;
         public static final int satelite=0x7f04002c;
         public static final int satellite=0x7f040004;
@@ -588,7 +588,8 @@ containing a value of this type.
         public static final int profile_fgmt_background=0x7f030011;
         public static final int profile_fgmt_custom=0x7f030012;
         public static final int profile_fgmt_gridview=0x7f030013;
-        public static final int splash=0x7f030014;
+        public static final int route_dialog=0x7f030014;
+        public static final int splash=0x7f030015;
     }
     public static final class menu {
         public static final int main=0x7f0a0000;
@@ -619,7 +620,7 @@ containing a value of this type.
         [CHAR LIMIT=70] 
          */
         public static final int auth_client_using_bad_version_title=0x7f07002d;
-        public static final int camera=0x7f070038;
+        public static final int camera=0x7f070039;
         public static final int com_facebook_choose_friends=0x7f07000f;
         public static final int com_facebook_dialogloginactivity_ok_button=0x7f070000;
         public static final int com_facebook_internet_permission_error_message=0x7f070013;
@@ -716,12 +717,13 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f07002c;
-        public static final int computer=0x7f070036;
-        public static final int email=0x7f07003a;
-        public static final int gamepad=0x7f070037;
+        public static final int computer=0x7f070037;
+        public static final int email=0x7f07003b;
+        public static final int gamepad=0x7f070038;
         public static final int phone=0x7f070035;
         public static final int please_wait=0x7f070034;
-        public static final int video=0x7f070039;
+        public static final int rotas=0x7f070036;
+        public static final int video=0x7f07003a;
     }
     public static final class style {
         public static final int ActionBar_Solid_Example=0x7f080006;

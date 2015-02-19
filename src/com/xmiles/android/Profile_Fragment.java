@@ -4,6 +4,9 @@ package com.xmiles.android;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
+import com.xmiles.android.sqlite.helper.DatabaseHelper;
+
 import com.xmiles.android.R;
 import com.xmiles.android.adapter.ImageAdapter;
 import com.xmiles.android.facebook_api_support.BaseRequestListener;
@@ -16,7 +19,9 @@ import android.support.v4.app.FragmentTransaction;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -35,14 +40,14 @@ import android.widget.AdapterView.OnItemClickListener;
 public class Profile_Fragment extends Fragment {
 
 	TextView name;
-	TextView email;
-	TextView locat;
+	TextView city;
+	TextView pontuacao;
 	ImageView mUserPic;
 	GridView gridView;
 	private static final String LOG = "FACEBOOK";
 	String json_name;
-	String json_email;
-	String json_locat;
+	String json_city;
+	String score;
 	String picURL;
 	ProgressDialog progressBar;  
 	private Handler mHandler;
@@ -60,8 +65,8 @@ public class Profile_Fragment extends Fragment {
         View rootView = inflater.inflate(R.layout.profile_fgmt_custom, container, false);
         
         name = (TextView) rootView.findViewById(R.id.name);
-        locat = (TextView) rootView.findViewById(R.id.locat);
-        email = (TextView) rootView.findViewById(R.id.info);
+        pontuacao = (TextView) rootView.findViewById(R.id.locat);
+        city = (TextView) rootView.findViewById(R.id.info);
         mUserPic = (ImageView) rootView.findViewById(R.id.profile_pic);
 
 		//-------
@@ -136,44 +141,14 @@ public class Profile_Fragment extends Fragment {
         
         Bundle params = new Bundle();
         
-        //params.putString("fields", "name, picture,email,gender,relationship_status");
-        params.putString("fields", "name, picture,birthday,gender,relationship_status");
+        //params.putString("fields", "name, picture,city,gender,relationship_status");
+        params.putString("fields", "name, picture,birthday,location,gender,relationship_status");
         Utility.mAsyncRunner.request("me", params, new URListener());
         //------
         
         return custom;
         
     }
-	  /*
-	  @Override
-	  public boolean onCreateOptionsMenu(Menu menu) {
-	      // Inflate the menu; this adds items to the action bar if it is present.
-	      getMenuInflater().inflate(R.menu.main, menu);
-	      return true;
-	  }
-  
-	    @Override
-	    public boolean onOptionsItemSelected(MenuItem item) {
-	 
-	        super.onOptionsItemSelected(item);
-	 
-	        switch(item.getItemId()){
-	            case R.id.phone:
-	                Toast.makeText(getActivity(), "You selected Phone", Toast.LENGTH_SHORT).show();
-	                break;
-	 
-	            case R.id.computer:
-	                Toast.makeText(getActivity(), "You selected Computer", Toast.LENGTH_SHORT).show();
-	                break;
-	 
-	            case R.id.gamepad:
-	                Toast.makeText(getActivity(), "You selected Gamepad", Toast.LENGTH_SHORT).show();
-	                break;
-	 
-	            }
-	        return true;
-	    }
-	    */
 	
 	 @Override
 	    public void onDestroyView() {
@@ -203,29 +178,40 @@ public class Profile_Fragment extends Fragment {
 
 	                picURL = jsonObject.optJSONObject("picture").optJSONObject("data").getString("url");
 	                json_name = jsonObject.getString("name");
-                
-	                /*
-	                try {
-	                	json_locat = jsonObject.getString("relationship_status");
-	                } catch (JSONException e) {
-	                    // TODO Auto-generated catch block
-	                	json_locat = "N/A";
-	                    e.printStackTrace();
-	                }
-	                */
-	                json_locat = "Pontuação: 0 km";
-	                
-	                try {
-	                	//Log.i(LOG, "email: " + jsonObject.getString("email"));
-	                	//json_email = jsonObject.getString("email");
-	                	Log.i(LOG, "email: " + jsonObject.getString("gender"));
-	                	json_email = jsonObject.getString("gender");
+	                //-----------
+	                score = "Pontuação: 0 km";
+	                //-----------
 
-	                } catch (JSONException e) {
-	                    // TODO Auto-generated catch block
-	                	json_email = "N/A";
-	                    e.printStackTrace();
-	                }
+
+                	//*
+                	try {
+                    	Uri uri = SqliteProvider.CONTENT_URI_USER_PLACES;
+                    	Cursor data = getActivity().getContentResolver().query(uri, null, null, null, null); 
+                    	
+                    	if (data != null && data.getCount() > 0){
+                    		data.moveToFirst();
+                			json_city = data.getString(2);
+                			
+                		} else{
+    		                try {
+    		                	Log.i(LOG, "city: " + jsonObject.optJSONObject("location").getString("name"));		                	
+    		                	//json_city = jsonObject.optJSONObject("location").getString("name");
+    		                	json_city = jsonObject.optJSONObject("location").getString("name").split(",")[0];
+
+    		                } catch (JSONException je) {
+    		                    // TODO Auto-generated catch block
+    		                	json_city = " ";
+    		                    je.printStackTrace();
+    		                }
+                			
+                		}
+                	}catch ( Exception ex ) {
+	                	json_city = " ";
+	                    ex.printStackTrace();
+	                    
+                	}
+                	//*/
+
 	                //----------------------------------------------
 	                runThread();
 	                //----------------------------------------------
@@ -247,9 +233,9 @@ public class Profile_Fragment extends Fragment {
 
 	                                @Override
 	                                public void run() {
-	            	                	email.setText(json_email);
+	            	                	city.setText(json_city);
 	            	                	name.setText(json_name);
-	            	                	locat.setText(json_locat);
+	            	                	pontuacao.setText(score);
 	    			                    	
 	    			        		        mHandler.post(new Runnable() {	
 	    			                            @Override

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -27,12 +28,14 @@ import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
 import com.facebook.android.FacebookError;
 import com.facebook.android.Facebook.DialogListener;
+
 import com.xmiles.android.facebook_api_support.SessionEvents;
 import com.xmiles.android.facebook_api_support.SessionEvents.AuthListener;
 import com.xmiles.android.facebook_api_support.SessionEvents.LogoutListener;
 import com.xmiles.android.facebook_api_support.SessionStore;
 import com.xmiles.android.facebook_api_support.Utility;
-import com.xmiles.android.scheduler.ServiceLocation;
+import com.xmiles.android.scheduler.FbPlaces_AlarmReceiver;
+import com.xmiles.android.sqlite.helper.DatabaseHelper;
 
 
 
@@ -43,33 +46,36 @@ public class BtnFbLogin_Fragment extends FragmentActivity {
 
 	// Facebook Permissions	
     public String[] permissions = { "read_stream", "offline_access", "publish_stream", "user_photos", "publish_checkins",
-          "photo_upload", };	
+          "photo_upload","user_location" };	
 
     private static final String TAG = "FACEBOOK";
 
     // Instance of Facebook Class	
 	private AsyncFacebookRunner mAsyncRunner;
 	
-
-	
 	// FAcebook LoginButtons	
 	ImageButton imgbtnFbLogin;
 
+    //get Context        
+    Context ctx;
+
+    FbPlaces_AlarmReceiver FbPlaces_alarm;
 	
-    // define service
-    //SampleAlarmReceiver alarm = new SampleAlarmReceiver();
   
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_main);
-      
-      
-      
-      // start service
-      //alarm.setAlarm(this);
 
+      //get Context        
+      //ctx = getApplicationContext();
+  	
+      // define service
+      //SampleAlarmReceiver alarm = new SampleAlarmReceiver();
+  	  //alarm = new FbPlaces_AlarmReceiver(ctx);
+      FbPlaces_alarm = new FbPlaces_AlarmReceiver();
+      
       // enabling action bar app icon and behaving it as toggle button
       //getActionBar().setDisplayHomeAsUpEnabled(true);
       //getActionBar().setTitle(null);
@@ -96,9 +102,12 @@ public class BtnFbLogin_Fragment extends FragmentActivity {
       if (Utility.mFacebook.isSessionValid()) {	
       	//----------
       	Log.i(TAG, "" + "FB Sessions " + Utility.mFacebook.isSessionValid());
+
+      		// start service
+      		FbPlaces_alarm.setAlarm(this);
       	
       	    //ServiceLocation					        
-            startService(new Intent(BtnFbLogin_Fragment.this, ServiceLocation.class));					        
+            //startService(new Intent(BtnFbLogin_Fragment.this, ServiceLocation.class));					        
 
 			requestUserData();		
       	
@@ -139,18 +148,29 @@ public class BtnFbLogin_Fragment extends FragmentActivity {
 	        super.onOptionsItemSelected(item);
 	 
 	        switch(item.getItemId()){
-	            case R.id.phone:
-	                Toast.makeText(getBaseContext(), "You selected Phone", Toast.LENGTH_SHORT).show();
-	                break;
+	            case R.id.rotas:
+	                //Toast.makeText(getBaseContext(), "You selected Rotas", Toast.LENGTH_SHORT).show();
+	                
+					//set up dialog
+		            final Dialog dialog = new Dialog(BtnFbLogin_Fragment.this);
+	                dialog.setContentView(R.layout.route_dialog);
+	                dialog.setTitle("  Rotas Cadastradas:");		                
+	                dialog.setCancelable(true);
+	                //there are a lot of settings, for dialog, check them all out!
+
+	                //now that the dialog is set up, it's time to show it    
+	                dialog.show();//*/
+
+	            	break;
 	 
 	            case R.id.computer:
 	                Toast.makeText(getBaseContext(), "You selected Computer", Toast.LENGTH_SHORT).show();
 	                break;
-	 
+	            /*    
 	            case R.id.gamepad:
 	                Toast.makeText(getBaseContext(), "You selected Gamepad", Toast.LENGTH_SHORT).show();
 	                break;
-	            /*    
+	                
 	            case R.id.camera:
 	                Toast.makeText(getBaseContext(), "You selected Camera", Toast.LENGTH_SHORT).show();
 	                break;
@@ -172,15 +192,16 @@ public class BtnFbLogin_Fragment extends FragmentActivity {
 	
 	  	
 	  	//close Database
-	  	//DatabaseHelper mDatabaseHelper = new DatabaseHelper(getApplicationContext());
-	  	//mDatabaseHelper.closeDB();
-	      // cancel service        
-	  	//alarm.cancelAlarm(this);
+	  	DatabaseHelper mDatabaseHelper = new DatabaseHelper(getApplicationContext());
+	  	mDatabaseHelper.closeDB();
+	    // cancel service        
+	  	FbPlaces_alarm.cancelAlarm(this);
 		  
 	  	//stop ServiceLocation    	
-	  	stopService(new Intent(BtnFbLogin_Fragment.this, ServiceLocation.class));
-	      Log.d(TAG, "onDestroy: BtnFbLogin_Fragment"); 
-	      super.onDestroy();
+	  	//stopService(new Intent(BtnFbLogin_Fragment.this, ServiceLocation.class));
+	    
+	  	Log.d(TAG, "onDestroy: BtnFbLogin_Fragment"); 
+	    super.onDestroy();
 	  }
 
 
@@ -222,9 +243,9 @@ public class BtnFbLogin_Fragment extends FragmentActivity {
 							SessionStore.save(Utility.mFacebook, getBaseContext());
 
 							// start service
-					        //alarm.setAlarm(MainActivity.this);
+							FbPlaces_alarm.setAlarm(BtnFbLogin_Fragment.this);
 					        //ServiceLocation					        
-					        startService(new Intent(BtnFbLogin_Fragment.this, ServiceLocation.class));					        
+					        //startService(new Intent(BtnFbLogin_Fragment.this, ServiceLocation.class));					        
 					        
 							//-------------------
 							requestUserData();

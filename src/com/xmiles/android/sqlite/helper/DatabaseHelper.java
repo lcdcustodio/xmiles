@@ -185,7 +185,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	/** Returns all the contacts in the table */
 	public Cursor get_UserPlaces(){
         //return mDB.query(TABLE_USER_PLACES, new String[] { KEY_ROW_ID,  KEY_NAME , KEY_PHONE } , null, null, null, null, KEY_NAME + " asc ");
-		return mDB.query(TABLE_USER_PLACES, new String[] {KEY_ROW_ID, KEY_NEARBY}, null, null, null, null, null);
+		//return mDB.query(TABLE_USER_PLACES, new String[] {KEY_ROW_ID, KEY_NEARBY,KEY_CITY}, null, null, null, null, null);
+		return mDB.query(TABLE_USER_PLACES, new String[] {KEY_ROW_ID, KEY_NEARBY,KEY_CITY}, null, null, null, null, KEY_CREATED_AT + " desc ");
 	}
 
 	/** Returns all the contacts in the table */

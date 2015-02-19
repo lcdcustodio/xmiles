@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">xMiles</string>
-    <string name="please_wait">Please wait...</string>    
+    <string name="please_wait">Por Favor, Espere...</string>    
     <string name="phone">Phone</string>
+    <string name="rotas">Rotas</string>
     <string name="computer">Computer</string>
     <string name="gamepad">Gamepad</string>
     <string name="camera">Camera</string>

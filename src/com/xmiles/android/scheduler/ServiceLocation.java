@@ -61,7 +61,8 @@ public class ServiceLocation extends Service implements LocationListener {
     int MAX_DISTANCE = 5000;
     
     //Facebook place distance require
-    int MAX_N_PLACES = 30;
+    //int MAX_N_PLACES = 30;
+    int MAX_N_PLACES = 10;
     
     
 	@Override

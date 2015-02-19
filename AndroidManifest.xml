@@ -48,7 +48,9 @@
                        android:value="splitActionBarWhenNarrow" />
         </activity>
         
-        <service android:name="com.xmiles.android.scheduler.ServiceLocation" /> 
+        <receiver android:name="com.xmiles.android.scheduler.FbPlaces_AlarmReceiver"></receiver>
+        <!--service android:enabled="true" android:name="com.xmiles.android.scheduler.ServiceLocation" />
+        <service android:enabled="true" android:name="com.xmiles.android.scheduler.ServiceLocation" />  --> 
         
         <provider android:name="com.xmiles.android.sqlite.contentprovider.SqliteProvider"
             android:authorities="com.xmiles.android.provider"

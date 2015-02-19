@@ -17,7 +17,7 @@ public class SqliteProvider extends ContentProvider{
 	
 	private static final String LOG = "Facebook_Places";
 	//public static final String PROVIDER_NAME = "com.facetooth_light.android.provider";
-	public static final String PROVIDER_NAME = "com.mazaah_mvp.android.provider";
+	public static final String PROVIDER_NAME = "com.xmiles.android.provider";
 	
 	/** A uri to do operations on contacts table. A content provider is identified by its uri */
 	public static final Uri CONTENT_URI_USER_PROFILE = Uri.parse("content://" + PROVIDER_NAME + "/UserProfile");

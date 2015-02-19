@@ -2,8 +2,8 @@
     xmlns:xMiles="http://schemas.android.com/apk/res-auto" >
  
     <item
-        android:id="@+id/phone"
-        android:title="@string/phone"
+        android:id="@+id/rotas"
+        android:title="@string/rotas"
         android:icon="@drawable/phone"        
         android:showAsAction="ifRoom|withText" />
  
@@ -13,13 +13,13 @@
         android:icon="@drawable/computer"
         android:showAsAction="ifRoom|withText" />
  
-    <item
+    <!--<item
         android:id="@+id/gamepad"
         android:title="@string/gamepad"
         android:icon="@drawable/gamepad"
         android:showAsAction="ifRoom|withText" />
  
-    <!--<item
+    <item
         android:id="@+id/camera"
         android:title="@string/camera"
         android:icon="@drawable/camera"
