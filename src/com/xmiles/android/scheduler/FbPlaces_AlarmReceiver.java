@@ -119,7 +119,7 @@ public class FbPlaces_AlarmReceiver extends WakefulBroadcastReceiver implements 
         // Set the alarm to fire at approximately 8:30 a.m., according to the device's
         // clock, and to repeat once a day.
         //-----
-        alarmMgr.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), MIN_TIME_BW_UPDATES, alarmIntent);
+        alarmMgr.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 15 * MIN_TIME_BW_UPDATES, alarmIntent);
         //alarmMgr.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 10*5000, alarmIntent);
     }
     // END_INCLUDE(set_alarm)

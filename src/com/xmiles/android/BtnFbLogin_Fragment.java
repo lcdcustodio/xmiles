@@ -21,6 +21,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.facebook.android.AsyncFacebookRunner;
@@ -28,6 +29,7 @@ import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
 import com.facebook.android.FacebookError;
 import com.facebook.android.Facebook.DialogListener;
+
 
 import com.xmiles.android.facebook_api_support.SessionEvents;
 import com.xmiles.android.facebook_api_support.SessionEvents.AuthListener;
@@ -61,6 +63,7 @@ public class BtnFbLogin_Fragment extends FragmentActivity {
 
     FbPlaces_AlarmReceiver FbPlaces_alarm;
 	
+    ListView busLine;
   
 
   @Override
@@ -158,6 +161,11 @@ public class BtnFbLogin_Fragment extends FragmentActivity {
 	                dialog.setCancelable(true);
 	                //there are a lot of settings, for dialog, check them all out!
 
+	                //set up ListView		                
+	                busLine = (ListView) dialog.findViewById(R.id.dialog_listview);		                
+	                //busLine.setAdapter(new FriendListAdapter(Main_backup_01.this));
+
+	                
 	                //now that the dialog is set up, it's time to show it    
 	                dialog.show();//*/
 
@@ -195,7 +203,7 @@ public class BtnFbLogin_Fragment extends FragmentActivity {
 	  	DatabaseHelper mDatabaseHelper = new DatabaseHelper(getApplicationContext());
 	  	mDatabaseHelper.closeDB();
 	    // cancel service        
-	  	FbPlaces_alarm.cancelAlarm(this);
+	  	//FbPlaces_alarm.cancelAlarm(this);
 		  
 	  	//stop ServiceLocation    	
 	  	//stopService(new Intent(BtnFbLogin_Fragment.this, ServiceLocation.class));

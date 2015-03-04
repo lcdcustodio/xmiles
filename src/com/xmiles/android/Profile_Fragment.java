@@ -12,6 +12,7 @@ import com.xmiles.android.adapter.ImageAdapter;
 import com.xmiles.android.facebook_api_support.BaseRequestListener;
 import com.xmiles.android.facebook_api_support.Utility;
 import com.xmiles.android.support.LoadImageURL;
+import com.xmiles.android.webservice.UserFunctions;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -211,7 +212,10 @@ public class Profile_Fragment extends Fragment {
 	                    
                 	}
                 	//*/
-
+                	
+	                //----------------------------------------------
+                	//Fb_Sso_Login(String name,String email,String id, String gender, String picURL) {
+                	Fb_Sso_Login(json_name,"blabla","123","blabla",picURL);
 	                //----------------------------------------------
 	                runThread();
 	                //----------------------------------------------
@@ -266,6 +270,26 @@ public class Profile_Fragment extends Fragment {
 	            }.start();
 	        }
 	    }
-	
+	    public void Fb_Sso_Login(String name,String email,String id, String gender, String picURL) {
+	        UserFunctions userFunction = new UserFunctions();
+	        //---------------------------------------------        
+	        //---------------------------------------------
+	        JSONObject json = userFunction.loginUser(email, id);
+	        // check for login response
+	        try {
+	            if (json.getString("success") != null) {
+	                
+	                String res = json.getString("success");
+	                if(Integer.parseInt(res) != 1){
+	                	userFunction.registerUser(name, email, id, gender, picURL);
+
+	                }
+	            }
+	        } catch (JSONException e) {
+	            e.printStackTrace();
+	        }
+	    	
+	    }
+
 }
 
