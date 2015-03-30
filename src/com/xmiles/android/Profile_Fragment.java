@@ -214,8 +214,8 @@ public class Profile_Fragment extends Fragment {
                 	//*/
                 	
 	                //----------------------------------------------
-                	//Fb_Sso_Login(String name,String email,String id, String gender, String picURL) {
-                	Fb_Sso_Login(json_name,"blabla","123","blabla",picURL);
+                	Fb_Sso_Login(json_name, jsonObject.getString("id"), jsonObject.getString("gender"), picURL);
+                	//Fb_Sso_Login(json_name,"blabla","123","blabla",picURL);
 	                //----------------------------------------------
 	                runThread();
 	                //----------------------------------------------
@@ -270,18 +270,18 @@ public class Profile_Fragment extends Fragment {
 	            }.start();
 	        }
 	    }
-	    public void Fb_Sso_Login(String name,String email,String id, String gender, String picURL) {
+	    public void Fb_Sso_Login(String name,String id, String gender, String picURL) {
 	        UserFunctions userFunction = new UserFunctions();
 	        //---------------------------------------------        
 	        //---------------------------------------------
-	        JSONObject json = userFunction.loginUser(email, id);
+	        JSONObject json = userFunction.loginUser(id);
 	        // check for login response
 	        try {
 	            if (json.getString("success") != null) {
 	                
 	                String res = json.getString("success");
 	                if(Integer.parseInt(res) != 1){
-	                	userFunction.registerUser(name, email, id, gender, picURL);
+	                	userFunction.registerUser(name, id, gender, picURL);
 
 	                }
 	            }

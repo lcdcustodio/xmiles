@@ -22,8 +22,11 @@ public class UserFunctions {
     
     //private static String loginURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/mazaah/login/";
     //private static String registerURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/mazaah/login/"; 
-    private static String loginURL = "http://ec2-54-152-39-25.compute-1.amazonaws.com/mazaah/login/";
-    private static String registerURL = "http://ec2-54-152-39-25.compute-1.amazonaws.com/mazaah/login/"; 
+    private static String loginURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
+    private static String registerURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/"; 
+
+    //private static String loginURL = "http://ec2-54-152-39-25.compute-1.amazonaws.com/mazaah/login/";
+    //private static String registerURL = "http://ec2-54-152-39-25.compute-1.amazonaws.com/mazaah/login/"; 
     
     
     private static String login_tag = "login";
@@ -44,14 +47,15 @@ public class UserFunctions {
      * @param password
      * */
     //public JSONObject loginUser(String email, String password){
-    public JSONObject loginUser(String email, String id){	
+    //public JSONObject loginUser(String email, String id){
+    public JSONObject loginUser(String id){
         // Building Parameters
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("tag", login_tag));
-        params.add(new BasicNameValuePair("email", email));
-        params.add(new BasicNameValuePair("facebook_id", id));
+        //params.add(new BasicNameValuePair("email", email));
+        params.add(new BasicNameValuePair("fb_id", id));
         JSONObject json = jsonParser.getJSONFromUrl(loginURL, params);
-        // return json
+        // return json        
         Log.e(TAG, "loginUser " + json.toString());
         return json;
     }
@@ -63,13 +67,13 @@ public class UserFunctions {
      * @param password
      * */
     //public JSONObject registerUser(String name, String email, String password){
-    public JSONObject registerUser(String name, String email, String id, String gender, String picURL){	
+    public JSONObject registerUser(String name, String id, String gender, String picURL){	
         // Building Parameters
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("tag", register_tag));
         params.add(new BasicNameValuePair("name", name));
-        params.add(new BasicNameValuePair("email", email));
-        params.add(new BasicNameValuePair("facebook_id", id));
+        //params.add(new BasicNameValuePair("email", email));
+        params.add(new BasicNameValuePair("fb_id", id));
         params.add(new BasicNameValuePair("gender", gender));
         params.add(new BasicNameValuePair("picURL", picURL));
         //params.add(new BasicNameValuePair("picURL", "blablabla"));
