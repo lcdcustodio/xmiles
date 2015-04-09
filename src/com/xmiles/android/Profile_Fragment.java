@@ -144,6 +144,7 @@ public class Profile_Fragment extends Fragment {
         
         //params.putString("fields", "name, picture,city,gender,relationship_status");
         params.putString("fields", "name, picture,birthday,location,gender,relationship_status");
+        //params.putString("fields", "name, picture.height(64),birthday,location,gender,relationship_status");
         Utility.mAsyncRunner.request("me", params, new URListener());
         //------
         

@@ -29,6 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String TABLE_USER_PROFILE = "user_profile";
 	public static final String TABLE_USER_PLACES = "user_places";
 	public static final String TABLE_USER_FRIENDS = "user_friends";
+	public static final String TABLE_USER_PLANE = "user_plane";
 
 	// Common column names
 	public static final String KEY_ROW_ID = "_id";
@@ -58,6 +59,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String KEY_FRIEND_PICURL = "friend_picUrl";	
 	public static final String KEY_FRIEND_LOCATION = "friend_location";
 	public static final String KEY_FRIEND_DEVICE = "friend_device";
+
+	// USER PLANE Table - column names	
+	public static final String KEY_BUSLINE = "busline";
+	public static final String KEY_FROM = "_from";
+	public static final String KEY_TO = "_to";
 	
 	// Table Create Statements
 	private static final String CREATE_TABLE_USER_PROFILE = "CREATE TABLE "
@@ -90,6 +96,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			KEY_P_LONGITUDE + " DOUBLE," +
 			KEY_CREATED_AT	+ " DATETIME" + ")";
 
+	
+	
+	private static final String CREATE_TABLE_USER_PLANE = "CREATE TABLE "
+			+ TABLE_USER_PLANE + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
+			KEY_ID + " TEXT," + KEY_NAME	+ " TEXT," +
+			KEY_BUSLINE + " TEXT," + 
+			KEY_FROM + " TEXT," + 
+			KEY_TO + " TEXT," + 
+			KEY_CREATED_AT	+ " DATETIME" + ")";
+
+	
     /** An instance variable for SQLiteDatabase */
     private SQLiteDatabase mDB;  
 	
@@ -119,6 +136,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(CREATE_TABLE_USER_PROFILE);
 		db.execSQL(CREATE_TABLE_USER_PLACES);
 		db.execSQL(CREATE_TABLE_USER_FRIENDS);
+		db.execSQL(CREATE_TABLE_USER_PLANE);
 	}
 
 	@Override
