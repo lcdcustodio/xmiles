@@ -75,6 +75,9 @@ public class SqliteProvider extends ContentProvider{
 		//long rowID = mDatabaseHelper.createUserProfile(values);		
 	    switch (uriMatcher.match(uri)){
 		    case USER_PROFILE:
+		    	//------
+		    	//mDatabaseHelper.resetUserProfile();
+		    	//------
 		    	long rowID_1 = mDatabaseHelper.createUserProfile(values);
 				//Uri _uri=null;
 				if(rowID_1>0){
@@ -200,6 +203,10 @@ public class SqliteProvider extends ContentProvider{
 			return mDatabaseHelper.get_UserPlaces();
 		}else if (uriMatcher.match(uri)==USER_FRIENDS){
 			return mDatabaseHelper.get_FriendList();
+		
+		}else if (uriMatcher.match(uri)==USER_PROFILE){
+			return mDatabaseHelper.get_UserProfile();		
+		
 		}else{
 			return null;
 		}

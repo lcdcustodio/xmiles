@@ -10,7 +10,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.database.Cursor;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 
@@ -37,7 +39,9 @@ import com.xmiles.android.facebook_api_support.SessionEvents.LogoutListener;
 import com.xmiles.android.facebook_api_support.SessionStore;
 import com.xmiles.android.facebook_api_support.Utility;
 import com.xmiles.android.scheduler.FbPlaces_AlarmReceiver;
+import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
+import com.xmiles.android.webservice.UserFunctions;
 
 
 
@@ -51,6 +55,7 @@ public class BtnFbLogin_Fragment extends FragmentActivity {
           "photo_upload","user_location" };	
 
     private static final String TAG = "FACEBOOK";
+    private static final Integer KEY_ID = 0;
 
     // Instance of Facebook Class	
 	private AsyncFacebookRunner mAsyncRunner;
@@ -168,6 +173,20 @@ public class BtnFbLogin_Fragment extends FragmentActivity {
 	                
 	                //now that the dialog is set up, it's time to show it    
 	                dialog.show();//*/
+	                
+	                //----------------------
+                	Uri uri = SqliteProvider.CONTENT_URI_USER_PROFILE;
+                	//Cursor data = ctx.getContentResolver().query(uri, null, null, null, null);
+                	Cursor data = getApplicationContext().getContentResolver().query(uri, null, null, null, null);
+                	
+                	if (data != null && data.getCount() > 0){
+                		data.moveToFirst();
+                		Log.i(TAG,"testing SQLITE: " + data.getString(0) + "," + data.getString(1));
+                		//UserFunctions userFunction = new UserFunctions();
+                		//JSONObject json = userFunction.loginUser(data.getString(KEY_ID));
+                	}
+	                //----------------------
+
 
 	            	break;
 	 

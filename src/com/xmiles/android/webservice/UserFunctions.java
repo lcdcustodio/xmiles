@@ -23,7 +23,9 @@ public class UserFunctions {
     //private static String loginURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/mazaah/login/";
     //private static String registerURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/mazaah/login/"; 
     private static String loginURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
-    private static String registerURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/"; 
+    private static String registerURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
+    private static String favoritesURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
+    
 
     //private static String loginURL = "http://ec2-54-152-39-25.compute-1.amazonaws.com/mazaah/login/";
     //private static String registerURL = "http://ec2-54-152-39-25.compute-1.amazonaws.com/mazaah/login/"; 
@@ -31,7 +33,7 @@ public class UserFunctions {
     
     private static String login_tag = "login";
     private static String register_tag = "register";
-    private static String face2me_users_tag = "face2me_users";
+    private static String favorites_tag = "favorites";
      
     // constructor
     public UserFunctions(){
@@ -57,6 +59,18 @@ public class UserFunctions {
         JSONObject json = jsonParser.getJSONFromUrl(loginURL, params);
         // return json        
         Log.e(TAG, "loginUser " + json.toString());
+        return json;
+    }
+
+    public JSONObject favoritesRoutes(String id){
+        // Building Parameters
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("tag", favorites_tag));
+        //params.add(new BasicNameValuePair("email", email));
+        params.add(new BasicNameValuePair("fb_id", id));
+        JSONObject json = jsonParser.getJSONFromUrl(favoritesURL, params);
+        // return json        
+        Log.e(TAG, "favorites_Routes " + json.toString());
         return json;
     }
      

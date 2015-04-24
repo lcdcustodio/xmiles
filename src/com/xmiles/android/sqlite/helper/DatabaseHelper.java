@@ -29,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String TABLE_USER_PROFILE = "user_profile";
 	public static final String TABLE_USER_PLACES = "user_places";
 	public static final String TABLE_USER_FRIENDS = "user_friends";
-	public static final String TABLE_USER_PLANE = "user_plane";
+	public static final String TABLE_FAVORITES = "favorites";
 
 	// Common column names
 	public static final String KEY_ROW_ID = "_id";
@@ -69,7 +69,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String CREATE_TABLE_USER_PROFILE = "CREATE TABLE "
 			+ TABLE_USER_PROFILE + "(" + KEY_ID + " TEXT," + KEY_NAME
 			+ " TEXT," + KEY_PICTURE + " TEXT," + 
-			KEY_DEVICE + " TEXT," + KEY_CREATED_AT
+			//KEY_DEVICE + " TEXT," + KEY_CREATED_AT
+			KEY_CREATED_AT
 			+ " DATETIME" + ")";
 
 	private static final String CREATE_TABLE_USER_FRIENDS = "CREATE TABLE "
@@ -98,8 +99,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	
 	
-	private static final String CREATE_TABLE_USER_PLANE = "CREATE TABLE "
-			+ TABLE_USER_PLANE + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
+	private static final String CREATE_TABLE_FAVORITES = "CREATE TABLE "
+			+ TABLE_FAVORITES + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
 			KEY_ID + " TEXT," + KEY_NAME	+ " TEXT," +
 			KEY_BUSLINE + " TEXT," + 
 			KEY_FROM + " TEXT," + 
@@ -136,7 +137,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(CREATE_TABLE_USER_PROFILE);
 		db.execSQL(CREATE_TABLE_USER_PLACES);
 		db.execSQL(CREATE_TABLE_USER_FRIENDS);
-		db.execSQL(CREATE_TABLE_USER_PLANE);
+		db.execSQL(CREATE_TABLE_FAVORITES);
 	}
 
 	@Override
@@ -199,6 +200,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	}	
 	
+	public void resetUserProfile() {
+		//-----------
+		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_PROFILE);
+		mDB.execSQL(CREATE_TABLE_USER_PROFILE);
+		//-----------		
+	
+	}	
+
 	
 	/** Returns all the contacts in the table */
 	public Cursor get_UserPlaces(){
@@ -207,6 +216,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return mDB.query(TABLE_USER_PLACES, new String[] {KEY_ROW_ID, KEY_NEARBY,KEY_CITY}, null, null, null, null, KEY_CREATED_AT + " desc ");
 	}
 
+	public Cursor get_UserProfile(){
+        //return mDB.query(TABLE_USER_PLACES, new String[] { KEY_ROW_ID,  KEY_NAME , KEY_PHONE } , null, null, null, null, KEY_NAME + " asc ");
+		//return mDB.query(TABLE_USER_PLACES, new String[] {KEY_ROW_ID, KEY_NEARBY,KEY_CITY}, null, null, null, null, null);
+		return mDB.query(TABLE_USER_PROFILE, new String[] {KEY_ID, KEY_NAME}, null, null, null, null, null);
+	}
+
+	
+	
 	/** Returns all the contacts in the table */
 	public Cursor get_FriendList(){        
 		//return mDB.query(TABLE_USER_FRIENDS, new String[] {KEY_FRIEND_ID, KEY_FRIEND_NAME}, null, null, null, null, null);

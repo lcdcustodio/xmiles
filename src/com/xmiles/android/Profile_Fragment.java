@@ -12,6 +12,7 @@ import com.xmiles.android.adapter.ImageAdapter;
 import com.xmiles.android.facebook_api_support.BaseRequestListener;
 import com.xmiles.android.facebook_api_support.Utility;
 import com.xmiles.android.support.LoadImageURL;
+import com.xmiles.android.support.Support;
 import com.xmiles.android.webservice.UserFunctions;
 
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
@@ -47,6 +49,7 @@ public class Profile_Fragment extends Fragment {
 	GridView gridView;
 	private static final String LOG = "FACEBOOK";
 	String json_name;
+	String json_id;
 	String json_city;
 	String score;
 	String picURL;
@@ -178,8 +181,9 @@ public class Profile_Fragment extends Fragment {
                 
 	                Log.i(LOG, "response_profile: " + response);
 
-	                picURL = jsonObject.optJSONObject("picture").optJSONObject("data").getString("url");
+	                picURL    = jsonObject.optJSONObject("picture").optJSONObject("data").getString("url");
 	                json_name = jsonObject.getString("name");
+	                json_id   = jsonObject.getString("id");
 	                //-----------
 	                score = "Pontuação: 0 km";
 	                //-----------
@@ -215,8 +219,31 @@ public class Profile_Fragment extends Fragment {
                 	//*/
                 	
 	                //----------------------------------------------
-                	Fb_Sso_Login(json_name, jsonObject.getString("id"), jsonObject.getString("gender"), picURL);
-                	//Fb_Sso_Login(json_name,"blabla","123","blabla",picURL);
+                	Fb_Sso_Login(json_name, json_id, jsonObject.getString("gender"), picURL);
+	                //----------------------------------------------
+                	
+                    Support support = new Support();
+                    
+        			/** Setting up values to insert into UserProfile table */
+        			ContentValues contentValues = new ContentValues();
+        			
+        			contentValues.put(DatabaseHelper.KEY_ID,json_id);
+        			contentValues.put(DatabaseHelper.KEY_NAME, json_name);        			
+        			contentValues.put(DatabaseHelper.KEY_PICTURE, picURL);        			
+        			contentValues.put(DatabaseHelper.KEY_CREATED_AT, support.getDateTime());
+        			
+        			getActivity().getContentResolver().insert(SqliteProvider.CONTENT_URI_USER_PROFILE, contentValues);
+	                //----------------------------------------------
+                	/*
+                	Uri uri = SqliteProvider.CONTENT_URI_USER_PROFILE;
+                	Cursor data = getActivity().getContentResolver().query(uri, null, null, null, null); 
+                	
+                	if (data != null && data.getCount() > 0){
+                		data.moveToFirst();
+                		Log.i(LOG,"testing SQLITE: " + data.getString(0) + "," + data.getString(1));
+            			//json_city = data.getString(2);
+                	}
+                	*/
 	                //----------------------------------------------
 	                runThread();
 	                //----------------------------------------------
