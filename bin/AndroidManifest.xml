@@ -13,13 +13,6 @@
         android:icon="@drawable/xmiles_logo_rev06"
         android:label="@string/app_name"                
         android:theme="@style/Theme.Example" >        
-        <!--        
-        android:icon="@drawable/signin_logo"
-        android:icon="@drawable/xmiles_logo_rev02"
-		android:label="@string/app_name"
-		android:theme="@style/CustomActionBarTheme" > 
-		android:theme="@style/AppBaseTheme" >
-        android:theme="@android:style/Theme.NoTitleBar"-->
         
         <uses-library android:name="com.google.android.maps" />
         

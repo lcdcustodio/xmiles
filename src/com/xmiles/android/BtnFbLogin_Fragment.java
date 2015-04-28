@@ -5,7 +5,10 @@ import java.util.ArrayList;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.ActionBar;
+import android.app.ActionBar.Tab;
 import android.app.Dialog;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -159,32 +162,72 @@ public class BtnFbLogin_Fragment extends FragmentActivity {
 	            case R.id.rotas:
 	                //Toast.makeText(getBaseContext(), "You selected Rotas", Toast.LENGTH_SHORT).show();
 	                
-					//set up dialog
-		            final Dialog dialog = new Dialog(BtnFbLogin_Fragment.this);
-	                dialog.setContentView(R.layout.route_dialog);
-	                dialog.setTitle("  Rotas Cadastradas:");		                
-	                dialog.setCancelable(true);
-	                //there are a lot of settings, for dialog, check them all out!
+	                // Specify that tabs should be displayed in the action bar.
+	            	getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+	            	//getActionBar().
+	            	
+	                // Create a tab listener that is called when the user changes tabs.
+	                ActionBar.TabListener tabListener = new ActionBar.TabListener() {
 
-	                //set up ListView		                
-	                busLine = (ListView) dialog.findViewById(R.id.dialog_listview);		                
-	                //busLine.setAdapter(new FriendListAdapter(Main_backup_01.this));
+						@Override
+						public void onTabReselected(Tab arg0,
+								FragmentTransaction arg1) {
+							// TODO Auto-generated method stub
+							
+						}
 
+						@Override
+						public void onTabSelected(Tab arg0,
+								FragmentTransaction arg1) {
+							// TODO Auto-generated method stub
+							
+						}
+
+						@Override
+						public void onTabUnselected(Tab arg0,
+								FragmentTransaction arg1) {
+							// TODO Auto-generated method stub
+							
+						}
+	                };
 	                
-	                //now that the dialog is set up, it's time to show it    
-	                dialog.show();//*/
-	                
+	                // Add 3 tabs, specifying the tab's text and TabListener
+	                for (int i = 0; i < 3; i++) {
+	                	getActionBar().addTab(
+	                			getActionBar().newTab()
+	                                    .setText("Tab " + (i + 1))
+	                                    .setTabListener(tabListener));
+	                }
+	            	
 	                //----------------------
-                	Uri uri = SqliteProvider.CONTENT_URI_USER_PROFILE;
-                	//Cursor data = ctx.getContentResolver().query(uri, null, null, null, null);
-                	Cursor data = getApplicationContext().getContentResolver().query(uri, null, null, null, null);
+            		//*
+            		Thread thread = new Thread(new Runnable(){
+            		    @Override
+            		    public void run() {
+            		        try {
+            		//*/        
+
+			                Uri uri = SqliteProvider.CONTENT_URI_USER_PROFILE;
+		                	Cursor data = getApplicationContext().getContentResolver().query(uri, null, null, null, null);
+		                	
+		                	if (data != null && data.getCount() > 0){
+		                		data.moveToFirst();
+		                		Log.i(TAG,"testing SQLITE: " + data.getString(KEY_ID) + "," + data.getString(1));
+
+		                		//Your code goes here
+                            	UserFunctions userFunc = new UserFunctions();
+                		        JSONObject json = userFunc.favoritesRoutes(data.getString(KEY_ID));
+
+		                	}
+		            		        	
+		    		        } catch (Exception e) {
+		    		            e.printStackTrace();
+		    		        }
+		    		    }
+		    		});
+		
+		    		thread.start();
                 	
-                	if (data != null && data.getCount() > 0){
-                		data.moveToFirst();
-                		Log.i(TAG,"testing SQLITE: " + data.getString(0) + "," + data.getString(1));
-                		//UserFunctions userFunction = new UserFunctions();
-                		//JSONObject json = userFunction.loginUser(data.getString(KEY_ID));
-                	}
 	                //----------------------
 
 
