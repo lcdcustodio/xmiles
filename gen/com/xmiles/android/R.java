@@ -419,7 +419,7 @@ containing a value of this type.
         public static final int com_facebook_list_section_header_background=0x7f020021;
         public static final int com_facebook_loginbutton_silver=0x7f020022;
         public static final int com_facebook_logo=0x7f020023;
-        public static final int com_facebook_picker_default_separator_color=0x7f020083;
+        public static final int com_facebook_picker_default_separator_color=0x7f020085;
         public static final int com_facebook_picker_item_background=0x7f020024;
         public static final int com_facebook_picker_list_focused=0x7f020025;
         public static final int com_facebook_picker_list_longpressed=0x7f020026;
@@ -463,58 +463,60 @@ containing a value of this type.
         public static final int computer=0x7f02004c;
         public static final int counter_bg=0x7f02004d;
         public static final int dashboard=0x7f02004e;
-        public static final int email=0x7f02004f;
-        public static final int gamepad=0x7f020050;
-        public static final int header_bar_blue_background=0x7f020051;
-        public static final int header_bar_orange_background=0x7f020052;
-        public static final int ic_launcher=0x7f020053;
-        public static final int ic_plusone_medium_off_client=0x7f020054;
-        public static final int ic_plusone_small_off_client=0x7f020055;
-        public static final int ic_plusone_standard_off_client=0x7f020056;
-        public static final int ic_plusone_tall_off_client=0x7f020057;
-        public static final int ios_logo=0x7f020058;
-        public static final int list_focused_example=0x7f020059;
-        public static final int list_pressed_example=0x7f02005a;
-        public static final int livefleet=0x7f02005b;
-        public static final int mark_zuckerberg=0x7f02005c;
-        public static final int menu_dropdown_panel_example=0x7f02005d;
-        public static final int phone=0x7f02005e;
-        public static final int profile=0x7f02005f;
-        public static final int progress_bg_example=0x7f020060;
-        public static final int progress_horizontal_example=0x7f020061;
-        public static final int progress_primary_example=0x7f020062;
-        public static final int progress_secondary_example=0x7f020063;
-        public static final int qt_logo=0x7f020064;
-        public static final int replay=0x7f020065;
-        public static final int report=0x7f020066;
-        public static final int rounded_corner=0x7f020067;
-        public static final int selectable_background_example=0x7f020068;
-        public static final int signin_logo=0x7f020069;
-        public static final int spinner_ab_default_example=0x7f02006a;
-        public static final int spinner_ab_disabled_example=0x7f02006b;
-        public static final int spinner_ab_focused_example=0x7f02006c;
-        public static final int spinner_ab_pressed_example=0x7f02006d;
-        public static final int spinner_background_ab_example=0x7f02006e;
-        public static final int tab_indicator_ab_example=0x7f02006f;
-        public static final int tab_selected_example=0x7f020070;
-        public static final int tab_selected_focused_example=0x7f020071;
-        public static final int tab_selected_pressed_example=0x7f020072;
-        public static final int tab_unselected_example=0x7f020073;
-        public static final int tab_unselected_focused_example=0x7f020074;
-        public static final int tab_unselected_pressed_example=0x7f020075;
-        public static final int truck=0x7f020076;
-        public static final int truck_rev02=0x7f020077;
-        public static final int video=0x7f020078;
-        public static final int webradar=0x7f020079;
-        public static final int webradar_logo=0x7f02007a;
-        public static final int windows_logo=0x7f02007b;
-        public static final int xmiles_logo=0x7f02007c;
-        public static final int xmiles_logo_rev02=0x7f02007d;
-        public static final int xmiles_logo_rev02_1024p=0x7f02007e;
-        public static final int xmiles_logo_rev03=0x7f02007f;
-        public static final int xmiles_logo_rev04_branco=0x7f020080;
-        public static final int xmiles_logo_rev05=0x7f020081;
-        public static final int xmiles_logo_rev06=0x7f020082;
+        public static final int em_contrucao=0x7f02004f;
+        public static final int email=0x7f020050;
+        public static final int gamepad=0x7f020051;
+        public static final int header_bar_blue_background=0x7f020052;
+        public static final int header_bar_orange_background=0x7f020053;
+        public static final int ic_launcher=0x7f020054;
+        public static final int ic_plusone_medium_off_client=0x7f020055;
+        public static final int ic_plusone_small_off_client=0x7f020056;
+        public static final int ic_plusone_standard_off_client=0x7f020057;
+        public static final int ic_plusone_tall_off_client=0x7f020058;
+        public static final int ios_logo=0x7f020059;
+        public static final int list_focused_example=0x7f02005a;
+        public static final int list_pressed_example=0x7f02005b;
+        public static final int livefleet=0x7f02005c;
+        public static final int mark_zuckerberg=0x7f02005d;
+        public static final int menu_dropdown_panel_example=0x7f02005e;
+        public static final int phone=0x7f02005f;
+        public static final int profile=0x7f020060;
+        public static final int progress_bg_example=0x7f020061;
+        public static final int progress_horizontal_example=0x7f020062;
+        public static final int progress_primary_example=0x7f020063;
+        public static final int progress_secondary_example=0x7f020064;
+        public static final int qt_logo=0x7f020065;
+        public static final int replay=0x7f020066;
+        public static final int report=0x7f020067;
+        public static final int rounded_corner=0x7f020068;
+        public static final int selectable_background_example=0x7f020069;
+        public static final int signin_logo=0x7f02006a;
+        public static final int spinner_ab_default_example=0x7f02006b;
+        public static final int spinner_ab_disabled_example=0x7f02006c;
+        public static final int spinner_ab_focused_example=0x7f02006d;
+        public static final int spinner_ab_pressed_example=0x7f02006e;
+        public static final int spinner_background_ab_example=0x7f02006f;
+        public static final int tab_bar_background=0x7f020070;
+        public static final int tab_indicator_ab_example=0x7f020071;
+        public static final int tab_selected_example=0x7f020072;
+        public static final int tab_selected_focused_example=0x7f020073;
+        public static final int tab_selected_pressed_example=0x7f020074;
+        public static final int tab_unselected_example=0x7f020075;
+        public static final int tab_unselected_focused_example=0x7f020076;
+        public static final int tab_unselected_pressed_example=0x7f020077;
+        public static final int truck=0x7f020078;
+        public static final int truck_rev02=0x7f020079;
+        public static final int video=0x7f02007a;
+        public static final int webradar=0x7f02007b;
+        public static final int webradar_logo=0x7f02007c;
+        public static final int windows_logo=0x7f02007d;
+        public static final int xmiles_logo=0x7f02007e;
+        public static final int xmiles_logo_rev02=0x7f02007f;
+        public static final int xmiles_logo_rev02_1024p=0x7f020080;
+        public static final int xmiles_logo_rev03=0x7f020081;
+        public static final int xmiles_logo_rev04_branco=0x7f020082;
+        public static final int xmiles_logo_rev05=0x7f020083;
+        public static final int xmiles_logo_rev06=0x7f020084;
     }
     public static final class id {
         public static final int com_facebook_login_activity_progress_bar=0x7f04000b;
@@ -537,7 +539,7 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment_login_button=0x7f04001d;
         public static final int com_facebook_usersettingsfragment_logo_image=0x7f04001b;
         public static final int com_facebook_usersettingsfragment_profile_name=0x7f04001c;
-        public static final int computer=0x7f04002a;
+        public static final int computer=0x7f04002b;
         public static final int dialog_listview=0x7f040028;
         public static final int frame_container=0x7f040007;
         public static final int gridView1=0x7f04001f;
@@ -556,13 +558,14 @@ containing a value of this type.
         public static final int picker_subtitle=0x7f040018;
         public static final int profile_pic=0x7f040024;
         public static final int relativeLayout1=0x7f040021;
-        public static final int rotas=0x7f040029;
-        public static final int rua=0x7f04002d;
-        public static final int satelite=0x7f04002c;
+        public static final int rotas=0x7f04002a;
+        public static final int rua=0x7f04002e;
+        public static final int satelite=0x7f04002d;
         public static final int satellite=0x7f040004;
         public static final int small=0x7f040000;
         public static final int terrain=0x7f040005;
-        public static final int visualizacao=0x7f04002b;
+        public static final int txtLabel=0x7f040029;
+        public static final int visualizacao=0x7f04002c;
     }
     public static final class integer {
         public static final int google_play_services_version=0x7f090000;
@@ -589,7 +592,8 @@ containing a value of this type.
         public static final int profile_fgmt_custom=0x7f030012;
         public static final int profile_fgmt_gridview=0x7f030013;
         public static final int route_dialog=0x7f030014;
-        public static final int splash=0x7f030015;
+        public static final int routes_fgmt=0x7f030015;
+        public static final int splash=0x7f030016;
     }
     public static final class menu {
         public static final int main=0x7f0a0000;
@@ -726,10 +730,10 @@ containing a value of this type.
         public static final int video=0x7f07003a;
     }
     public static final class style {
-        public static final int ActionBar_Solid_Example=0x7f080006;
-        public static final int ActionBar_Transparent_Example=0x7f080007;
-        public static final int ActionBarTabStyle_Example=0x7f08000a;
-        public static final int ActionButton_CloseMode_Example=0x7f08000d;
+        public static final int ActionBar_Solid_Example=0x7f080007;
+        public static final int ActionBar_Transparent_Example=0x7f080008;
+        public static final int ActionBarTabStyle_Example=0x7f08000b;
+        public static final int ActionButton_CloseMode_Example=0x7f08000e;
         /** 
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
@@ -747,20 +751,21 @@ containing a value of this type.
         public static final int AppTheme=0x7f080003;
         /**  the theme applied to the application or activity 
          */
-        public static final int CustomActionBarTheme=0x7f08000f;
-        public static final int DropDownListView_Example=0x7f080009;
-        public static final int DropDownNav_Example=0x7f08000b;
+        public static final int CustomActionBarTheme=0x7f080010;
+        public static final int DropDownListView_Example=0x7f08000a;
+        public static final int DropDownNav_Example=0x7f08000c;
         /**  ActionBar styles 
 item name="displayOptions">showHome|useLogo</item>  
          */
-        public static final int MyActionBar=0x7f080010;
+        public static final int MyActionBar=0x7f080011;
+        public static final int MyTheme_ActionBar_TabBar=0x7f080006;
         public static final int NusProfileUserName=0x7f080004;
-        public static final int PopupMenu_Example=0x7f080008;
-        public static final int ProgressBar_Example=0x7f08000c;
+        public static final int PopupMenu_Example=0x7f080009;
+        public static final int ProgressBar_Example=0x7f08000d;
         public static final int Theme_Example=0x7f080005;
         /**  this style is only referenced in a Light.DarkActionBar based theme 
          */
-        public static final int Theme_Example_Widget=0x7f08000e;
+        public static final int Theme_Example_Widget=0x7f08000f;
         public static final int com_facebook_loginview_default_style=0x7f080000;
         public static final int com_facebook_loginview_silver_style=0x7f080001;
     }

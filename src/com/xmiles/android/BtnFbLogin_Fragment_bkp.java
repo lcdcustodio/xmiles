@@ -7,8 +7,6 @@ import org.json.JSONObject;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
-import android.app.ActionBar.TabListener;
-
 import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -21,7 +19,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 
-//import android.app.Fragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -55,9 +52,29 @@ import com.xmiles.android.webservice.UserFunctions;
 
 
 
-//public class BtnFbLogin_Fragment extends FragmentActivity implements ActionBar.TabListener {
-	public class BtnFbLogin_Fragment extends FragmentActivity {	
+public class BtnFbLogin_Fragment_bkp extends FragmentActivity implements ActionBar.TabListener {
+	//public class BtnFbLogin_Fragment extends FragmentActivity {	
 
+    //*********************************
+    //*********************************
+    //*********************************	
+    /**
+     * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the
+     * three primary sections of the app. We use a {@link android.support.v4.app.FragmentPagerAdapter}
+     * derivative, which will keep every loaded fragment in memory. If this becomes too memory
+     * intensive, it may be best to switch to a {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     */
+    AppSectionsPagerAdapter mAppSectionsPagerAdapter;
+
+    /**
+     * The {@link ViewPager} that will display the three primary sections of the app, one at a
+     * time.
+     */
+    ViewPager mViewPager;
+    
+    //*********************************
+    //*********************************
+    //*********************************
 	// Your Facebook APP ID	
 	private static final String APP_ID = "844332932270301";
 
@@ -136,7 +153,7 @@ import com.xmiles.android.webservice.UserFunctions;
 	        getActionBar().hide();
 	        //------------------------------			
 		}
-              
+        /*      
 		imgbtnFbLogin.setOnClickListener(new View.OnClickListener() {
 
 			@Override
@@ -146,8 +163,13 @@ import com.xmiles.android.webservice.UserFunctions;
 				loginToFacebook();
 			}
 		});
-		
+		*/
       //-----------------------------
+
+      if (savedInstanceState == null) {
+          // on first time display view for first nav item
+          //displayView(0);
+      }
   }
   
 	  @Override
@@ -166,6 +188,43 @@ import com.xmiles.android.webservice.UserFunctions;
 	            case R.id.rotas:
 	                //Toast.makeText(getBaseContext(), "You selected Rotas", Toast.LENGTH_SHORT).show();
 	                
+	                // Specify that tabs should be displayed in the action bar.
+	            	getActionBar().setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+	            	//getActionBar().
+	            	
+	                // Create a tab listener that is called when the user changes tabs.
+	                ActionBar.TabListener tabListener = new ActionBar.TabListener() {
+
+						@Override
+						public void onTabReselected(Tab arg0,
+								FragmentTransaction arg1) {
+							// TODO Auto-generated method stub
+							
+						}
+
+						@Override
+						public void onTabSelected(Tab arg0,
+								FragmentTransaction arg1) {
+							// TODO Auto-generated method stub
+							
+						}
+
+						@Override
+						public void onTabUnselected(Tab arg0,
+								FragmentTransaction arg1) {
+							// TODO Auto-generated method stub
+							
+						}
+	                };
+	                
+	                // Add 3 tabs, specifying the tab's text and TabListener
+	                for (int i = 0; i < 3; i++) {
+	                	getActionBar().addTab(
+	                			getActionBar().newTab()
+	                                    .setText("Tab " + (i + 1))
+	                                    .setTabListener(tabListener));
+	                }
+	            	
 	                //----------------------
             		//*
             		Thread thread = new Thread(new Runnable(){
@@ -223,8 +282,22 @@ import com.xmiles.android.webservice.UserFunctions;
 	  	Log.d(TAG, "onDestroy: BtnFbLogin_Fragment"); 
 	    super.onDestroy();
 	  }
+
+	    @Override
+	    public void onTabUnselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+	    }
+
+	    @Override
+	    public void onTabSelected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+	        // When the given tab is selected, switch to the corresponding page in the ViewPager.
+	        mViewPager.setCurrentItem(tab.getPosition());
+	    }
+
+	    @Override
+	    public void onTabReselected(ActionBar.Tab tab, FragmentTransaction fragmentTransaction) {
+	    }  
   
-	 /**
+  /**
 	 * Function to login into facebook
 	 * */
 	public void loginToFacebook() {
@@ -253,7 +326,7 @@ import com.xmiles.android.webservice.UserFunctions;
 							SessionStore.save(Utility.mFacebook, getBaseContext());
 
 							// start service
-							FbPlaces_alarm.setAlarm(BtnFbLogin_Fragment.this);
+							FbPlaces_alarm.setAlarm(BtnFbLogin_Fragment_bkp.this);
 					        //ServiceLocation					        
 					        //startService(new Intent(BtnFbLogin_Fragment.this, ServiceLocation.class));					        
 					        
@@ -317,69 +390,96 @@ import com.xmiles.android.webservice.UserFunctions;
   public void requestUserData() {
 	  //----
       Log.d(TAG, "requestUserData()");
-      //---------------
+      //---------------	  
       
-      //*******
-      Fragment fgmt_inicio 	  = new Profile_Fragment();
-      Fragment fgmt_favoritos = new Routes_Fragment();
-      //*******
-  	  
-      ActionBar actionBar = getActionBar();
-      actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-      //actionBar.setDisplayShowTitleEnabled(true);
+      // Create the adapter that will return a fragment for each of the three primary sections
+      // of the app.
+      mAppSectionsPagerAdapter = new AppSectionsPagerAdapter(getSupportFragmentManager());
 
+      // Set up the action bar.
+      final ActionBar actionBar = getActionBar();    
+            
       // Enable Action Bar
       actionBar.show();
+  	  
+      // Specify that we will be displaying tabs in the action bar.
+      actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
-
-      Tab tab1 = actionBar
-          .newTab()
-          .setText("INÍCIO")
-          //.setIcon(R.drawable.android_logo)
-          .setTabListener(new MyTabsListener(fgmt_inicio));
-
-      actionBar.addTab(tab1);
-      actionBar.selectTab(tab1);
-
-      Tab tab2 = actionBar
-          .newTab()
-          .setText("FAVORITOS")
-          //.setIcon(R.drawable.windows_logo)
-          .setTabListener(new MyTabsListener(fgmt_favoritos));
-      
-      actionBar.addTab(tab2);
-      
-      Tab tab3 = actionBar
-              .newTab()
-              .setText("RANKING")
-              //.setIcon(R.drawable.windows_logo)
-              .setTabListener(new MyTabsListener(fgmt_favoritos));
-          
-          actionBar.addTab(tab3);
+      // Set up the ViewPager, attaching the adapter and setting up a listener for when the
+      // user swipes between sections.
+      mViewPager = (ViewPager) findViewById(R.id.com_facebook_login_activity_progress_bar);
+      mViewPager.setAdapter(mAppSectionsPagerAdapter);
+      mViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+          @Override
+          public void onPageSelected(int position) {
+              // When swiping between different app sections, select the corresponding tab.
+              // We can also use ActionBar.Tab#select() to do this if we have a reference to the
+              // Tab.
+              actionBar.setSelectedNavigationItem(position);
+          }
+      });
       
       
+      // For each of the sections in the app, add a tab to the action bar.
+      for (int i = 0; i < mAppSectionsPagerAdapter.getCount(); i++) {
+          // Create a tab with text corresponding to the page title defined by the adapter.
+          // Also specify this Activity object, which implements the TabListener interface, as the
+          // listener for when this tab is selected.
+          actionBar.addTab(
+                  actionBar.newTab()
+                          .setText(mAppSectionsPagerAdapter.getPageTitle(i))
+                          .setTabListener(this));
+      }
+      
+  	  
+  	  /**
+  	   * Diplaying fragment
+  	   * */
+      
+      /*
+  	  Fragment fragment = new Profile_Fragment();
+  	  
+
+  	  android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+      android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();        
+      fragmentTransaction.replace(R.id.frame_container, fragment);
+      fragmentTransaction.commit();
+      */
 
   }
-  protected class MyTabsListener implements ActionBar.TabListener{
-	    private Fragment fragment;
+  
+  public static class AppSectionsPagerAdapter extends FragmentPagerAdapter {
 
-	    public MyTabsListener(Fragment fragment2){
-	        this.fragment = fragment2;
-	    }
-	    public void onTabSelected(Tab tab, FragmentTransaction ft){
-	        //ft.add(R.id.frame_container, fragment);
-	    	//ft.replace(R.id.frame_container, fragment);
-	    	  android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-	          android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();        
-	          fragmentTransaction.replace(R.id.frame_container, fragment);
-	          fragmentTransaction.commit();
+      public AppSectionsPagerAdapter(FragmentManager fm) {
+          super(fm);
+      }
 
-	    }
-	    public void onTabReselected(Tab tab, FragmentTransaction ft) {
-	    }
-	    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-	        //ft.remove(fragment);
-	    }
-	}
+      @Override
+      public Fragment getItem(int i) {
+    	  
+    	  Fragment fragment = null;
+    	  
+    	  
+          switch (i) {
+              case 0:
+                  // The first section of the app is the most interesting -- it offers
+                  // a launchpad into the other demonstrations in this example application.
+            	  fragment = new Profile_Fragment();
+
+          }
+          return fragment;
+      }
+
+      @Override
+      public int getCount() {
+          //return 3;
+          return 1;
+      }
+
+      @Override
+      public CharSequence getPageTitle(int position) {
+          return "Section " + (position + 1);
+      }
+  }
 
 }

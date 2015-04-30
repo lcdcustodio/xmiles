@@ -7,8 +7,6 @@ import org.json.JSONObject;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
-import android.app.ActionBar.TabListener;
-
 import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -21,7 +19,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 
-//import android.app.Fragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -56,7 +53,7 @@ import com.xmiles.android.webservice.UserFunctions;
 
 
 //public class BtnFbLogin_Fragment extends FragmentActivity implements ActionBar.TabListener {
-	public class BtnFbLogin_Fragment extends FragmentActivity {	
+	public class BtnFbLogin_Fragment_bkp2 extends FragmentActivity {	
 
 	// Your Facebook APP ID	
 	private static final String APP_ID = "844332932270301";
@@ -253,7 +250,7 @@ import com.xmiles.android.webservice.UserFunctions;
 							SessionStore.save(Utility.mFacebook, getBaseContext());
 
 							// start service
-							FbPlaces_alarm.setAlarm(BtnFbLogin_Fragment.this);
+							FbPlaces_alarm.setAlarm(BtnFbLogin_Fragment_bkp2.this);
 					        //ServiceLocation					        
 					        //startService(new Intent(BtnFbLogin_Fragment.this, ServiceLocation.class));					        
 					        
@@ -317,69 +314,27 @@ import com.xmiles.android.webservice.UserFunctions;
   public void requestUserData() {
 	  //----
       Log.d(TAG, "requestUserData()");
-      //---------------
-      
-      //*******
-      Fragment fgmt_inicio 	  = new Profile_Fragment();
-      Fragment fgmt_favoritos = new Routes_Fragment();
-      //*******
+      //---------------	  
   	  
-      ActionBar actionBar = getActionBar();
-      actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-      //actionBar.setDisplayShowTitleEnabled(true);
-
-      // Enable Action Bar
-      actionBar.show();
-
-
-      Tab tab1 = actionBar
-          .newTab()
-          .setText("INÍCIO")
-          //.setIcon(R.drawable.android_logo)
-          .setTabListener(new MyTabsListener(fgmt_inicio));
-
-      actionBar.addTab(tab1);
-      actionBar.selectTab(tab1);
-
-      Tab tab2 = actionBar
-          .newTab()
-          .setText("FAVORITOS")
-          //.setIcon(R.drawable.windows_logo)
-          .setTabListener(new MyTabsListener(fgmt_favoritos));
+  	  /**
+  	   * Diplaying fragment
+  	   * */
       
-      actionBar.addTab(tab2);
       
-      Tab tab3 = actionBar
-              .newTab()
-              .setText("RANKING")
-              //.setIcon(R.drawable.windows_logo)
-              .setTabListener(new MyTabsListener(fgmt_favoritos));
-          
-          actionBar.addTab(tab3);
+  	  //Fragment fragment = new Profile_Fragment();
+  	  //Fragment fragment = new ActionTab_Fragment();
+
+  	  android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+      android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();        
+      //fragmentTransaction.replace(R.id.frame_container, fragment);
       
+      //android.app.FragmentManager fragMgr = getFragmentManager();
+      //Fragment currentFragment = (Fragment) fragMgr.findFragmentById(0);
+      
+      fragmentTransaction.commit();
       
 
   }
-  protected class MyTabsListener implements ActionBar.TabListener{
-	    private Fragment fragment;
-
-	    public MyTabsListener(Fragment fragment2){
-	        this.fragment = fragment2;
-	    }
-	    public void onTabSelected(Tab tab, FragmentTransaction ft){
-	        //ft.add(R.id.frame_container, fragment);
-	    	//ft.replace(R.id.frame_container, fragment);
-	    	  android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-	          android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();        
-	          fragmentTransaction.replace(R.id.frame_container, fragment);
-	          fragmentTransaction.commit();
-
-	    }
-	    public void onTabReselected(Tab tab, FragmentTransaction ft) {
-	    }
-	    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-	        //ft.remove(fragment);
-	    }
-	}
+  
 
 }

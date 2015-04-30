@@ -4,7 +4,7 @@
     android:layout_height="fill_parent"
     android:background="@color/standard_gray_e2e2e0"
     android:orientation="vertical" >
- 
+
     <!-- Framelayout to display Fragments -->
     <FrameLayout
         android:id="@+id/frame_container"
