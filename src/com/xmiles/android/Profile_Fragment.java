@@ -65,7 +65,7 @@ public class Profile_Fragment extends Fragment {
  
 		mHandler = new Handler();
 		
-		View custom = inflater.inflate(R.layout.profile_fgmt_background, container, false);
+		View custom = inflater.inflate(R.layout.fgmt_background, container, false);
         View rootView = inflater.inflate(R.layout.profile_fgmt_custom, container, false);
         
         name = (TextView) rootView.findViewById(R.id.name);

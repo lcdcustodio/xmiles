@@ -322,6 +322,7 @@ import com.xmiles.android.webservice.UserFunctions;
       //*******
       Fragment fgmt_inicio 	  = new Profile_Fragment();
       Fragment fgmt_favoritos = new Routes_Fragment();
+      Fragment fgmt_ranking = new EmConstrucao_Fragment();
       //*******
   	  
       ActionBar actionBar = getActionBar();
@@ -353,7 +354,7 @@ import com.xmiles.android.webservice.UserFunctions;
               .newTab()
               .setText("RANKING")
               //.setIcon(R.drawable.windows_logo)
-              .setTabListener(new MyTabsListener(fgmt_favoritos));
+              .setTabListener(new MyTabsListener(fgmt_ranking));
           
           actionBar.addTab(tab3);
       
