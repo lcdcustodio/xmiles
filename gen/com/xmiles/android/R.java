@@ -519,6 +519,7 @@ containing a value of this type.
         public static final int xmiles_logo_rev06=0x7f020084;
     }
     public static final class id {
+        public static final int _de=0x7f040024;
         public static final int com_facebook_login_activity_progress_bar=0x7f04000b;
         public static final int com_facebook_picker_activity_circle=0x7f04000a;
         public static final int com_facebook_picker_checkbox=0x7f04000d;
@@ -540,27 +541,26 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment_logo_image=0x7f04001b;
         public static final int com_facebook_usersettingsfragment_profile_name=0x7f04001c;
         public static final int computer=0x7f04002d;
-        public static final int dialog_listview=0x7f04002b;
         public static final int frame_container=0x7f040007;
-        public static final int friend_item=0x7f040020;
-        public static final int gridView1=0x7f040025;
-        public static final int grid_item_image=0x7f040028;
-        public static final int grid_item_label=0x7f040029;
+        public static final int friend_item=0x7f040021;
+        public static final int gridView1=0x7f040027;
+        public static final int grid_item_image=0x7f04002a;
+        public static final int grid_item_label=0x7f04002b;
         public static final int hybrid=0x7f040006;
-        public static final int imageView1=0x7f040026;
-        public static final int imageView2=0x7f040024;
+        public static final int imageView1=0x7f040028;
+        public static final int imageView2=0x7f040026;
         public static final int imgbtn_fblogin=0x7f040008;
-        public static final int info=0x7f040023;
+        public static final int info=0x7f040025;
         public static final int large=0x7f040002;
         public static final int list_favorites=0x7f04001f;
-        public static final int locat=0x7f04002a;
-        public static final int name=0x7f040022;
+        public static final int locat=0x7f04002c;
+        public static final int name=0x7f040023;
         public static final int none=0x7f040003;
         public static final int normal=0x7f040001;
         public static final int picker_subtitle=0x7f040018;
-        public static final int profile_pic=0x7f040021;
-        public static final int relativeLayout1=0x7f040027;
-        public static final int rotas=0x7f04002c;
+        public static final int profile_pic=0x7f040022;
+        public static final int relativeLayout1=0x7f040029;
+        public static final int rotas=0x7f040020;
         public static final int rua=0x7f040030;
         public static final int satelite=0x7f04002f;
         public static final int satellite=0x7f040004;
@@ -590,13 +590,13 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment=0x7f03000e;
         public static final int em_construcao_fgmt=0x7f03000f;
         public static final int favorites_fragment=0x7f030010;
-        public static final int favorites_items=0x7f030011;
-        public static final int fgmt_background=0x7f030012;
-        public static final int main=0x7f030013;
-        public static final int mobile=0x7f030014;
-        public static final int profile_fgmt_custom=0x7f030015;
-        public static final int profile_fgmt_gridview=0x7f030016;
-        public static final int route_dialog=0x7f030017;
+        public static final int favorites_header_view=0x7f030011;
+        public static final int favorites_items=0x7f030012;
+        public static final int fgmt_background=0x7f030013;
+        public static final int main=0x7f030014;
+        public static final int mobile=0x7f030015;
+        public static final int profile_fgmt_custom=0x7f030016;
+        public static final int profile_fgmt_gridview=0x7f030017;
         public static final int splash=0x7f030018;
     }
     public static final class menu {

@@ -164,37 +164,9 @@ import com.xmiles.android.webservice.UserFunctions;
 	 
 	        switch(item.getItemId()){
 	            case R.id.rotas:
-	                //Toast.makeText(getBaseContext(), "You selected Rotas", Toast.LENGTH_SHORT).show();
+
+	            	Toast.makeText(getBaseContext(), "You selected Rotas", Toast.LENGTH_SHORT).show();
 	                
-	                //----------------------
-            		//*
-            		Thread thread = new Thread(new Runnable(){
-            		    @Override
-            		    public void run() {
-            		        try {
-            		//*/        
-
-			                Uri uri = SqliteProvider.CONTENT_URI_USER_PROFILE;
-		                	Cursor data = getApplicationContext().getContentResolver().query(uri, null, null, null, null);
-		                	
-		                	if (data != null && data.getCount() > 0){
-		                		data.moveToFirst();
-		                		Log.i(TAG,"testing SQLITE: " + data.getString(KEY_ID) + "," + data.getString(1));
-
-		                		//Your code goes here
-                            	UserFunctions userFunc = new UserFunctions();
-                		        JSONObject json = userFunc.favoritesRoutes(data.getString(KEY_ID));
-
-		                	}
-		            		        	
-		    		        } catch (Exception e) {
-		    		            e.printStackTrace();
-		    		        }
-		    		    }
-		    		});
-		
-		    		thread.start();
-                	
 	                //----------------------
 
 
