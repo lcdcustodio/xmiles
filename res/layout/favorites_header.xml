@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
 			 android:layout_width="fill_parent"
-			 android:layout_height="30dp"
+			 android:layout_height="35dp"
 			 android:background="@color/standard_gray_e2e2e0"			 
 			 android:layout_marginTop="0dp">
 			 
             <TextView
 	        android:id="@+id/rotas"
-	        android:text="ROTA(S):"
-	        android:textColor="@color/orange_2"  
+	        android:text="ROTAS"	        
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentRight="true"
-	        android:layout_marginTop="3dip"
-	        android:layout_marginLeft="6dip"
+	        android:layout_marginTop="8dip"
+	        android:layout_marginLeft="10dip"
 	        style="@style/NusProfileUserName"
 	        android:layout_alignWithParentIfMissing="true"
 	        android:gravity="center_vertical" />

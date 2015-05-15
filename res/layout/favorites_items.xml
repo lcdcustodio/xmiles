@@ -19,12 +19,12 @@
     
     <ImageView
         android:id="@+id/profile_pic"
-        android:background="@drawable/rounded_corner"
+        android:background="@drawable/rounded_corner"        
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" 
         android:layout_marginLeft="6dip"
         android:layout_marginTop="6dip"                
-        android:src="@drawable/action_people"
+        android:src="@drawable/bus"
         android:layout_marginRight="6dip" />
 
     <TextView
@@ -34,7 +34,7 @@
         android:layout_toRightOf="@id/profile_pic"
         android:layout_alignParentRight="true"
         android:layout_marginTop="6dip"
-        style="@style/NusProfileUserName"
+        style="@style/BusLine"
         android:layout_alignWithParentIfMissing="true"
         android:gravity="center_vertical" />
 

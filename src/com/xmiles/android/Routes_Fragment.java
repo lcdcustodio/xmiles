@@ -48,8 +48,10 @@ public class Routes_Fragment extends Fragment {
             Bundle savedInstanceState) {
  
 		View rootView = inflater.inflate(R.layout.fgmt_background, container, false);
-		View rootView2 = inflater.inflate(R.layout.favorites_header_view, container, false);
+		View rootView2 = inflater.inflate(R.layout.favorites_header, container, false);
+		
 		View custom = inflater.inflate(R.layout.favorites_fragment, null); 
+		View custom2 = inflater.inflate(R.layout.favorites_add_routes_button, container, false);
 		
 		mListFavorites = (ListView) custom.findViewById(R.id.list_favorites);
 		
@@ -64,6 +66,7 @@ public class Routes_Fragment extends Fragment {
 		
 		((ViewGroup) rootView).addView(rootView2);
 		((ViewGroup) rootView).addView(custom);
+		((ViewGroup) rootView).addView(custom2);
         return rootView;
     }
 	
@@ -163,8 +166,8 @@ public class Routes_Fragment extends Fragment {
 			@Override
 			public int getCount() {
 				// TODO Auto-generated method stub
-				//return jsonArray.length();	
-				return 2;
+				return jsonArray.length();	
+				
 			}
 
 			@Override
@@ -226,13 +229,13 @@ public class Routes_Fragment extends Fragment {
 	            }
 	            
 	            try {
-	                holder._de.setText("        De: " +jsonObject.getString("_from"));
+	                holder._de.setText("De: " +jsonObject.getString("_from"));
 	            } catch (JSONException e) {
 	                holder._de.setText("");
 	            }
 	            
 	            try {
-	                holder.info.setText("   Para: " +jsonObject.getString("_to"));
+	                holder.info.setText("Para: " +jsonObject.getString("_to"));
 	            } catch (JSONException e) {
 	                holder.info.setText("");
 	            }

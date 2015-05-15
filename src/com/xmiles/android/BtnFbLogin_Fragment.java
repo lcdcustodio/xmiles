@@ -62,9 +62,8 @@ import com.xmiles.android.webservice.UserFunctions;
 	private static final String APP_ID = "844332932270301";
 
 	// Facebook Permissions	
-    public String[] permissions = { "read_stream", "offline_access", "publish_stream", "user_photos", "publish_checkins",
-          "photo_upload","user_location" };	
-
+	public String[] permissions = { "read_stream", "publish_actions", "user_photos", "user_location" };
+	
     private static final String TAG = "FACEBOOK";
     private static final Integer KEY_ID = 0;
 
