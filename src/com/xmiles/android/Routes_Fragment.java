@@ -53,6 +53,8 @@ public class Routes_Fragment extends Fragment {
 		View custom = inflater.inflate(R.layout.favorites_fragment, null); 
 		View custom2 = inflater.inflate(R.layout.favorites_add_routes_button, container, false);
 		
+		View custom3 = inflater.inflate(R.layout.favorites_header, container, false);
+		
 		mListFavorites = (ListView) custom.findViewById(R.id.list_favorites);
 		
         progressBar = new ProgressDialog(getActivity());
@@ -66,6 +68,7 @@ public class Routes_Fragment extends Fragment {
 		
 		((ViewGroup) rootView).addView(rootView2);
 		((ViewGroup) rootView).addView(custom);
+		((ViewGroup) rootView).addView(custom3);
 		((ViewGroup) rootView).addView(custom2);
         return rootView;
     }
@@ -223,7 +226,7 @@ public class Routes_Fragment extends Fragment {
 	            }
 	            */
 	            try {
-	                holder.name.setText("Linha: " + jsonObject.getString("busline"));
+	                holder.name.setText(jsonObject.getString("busline"));
 	            } catch (JSONException e) {
 	                holder.name.setText("");
 	            }
