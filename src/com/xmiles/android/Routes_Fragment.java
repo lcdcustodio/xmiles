@@ -21,11 +21,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 public class Routes_Fragment extends Fragment {
@@ -33,6 +36,9 @@ public class Routes_Fragment extends Fragment {
 	
 	private static final String TAG = "FACEBOOK";
 	private static final Integer KEY_ID = 0;
+	//---------------------
+	protected static final Integer TYPE1 = 1;
+	private static final Integer TYPE2 = 2;	
 	//---------------------
 	ListView mListFavorites;
 	SimpleCursorAdapter mAdapter;
@@ -51,9 +57,8 @@ public class Routes_Fragment extends Fragment {
 		View rootView2 = inflater.inflate(R.layout.favorites_header, container, false);
 		
 		View custom = inflater.inflate(R.layout.favorites_fragment, null); 
-		View custom2 = inflater.inflate(R.layout.favorites_add_routes_button, container, false);
-		
-		View custom3 = inflater.inflate(R.layout.favorites_header, container, false);
+		//View custom2 = inflater.inflate(R.layout.favorites_add_routes_button, container, false);		
+		//View custom3 = inflater.inflate(R.layout.favorites_header, container, false);
 		
 		mListFavorites = (ListView) custom.findViewById(R.id.list_favorites);
 		
@@ -68,8 +73,8 @@ public class Routes_Fragment extends Fragment {
 		
 		((ViewGroup) rootView).addView(rootView2);
 		((ViewGroup) rootView).addView(custom);
-		((ViewGroup) rootView).addView(custom3);
-		((ViewGroup) rootView).addView(custom2);
+		//((ViewGroup) rootView).addView(custom3);
+		//((ViewGroup) rootView).addView(custom2);
         return rootView;
     }
 	
@@ -169,8 +174,19 @@ public class Routes_Fragment extends Fragment {
 			@Override
 			public int getCount() {
 				// TODO Auto-generated method stub
-				return jsonArray.length();	
+				return jsonArray.length() + 1;	
+				//return jsonArray.length();
 				
+			}
+			
+			@Override
+			public int getItemViewType(int position) {
+				
+				if (position < jsonArray.length() ){
+					return TYPE1;
+				} else {
+					return TYPE2;
+				}
 			}
 
 			@Override
@@ -188,66 +204,110 @@ public class Routes_Fragment extends Fragment {
 			@Override
 			public View getView(final int position, View convertView, ViewGroup arg2) {				
 
-	            JSONObject jsonObject = null;
-	            try {
-	                jsonObject = jsonArray.getJSONObject(position);
-	            } catch (JSONException e1) {
-	                // TODO Auto-generated catch block
-	                e1.printStackTrace();
-	            }				
 				
-				 View hView = convertView;
-				 
+				int viewType = this.getItemViewType(position);
 				
-				if (mInflater == null){
-					mInflater = (LayoutInflater) getActivity()
-		                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				}
-		        if (convertView == null){		        	
-		        	
-		        	hView = mInflater.inflate(R.layout.favorites_items, null);	                
-	                ViewHolder holder = new ViewHolder();
-	                holder.profile_pic = (ImageView) hView.findViewById(R.id.profile_pic);
-	                holder.name = (TextView) hView.findViewById(R.id.name);
-	                holder._de = (TextView) hView.findViewById(R.id._de);
-	                holder.info = (TextView) hView.findViewById(R.id.info);
-	                //------
-	                hView.setTag(holder);
-	            }		    
-		        
-		        final ViewHolder holder = (ViewHolder) hView.getTag();
-		        /*
-	            try {
-	                holder.profile_pic.setImageBitmap(Utility.model.getImage(
-	                      jsonObject.getString("id"), jsonObject.optJSONObject("picture").optJSONObject("data").getString("url")));
-	                    
-	            } catch (JSONException e) {
-	                holder.name.setText("");
-	            }
-	            */
-	            try {
-	                holder.name.setText(jsonObject.getString("busline"));
-	            } catch (JSONException e) {
-	                holder.name.setText("");
-	            }
-	            
-	            try {
-	                holder._de.setText("De: " +jsonObject.getString("_from"));
-	            } catch (JSONException e) {
-	                holder._de.setText("");
-	            }
-	            
-	            try {
-	                holder.info.setText("Para: " +jsonObject.getString("_to"));
-	            } catch (JSONException e) {
-	                holder.info.setText("");
-	            }
+				//Log.d(TAG,"positition: " + position);
+				
+			    switch(viewType){
+			       case 1:
+			           
+			    	   Type1Holder holder1; 
 
-	            return hView;
+			           View v = convertView;
+			           
+						if (mInflater == null){
+							mInflater = (LayoutInflater) getActivity()
+				                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+						}
+			           
+			           //if (v == null) { 
+			        	   v = mInflater.inflate(R.layout.favorites_items, null);
+			        	   holder1 = new Type1Holder (); 
+			               
+			        	   holder1.profile_pic = (ImageView) v.findViewById(R.id.profile_pic);
+			               holder1.name = (TextView) v.findViewById(R.id.name);
+			               holder1._de = (TextView) v.findViewById(R.id._de);
+			               holder1.info = (TextView) v.findViewById(R.id.info);
+			               v.setTag(holder1); 
+			        	   
+			           //} else {
+			           //   holder1 = (Type1Holder)v.getTag(); 
+			          // }
+			       
+					    JSONObject jsonObject = null;
+					    
+			            try {
+			                jsonObject = jsonArray.getJSONObject(position);
+			            
+					 try {
+				                holder1.name.setText(jsonObject.getString("busline"));
+				             } catch (JSONException e) {
+				                holder1.name.setText("");
+				             }
+				            
+				         try {
+				                holder1._de.setText("De: " +jsonObject.getString("_from"));
+				             } catch (JSONException e) {
+				                holder1._de.setText("");
+				             }
+				            
+				         try {
+				                holder1.info.setText("Para: " +jsonObject.getString("_to"));
+				             } catch (JSONException e) {
+				                holder1.info.setText("");
+				             }
+			            
+			            
+			            } catch (JSONException e1) {
+			                // TODO Auto-generated catch block
+			                e1.printStackTrace();	                
+			            }
+
+			            return v;	
+
+
+
+			       case 2:
+			    	   
+			    	   Type2Holder holder2; 
+
+			           View v2 = convertView;
+			           
+						//if (mInflater == null){
+						//mInflater = (LayoutInflater) getActivity()
+				        //            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+						//}			           
+ 
+			        	v2 = mInflater.inflate(R.layout.favorites_add_routes_button, null);			        	   
+			        	holder2 = new Type2Holder (); 			               
+			        	holder2.add_routes = (Button) v2.findViewById(R.id.button1);
+		        	
+			            ((Button)v2.findViewById(R.id.button1)).setOnClickListener(new OnClickListener() {
+
+			                @Override
+			                public void onClick(View v2) {
+			                	Toast.makeText(getActivity(), "Botao Nova Rota pressionado", Toast.LENGTH_SHORT).show();
+			                }
+			            });
+			            
+			            v2.setTag(holder2); 
+			        	   
+			    	   
+			           return v2;
+			    	   
+			       default:
+			            break;
+			        	   
+			    }
+				return null;
+				
+
 			}
 		}
 
-	    class ViewHolder {
+	    
+	    class Type1Holder {
 	        ImageView profile_pic;
 	        TextView name;
 	        TextView _de;
@@ -255,5 +315,10 @@ public class Routes_Fragment extends Fragment {
 
 	    }
 
-	 
+	    class Type2Holder {
+	        Button add_routes;
+
+	    }
+
+	    
 }
