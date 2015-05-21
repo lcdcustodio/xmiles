@@ -287,7 +287,21 @@ public class Routes_Fragment extends Fragment {
 
 			                @Override
 			                public void onClick(View v2) {
+			                	//-------------
 			                	Toast.makeText(getActivity(), "Botao Nova Rota pressionado", Toast.LENGTH_SHORT).show();
+			                	//------------
+			                	Fragment fgmt = new AddRoutes_Fragment();
+			                	//Fragment fgmt = new EmConstrucao_Fragment();
+			                	//android.support.v4.app.FragmentManager fm = getChildFragmentManager();
+			                	//android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();        
+			                	//fragmentTransaction.replace(R.id.frame_container, fgmt);			                	
+			                	//fragmentTransaction.commit();
+
+			      	    	  	android.support.v4.app.FragmentManager fm = getFragmentManager();
+			      	    	  	android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();        
+			      	    	  	fragmentTransaction.replace(R.id.frame_container, fgmt);
+			      	    	  	fragmentTransaction.commit();
+			                	
 			                }
 			            });
 			            
