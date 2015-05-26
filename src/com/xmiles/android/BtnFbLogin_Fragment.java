@@ -162,12 +162,39 @@ import com.xmiles.android.webservice.UserFunctions;
 	        super.onOptionsItemSelected(item);
 	 
 	        switch(item.getItemId()){
-	            case R.id.rotas:
+	            
+	        	case android.R.id.home:
+
+	            	//Toast.makeText(getBaseContext(), "You selected UpButton", Toast.LENGTH_SHORT).show();
+
+	            	//------------------
+	        	    ActionBar actionBar = getActionBar();
+
+	        	    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+	        	    actionBar.setDisplayHomeAsUpEnabled(false);	    
+	        	    //*
+	            	android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+	            	android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();	                
+	            	fragmentTransaction.addToBackStack(null)
+	                        		   .commit();            	
+	            	//*/	        	    
+	          	  	//--------------
+	        	    /*
+	        	    Fragment fgmt = new AddRoutes_Fragment();
+	        	    android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+	        	    android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();        
+	        	    fragmentTransaction.replace(R.id.frame_container, fgmt);
+	        	    fragmentTransaction.commit();
+					*/
+	        	    
+	            	break;
+	        		
+	        		
+	        		
+	        	case R.id.rotas:
 
 	            	Toast.makeText(getBaseContext(), "You selected Rotas", Toast.LENGTH_SHORT).show();
 	                
-	                //----------------------
-
 
 	            	break;
 	 
@@ -177,6 +204,19 @@ import com.xmiles.android.webservice.UserFunctions;
 	            }	            
 	        return true;
 	    }
+	  
+	    
+	    @Override
+	    public void onBackPressed() {
+	        if(getFragmentManager().getBackStackEntryCount() == 0) {
+	            super.onBackPressed();
+	        }
+	        else {
+	            getFragmentManager().popBackStack();
+	        }
+	    }  
+	    
+	    
 	    
 	  @Override
 	  public void onDestroy() {

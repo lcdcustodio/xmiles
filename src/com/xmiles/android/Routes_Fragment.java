@@ -81,16 +81,25 @@ public class Routes_Fragment extends Fragment {
 	 @Override
 	    public void onDestroyView() {
 	        super.onDestroyView();
-	         
+	        //* 
 	        FragmentManager fragMgr = getFragmentManager();
-	        Fragment currentFragment = (Fragment) fragMgr.findFragmentById(0);
-	         
+	        //Fragment currentFragment = (Fragment) fragMgr.findFragmentById(0);
+	        Fragment currentFragment = (Fragment) fragMgr.findFragmentById(R.id.frame_container);
+	        //Fragment currentFragment = (Fragment) fragMgr.findFragmentByTag("Routes_Fragment");
+	        Log.d(TAG, "currentFragment: " + currentFragment); 
 
+	        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+		    ft.remove(currentFragment);
+		    ft.commit();
+		    /*
 	        if (currentFragment != null){	        	
 	        	FragmentTransaction fragTrans = fragMgr.beginTransaction();
 	            fragTrans.remove(currentFragment);
+	            //fragTrans.remove("Routes_Fragment");
 	            fragTrans.commit();
 	        }
+	        */
+	        
 	    }
 	 
 	 public class Favorites_Query {
@@ -288,19 +297,18 @@ public class Routes_Fragment extends Fragment {
 			                @Override
 			                public void onClick(View v2) {
 			                	//-------------
-			                	Toast.makeText(getActivity(), "Botao Nova Rota pressionado", Toast.LENGTH_SHORT).show();
+			                	//Toast.makeText(getActivity(), "Botao Nova Rota pressionado", Toast.LENGTH_SHORT).show();
 			                	//------------
 			                	Fragment fgmt = new AddRoutes_Fragment();
-			                	//Fragment fgmt = new EmConstrucao_Fragment();
-			                	//android.support.v4.app.FragmentManager fm = getChildFragmentManager();
-			                	//android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();        
-			                	//fragmentTransaction.replace(R.id.frame_container, fgmt);			                	
-			                	//fragmentTransaction.commit();
 
 			      	    	  	android.support.v4.app.FragmentManager fm = getFragmentManager();
-			      	    	  	android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();        
-			      	    	  	fragmentTransaction.replace(R.id.frame_container, fgmt);
+			      	    	  	android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();
+			      	    	  	//-------------
+			      	    	    fragmentTransaction.replace(R.id.frame_container, fgmt);
 			      	    	  	fragmentTransaction.commit();
+
+			      	    	  	
+			      	    	  	
 			                	
 			                }
 			            });

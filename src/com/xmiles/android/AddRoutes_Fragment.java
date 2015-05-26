@@ -7,14 +7,17 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import android.app.ActionBar;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
+
+
 
 public class AddRoutes_Fragment extends Fragment {
 
@@ -24,6 +27,7 @@ public class AddRoutes_Fragment extends Fragment {
 	 * available.
 	 */
 
+	private static final String TAG = "FACEBOOK";
 	private static GoogleMap mMap;
 	private static Double latitude, longitude;
 	
@@ -35,7 +39,11 @@ public class AddRoutes_Fragment extends Fragment {
 	    if (container == null) {
 	        return null;
 	    }
-	    //view = (RelativeLayout) inflater.inflate(R.layout.addroutes_fgmt, container, false);
+	    //---------------------
+	    ActionBar actionBar = getActivity().getActionBar();
+	    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
+	    actionBar.setDisplayHomeAsUpEnabled(true);
+	    //---------------------
 	    View rootView = inflater.inflate(R.layout.addroutes_fgmt, container, false);
 	    	    
 	    // Passing harcoded values for latitude & longitude. Please change as per your need. This is just used to drop a Marker on the Map
@@ -44,7 +52,7 @@ public class AddRoutes_Fragment extends Fragment {
 
 	            setUpMapIfNeeded(); // For setting up the MapFragment
 
-	    //return view;
+
 	    return rootView;
 	}
 
@@ -105,21 +113,16 @@ public class AddRoutes_Fragment extends Fragment {
 	@Override
 	public void onDestroyView() {
 	    super.onDestroyView();
-	    /*if (mMap != null) {
-	        MainActivity.fragmentManager.beginTransaction()
-	            .remove(MainActivity.fragmentManager.findFragmentById(R.id.location_map)).commit();
-	        mMap = null;
-	    }*/
 	    
-        FragmentManager fragMgr = getFragmentManager();
-        Fragment currentFragment = (Fragment) fragMgr.findFragmentById(0);
-         
-
-        if (currentFragment != null){	        	
-        	FragmentTransaction fragTrans = fragMgr.beginTransaction();
-            fragTrans.remove(currentFragment);
-            fragTrans.commit();
-        }
+	    //Log.d(TAG, "lala");
+	    
+	    Fragment fragment = (getFragmentManager().findFragmentById(R.id.gmap_addroutes));
+	    //Fragment fragment = (getFragmentManager().findFragmentById(R.id.frame_container));
+	    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+	    ft.remove(fragment);
+	    //ft.detach(fragment);
+	    ft.commit();
+	    
 
 	}
 	
