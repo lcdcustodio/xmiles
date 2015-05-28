@@ -1,12 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
+	android:paddingTop="10dp"
+    android:background="@color/standard_gray_e2e2e0"
     android:layout_height="fill_parent" >
 
+	<RelativeLayout 
+	    android:id="@+id/rel01"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:paddingLeft="10dp"
+	    android:paddingRight="10dp">
+	    
+	    <RelativeLayout
+	    android:id="@+id/rel02" 
+        android:layout_width="fill_parent"
+        android:layout_height="100dp"        
+        android:background="@drawable/background_with_shadow"
+        android:orientation="horizontal" >
+        	<Spinner
+			    android:id="@+id/planets_spinner"
+			    android:layout_width="fill_parent"
+			    android:layout_height="wrap_content" />         
+		</RelativeLayout>
+				 
+	</RelativeLayout>		 
+	<View
+			 android:id="@+id/view01"
+			 android:layout_below="@id/rel01"
+			 android:layout_width="fill_parent"
+			 android:layout_height="10dp"
+			 android:background="@color/standard_gray_e2e2e0"			 
+			 android:layout_marginTop="0dp"
+	
+	></View>    		 	
+    
+     
     <fragment
         android:id="@+id/gmap_addroutes"
+        android:layout_below="@id/view01"        
         android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+		    <RelativeLayout
+		    android:id="@+id/rel03" 
+	        android:layout_width="fill_parent"
+	        android:layout_height="100dp"        
+	        android:background="@drawable/background_with_shadow"
+	        android:orientation="horizontal" >
+	        	<Spinner
+				    android:id="@+id/city_spinner"
+				    android:layout_width="fill_parent"
+				    android:layout_height="wrap_content" />         
+			</RelativeLayout>
+        
+        </fragment>
 
 </RelativeLayout>

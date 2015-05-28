@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.webservice.UserFunctions;
 
@@ -15,6 +16,7 @@ import android.support.v4.widget.SimpleCursorAdapter;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -78,20 +80,27 @@ public class Routes_Fragment extends Fragment {
         return rootView;
     }
 	
+	
+	
+	
+	
+	
 	 @Override
 	    public void onDestroyView() {
 	        super.onDestroyView();
-	        //* 
+	        
+	        Log.d(TAG, "onDestroy Routes_fgmt");
+	        /* 
 	        FragmentManager fragMgr = getFragmentManager();
 	        //Fragment currentFragment = (Fragment) fragMgr.findFragmentById(0);
 	        Fragment currentFragment = (Fragment) fragMgr.findFragmentById(R.id.frame_container);
 	        //Fragment currentFragment = (Fragment) fragMgr.findFragmentByTag("Routes_Fragment");
-	        Log.d(TAG, "currentFragment: " + currentFragment); 
+	        Log.d(TAG, "onDestroy Routes_fgmt: " + currentFragment); 
 
 	        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
 		    ft.remove(currentFragment);
 		    ft.commit();
-		    /*
+		    //*
 	        if (currentFragment != null){	        	
 	        	FragmentTransaction fragTrans = fragMgr.beginTransaction();
 	            fragTrans.remove(currentFragment);
@@ -216,7 +225,6 @@ public class Routes_Fragment extends Fragment {
 				
 				int viewType = this.getItemViewType(position);
 				
-				//Log.d(TAG,"positition: " + position);
 				
 			    switch(viewType){
 			       case 1:
@@ -299,15 +307,17 @@ public class Routes_Fragment extends Fragment {
 			                	//-------------
 			                	//Toast.makeText(getActivity(), "Botao Nova Rota pressionado", Toast.LENGTH_SHORT).show();
 			                	//------------
-			                	Fragment fgmt = new AddRoutes_Fragment();
+			                	/*
+			                	Fragment fgmt = new Profile_Fragment();
 
 			      	    	  	android.support.v4.app.FragmentManager fm = getFragmentManager();
 			      	    	  	android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();
 			      	    	  	//-------------
 			      	    	    fragmentTransaction.replace(R.id.frame_container, fgmt);
 			      	    	  	fragmentTransaction.commit();
-
-			      	    	  	
+			      	    	  	*/
+	                            Intent intent = new Intent(getActivity(), AddRoutes_Fragment.class);
+	                            startActivity(intent);
 			      	    	  	
 			                	
 			                }

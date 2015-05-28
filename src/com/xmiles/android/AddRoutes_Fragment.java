@@ -1,5 +1,6 @@
 package com.xmiles.android;
 
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 //import com.google.android.gms.maps.MapFragment;
@@ -8,18 +9,23 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.app.ActionBar;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.NavUtils;
+import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
 
 
-public class AddRoutes_Fragment extends Fragment {
+public class AddRoutes_Fragment extends FragmentActivity {
 
 	private static View view;
 	/**
@@ -34,17 +40,15 @@ public class AddRoutes_Fragment extends Fragment {
 	public AddRoutes_Fragment(){}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	        Bundle savedInstanceState) {
-	    if (container == null) {
-	        return null;
-	    }
-	    //---------------------
-	    ActionBar actionBar = getActivity().getActionBar();
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.addroutes_fgmt);
+	    
+        ActionBar actionBar = getActionBar();
 	    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 	    actionBar.setDisplayHomeAsUpEnabled(true);
 	    //---------------------
-	    View rootView = inflater.inflate(R.layout.addroutes_fgmt, container, false);
+	    //View rootView = inflater.inflate(R.layout.addroutes_fgmt, container, false);
 	    	    
 	    // Passing harcoded values for latitude & longitude. Please change as per your need. This is just used to drop a Marker on the Map
 	            latitude = 26.78;
@@ -53,7 +57,7 @@ public class AddRoutes_Fragment extends Fragment {
 	            setUpMapIfNeeded(); // For setting up the MapFragment
 
 
-	    return rootView;
+	    //return rootView;
 	}
 
 	/***** Sets up the map if it is possible to do so *****/
@@ -62,7 +66,7 @@ public class AddRoutes_Fragment extends Fragment {
 	    if (mMap == null) {
 	        // Try to obtain the map from the SupportMapFragment.
 	    	
-			FragmentManager fm = getFragmentManager();
+			FragmentManager fm = getSupportFragmentManager();
 			SupportMapFragment fragment = (SupportMapFragment) fm.findFragmentById(R.id.gmap_addroutes);
 	    	
 	    	mMap = fragment.getMap();
@@ -89,7 +93,7 @@ public class AddRoutes_Fragment extends Fragment {
 	    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude,
 	            longitude), 12.0f));
 	}
-
+	/*
 	@Override
 	public void onViewCreated(View view, Bundle savedInstanceState) {
 	    // TODO Auto-generated method stub
@@ -106,24 +110,43 @@ public class AddRoutes_Fragment extends Fragment {
 	            setUpMap();
 	    }
 	}
-
+	*/
 	/**** The mapfragment's id must be removed from the FragmentManager
 	 **** or else if the same it is passed on the next time then 
 	 **** app will crash ****/
-	@Override
-	public void onDestroyView() {
-	    super.onDestroyView();
-	    
+	  @Override
+	  public void onDestroy() {	    
 	    //Log.d(TAG, "lala");
 	    
-	    Fragment fragment = (getFragmentManager().findFragmentById(R.id.gmap_addroutes));
-	    //Fragment fragment = (getFragmentManager().findFragmentById(R.id.frame_container));
-	    FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-	    ft.remove(fragment);
-	    //ft.detach(fragment);
-	    ft.commit();
-	    
-
+		super.onDestroy();
 	}
-	
+	  
+	    @Override
+	    public boolean onOptionsItemSelected(MenuItem item) {
+	        switch (item.getItemId()) {
+	            case android.R.id.home:
+
+	            	/*
+	            	 * Trecho comentado abaixo é para o botão de confirmar adição de rota
+	            	 */
+	            	//Intent upIntent = new Intent(this, BtnFbLogin_Fragment.class);	            	
+	            	//NavUtils.navigateUpTo(this, upIntent);
+	            	finish();
+	            	break;
+	        }
+	        return true;
+	    }
+	    
+	    /*
+	    @Override
+	    public void onBackPressed() {
+	        if(getFragmentManager().getBackStackEntryCount() == 0) {
+	            super.onBackPressed();
+	        }
+	        else {
+	            getFragmentManager().popBackStack();
+	        }
+	    } 
+	    */ 
+ 
 }

@@ -85,10 +85,6 @@ import com.xmiles.android.webservice.UserFunctions;
   protected void onCreate(Bundle savedInstanceState) {
       super.onCreate(savedInstanceState);
       setContentView(R.layout.activity_main);
-      //setContentView(R.layout.activity_main_bkp);
-
-      //get Context        
-      //ctx = getApplicationContext();
   	
       // define service
       //SampleAlarmReceiver alarm = new SampleAlarmReceiver();
@@ -100,7 +96,7 @@ import com.xmiles.android.webservice.UserFunctions;
       //getActionBar().setTitle(null);
       //getActionBar().setHomeButtonEnabled(true);
 
-      
+      Log.i(TAG,"OnCreated BtnFbLogin");
       //-----------------------------
       //Facebook Authentication
       imgbtnFbLogin = (ImageButton) findViewById(R.id.imgbtn_fblogin);
@@ -205,7 +201,7 @@ import com.xmiles.android.webservice.UserFunctions;
 	        return true;
 	    }
 	  
-	    
+	    /*
 	    @Override
 	    public void onBackPressed() {
 	        if(getFragmentManager().getBackStackEntryCount() == 0) {
@@ -215,7 +211,7 @@ import com.xmiles.android.webservice.UserFunctions;
 	            getFragmentManager().popBackStack();
 	        }
 	    }  
-	    
+	    */
 	    
 	    
 	  @Override
