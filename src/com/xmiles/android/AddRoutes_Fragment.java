@@ -9,6 +9,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import android.app.ActionBar;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -19,9 +20,12 @@ import android.support.v4.app.NavUtils;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Toast;
 
 
 
@@ -36,41 +40,71 @@ public class AddRoutes_Fragment extends FragmentActivity {
 	private static final String TAG = "FACEBOOK";
 	private static GoogleMap mMap;
 	private static Double latitude, longitude;
-	
+
 	public AddRoutes_Fragment(){}
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addroutes_fgmt);
-	    
+
         ActionBar actionBar = getActionBar();
-	    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_STANDARD);
 	    actionBar.setDisplayHomeAsUpEnabled(true);
-	    //---------------------
-	    //View rootView = inflater.inflate(R.layout.addroutes_fgmt, container, false);
-	    	    
+	    
 	    // Passing harcoded values for latitude & longitude. Please change as per your need. This is just used to drop a Marker on the Map
-	            latitude = 26.78;
-	            longitude = 72.56;
+	    latitude = 26.78;
+	    longitude = 72.56;
 
-	            setUpMapIfNeeded(); // For setting up the MapFragment
+	    setUpMapIfNeeded(); // For setting up the MapFragment
+	    //---------------------
+	    Button find_line = (Button) findViewById(R.id.gmap_button);
+	    
+        find_line.setOnClickListener(new View.OnClickListener() {
 
+            public void onClick(View view) {
+                // TODO Auto-generated method stub
+                //Toast.makeText(getApplicationContext(), "Botao Find_Line pressionado", Toast.LENGTH_SHORT).show();
+                
+				//set up dialog
+                final Dialog dialog = new Dialog(AddRoutes_Fragment.this);
+                dialog.setContentView(R.layout.addroutes_dialog);
+                dialog.setTitle("  Linhas de Ônibus:");		                
+                dialog.setCancelable(true);
+                //there are a lot of settings, for dialog, check them all out!
+                //------------------------------------------------		                
+                //------------------------------------------------		                
+                //set up ListView		                
+                //face2me_users = (ListView) dialog.findViewById(R.id.dialog_listview);		                
+                //face2me_users.setAdapter(new f2m_users_ListAdapter(Profile.this));
+                //-------------------	                
+                dialog.show();
 
-	    //return rootView;
+                
+            }
+        });	    
+	    
+	            
+
 	}
+	
+	  @Override
+	  public boolean onCreateOptionsMenu(Menu menu) {
+	      // Inflate the menu; this adds items to the action bar if it is present.
+	      getMenuInflater().inflate(R.menu.main, menu);
+	      return true;
+	  }
 
 	/***** Sets up the map if it is possible to do so *****/
 	public void setUpMapIfNeeded() {
 	    // Do a null check to confirm that we have not already instantiated the map.
 	    if (mMap == null) {
 	        // Try to obtain the map from the SupportMapFragment.
-	    	
+
 			FragmentManager fm = getSupportFragmentManager();
 			SupportMapFragment fragment = (SupportMapFragment) fm.findFragmentById(R.id.gmap_addroutes);
-	    	
+
 	    	mMap = fragment.getMap();
-	    	
+
 	        // Check if we were successful in obtaining the map.
 	        if (mMap != null)
 	            setUpMap();
@@ -93,34 +127,17 @@ public class AddRoutes_Fragment extends FragmentActivity {
 	    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude,
 	            longitude), 12.0f));
 	}
-	/*
-	@Override
-	public void onViewCreated(View view, Bundle savedInstanceState) {
-	    // TODO Auto-generated method stub
-	    if (mMap != null)
-	        setUpMap();
 
-	    if (mMap == null) {
-	        // Try to obtain the map from the SupportMapFragment.
-			FragmentManager fm = getFragmentManager();
-			SupportMapFragment fragment = (SupportMapFragment) fm.findFragmentById(R.id.gmap_addroutes);	    	
-	    	mMap = fragment.getMap();
-	        // Check if we were successful in obtaining the map.
-	        if (mMap != null)
-	            setUpMap();
-	    }
-	}
-	*/
 	/**** The mapfragment's id must be removed from the FragmentManager
-	 **** or else if the same it is passed on the next time then 
+	 **** or else if the same it is passed on the next time then
 	 **** app will crash ****/
 	  @Override
-	  public void onDestroy() {	    
+	  public void onDestroy() {
 	    //Log.d(TAG, "lala");
-	    
+
 		super.onDestroy();
 	}
-	  
+
 	    @Override
 	    public boolean onOptionsItemSelected(MenuItem item) {
 	        switch (item.getItemId()) {
@@ -129,14 +146,14 @@ public class AddRoutes_Fragment extends FragmentActivity {
 	            	/*
 	            	 * Trecho comentado abaixo é para o botão de confirmar adição de rota
 	            	 */
-	            	//Intent upIntent = new Intent(this, BtnFbLogin_Fragment.class);	            	
+	            	//Intent upIntent = new Intent(this, BtnFbLogin_Fragment.class);
 	            	//NavUtils.navigateUpTo(this, upIntent);
 	            	finish();
 	            	break;
 	        }
 	        return true;
 	    }
-	    
+
 	    /*
 	    @Override
 	    public void onBackPressed() {
@@ -146,7 +163,7 @@ public class AddRoutes_Fragment extends FragmentActivity {
 	        else {
 	            getFragmentManager().popBackStack();
 	        }
-	    } 
-	    */ 
- 
+	    }
+	    */
+
 }

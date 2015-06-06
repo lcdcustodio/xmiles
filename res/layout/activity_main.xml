@@ -1,34 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
+    android:layout_height="fill_parent"    
     android:background="@color/standard_gray_e2e2e0"
     android:orientation="vertical" >
 
-    <!-- Framelayout to display Fragments -->
-    <FrameLayout
-        android:id="@+id/frame_container"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/white" >
-     
-    <ImageView android:layout_width="wrap_content"
-        android:layout_height="wrap_content"        
-        android:src="@drawable/xmiles_logo_rev04_branco"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="20dp"/>   
+    
+    <RelativeLayout 
+    	android:id="@+id/frame_container"
+    	android:layout_width="fill_parent"
+    	android:background="@color/standard_gray_e2e2e0"
+        android:layout_height="300dp">
+
+             <ImageButton
+                 android:id="@+id/imgbtn_fblogin"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:layout_centerHorizontal="true"
+                 android:layout_centerVertical="true"
+                 android:background="@color/lite_blue"
+                 android:src="@drawable/btn_login" />
+
+	</RelativeLayout>        
+
+    <RelativeLayout 
+    	android:id="@+id/frame_logo"
+    	android:layout_below="@id/frame_container"
+    	android:layout_width="match_parent"
+    	android:background="@color/standard_gray_e2e2e0"
+        android:layout_height="match_parent">
+
+	    <ImageView
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentTop="true"
+	        android:layout_centerHorizontal="true"
+	        android:layout_marginTop="24dp"
+	        android:src="@drawable/xmiles_logo_rev04_transparente" />
         
-     <ImageButton
-        android:id="@+id/imgbtn_fblogin"
-        android:background="@color/lite_blue"
-        android:layout_gravity="center_horizontal|center_vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/btn_login" />
-      
-        
- 	</FrameLayout>
-    <!-- Listview to display slider menu -->
+	</RelativeLayout>      
     
     
-</LinearLayout>
+</RelativeLayout>

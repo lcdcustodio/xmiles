@@ -222,7 +222,7 @@ import com.xmiles.android.webservice.UserFunctions;
 	  	DatabaseHelper mDatabaseHelper = new DatabaseHelper(getApplicationContext());
 	  	mDatabaseHelper.closeDB();
 	    // cancel service        
-	  	//FbPlaces_alarm.cancelAlarm(this);
+	  	FbPlaces_alarm.cancelAlarm(this);
 		  
 	  	//stop ServiceLocation    	
 	  	//stopService(new Intent(BtnFbLogin_Fragment.this, ServiceLocation.class));
