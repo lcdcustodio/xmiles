@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="300dp"
     android:background="@color/standard_gray_e2e2e0"
     android:orientation="vertical" >
     
@@ -34,13 +34,23 @@
 		android:background="@color/standard_gray_e2e2e0"			 
 		android:layout_marginTop="0dp">	
 	 </View>    	
+
+    <RelativeLayout 
+	    android:id="@+id/rel03"	    
+	    android:paddingTop="10dp"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:paddingLeft="10dp"
+	    android:paddingBottom="10dp"
+	    android:paddingRight="10dp">
     
-     <ListView
-     android:id="@+id/dialog_listview"
-     android:background="@color/white"
-     android:layout_width="fill_parent"
-     android:layout_height="wrap_content" />
+    
+	     <ListView
+	     android:id="@+id/dialog_listview"
+	     android:background="@color/white"     
+	     android:layout_width="fill_parent"
+	     android:layout_height="wrap_content" />
  
-    
+	  </RelativeLayout>    
     
 </LinearLayout>

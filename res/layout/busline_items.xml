@@ -1,0 +1,67 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:background="@color/white"
+    
+    android:layout_height="?android:attr/listPreferredItemHeight"
+    android:id="@+id/friend_item">
+
+    <!--
+    android:background="@drawable/background_with_shadow"
+    -->
+    
+    <!--View
+			 android:layout_width="fill_parent"
+			 android:layout_height="5dp"
+			 android:background="@color/standard_gray_e2e2e0"			 
+			 android:layout_marginTop="0dp"
+			 
+	></View>   --> 
+    
+    <ImageView
+        android:id="@+id/profile_pic"
+        android:background="@drawable/rounded_corner_favorites"        
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:layout_marginLeft="6dip"
+        android:layout_marginTop="6dip"                
+        android:src="@drawable/bus_ver4"
+        android:layout_marginRight="6dip" />
+
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/profile_pic"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="20dip"
+        style="@style/BusLine"
+        android:layout_alignWithParentIfMissing="true"
+        android:gravity="center_vertical" />
+
+    
+    <TextView
+        android:id="@+id/city"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"                
+        android:layout_below="@id/name"
+        android:layout_toRightOf="@id/profile_pic"
+        android:textColor="@color/blue"        
+        android:layout_alignParentRight="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:singleLine="true"
+        android:ellipsize="marquee" />    
+    
+    
+    
+    	<!--View
+			 android:layout_width="fill_parent"
+			 android:layout_height="5dp"
+			 android:background="@color/standard_gray_e2e2e0"
+			 android:layout_marginBottom="0dp"
+			 android:layout_marginTop="67dp"
+			 
+		 ></View>  --> 
+    
+
+    
+</RelativeLayout>

@@ -23,11 +23,13 @@ public class SqliteProvider extends ContentProvider{
 	public static final Uri CONTENT_URI_USER_PROFILE = Uri.parse("content://" + PROVIDER_NAME + "/UserProfile");
 	public static final Uri CONTENT_URI_USER_PLACES = Uri.parse("content://" + PROVIDER_NAME + "/UserPlaces");
 	public static final Uri CONTENT_URI_USER_FRIENDS = Uri.parse("content://" + PROVIDER_NAME + "/UserFriends");
+	public static final Uri CONTENT_URI_CITY_BUSLINE = Uri.parse("content://" + PROVIDER_NAME + "/CityBusline");
 	
 	/** Constants to identify the requested operation */
 	private static final int USER_PROFILE = 1;
 	private static final int USER_PLACES = 2;
 	private static final int USER_FRIENDS = 3;
+	private static final int CITY_BUSLINE = 4;
 	
 	private static final UriMatcher uriMatcher ;
 	static {
@@ -35,7 +37,7 @@ public class SqliteProvider extends ContentProvider{
 		uriMatcher.addURI(PROVIDER_NAME, "UserProfile", USER_PROFILE);
 		uriMatcher.addURI(PROVIDER_NAME, "UserPlaces", USER_PLACES);
 		uriMatcher.addURI(PROVIDER_NAME, "UserFriends", USER_FRIENDS);
-
+		uriMatcher.addURI(PROVIDER_NAME, "CityBusline", CITY_BUSLINE);
 	}
 	
 	/** This content provider does the database operations by this object */
@@ -104,6 +106,23 @@ public class SqliteProvider extends ContentProvider{
 					}
 				}
 			break;
+		    
+		    case CITY_BUSLINE:
+		    	long rowID_3 = mDatabaseHelper.createCityBusline(values);
+				//Uri _uri=null;
+				if(rowID_3>0){
+					_uri = ContentUris.withAppendedId(CONTENT_URI_CITY_BUSLINE, rowID_3);
+				}else {		
+					try {
+						throw new SQLException("Failed to insert at TABLE_CITY_BUSLINE: " + uri);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			break;
+			
+			
+			
 			/*
 		    case USER_FRIENDS:
 		    	long rowID_3 = mDatabaseHelper.createUserFriends(values);
@@ -206,7 +225,10 @@ public class SqliteProvider extends ContentProvider{
 		
 		}else if (uriMatcher.match(uri)==USER_PROFILE){
 			return mDatabaseHelper.get_UserProfile();		
-		
+
+		}else if (uriMatcher.match(uri)==CITY_BUSLINE){
+			return mDatabaseHelper.get_CityBusline();		
+			
 		}else{
 			return null;
 		}

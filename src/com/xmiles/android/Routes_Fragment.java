@@ -316,8 +316,11 @@ public class Routes_Fragment extends Fragment {
 			      	    	    fragmentTransaction.replace(R.id.frame_container, fgmt);
 			      	    	  	fragmentTransaction.commit();
 			      	    	  	*/
-	                            Intent intent = new Intent(getActivity(), AddRoutes_Fragment.class);
+			                	
+	                            //Intent intent = new Intent(getActivity(), Gmaps_Fragment.class);
+	                            Intent intent = new Intent(getActivity(), NewRoutes_Fragment.class);
 	                            startActivity(intent);
+	                            
 			      	    	  	
 			                	
 			                }
