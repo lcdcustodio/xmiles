@@ -11,12 +11,16 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.xmiles.android.Busline_Fragment.BuslineListAdapter;
+import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.webservice.UserFunctions;
 
 import android.app.ActionBar;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -54,7 +58,7 @@ public class Gmaps_Fragment extends FragmentActivity {
 	
 	Spinner dialog_cities;
 	ProgressDialog progressBar;
-	ListView dialog_busline;
+	
 
 	protected static JSONArray jsonArray;
 	protected static JSONObject json;
@@ -69,50 +73,28 @@ public class Gmaps_Fragment extends FragmentActivity {
         ActionBar actionBar = getActionBar();
 	    actionBar.setDisplayHomeAsUpEnabled(true);
 	    
-	    // Passing harcoded values for latitude & longitude. Please change as per your need. This is just used to drop a Marker on the Map
-	    latitude = 26.78;
-	    longitude = 72.56;
 
-	    setUpMapIfNeeded(); // For setting up the MapFragment
 	    //---------------------
-	    Button find_line = (Button) findViewById(R.id.gmap_button);
+	    Bundle args = getIntent().getExtras();
+	    String busline = args.getString("busline");
+	    String city = args.getString("city");
+	    //---------------------
+        progressBar = new ProgressDialog(this);
+		progressBar.setCancelable(true);
+		progressBar.setMessage("Please, wait ...");
+		progressBar.show();
+		//-------------------
 	    
-        find_line.setOnClickListener(new View.OnClickListener() {
+	    Bus_Stop_Query bsq = new Bus_Stop_Query(busline,city);
+	    //----
+	    TextView ct = (TextView) findViewById(R.id.city_header);
+	    ct.setText(city);
+	    //----
+		FragmentManager fm = getSupportFragmentManager();
+		SupportMapFragment fragment = (SupportMapFragment) fm.findFragmentById(R.id.gmap_addroutes);
 
-            public void onClick(View view) {
-                // TODO Auto-generated method stub
-                //Toast.makeText(getApplicationContext(), "Botao Find_Line pressionado", Toast.LENGTH_SHORT).show();
-                
-				//set up dialog
-                final Dialog dialog = new Dialog(Gmaps_Fragment.this);
-                dialog.setContentView(R.layout.addroutes_dialog);
-                dialog.setTitle("  Linhas de Ônibus:");		                
-                dialog.setCancelable(true);
-                //there are a lot of settings, for dialog, check them all out!
-                //------------------------------------------------		                
-                //------------------------------------------------		                
-                //set up ListView		                
-                //face2me_users = (ListView) dialog.findViewById(R.id.dialog_listview);		                
-                //face2me_users.setAdapter(new f2m_users_ListAdapter(Profile.this));
-                dialog_busline = (ListView) dialog.findViewById(R.id.dialog_listview);
-                //-------------------	                
-                //set up Spinner
-                //dialog_cities = (Spinner) dialog.findViewById(R.id.cities_spinner);
-                //--------------
-    	        progressBar = new ProgressDialog(getApplicationContext());
-    			progressBar.setCancelable(true);
-    			progressBar.setMessage("Please, wait ...");
-    			//progressBar.show();
-    			//--------------                
-                Busline_Query bq = new Busline_Query();
-                //-------------------
-                dialog.show();
-                //progressBar.show();
-                
-            }
-        });	    
-	    
-	            
+    	mMap = fragment.getMap();       
+    	mMap.setMyLocationEnabled(true);
 
 	}
 	
@@ -123,38 +105,38 @@ public class Gmaps_Fragment extends FragmentActivity {
 	      return true;
 	  }
 
-	/***** Sets up the map if it is possible to do so *****/
-	public void setUpMapIfNeeded() {
-	    // Do a null check to confirm that we have not already instantiated the map.
-	    if (mMap == null) {
-	        // Try to obtain the map from the SupportMapFragment.
+	
+	public void renderMarkerOptions(JSONArray bus_stop){
+		
+		
+		
+		for (int position = 0; position < 10; position++) {
+			
+			JSONObject jsonObject = null;
+			
+			try {
+				jsonObject = bus_stop.getJSONObject(position);
+				//-----------
+				latitude = Double.parseDouble(jsonObject.getString("latitude"));
+				longitude = Double.parseDouble(jsonObject.getString("longitude"));
+				//-----------
+				// Adding a marker
+				mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude))
+						.title(jsonObject.getString("busline")).snippet(jsonObject.getString("bus_stop")));
+				if (position == 0) {
 
-			FragmentManager fm = getSupportFragmentManager();
-			SupportMapFragment fragment = (SupportMapFragment) fm.findFragmentById(R.id.gmap_addroutes);
+					mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude,
+				            longitude), 12.0f));
 
-	    	mMap = fragment.getMap();
-
-	        // Check if we were successful in obtaining the map.
-	        if (mMap != null)
-	            setUpMap();
-	    }
-	}
-
-	/**
-	 * This is where we can add markers or lines, add listeners or move the
-	 * camera.
-	 * <p>
-	 * This should only be called once and when we are sure that {@link #mMap}
-	 * is not null.
-	 */
-	private void setUpMap() {
-	    // For showing a move to my loction button
-	    mMap.setMyLocationEnabled(true);
-	    // For dropping a marker at a point on the Map
-	    mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("My Home").snippet("Home Address"));
-	    // For zooming automatically to the Dropped PIN Location
-	    mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude,
-	            longitude), 12.0f));
+				}
+				
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+		
 	}
 
 	/**** The mapfragment's id must be removed from the FragmentManager
@@ -172,185 +154,83 @@ public class Gmaps_Fragment extends FragmentActivity {
 	        switch (item.getItemId()) {
 	            case android.R.id.home:
 
-	            	/*
-	            	 * Trecho comentado abaixo é para o botão de confirmar adição de rota
-	            	 */
-	            	//Intent upIntent = new Intent(this, BtnFbLogin_Fragment.class);
-	            	//NavUtils.navigateUpTo(this, upIntent);
 	            	finish();
 	            	break;
 	        }
 	        return true;
 	    }
+	    
+	    
+	 public class Bus_Stop_Query{
+		 
+		 String bl;
+		 String ct;
+		 
+		 public Bus_Stop_Query(String busline, String city){
+			 this.bl = busline;
+			 this.ct = city;
+		 
+		     Thread thread = new Thread(new Runnable(){
+			    @Override
+			    public void run() {
+			        try {
 
-	    /*
-	    @Override
-	    public void onBackPressed() {
-	        if(getFragmentManager().getBackStackEntryCount() == 0) {
-	            super.onBackPressed();
-	        }
-	        else {
-	            getFragmentManager().popBackStack();
-	        }
-	    }
-	    */
-	    public class Busline_Query {
-	    	
-	    	public Busline_Query() {
-				 Thread thread = new Thread(new Runnable(){
-					    @Override
-					    public void run() {
-					        try {
+			        	//Your code goes here
+			        	jsonArray = null;
+			        	
+			        	UserFunctions userFunc = new UserFunctions();
+			        	json = userFunc.bus_stop(bl, ct);
 
+			        	jsonArray = new JSONArray(json.getString("busline"));
+			        	
+			        	//Log.i(TAG,"testing 1: " + jsonArray.get(1));
 
-					        	//Your code goes here
-					        	UserFunctions userFunc = new UserFunctions();
-					        	json = userFunc.busline("Rio de Janeiro");
-		
-					        	jsonArray = new JSONArray(json.getString("city"));
-					        	//Log.i(TAG,"testing 1: " + jsonArray.get(1));
-
-					        	
-					    		        	
-						    } catch (Exception e) {
-						            e.printStackTrace();
-						    }
-						}
-				});
-
-				thread.start();
-				//-----------
-				try {
-					thread.join();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+			        
+			    		        	
+				    } catch (Exception e) {
+				            e.printStackTrace();
+				    }
 				}
-				//-----------
-				//progressBar.dismiss();
-				runThread();			 
+		   });
 
-			 }
-			 
-		        private void runThread() {
-
-		            new Thread() {
-		                public void run() {
-
-		                        try {
-		                        	runOnUiThread(new Runnable() {
-
-		                                @Override
-		                                public void run() {
-		            						dialog_busline.setAdapter(new BuslineListAdapter(this));
-		                                }
-		                            });
-		                            Thread.sleep(400);
-		                            progressBar.dismiss();
-		                            
-		                        } catch (InterruptedException e) {
-		                            e.printStackTrace();
-		                        }
-
-		                }
-		            }.start();	    		
-	    	}
-	    }
-	    
-	    
-		public class BuslineListAdapter extends BaseAdapter {
-		    private LayoutInflater mInflater;		    
-
-		    public BuslineListAdapter(Runnable runnable) {
-		    	//friends_info = data; 	    		    	
-		    }
-
-			@Override
-			public int getCount() {
-				// TODO Auto-generated method stub
-				//return jsonArray.length() + 1;	
-				return jsonArray.length();
-				
+		   thread.start();
+		   //-----------
+			try {
+				thread.join();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-			
-			@Override
-			public int getItemViewType(int position) {
-				/*
-				if (position < jsonArray.length() ){
-					return TYPE1;
-				} else {
-					return TYPE2;
-				}
-				*/
-				return 0;
-			}
+			//----------
+			runThread();			 
 
-			@Override
-			public Object getItem(int arg0) {
-				// TODO Auto-generated method stub
-				return null;
-			}
+		 }
+		 
+	        private void runThread() {
 
-			@Override
-			public long getItemId(int arg0) {
-				// TODO Auto-generated method stub
-				return 0;
-			}
+	            new Thread() {
+	                public void run() {
 
-			@Override
-			public View getView(final int position, View convertView, ViewGroup arg2) {				
+	                        try {
+	                        	runOnUiThread(new Runnable() {
 
-			    
-			           
-			    	   Type1Holder holder1; 
-			           View v = convertView;
-			           
-					if (mInflater == null){
-						mInflater = (LayoutInflater) getApplication()
-				               .getSystemService(getApplicationContext().LAYOUT_INFLATER_SERVICE);
-					}
-			           
-			           if (v == null) { 
-			        	   v = mInflater.inflate(R.layout.favorites_items, null);
-			        	   holder1 = new Type1Holder (); 
-			               
-			        	   holder1.profile_pic = (ImageView) v.findViewById(R.id.profile_pic);
-			               holder1.name = (TextView) v.findViewById(R.id.name);
+	                                @Override
+	                                public void run() {
+	                                	renderMarkerOptions(jsonArray);
+	                                }
+	                            });
+	                            Thread.sleep(400);
+	                            progressBar.dismiss();
+	                            
+	                        } catch (InterruptedException e) {
+	                            e.printStackTrace();
+	                        }
 
-			               v.setTag(holder1); 
-			        	   
-			           } else {
-			              holder1 = (Type1Holder)v.getTag(); 
-			           }
-			       
-					    JSONObject jsonObject = null;
-					    
-			            try {
-			                jsonObject = jsonArray.getJSONObject(position);
-			            
-					 try {
-				                holder1.name.setText(jsonObject.getString("busline"));
-				             } catch (JSONException e) {
-				                holder1.name.setText("");
-				             }
-				            
-			            
-			            
-			            } catch (JSONException e1) {
-			                // TODO Auto-generated catch block
-			                e1.printStackTrace();	                
-			            }
+	                }
+	            }.start();
+	        }       
 
+		 
+	 }
 
-			       return v;
-			}
-		}
-
-	    
-	    class Type1Holder {
-	        ImageView profile_pic;
-	        TextView name;
-
-
-	    }
 }

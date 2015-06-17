@@ -47,6 +47,7 @@ public class Cities_Fragment extends Fragment implements OnItemClickListener {
 	//---------------------
 	//---------------------
 	ListView mListCities;
+	TextView header;
 	SimpleCursorAdapter mAdapter;
 	protected static JSONArray jsonArray;
 	protected static JSONObject json;
@@ -65,7 +66,9 @@ public class Cities_Fragment extends Fragment implements OnItemClickListener {
 		View custom = inflater.inflate(R.layout.cities_fragment, null); 
 		
 		mListCities = (ListView) custom.findViewById(R.id.list_cities);
-		//mListCities.-
+		
+		header = (TextView) rootView2.findViewById(R.id.rotas);
+		header.setText("Escolha a cidade:");
 		//-------TEMP-----------
 		//mListCities.setAdapter(new CityListAdapter(getActivity()));
 	    String[] cities = new String[] {
@@ -133,7 +136,7 @@ public class Cities_Fragment extends Fragment implements OnItemClickListener {
 	        Log.d(TAG, "onDestroy Routes_fgmt");
 	        
 	    }
-	 
+	 /*
 	 public class Favorites_Query {
 		 
 		 public Favorites_Query(){
@@ -307,7 +310,7 @@ public class Cities_Fragment extends Fragment implements OnItemClickListener {
 	        TextView info;
 
 	    }
-
+		*/
 
 
 

@@ -34,7 +34,7 @@
         android:layout_toRightOf="@id/profile_pic"
         android:layout_alignParentRight="true"
         android:layout_marginTop="20dip"
-        style="@style/BusLine"
+        style="@style/BusLine"        
         android:layout_alignWithParentIfMissing="true"
         android:gravity="center_vertical" />
 

@@ -35,11 +35,12 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
 public class Busline_Fragment extends Fragment implements OnItemClickListener {
+//public class Busline_Fragment extends Fragment implements View.OnClickListener {
 
 	
 	private static final String TAG = "FACEBOOK";
@@ -47,6 +48,7 @@ public class Busline_Fragment extends Fragment implements OnItemClickListener {
 	//---------------------
 	//---------------------
 	ListView mListBusline;
+	TextView city;
 	SimpleCursorAdapter mAdapter;
 	protected static JSONArray jsonArray;
 	protected static JSONObject json;
@@ -64,11 +66,10 @@ public class Busline_Fragment extends Fragment implements OnItemClickListener {
 		View custom = inflater.inflate(R.layout.busline_fragment, null); 
 		
 		mListBusline = (ListView) custom.findViewById(R.id.list_busline);
-		//mListBusline.-
-		//-------TEMP-----------
-		//mListBusline.setAdapter(new BuslineListAdapter(getActivity()));
 	    
 	    mListBusline.setOnItemClickListener((OnItemClickListener) this);
+	    
+	    city = (TextView) rootView2.findViewById(R.id.rotas);
 	    
 		//----------------------
 		//*
@@ -94,8 +95,26 @@ public class Busline_Fragment extends Fragment implements OnItemClickListener {
 			long id) {
 		// TODO Auto-generated method stub
 		//Log.d(TAG, (String)parent.getItemAtPosition(position));
-		Toast.makeText(getActivity(), (String)parent.getItemAtPosition(position), Toast.LENGTH_SHORT).show();
-		
+		//Toast.makeText(getActivity(), (String)parent.getItemAtPosition(position), Toast.LENGTH_SHORT).show();
+
+		TextView busline = (TextView) view.findViewById(R.id.name);
+		TextView city = (TextView) view.findViewById(R.id.city);
+		//String busline = c.getText().toString();
+		Toast.makeText(getActivity(), "Linha " + busline.getText().toString() + "selecionada", Toast.LENGTH_SHORT).show();
+		//------------		
+        Intent intent = new Intent(getActivity(), Gmaps_Fragment.class);
+        
+        Bundle args = new Bundle();
+        args.putString("busline", busline.getText().toString());
+        args.putString("city", city.getText().toString());
+        //---
+        intent.putExtras(args);
+        //---
+        startActivity(intent);
+        //------------
+        getActivity().finish();
+        
+
 	}
 	
 	
@@ -122,12 +141,17 @@ public class Busline_Fragment extends Fragment implements OnItemClickListener {
 				        	if (data != null && data.getCount() > 0){
 				        		data.moveToFirst();
 				        		//Log.i(TAG,"testing SQLITE: " + data.getString(KEY_ID) + "," + data.getString(1));
-
+				        		
+				        		city.setText(data.getString(KEY_ID));
 				        		//Your code goes here
+				        		//-----
+				        		//Log.i(TAG,"city: " + data.getString(KEY_ID));
+				        		//-----
 				        		UserFunctions userFunc = new UserFunctions();
 				        		json = userFunc.busline(data.getString(KEY_ID));
 	
 				        		jsonArray = new JSONArray(json.getString("city"));
+				        		//----
 				        		//Log.i(TAG,"testing 1: " + jsonArray.get(1));
 
 				        	}
@@ -274,8 +298,6 @@ public class Busline_Fragment extends Fragment implements OnItemClickListener {
 	        
 
 	    }
-
-
 
 
 	    

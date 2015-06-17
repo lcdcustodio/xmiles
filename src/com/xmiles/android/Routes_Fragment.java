@@ -307,15 +307,6 @@ public class Routes_Fragment extends Fragment {
 			                	//-------------
 			                	//Toast.makeText(getActivity(), "Botao Nova Rota pressionado", Toast.LENGTH_SHORT).show();
 			                	//------------
-			                	/*
-			                	Fragment fgmt = new Profile_Fragment();
-
-			      	    	  	android.support.v4.app.FragmentManager fm = getFragmentManager();
-			      	    	  	android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();
-			      	    	  	//-------------
-			      	    	    fragmentTransaction.replace(R.id.frame_container, fgmt);
-			      	    	  	fragmentTransaction.commit();
-			      	    	  	*/
 			                	
 	                            //Intent intent = new Intent(getActivity(), Gmaps_Fragment.class);
 	                            Intent intent = new Intent(getActivity(), NewRoutes_Fragment.class);

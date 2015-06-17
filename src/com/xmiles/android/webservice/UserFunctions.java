@@ -26,7 +26,8 @@ public class UserFunctions {
     private static String registerURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String favoritesURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";    
     private static String buslineURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
-
+    private static String bus_stopURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
+    
     //private static String loginURL = "http://ec2-54-152-39-25.compute-1.amazonaws.com/mazaah/login/";
     //private static String registerURL = "http://ec2-54-152-39-25.compute-1.amazonaws.com/mazaah/login/"; 
     
@@ -35,6 +36,7 @@ public class UserFunctions {
     private static String register_tag = "register";
     private static String favorites_tag = "favorites";
     private static String busline_tag = "busline";
+    private static String bus_stop_tag = "bus_stop";
      
     // constructor
     public UserFunctions(){
@@ -80,12 +82,25 @@ public class UserFunctions {
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("tag", busline_tag));
         params.add(new BasicNameValuePair("city", id));
-        JSONObject json = jsonParser.getJSONFromUrl(favoritesURL, params);
+        JSONObject json = jsonParser.getJSONFromUrl(buslineURL, params);
         // return json        
-        Log.e(TAG, "favorites_Routes " + json.toString());
+        Log.e(TAG, "Busline " + json.toString());
         return json;
     }
-     
+
+    public JSONObject bus_stop(String bl, String id){
+        // Building Parameters
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("tag", bus_stop_tag));
+        params.add(new BasicNameValuePair("busline", bl));
+        params.add(new BasicNameValuePair("city", id));
+        JSONObject json = jsonParser.getJSONFromUrl(bus_stopURL, params);
+        // return json        
+        Log.e(TAG, "Bus Stop " + json.toString());
+        return json;
+    }
+    
+    
     /**
      * function make Login Request
      * @param name
