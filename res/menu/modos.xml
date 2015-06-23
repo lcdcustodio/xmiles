@@ -2,16 +2,29 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
    
-   <item android:id="@+id/visualizacao" android:title="Modo de Visualização">
+   <!--item android:id="@+id/visualizacao" android:title="Tipo de Mapa">
 	 <menu>         	
 	  <item
 		  android:id="@+id/satelite"
 		  android:title="Satélite"/>		
 	  <item
 		  android:id="@+id/rua"
-		  android:title="Mapa"/>
+		  android:title="Normal"/>
+	  	  <item
+		  android:id="@+id/terreno"
+		  android:title="Terreno"/>
+	  
      </menu>
-   </item>
-   
+   </item>   -->
+	  <item
+		  android:id="@+id/satelite"
+		  android:title="Satélite"/>		
+	  <item
+		  android:id="@+id/rua"
+		  android:title="Normal"/>
+	  <item
+		  android:id="@+id/terreno"
+		  android:title="Terreno"/>
+
  
 </menu>

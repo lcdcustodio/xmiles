@@ -79,12 +79,9 @@
                 
         <activity
             android:label="@string/app_name"
-            android:uiOptions="splitActionBarWhenNarrow"
             android:name="com.xmiles.android.Gmaps_Fragment">
             
-            <meta-data android:name="android.support.UI_OPTIONS"
-                       android:value="splitActionBarWhenNarrow" />
-
+     
                         
         </activity>
 

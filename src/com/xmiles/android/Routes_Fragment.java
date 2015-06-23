@@ -244,6 +244,7 @@ public class Routes_Fragment extends Fragment {
 			               
 			        	   holder1.profile_pic = (ImageView) v.findViewById(R.id.profile_pic);
 			               holder1.name = (TextView) v.findViewById(R.id.name);
+			               holder1.city = (TextView) v.findViewById(R.id.city);
 			               holder1._de = (TextView) v.findViewById(R.id._de);
 			               holder1.info = (TextView) v.findViewById(R.id.info);
 			               v.setTag(holder1); 
@@ -262,7 +263,11 @@ public class Routes_Fragment extends Fragment {
 				             } catch (JSONException e) {
 				                holder1.name.setText("");
 				             }
-				            
+					 try {
+			                holder1.city.setText(jsonObject.getString("city"));
+			             } catch (JSONException e) {
+			                holder1.city.setText("");
+			             }				            
 				         try {
 				                holder1._de.setText("De: " +jsonObject.getString("_from"));
 				             } catch (JSONException e) {
@@ -336,6 +341,7 @@ public class Routes_Fragment extends Fragment {
 	    class Type1Holder {
 	        ImageView profile_pic;
 	        TextView name;
+	        TextView city;
 	        TextView _de;
 	        TextView info;
 

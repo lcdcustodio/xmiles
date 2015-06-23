@@ -5,15 +5,15 @@
     android:paddingLeft="10dp"
     android:paddingTop="10dp"
     android:paddingRight="10dp"
-    android:layout_marginRight="6dip"    
-    android:orientation="horizontal" >
+    android:layout_marginRight="6dip">    
+    <!-- android:orientation="horizontal" > -->
 
     <RelativeLayout 
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"        
-        android:background="@drawable/background_with_shadow"
-        android:orientation="horizontal" >
-        <!-- android:background="@color/white"--> 
+        android:background="@drawable/background_with_shadow">        
+        <!--android:orientation="horizontal" 
+        	android:background="@color/white"--> 
         
     <ImageView
         android:id="@+id/profile_pic"

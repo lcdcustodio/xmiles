@@ -7,9 +7,13 @@ import org.json.JSONObject;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 //import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.xmiles.android.Busline_Fragment.BuslineListAdapter;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
@@ -34,6 +38,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -44,7 +49,8 @@ import android.widget.Toast;
 
 
 
-public class Gmaps_Fragment extends FragmentActivity {
+public class Gmaps_Fragment extends FragmentActivity implements OnInfoWindowClickListener{
+//public class Gmaps_Fragment extends FragmentActivity {
 
 	private static View view;
 	/**
@@ -58,6 +64,10 @@ public class Gmaps_Fragment extends FragmentActivity {
 	
 	Spinner dialog_cities;
 	ProgressDialog progressBar;
+	TextView tv_busline;
+	TextView tv_city;
+	TextView tv_from;
+	TextView tv_to;
 	
 
 	protected static JSONArray jsonArray;
@@ -68,7 +78,7 @@ public class Gmaps_Fragment extends FragmentActivity {
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.addroutes_fgmt);
+        setContentView(R.layout.gmaps_fgmt);
 
         ActionBar actionBar = getActionBar();
 	    actionBar.setDisplayHomeAsUpEnabled(true);
@@ -89,19 +99,43 @@ public class Gmaps_Fragment extends FragmentActivity {
 	    //----
 	    TextView ct = (TextView) findViewById(R.id.city_header);
 	    ct.setText(city);
+	    tv_busline = (TextView) findViewById(R.id.busline);
+	    tv_busline.setText(busline);
+	    tv_city = (TextView) findViewById(R.id.city);
+	    tv_city.setText(city);
+	    tv_from = (TextView) findViewById(R.id._de);
+	    tv_to = (TextView) findViewById(R.id.info);
 	    //----
 		FragmentManager fm = getSupportFragmentManager();
 		SupportMapFragment fragment = (SupportMapFragment) fm.findFragmentById(R.id.gmap_addroutes);
 
     	mMap = fragment.getMap();       
     	mMap.setMyLocationEnabled(true);
-
+    	
+    	mMap.setOnInfoWindowClickListener(this);
 	}
-	
+	//*
+	@Override
+	public void onInfoWindowClick(Marker marker) {
+		// TODO Auto-generated method stub
+		//Toast.makeText(this, marker.getSnippet(), Toast.LENGTH_LONG).show();
+		marker.hideInfoWindow();
+		marker.setIcon(BitmapDescriptorFactory
+				.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+		
+		 
+		if (tv_from.getText().toString().isEmpty()){
+			tv_from.setText("De: " + marker.getSnippet());
+		}else {
+			tv_to.setText("Para: " + marker.getSnippet());
+		}
+	}
+	//*/
+	  
 	  @Override
 	  public boolean onCreateOptionsMenu(Menu menu) {
 	      // Inflate the menu; this adds items to the action bar if it is present.
-	      getMenuInflater().inflate(R.menu.main, menu);
+	      getMenuInflater().inflate(R.menu.modos, menu);
 	      return true;
 	  }
 
@@ -122,11 +156,44 @@ public class Gmaps_Fragment extends FragmentActivity {
 				//-----------
 				// Adding a marker
 				mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude))
-						.title(jsonObject.getString("busline")).snippet(jsonObject.getString("bus_stop")));
+						.title(jsonObject.getString("busline"))						
+						.snippet(jsonObject.getString("bus_stop"))
+						);
+				//*
+				mMap.setInfoWindowAdapter(new InfoWindowAdapter() {
+					 
+		            // Use default InfoWindow frame
+		            @Override
+		            public View getInfoWindow(Marker arg0) {
+		                return null;
+		            }
+		 
+		            // Defines the contents of the InfoWindow
+		            @Override
+		            public View getInfoContents(Marker arg0) {
+		 
+		                // Getting view from the layout file info_window_layout
+		                View v = getLayoutInflater().inflate(R.layout.gmaps_infowindow_items, null);
+		                
+		                TextView bus_stop = (TextView) v.findViewById(R.id._de);		                
+						bus_stop.setText(arg0.getSnippet());
+						
+
+		 
+		 
+		                // Returning the view containing InfoWindow contents
+		                return v;
+		 
+		            }
+		        });
+				//*/
 				if (position == 0) {
 
+					//mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude,
+				    //        longitude), 12.0f));
 					mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(latitude,
-				            longitude), 12.0f));
+				            longitude), 11.0f));
+
 
 				}
 				
@@ -152,10 +219,31 @@ public class Gmaps_Fragment extends FragmentActivity {
 	    @Override
 	    public boolean onOptionsItemSelected(MenuItem item) {
 	        switch (item.getItemId()) {
-	            case android.R.id.home:
-
+	            
+	        	case android.R.id.home:	            	
 	            	finish();
 	            	break;
+	            	
+
+	            case R.id.satelite:
+	            	
+	                //Toast.makeText(getBaseContext(), "You selected Satélite", Toast.LENGTH_SHORT).show();
+	            	mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+	            	//return true;
+	            	break;	            	
+	            
+	            case R.id.rua:
+	            	mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+	            	//Toast.makeText(getBaseContext(), "You selected Rua", Toast.LENGTH_SHORT).show();
+	            	break;
+	            	
+	            case R.id.terreno:
+	            	mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+	            	
+	            	break;
+	
+	            default:
+	            	return super.onOptionsItemSelected(item);
 	        }
 	        return true;
 	    }
@@ -232,5 +320,8 @@ public class Gmaps_Fragment extends FragmentActivity {
 
 		 
 	 }
+
+
+
 
 }

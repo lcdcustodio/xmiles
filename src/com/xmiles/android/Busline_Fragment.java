@@ -100,7 +100,7 @@ public class Busline_Fragment extends Fragment implements OnItemClickListener {
 		TextView busline = (TextView) view.findViewById(R.id.name);
 		TextView city = (TextView) view.findViewById(R.id.city);
 		//String busline = c.getText().toString();
-		Toast.makeText(getActivity(), "Linha " + busline.getText().toString() + "selecionada", Toast.LENGTH_SHORT).show();
+		Toast.makeText(getActivity(), "Linha " + busline.getText().toString() + " selecionada", Toast.LENGTH_SHORT).show();
 		//------------		
         Intent intent = new Intent(getActivity(), Gmaps_Fragment.class);
         
