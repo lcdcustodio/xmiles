@@ -12,7 +12,7 @@
 			 android:layout_marginTop="0dp">
 			 
             <TextView
-	        android:id="@+id/city_header"	        	        
+	        android:id="@+id/txt_header"	        	        
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentRight="true"
@@ -36,7 +36,7 @@
     	android:paddingBottom="2dp"    	
     	android:layout_width="match_parent"
     	android:background="@color/grey"
-        android:layout_height="330dp">
+        android:layout_height="320dp">
     
      
     <fragment
@@ -46,83 +46,21 @@
         android:layout_height="fill_parent">
         
       	  
-        <!--Button
-		    android:layout_width="wrap_content"
-	    	android:layout_height="wrap_content"
-	    	android:layout_gravity="center|top"
-	    	android:id="@+id/gmap_button"
-		    android:text="Demo Button" 
-		    android:padding="10dp"
-		    android:layout_marginTop="20dp"
-		    android:background="@drawable/white_button"
-		    android:paddingRight="10dp"/>	
-        
-        
-        	
-          <RelativeLayout
-            android:layout_width="300dp"
-			 android:layout_height="65dp"
-			 android:background="@color/standard_gray_e2e2e0"			 
-			 android:layout_marginTop="20dp">        
-		        
-		        
-		    <Button
-		        android:background="@drawable/white_button"
-		        android:id="@+id/button2"
-		        android:layout_width="fill_parent"
-		        android:layout_height="wrap_content"
-		        android:text="Busca"
-		        style="@style/button_gmaps" />
-
-		    </RelativeLayout>  -->                
     	</fragment>
     	
     </RelativeLayout>
     	
 
-    <!--View
-		android:id="@+id/view01"
-		android:layout_below="@id/rel01"
-		android:layout_width="fill_parent"
-		android:layout_height="3dp"
-		android:background="@color/silver"			 
-		android:layout_marginTop="0dp"	
-	></View>  -->    	
-    
-    <!-- android:background="@color/orange_2" -->
-	<!--RelativeLayout 
-	    android:id="@+id/rel01"
-	    android:layout_below="@id/view01"
-	    android:paddingTop="10dp"
-	    android:layout_width="wrap_content"
-	    android:layout_height="wrap_content"
-	    android:paddingLeft="10dp"
-	    android:paddingRight="10dp">
-	    
-	    <RelativeLayout
-	    android:id="@+id/rel02" 
-	    android:paddingTop="10dp"
-        android:layout_width="fill_parent"
-        android:layout_height="110dp"        
-        android:background="@drawable/background_with_shadow"
-        android:orientation="horizontal" >
-        	<Spinner
-			    android:id="@+id/planets_spinner"
-			    android:layout_width="fill_parent"
-			    android:layout_height="wrap_content" />         
-		</RelativeLayout>
-				 
-	</RelativeLayout>  -->
 	    <RelativeLayout 
     	android:id="@+id/frame_busline"
     	android:layout_below="@id/rel01"
     	android:layout_marginRight="10dp"
     	android:layout_marginLeft="10dp"
     	android:layout_marginTop="10dp"
-    	android:layout_marginBottom="10dp"    	
+    	android:layout_marginBottom="5dp"    	
     	android:layout_width="fill_parent"
     	android:background="@color/standard_gray_e2e2e0"
-        android:layout_height="100dp">
+        android:layout_height="85dp">
 
 
         
@@ -138,10 +76,10 @@
         android:background="@drawable/rounded_corner_favorites"        
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" 
-        android:layout_marginLeft="3dp"
-        android:layout_marginTop="6dip"                
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="6dp"                
         android:src="@drawable/bus_ver5"
-        android:layout_marginRight="3dp" />
+        android:layout_marginRight="2dp" />
 
     <TextView
         android:id="@+id/busline"
@@ -149,7 +87,7 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/profile_pic"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="6dip"
+        android:layout_marginTop="2dp"
         style="@style/BusLine"
         android:layout_alignWithParentIfMissing="true"
         android:gravity="center_vertical" />
@@ -207,6 +145,13 @@
         
 	</RelativeLayout>		 
 
-    
+ 	    <Button
+        android:background="@drawable/red_button"
+        android:id="@+id/button_save_route"
+        android:layout_below="@id/frame_busline"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Salvar Rota"
+        style="@style/button_text" />   
 
 </RelativeLayout>

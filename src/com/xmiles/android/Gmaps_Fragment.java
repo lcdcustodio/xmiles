@@ -24,6 +24,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -43,6 +44,7 @@ import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,7 +70,8 @@ public class Gmaps_Fragment extends FragmentActivity implements OnInfoWindowClic
 	TextView tv_city;
 	TextView tv_from;
 	TextView tv_to;
-	
+	TextView tv_header;
+	Button save_route;
 
 	protected static JSONArray jsonArray;
 	protected static JSONObject json;
@@ -97,14 +100,14 @@ public class Gmaps_Fragment extends FragmentActivity implements OnInfoWindowClic
 	    
 	    Bus_Stop_Query bsq = new Bus_Stop_Query(busline,city);
 	    //----
-	    TextView ct = (TextView) findViewById(R.id.city_header);
-	    ct.setText(city);
+	    tv_header = (TextView) findViewById(R.id.txt_header);
+	    tv_header.setText("Selecione os pontos:");
 	    tv_busline = (TextView) findViewById(R.id.busline);
 	    tv_busline.setText(busline);
 	    tv_city = (TextView) findViewById(R.id.city);
 	    tv_city.setText(city);
 	    tv_from = (TextView) findViewById(R.id._de);
-	    tv_to = (TextView) findViewById(R.id.info);
+	    tv_to = (TextView) findViewById(R.id.info);	    
 	    //----
 		FragmentManager fm = getSupportFragmentManager();
 		SupportMapFragment fragment = (SupportMapFragment) fm.findFragmentById(R.id.gmap_addroutes);
@@ -113,6 +116,19 @@ public class Gmaps_Fragment extends FragmentActivity implements OnInfoWindowClic
     	mMap.setMyLocationEnabled(true);
     	
     	mMap.setOnInfoWindowClickListener(this);
+	    //----
+	    save_route = (Button) findViewById(R.id.button_save_route);
+	    save_route.setVisibility(View.INVISIBLE);
+	    save_route.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				Toast.makeText(getApplicationContext(), "botão 'Salvar Rota' pressionado", Toast.LENGTH_LONG).show();
+			}	
+		});
+
+
 	}
 	//*
 	@Override
@@ -120,14 +136,20 @@ public class Gmaps_Fragment extends FragmentActivity implements OnInfoWindowClic
 		// TODO Auto-generated method stub
 		//Toast.makeText(this, marker.getSnippet(), Toast.LENGTH_LONG).show();
 		marker.hideInfoWindow();
-		marker.setIcon(BitmapDescriptorFactory
-				.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
 		
 		 
 		if (tv_from.getText().toString().isEmpty()){
 			tv_from.setText("De: " + marker.getSnippet());
+			marker.setIcon(BitmapDescriptorFactory
+					.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+
 		}else {
 			tv_to.setText("Para: " + marker.getSnippet());
+			marker.setIcon(BitmapDescriptorFactory
+					.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+			
+			save_route.setVisibility(View.VISIBLE);
+			//save_route.setBackgroundColor(Color.TRANSPARENT);
 		}
 	}
 	//*/
@@ -174,6 +196,9 @@ public class Gmaps_Fragment extends FragmentActivity implements OnInfoWindowClic
 		 
 		                // Getting view from the layout file info_window_layout
 		                View v = getLayoutInflater().inflate(R.layout.gmaps_infowindow_items, null);
+		               
+		                // Set desired height and width
+		                v.setLayoutParams(new RelativeLayout.LayoutParams(400, RelativeLayout.LayoutParams.WRAP_CONTENT));
 		                
 		                TextView bus_stop = (TextView) v.findViewById(R.id._de);		                
 						bus_stop.setText(arg0.getSnippet());
