@@ -70,12 +70,17 @@ public class Cities_Fragment extends Fragment implements OnItemClickListener {
 		header = (TextView) rootView2.findViewById(R.id.rotas);
 		header.setText("Escolha a cidade:");
 		//-------TEMP-----------
-		//mListCities.setAdapter(new CityListAdapter(getActivity()));
-	    String[] cities = new String[] {
+	    /*
+		String[] cities = new String[] {
 	            "Rio de Janeiro",
 	            "Porto Alegre"
 	        };
-	    
+	    */    
+	    String[] cities = new String[] {
+	            "Rio de Janeiro - RJ",
+	            "Porto Alegre - RS"
+	        };
+	    	    
 	    ArrayAdapter<String> adapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_list_item_single_choice,cities);
 	    mListCities.setAdapter(adapter);	    
 	    mListCities.setItemChecked(KEY_TEMP, true);
@@ -112,7 +117,7 @@ public class Cities_Fragment extends Fragment implements OnItemClickListener {
 		insert_DB((String)parent.getItemAtPosition(position));
 	}
 	
-	public void insert_DB(String city){
+	public void insert_DB(String city_uf){
 		
         //----------------------------------------------
     	
@@ -121,7 +126,7 @@ public class Cities_Fragment extends Fragment implements OnItemClickListener {
 		/** Setting up values to insert into UserProfile table */
 		ContentValues contentValues = new ContentValues();
 		
-		contentValues.put(DatabaseHelper.KEY_CITY_BUSLINE,city);        			
+		contentValues.put(DatabaseHelper.KEY_CITY_BUSLINE,city_uf);        			
 		contentValues.put(DatabaseHelper.KEY_CREATED_AT, support.getDateTime());
 		
 		getActivity().getContentResolver().insert(SqliteProvider.CONTENT_URI_CITY_BUSLINE, contentValues);

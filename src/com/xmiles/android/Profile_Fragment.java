@@ -4,6 +4,7 @@ package com.xmiles.android;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.xmiles.android.scheduler.Favorites_AlarmReceiver;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
 
@@ -219,7 +220,8 @@ public class Profile_Fragment extends Fragment {
                 	//*/
                 	
 	                //----------------------------------------------
-                	Fb_Sso_Login(json_name, json_id, jsonObject.getString("gender"), picURL);
+                	//Fb_Sso_Login(json_name, json_id, jsonObject.getString("gender"), picURL);
+                	xMiles_WebService_Login(json_name, json_id, jsonObject.getString("gender"), picURL);
 	                //----------------------------------------------
                 	
                     Support support = new Support();
@@ -234,19 +236,12 @@ public class Profile_Fragment extends Fragment {
         			
         			getActivity().getContentResolver().insert(SqliteProvider.CONTENT_URI_USER_PROFILE, contentValues);
 	                //----------------------------------------------
-                	/*
-                	Uri uri = SqliteProvider.CONTENT_URI_USER_PROFILE;
-                	Cursor data = getActivity().getContentResolver().query(uri, null, null, null, null); 
-                	
-                	if (data != null && data.getCount() > 0){
-                		data.moveToFirst();
-                		Log.i(LOG,"testing SQLITE: " + data.getString(0) + "," + data.getString(1));
-            			//json_city = data.getString(2);
-                	}
-                	*/
-	                //----------------------------------------------
 	                runThread();
 	                //----------------------------------------------
+	          		// TEMPORARY - start service
+	                Favorites_AlarmReceiver FA = new Favorites_AlarmReceiver();
+	          		FA.setAlarm(getActivity());
+
 	                
 
 	            } catch (JSONException e) {
@@ -298,7 +293,8 @@ public class Profile_Fragment extends Fragment {
 	            }.start();
 	        }
 	    }
-	    public void Fb_Sso_Login(String name,String id, String gender, String picURL) {
+	    //public void Fb_Sso_Login(String name,String id, String gender, String picURL) {
+	    public void xMiles_WebService_Login(String name,String id, String gender, String picURL) {
 	        UserFunctions userFunction = new UserFunctions();
 	        //---------------------------------------------        
 	        //---------------------------------------------

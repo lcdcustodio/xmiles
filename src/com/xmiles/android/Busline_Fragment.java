@@ -48,7 +48,7 @@ public class Busline_Fragment extends Fragment implements OnItemClickListener {
 	//---------------------
 	//---------------------
 	ListView mListBusline;
-	TextView city;
+	TextView tv_header;
 	SimpleCursorAdapter mAdapter;
 	protected static JSONArray jsonArray;
 	protected static JSONObject json;
@@ -69,8 +69,8 @@ public class Busline_Fragment extends Fragment implements OnItemClickListener {
 	    
 	    mListBusline.setOnItemClickListener((OnItemClickListener) this);
 	    
-	    city = (TextView) rootView2.findViewById(R.id.rotas);
-	    
+	    tv_header = (TextView) rootView2.findViewById(R.id.rotas);
+	    tv_header.setText("Selecione a linha:");
 		//----------------------
 		//*
         progressBar = new ProgressDialog(getActivity());
@@ -142,13 +142,14 @@ public class Busline_Fragment extends Fragment implements OnItemClickListener {
 				        		data.moveToFirst();
 				        		//Log.i(TAG,"testing SQLITE: " + data.getString(KEY_ID) + "," + data.getString(1));
 				        		
-				        		city.setText(data.getString(KEY_ID));
+				        		//city.setText(data.getString(KEY_ID));
 				        		//Your code goes here
 				        		//-----
 				        		//Log.i(TAG,"city: " + data.getString(KEY_ID));
 				        		//-----
 				        		UserFunctions userFunc = new UserFunctions();
-				        		json = userFunc.busline(data.getString(KEY_ID));
+				        		//json = userFunc.busline(data.getString(KEY_ID));
+				        		json = userFunc.busline(data.getString(KEY_ID).split(" - ")[0]);
 	
 				        		jsonArray = new JSONArray(json.getString("city"));
 				        		//----
@@ -273,7 +274,8 @@ public class Busline_Fragment extends Fragment implements OnItemClickListener {
 				             }
 				            
 				         try {
-				                holder1.city.setText(jsonObject.getString("city"));
+				        	 	//holder1.city.setText(jsonObject.getString("city"));
+				                holder1.city.setText(jsonObject.getString("city") + " - " + jsonObject.getString("uf"));
 				             } catch (JSONException e) {
 				                holder1.city.setText("");
 				             }

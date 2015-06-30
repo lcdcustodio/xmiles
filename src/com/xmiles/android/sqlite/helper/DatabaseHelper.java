@@ -29,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String TABLE_USER_PROFILE = "user_profile";
 	public static final String TABLE_USER_PLACES = "user_places";
 	public static final String TABLE_USER_FRIENDS = "user_friends";
-	public static final String TABLE_FAVORITES = "favorites";
+	public static final String TABLE_USER_FAVORITES = "user_favorites";
 	public static final String TABLE_CITY_BUSLINE = "city_busline";
 
 	// Common column names
@@ -61,12 +61,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String KEY_FRIEND_LOCATION = "friend_location";
 	public static final String KEY_FRIEND_DEVICE = "friend_device";
 
-	// USER PLANE Table - column names	
+	// USER FAVORITES Table - column names	
 	public static final String KEY_BUSLINE = "busline";
 	public static final String KEY_FROM = "_from";
 	public static final String KEY_TO = "_to";
+	public static final String KEY_UF = "uf";
+	public static final String KEY_TO_BUS_STOP_ID = "_to_bus_stop_id";
+	public static final String KEY_FROM_BUS_STOP_ID = "_from_bus_stop_id";
+	public static final String KEY_BD_UPDATED = "bd_updated";
 	
-	// CITY BUSLINE Tabke - cokumn names
+	// CITY BUSLINE Table - column names
 	public static final String KEY_CITY_BUSLINE = "city_busline";
 	
 	// Table Create Statements
@@ -109,12 +113,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	
 	
-	private static final String CREATE_TABLE_FAVORITES = "CREATE TABLE "
-			+ TABLE_FAVORITES + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
+	private static final String CREATE_TABLE_USER_FAVORITES = "CREATE TABLE "
+			+ TABLE_USER_FAVORITES + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
 			KEY_ID + " TEXT," + KEY_NAME	+ " TEXT," +
-			KEY_BUSLINE + " TEXT," + 
+			KEY_BUSLINE + " TEXT," +
+			KEY_CITY + " TEXT," +
+			KEY_UF + " TEXT," +
 			KEY_FROM + " TEXT," + 
+			KEY_FROM_BUS_STOP_ID + " BIGINT," +
 			KEY_TO + " TEXT," + 
+			KEY_TO_BUS_STOP_ID + " BIGINT," +
+			KEY_BD_UPDATED + " TEXT," +
 			KEY_CREATED_AT	+ " DATETIME" + ")";
 
 	
@@ -147,7 +156,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(CREATE_TABLE_USER_PROFILE);
 		db.execSQL(CREATE_TABLE_USER_PLACES);
 		db.execSQL(CREATE_TABLE_USER_FRIENDS);
-		db.execSQL(CREATE_TABLE_FAVORITES);
+		db.execSQL(CREATE_TABLE_USER_FAVORITES);
 		db.execSQL(CREATE_TABLE_CITY_BUSLINE);
 	}
 
@@ -207,7 +216,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	}
 	
+	public long createUserFavorites(ContentValues contentValues) {		
+
+		//-----------
+		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_FAVORITES);
+		mDB.execSQL(CREATE_TABLE_USER_FAVORITES);
+		//-----------		
+		long rowID = mDB.insert(TABLE_USER_FAVORITES, null, contentValues);
+		return rowID;
 	
+	}	
 	/*
 	 * Creating a UserFriends
 	 */
@@ -231,6 +249,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	}	
 
+
+	public void resetUserFavorites() {
+		//-----------
+		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_FAVORITES);
+		mDB.execSQL(CREATE_TABLE_USER_FAVORITES);
+		//-----------		
+	
+	}		
 	
 	/** Returns all the contacts in the table */
 	public Cursor get_UserPlaces(){
@@ -249,6 +275,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         //return mDB.query(TABLE_USER_PLACES, new String[] { KEY_ROW_ID,  KEY_NAME , KEY_PHONE } , null, null, null, null, KEY_NAME + " asc ");
 		//return mDB.query(TABLE_USER_PLACES, new String[] {KEY_ROW_ID, KEY_NEARBY,KEY_CITY}, null, null, null, null, null);
 		return mDB.query(TABLE_CITY_BUSLINE, new String[] {KEY_CITY_BUSLINE}, null, null, null, null, null);
+	}	
+
+	public Cursor get_UserFavorites(){
+        //return mDB.query(TABLE_USER_PLACES, new String[] { KEY_ROW_ID,  KEY_NAME , KEY_PHONE } , null, null, null, null, KEY_NAME + " asc ");
+		//return mDB.query(TABLE_USER_PLACES, new String[] {KEY_ROW_ID, KEY_NEARBY,KEY_CITY}, null, null, null, null, null);
+		return mDB.query(TABLE_USER_FAVORITES, new String[] {KEY_ID, KEY_NAME}, null, null, null, null, null);
 	}	
 	
 	/** Returns all the contacts in the table */

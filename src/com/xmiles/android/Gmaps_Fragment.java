@@ -72,6 +72,8 @@ public class Gmaps_Fragment extends FragmentActivity implements OnInfoWindowClic
 	TextView tv_to;
 	TextView tv_header;
 	Button save_route;
+	//----------
+	String city;
 
 	protected static JSONArray jsonArray;
 	protected static JSONObject json;
@@ -90,7 +92,7 @@ public class Gmaps_Fragment extends FragmentActivity implements OnInfoWindowClic
 	    //---------------------
 	    Bundle args = getIntent().getExtras();
 	    String busline = args.getString("busline");
-	    String city = args.getString("city");
+	    city = args.getString("city");
 	    //---------------------
         progressBar = new ProgressDialog(this);
 		progressBar.setCancelable(true);
@@ -124,7 +126,8 @@ public class Gmaps_Fragment extends FragmentActivity implements OnInfoWindowClic
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
-				Toast.makeText(getApplicationContext(), "botão 'Salvar Rota' pressionado", Toast.LENGTH_LONG).show();
+				//Toast.makeText(getApplicationContext(), "botão 'Salvar Rota' pressionado", Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(), city, Toast.LENGTH_LONG).show();
 			}	
 		});
 
@@ -143,7 +146,7 @@ public class Gmaps_Fragment extends FragmentActivity implements OnInfoWindowClic
 			marker.setIcon(BitmapDescriptorFactory
 					.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
 
-		}else {
+		}else if (tv_to.getText().toString().isEmpty()) {
 			tv_to.setText("Para: " + marker.getSnippet());
 			marker.setIcon(BitmapDescriptorFactory
 					.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
@@ -166,7 +169,8 @@ public class Gmaps_Fragment extends FragmentActivity implements OnInfoWindowClic
 		
 		
 		
-		for (int position = 0; position < 10; position++) {
+		//for (int position = 0; position < 10; position++) {
+		for (int position = 0; position < bus_stop.length(); position++) {	
 			
 			JSONObject jsonObject = null;
 			
@@ -281,7 +285,8 @@ public class Gmaps_Fragment extends FragmentActivity implements OnInfoWindowClic
 		 
 		 public Bus_Stop_Query(String busline, String city){
 			 this.bl = busline;
-			 this.ct = city;
+			 //this.ct = city;
+			 this.ct = city.split(" - ")[0];
 		 
 		     Thread thread = new Thread(new Runnable(){
 			    @Override

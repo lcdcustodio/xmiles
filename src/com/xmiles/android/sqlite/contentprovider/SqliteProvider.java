@@ -24,12 +24,14 @@ public class SqliteProvider extends ContentProvider{
 	public static final Uri CONTENT_URI_USER_PLACES = Uri.parse("content://" + PROVIDER_NAME + "/UserPlaces");
 	public static final Uri CONTENT_URI_USER_FRIENDS = Uri.parse("content://" + PROVIDER_NAME + "/UserFriends");
 	public static final Uri CONTENT_URI_CITY_BUSLINE = Uri.parse("content://" + PROVIDER_NAME + "/CityBusline");
+	public static final Uri CONTENT_URI_USER_FAVORITES = Uri.parse("content://" + PROVIDER_NAME + "/UserFavorites");
 	
 	/** Constants to identify the requested operation */
 	private static final int USER_PROFILE = 1;
 	private static final int USER_PLACES = 2;
 	private static final int USER_FRIENDS = 3;
 	private static final int CITY_BUSLINE = 4;
+	private static final int USER_FAVORITES = 5;
 	
 	private static final UriMatcher uriMatcher ;
 	static {
@@ -38,6 +40,7 @@ public class SqliteProvider extends ContentProvider{
 		uriMatcher.addURI(PROVIDER_NAME, "UserPlaces", USER_PLACES);
 		uriMatcher.addURI(PROVIDER_NAME, "UserFriends", USER_FRIENDS);
 		uriMatcher.addURI(PROVIDER_NAME, "CityBusline", CITY_BUSLINE);
+		uriMatcher.addURI(PROVIDER_NAME, "UserFavorites", USER_FAVORITES);
 	}
 	
 	/** This content provider does the database operations by this object */
@@ -121,7 +124,19 @@ public class SqliteProvider extends ContentProvider{
 				}
 			break;
 			
-			
+		    case USER_FAVORITES:
+		    	long rowID_4 = mDatabaseHelper.createUserFavorites(values);
+				//Uri _uri=null;
+				if(rowID_4>0){
+					_uri = ContentUris.withAppendedId(CONTENT_URI_USER_FAVORITES, rowID_4);
+				}else {		
+					try {
+						throw new SQLException("Failed to insert at TABLE_USER_FAVORITES: " + uri);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			break;			
 			
 			/*
 		    case USER_FRIENDS:
@@ -201,6 +216,28 @@ public class SqliteProvider extends ContentProvider{
 	            	mDatabaseHelper.getWritableDatabase().endTransaction();
 	            }
 	            break;
+
+	        case USER_FAVORITES:
+	            try {
+	            	//----
+	            	mDatabaseHelper.resetUserFavorites();
+	            	//----
+	            	mDatabaseHelper.getWritableDatabase().beginTransaction();
+	                for (ContentValues value : values) {
+	                	//---------
+	                	//---------
+	                    long id = mDatabaseHelper.getWritableDatabase().insert(DatabaseHelper.TABLE_USER_FAVORITES, null, value);
+	                    if (id > 0)
+	                        insertCount++;
+	                }
+	                mDatabaseHelper.getWritableDatabase().setTransactionSuccessful();
+	            } catch (Exception e) {
+	                // Your error handling
+	            } finally {
+	            	mDatabaseHelper.getWritableDatabase().endTransaction();
+	            }
+	            break;
+	            
 	            
 	        default:
 	            throw new IllegalArgumentException("Unknown URI: " + uri);
@@ -228,6 +265,9 @@ public class SqliteProvider extends ContentProvider{
 
 		}else if (uriMatcher.match(uri)==CITY_BUSLINE){
 			return mDatabaseHelper.get_CityBusline();		
+
+		}else if (uriMatcher.match(uri)==USER_FAVORITES){
+			return mDatabaseHelper.get_UserFavorites();		
 			
 		}else{
 			return null;
