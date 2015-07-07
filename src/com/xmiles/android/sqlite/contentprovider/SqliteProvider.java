@@ -220,7 +220,7 @@ public class SqliteProvider extends ContentProvider{
 	        case USER_FAVORITES:
 	            try {
 	            	//----
-	            	mDatabaseHelper.resetUserFavorites();
+	            	//mDatabaseHelper.resetUserFavorites();
 	            	//----
 	            	mDatabaseHelper.getWritableDatabase().beginTransaction();
 	                for (ContentValues value : values) {

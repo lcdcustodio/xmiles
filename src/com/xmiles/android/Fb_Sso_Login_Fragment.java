@@ -77,6 +77,8 @@ import com.xmiles.android.webservice.UserFunctions;
     Context ctx;
 
     FbPlaces_AlarmReceiver FbPlaces_alarm;
+    
+    DatabaseHelper  mDatabaseHelper;
 	
     ListView busLine;
   
@@ -120,6 +122,10 @@ import com.xmiles.android.webservice.UserFunctions;
 
       		// start service
       		FbPlaces_alarm.setAlarm(this);
+      		// TEMPORARY - resetUserFavorites  
+      		mDatabaseHelper = new DatabaseHelper(getApplicationContext());
+      		mDatabaseHelper.resetUserFavorites();     		
+      		
       	
       	    //ServiceLocation					        
             //startService(new Intent(BtnFbLogin_Fragment.this, ServiceLocation.class));					        

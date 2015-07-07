@@ -38,6 +38,12 @@ public class Favorites_Fragment extends Fragment {
 	
 	private static final String TAG = "FACEBOOK";
 	private static final Integer KEY_ID = 0;
+	private static final Integer KEY_NAME = 1;
+	private static final Integer KEY_BUSLINE = 2;
+	private static final Integer KEY_CITY = 3;
+	private static final Integer KEY_UF = 4;
+	private static final Integer KEY_FROM = 5;
+	private static final Integer KEY_TO = 6;
 	//---------------------
 	protected static final Integer TYPE1 = 1;
 	private static final Integer TYPE2 = 2;	
@@ -47,7 +53,7 @@ public class Favorites_Fragment extends Fragment {
 	protected static JSONArray jsonArray;
 	protected static JSONObject json;
 	ProgressDialog progressBar;
-	
+	Cursor data_userFavorites;
 	
 	public Favorites_Fragment(){}
 	
@@ -120,11 +126,16 @@ public class Favorites_Fragment extends Fragment {
 				    public void run() {
 				        try {
 
-				            Uri uri = SqliteProvider.CONTENT_URI_USER_PROFILE;
-				        	Cursor data = getActivity().getContentResolver().query(uri, null, null, null, null);
-				        	
+				            //Uri uri = SqliteProvider.CONTENT_URI_USER_PROFILE;
+				            Uri uri = SqliteProvider.CONTENT_URI_USER_FAVORITES;
+				        	//Cursor data = getActivity().getContentResolver().query(uri, null, null, null, null);
+				            data_userFavorites = getActivity().getContentResolver().query(uri, null, null, null, null);
+				        	/*
 				        	if (data != null && data.getCount() > 0){
 				        		data.moveToFirst();
+				        		//data.moveToNext();
+				        		//data.getCount();
+				        		
 
 				        		//Your code goes here
 				        		UserFunctions userFunc = new UserFunctions();
@@ -134,6 +145,7 @@ public class Favorites_Fragment extends Fragment {
 				        		//Log.i(TAG,"testing 1: " + jsonArray.get(1));
 
 				        	}
+				        	*/
 				    		        	
 					    } catch (Exception e) {
 					            e.printStackTrace();
@@ -191,7 +203,8 @@ public class Favorites_Fragment extends Fragment {
 			@Override
 			public int getCount() {
 				// TODO Auto-generated method stub
-				return jsonArray.length() + 1;	
+				//return jsonArray.length() + 1;
+				return data_userFavorites.getCount() + 1;
 				//return jsonArray.length();
 				
 			}
@@ -199,7 +212,8 @@ public class Favorites_Fragment extends Fragment {
 			@Override
 			public int getItemViewType(int position) {
 				
-				if (position < jsonArray.length() ){
+				//if (position < jsonArray.length() ){
+				if  (position < data_userFavorites.getCount() ){	
 					return TYPE1;
 				} else {
 					return TYPE2;
@@ -248,42 +262,22 @@ public class Favorites_Fragment extends Fragment {
 			               holder1.info = (TextView) v.findViewById(R.id.info);
 			               v.setTag(holder1); 
 			        	   
-			           //} else {
-			           //   holder1 = (Type1Holder)v.getTag(); 
-			          // }
+			               if (data_userFavorites.getCount() == 0) {
+			               //if (data_userFavorites.getCount() > 0) {
+			            	   
+			            	   holder1.name.setText( "Não há rotas cadastradas");
+			            	   //holder1.profile_pic.setVisibility(View.GONE);
+			               } else {
 			       
-					    JSONObject jsonObject = null;
-					    
-			            try {
-			                jsonObject = jsonArray.getJSONObject(position);
+				               data_userFavorites.moveToPosition(position);
+				              
+				               holder1.name.setText( data_userFavorites.getString(KEY_BUSLINE));					 
+				               holder1.city.setText(data_userFavorites.getString(KEY_CITY) + " - " 
+				            		   + data_userFavorites.getString(KEY_UF));
+				               holder1._de.setText("De: " + data_userFavorites.getString(KEY_FROM));
+					           holder1.info.setText("Para: " + data_userFavorites.getString(KEY_TO));
 			            
-					 try {
-				                holder1.name.setText(jsonObject.getString("busline"));
-				             } catch (JSONException e) {
-				                holder1.name.setText("");
-				             }
-					 try {
-			                holder1.city.setText(jsonObject.getString("city"));
-			             } catch (JSONException e) {
-			                holder1.city.setText("");
-			             }				            
-				         try {
-				                holder1._de.setText("De: " +jsonObject.getString("_from"));
-				             } catch (JSONException e) {
-				                holder1._de.setText("");
-				             }
-				            
-				         try {
-				                holder1.info.setText("Para: " +jsonObject.getString("_to"));
-				             } catch (JSONException e) {
-				                holder1.info.setText("");
-				             }
-			            
-			            
-			            } catch (JSONException e1) {
-			                // TODO Auto-generated catch block
-			                e1.printStackTrace();	                
-			            }
+			               }
 
 			            return v;	
 

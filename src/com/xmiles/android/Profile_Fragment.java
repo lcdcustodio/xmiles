@@ -239,8 +239,34 @@ public class Profile_Fragment extends Fragment {
 	                runThread();
 	                //----------------------------------------------
 	          		// TEMPORARY - start service
-	                Favorites_AlarmReceiver FA = new Favorites_AlarmReceiver();
-	          		FA.setAlarm(getActivity());
+	                //Favorites_AlarmReceiver FA = new Favorites_AlarmReceiver();
+	          		//FA.setAlarm(getActivity());
+	                
+		   			 Thread thread_FA = new Thread(new Runnable(){
+						    @Override
+						    public void run() {
+						        try {
+	
+						            Uri uri = SqliteProvider.CONTENT_URI_USER_FAVORITES;
+						        	Cursor data = getActivity().getContentResolver().query(uri, null, null, null, null);
+						        	
+						        	//if (data == null){
+						        	if (data.getCount() == 0){	
+	
+						        		//Your code goes here
+									Favorites_AlarmReceiver FA = new Favorites_AlarmReceiver();
+									FA.setAlarm(getActivity());
+	
+						        	}
+						    		        	
+							    } catch (Exception e) {
+							            e.printStackTrace();
+							    }
+							}
+					});
+	
+					thread_FA.start();
+
 
 	                
 
