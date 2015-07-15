@@ -48,7 +48,8 @@ public class NewRoutes_Fragment extends FragmentActivity {
 	      //*******
 	  	  
 	      actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-	      //actionBar.setDisplayShowTitleEnabled(true);
+	      actionBar.setTitle(" Adicione Nova Rota");
+	      actionBar.setDisplayShowTitleEnabled(true);
 
 	      // Enable Action Bar
 	      actionBar.show();
@@ -96,7 +97,7 @@ public class NewRoutes_Fragment extends FragmentActivity {
 	  @Override
 	  public boolean onCreateOptionsMenu(Menu menu) {
 	      // Inflate the menu; this adds items to the action bar if it is present.
-	      getMenuInflater().inflate(R.menu.main, menu);
+	      //getMenuInflater().inflate(R.menu.main, menu);
 	      return true;
 	  }
 	    @Override

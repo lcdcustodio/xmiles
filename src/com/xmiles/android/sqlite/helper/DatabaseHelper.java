@@ -120,12 +120,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			KEY_CITY + " TEXT," +
 			KEY_UF + " TEXT," +
 			KEY_FROM + " TEXT," + 
-			KEY_FROM_BUS_STOP_ID + " BIGINT," +
+			KEY_FROM_BUS_STOP_ID + " integer," +
 			KEY_TO + " TEXT," + 
-			KEY_TO_BUS_STOP_ID + " BIGINT," +
+			KEY_TO_BUS_STOP_ID + " integer," +
 			KEY_BD_UPDATED + " TEXT," +
 			KEY_CREATED_AT	+ " DATETIME" + ")";
 
+	//KEY_FROM_BUS_STOP_ID + " BIGINT," +	
+	//KEY_TO_BUS_STOP_ID + " BIGINT," +	
 	
     /** An instance variable for SQLiteDatabase */
     private SQLiteDatabase mDB;  
@@ -219,8 +221,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public long createUserFavorites(ContentValues contentValues) {		
 
 		//-----------
-		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_FAVORITES);
-		mDB.execSQL(CREATE_TABLE_USER_FAVORITES);
+		//mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_FAVORITES);
+		//mDB.execSQL(CREATE_TABLE_USER_FAVORITES);
 		//-----------		
 		long rowID = mDB.insert(TABLE_USER_FAVORITES, null, contentValues);
 		return rowID;

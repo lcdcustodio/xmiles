@@ -289,10 +289,10 @@ public class Favorites_Fragment extends Fragment {
 
 			           View v2 = convertView;
 			           
-						//if (mInflater == null){
-						//mInflater = (LayoutInflater) getActivity()
-				        //            .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-						//}			           
+						if (mInflater == null){
+						  mInflater = (LayoutInflater) getActivity()
+				                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+						}			           
  
 			        	v2 = mInflater.inflate(R.layout.favorites_add_routes_button, null);			        	   
 			        	holder2 = new Type2Holder (); 			               

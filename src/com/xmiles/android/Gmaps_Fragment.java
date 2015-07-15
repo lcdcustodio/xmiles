@@ -1,6 +1,8 @@
 package com.xmiles.android;
 
 
+import java.math.BigInteger;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -17,11 +19,14 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.xmiles.android.Busline_Fragment.BuslineListAdapter;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
+import com.xmiles.android.sqlite.helper.DatabaseHelper;
+import com.xmiles.android.support.Support;
 import com.xmiles.android.webservice.UserFunctions;
 
 import android.app.ActionBar;
 import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -74,6 +79,14 @@ public class Gmaps_Fragment extends FragmentActivity implements OnInfoWindowClic
 	Button save_route;
 	//----------
 	String city;
+	String busline;
+	//----------
+	int _from_bus_stop_id;
+	int _to_bus_stop_id;
+	String bus_stop_id;
+	
+	private static final Integer KEY_ID = 0;
+	private static final Integer KEY_NAME = 1;
 
 	protected static JSONArray jsonArray;
 	protected static JSONObject json;
@@ -91,7 +104,7 @@ public class Gmaps_Fragment extends FragmentActivity implements OnInfoWindowClic
 
 	    //---------------------
 	    Bundle args = getIntent().getExtras();
-	    String busline = args.getString("busline");
+	    busline = args.getString("busline");
 	    city = args.getString("city");
 	    //---------------------
         progressBar = new ProgressDialog(this);
@@ -125,9 +138,49 @@ public class Gmaps_Fragment extends FragmentActivity implements OnInfoWindowClic
 
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				//Toast.makeText(getApplicationContext(), "botão 'Salvar Rota' pressionado", Toast.LENGTH_LONG).show();
+				// TODO Auto-generated method stub				
 				Toast.makeText(getApplicationContext(), city, Toast.LENGTH_LONG).show();
+				//---------------------------------------
+				//---------------------------------------
+                try {
+					Support support = new Support();
+	                
+	    			/** Setting up values to insert into UserFavorites table */
+	    			ContentValues contentValues = new ContentValues();
+	    			
+		            Uri uri = SqliteProvider.CONTENT_URI_USER_PROFILE;
+		        	Cursor data = getApplication().getContentResolver().query(uri, null, null, null, null);
+		        	
+		        	if (data != null && data.getCount() > 0){
+		        		data.moveToFirst();
+
+		        		//Your code goes here
+		        		contentValues.put(DatabaseHelper.KEY_ID, data.getString(KEY_ID));
+		    			contentValues.put(DatabaseHelper.KEY_NAME, data.getString(KEY_NAME));
+		        	}
+	    			
+	    			contentValues.put(DatabaseHelper.KEY_BUSLINE, busline);
+	    			contentValues.put(DatabaseHelper.KEY_CITY, city.split(" - ")[0]);
+	    			contentValues.put(DatabaseHelper.KEY_UF, city.split(" - ")[1]);
+	    			contentValues.put(DatabaseHelper.KEY_FROM, tv_from.getText().toString().split(": ")[1]);					
+	    			contentValues.put(DatabaseHelper.KEY_FROM_BUS_STOP_ID, _from_bus_stop_id);
+	    			contentValues.put(DatabaseHelper.KEY_TO, tv_to.getText().toString().split(": ")[1]);
+	    			contentValues.put(DatabaseHelper.KEY_TO_BUS_STOP_ID, _to_bus_stop_id);
+	    			contentValues.put(DatabaseHelper.KEY_BD_UPDATED, "YES");
+	    			contentValues.put(DatabaseHelper.KEY_CREATED_AT, support.getDateTime());	
+	    			
+	    			getApplication().getContentResolver().insert(SqliteProvider.CONTENT_URI_USER_FAVORITES, contentValues);
+
+                 } catch (Exception e) {
+			         e.printStackTrace();
+			     }
+
+				//---------------------------------------
+				//---------------------------------------
+				finish();
+				//---------------------------------------
+				//---------------------------------------
+
 			}	
 		});
 
@@ -145,11 +198,16 @@ public class Gmaps_Fragment extends FragmentActivity implements OnInfoWindowClic
 			tv_from.setText("De: " + marker.getSnippet());
 			marker.setIcon(BitmapDescriptorFactory
 					.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+			
+
+			_from_bus_stop_id = Integer.parseInt(bus_stop_id);
 
 		}else if (tv_to.getText().toString().isEmpty()) {
 			tv_to.setText("Para: " + marker.getSnippet());
 			marker.setIcon(BitmapDescriptorFactory
 					.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+
+			_to_bus_stop_id = Integer.parseInt(bus_stop_id);
 			
 			save_route.setVisibility(View.VISIBLE);
 			//save_route.setBackgroundColor(Color.TRANSPARENT);
@@ -160,7 +218,7 @@ public class Gmaps_Fragment extends FragmentActivity implements OnInfoWindowClic
 	  @Override
 	  public boolean onCreateOptionsMenu(Menu menu) {
 	      // Inflate the menu; this adds items to the action bar if it is present.
-	      getMenuInflater().inflate(R.menu.modos, menu);
+	      getMenuInflater().inflate(R.menu.gmaps_type, menu);
 	      return true;
 	  }
 
@@ -186,6 +244,9 @@ public class Gmaps_Fragment extends FragmentActivity implements OnInfoWindowClic
 						.snippet(jsonObject.getString("bus_stop"))
 						);
 				//*
+				//-------------------
+				bus_stop_id = jsonObject.getString("bus_stop_id");				
+				//-------------------
 				mMap.setInfoWindowAdapter(new InfoWindowAdapter() {
 					 
 		            // Use default InfoWindow frame

@@ -1,16 +1,16 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xMiles="http://schemas.android.com/apk/res-auto" >
  
-    <item
+    <!--item
         android:id="@+id/rotas"
         android:title="@string/rotas"
         android:icon="@drawable/phone"        
-        android:showAsAction="ifRoom|withText" />
+        android:showAsAction="ifRoom|withText" />  -->
  
     <item
-        android:id="@+id/computer"
-        android:title="@string/computer"
-        android:icon="@drawable/computer"
+        android:id="@+id/new_route"
+        android:title="@string/new_route"
+        android:icon="@drawable/ic_directions_bus_black_24dp"
         android:showAsAction="ifRoom|withText" />
  
     <!--<item

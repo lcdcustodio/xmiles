@@ -254,8 +254,8 @@ public class Profile_Fragment extends Fragment {
 						        	if (data.getCount() == 0){	
 	
 						        		//Your code goes here
-									Favorites_AlarmReceiver FA = new Favorites_AlarmReceiver();
-									FA.setAlarm(getActivity());
+						        		Favorites_AlarmReceiver FA = new Favorites_AlarmReceiver();
+						        		FA.setAlarm(getActivity());
 	
 						        	}
 						    		        	

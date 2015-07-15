@@ -155,6 +155,8 @@ import com.xmiles.android.webservice.UserFunctions;
 	  public boolean onCreateOptionsMenu(Menu menu) {
 	      // Inflate the menu; this adds items to the action bar if it is present.
 	      getMenuInflater().inflate(R.menu.main, menu);
+		  getMenuInflater().inflate(R.menu.main_frame, menu);
+
 	      return true;
 	  }
   
@@ -179,30 +181,17 @@ import com.xmiles.android.webservice.UserFunctions;
 	            	android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();	                
 	            	fragmentTransaction.addToBackStack(null)
 	                        		   .commit();            	
-	            	//*/	        	    
-	          	  	//--------------
-	        	    /*
-	        	    Fragment fgmt = new AddRoutes_Fragment();
-	        	    android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-	        	    android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();        
-	        	    fragmentTransaction.replace(R.id.frame_container, fgmt);
-	        	    fragmentTransaction.commit();
-					*/
 	        	    
 	            	break;
 	        		
 	        		
 	        		
-	        	case R.id.rotas:
+	        	case R.id.new_route:
 
-	            	Toast.makeText(getBaseContext(), "You selected Rotas", Toast.LENGTH_SHORT).show();
+	            	Toast.makeText(getBaseContext(), "You selected New Route", Toast.LENGTH_SHORT).show();
 	                
 
-	            	break;
-	 
-	            case R.id.computer:
-	                Toast.makeText(getBaseContext(), "You selected Computer", Toast.LENGTH_SHORT).show();
-	                break;
+	            	break;	 
 	            }	            
 	        return true;
 	    }

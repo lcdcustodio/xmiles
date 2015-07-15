@@ -26,10 +26,11 @@
     <color name="transparent">#00000000</color>
     <color name="foursquare_blue">#ff0aaeef</color>
     <color name="divider_line">#ffc5c0ba</color>
-    <color name="standard_gray_e2e2e0">#ffe2e2e0</color>
-	<color name="silver">#E6E8FA</color> 
+    <color name="standard_gray_e2e2e0">#ffe2e2e0</color> 
 	<color name="light_font">#FBFBFB</color>
     <color name="grey_font">#ff9e9e9e</color>
     <color name="text_shadow">#7F000000</color>
-    <color name="text_shadow_white">#FFFFFF</color>    
+    <color name="text_shadow_white">#FFFFFF</color>
+    <color name="ColorPrimary">#FF5722</color>
+    <color name="ColorPrimaryDark">#E64A19</color>    
 </resources>

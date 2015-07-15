@@ -9,5 +9,6 @@
     <string name="camera">Camera</string>
     <string name="video">Video</string>
     <string name="email">EMail</string>
+    <string name="new_route">Nova Rota</string>
     
 </resources>
