@@ -281,7 +281,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	public Cursor get_UserFavorites(){
 		//return mDB.query(TABLE_USER_FAVORITES, new String[] {KEY_ID, KEY_NAME}, null, null, null, null, null);
-		return mDB.query(TABLE_USER_FAVORITES, new String[] {KEY_ID, KEY_NAME, KEY_BUSLINE, KEY_CITY, KEY_UF, KEY_FROM, KEY_TO}, null, null, null, null, null);
+		return mDB.query(TABLE_USER_FAVORITES, new String[] {KEY_ID, KEY_NAME, KEY_BUSLINE, KEY_CITY, KEY_UF, KEY_FROM, KEY_TO,KEY_FROM_BUS_STOP_ID,KEY_TO_BUS_STOP_ID}, null, null, null, null, null);
 	}	
 	
 	/** Returns all the contacts in the table */

@@ -138,7 +138,7 @@ public class Cities_Fragment extends Fragment implements OnItemClickListener {
 	    public void onDestroyView() {
 	        super.onDestroyView();
 	        
-	        Log.d(TAG, "onDestroy Routes_fgmt");
+	        Log.d(TAG, "onDestroy Cities_fgmt");
 	        
 	    }
 	 /*

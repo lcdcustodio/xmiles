@@ -9,7 +9,7 @@
     	android:id="@+id/frame_container"
     	android:layout_width="fill_parent"
     	android:background="@color/standard_gray_e2e2e0"
-        android:layout_height="300dp">
+        android:layout_height="360dp">
 
              <ImageButton
                  android:id="@+id/imgbtn_fblogin"

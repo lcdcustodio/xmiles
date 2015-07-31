@@ -7,22 +7,26 @@
     <!--android:paddingRight="10dp" -->
     
         <LinearLayout 
-        android:layout_width="fill_parent"
-        android:layout_height="300dp"
+        android:layout_width="fill_parent"        
+        android:layout_height="match_parent"
         android:background="@color/standard_gray_e2e2e0"                 
         android:orientation="horizontal" >
-        <!--android:background="@color/white"-->        
+        <!--android:layout_height="300dp"
+        	android:background="@color/white"-->        
         <!--android:background="@color/lite_blue"-->
     
 	         <ListView
     	    android:id="@+id/list_favorites"        
         	android:layout_width="fill_parent"
-        	android:layout_height="fill_parent"        
-        	/>
+        	android:layout_height="fill_parent"
+        	android:layout_weight="1"
+        	android:paddingTop="2dp"
+    		android:paddingBottom="2dp"    		              	   
+        	android:background="@drawable/listview_border_ui"/>        	
 	        <!--android:layout_height="wrap_content"--> 
 	         
     </LinearLayout>        
        
-
-    
+        
+        
  </LinearLayout>

@@ -142,6 +142,17 @@ public class Favorites_AlarmReceiver extends WakefulBroadcastReceiver {
 			        		//Your code goes here
 			        		UserFunctions userFunc = new UserFunctions();
 			        		json = userFunc.favoritesRoutes(data.getString(KEY_ID));
+			        		//----------------------------------------
+				            if (json.getString("success") != null) {
+				                
+				                String res = json.getString("success");
+				                if(Integer.parseInt(res) != 1){
+
+				                	cancelAlarm(c);
+
+				                }
+				            }
+				            //----------------------------------------
 
 			        		jsonArray = new JSONArray(json.getString("user"));
 			        		//Log.i(TAG,"testing 1: " + jsonArray.get(1));

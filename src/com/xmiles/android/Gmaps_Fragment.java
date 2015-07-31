@@ -22,7 +22,8 @@ import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
 import com.xmiles.android.support.Support;
 import com.xmiles.android.webservice.UserFunctions;
-
+import com.xmiles.android.scheduler.Favorites_AlarmReceiver;
+import com.xmiles.android.scheduler.Favorites_Update;
 import android.app.ActionBar;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -81,8 +82,11 @@ public class Gmaps_Fragment extends FragmentActivity implements OnInfoWindowClic
 	String city;
 	String busline;
 	//----------
-	int _from_bus_stop_id;
-	int _to_bus_stop_id;
+	//int _from_bus_stop_id;
+	//int _to_bus_stop_id;
+	String _from_bus_stop_id;
+	String _to_bus_stop_id;
+
 	String bus_stop_id;
 	
 	private static final Integer KEY_ID = 0;
@@ -139,7 +143,7 @@ public class Gmaps_Fragment extends FragmentActivity implements OnInfoWindowClic
 			@Override
 			public void onClick(View v) {
 				// TODO Auto-generated method stub				
-				Toast.makeText(getApplicationContext(), city, Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(), "Salva em favoritos!", Toast.LENGTH_SHORT).show();
 				//---------------------------------------
 				//---------------------------------------
                 try {
@@ -158,7 +162,10 @@ public class Gmaps_Fragment extends FragmentActivity implements OnInfoWindowClic
 		        		contentValues.put(DatabaseHelper.KEY_ID, data.getString(KEY_ID));
 		    			contentValues.put(DatabaseHelper.KEY_NAME, data.getString(KEY_NAME));
 		        	}
-	    			
+		        	//---------------
+		        	//Log.e(TAG, "_from_bus_stop_id: " + _from_bus_stop_id);
+	    			//Log.d(TAG, "_to_bus_stop_id: " + _to_bus_stop_id);
+	    			//---------------
 	    			contentValues.put(DatabaseHelper.KEY_BUSLINE, busline);
 	    			contentValues.put(DatabaseHelper.KEY_CITY, city.split(" - ")[0]);
 	    			contentValues.put(DatabaseHelper.KEY_UF, city.split(" - ")[1]);
@@ -170,10 +177,22 @@ public class Gmaps_Fragment extends FragmentActivity implements OnInfoWindowClic
 	    			contentValues.put(DatabaseHelper.KEY_CREATED_AT, support.getDateTime());	
 	    			
 	    			getApplication().getContentResolver().insert(SqliteProvider.CONTENT_URI_USER_FAVORITES, contentValues);
+	    			//-------------------
+	            	Intent intent=new Intent("fragmentupdater");
+	            	sendBroadcast(intent);
+	            	//-------------------
+	            	Log.e(TAG,"Favorites_Update StartUp");
+	        		//Your code goes here
+	            	Favorites_Update FA_Up = new Favorites_Update();	
+	        		FA_Up.setAlarm(getApplicationContext());
 
+	            	
+	            	
                  } catch (Exception e) {
 			         e.printStackTrace();
 			     }
+                
+                
 
 				//---------------------------------------
 				//---------------------------------------
@@ -195,22 +214,34 @@ public class Gmaps_Fragment extends FragmentActivity implements OnInfoWindowClic
 		
 		 
 		if (tv_from.getText().toString().isEmpty()){
-			tv_from.setText("De: " + marker.getSnippet());
-			marker.setIcon(BitmapDescriptorFactory
-					.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+			//tv_from.setText("De: " + marker.getSnippet());
 			
+			tv_from.setText("De: " + marker.getSnippet().split(" - id: ")[0]);
+			marker.setIcon(BitmapDescriptorFactory
+					.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));			
 
-			_from_bus_stop_id = Integer.parseInt(bus_stop_id);
+			//_from_bus_stop_id = Integer.parseInt(bus_stop_id);
+			//_from_bus_stop_id = bus_stop_id;
+			_from_bus_stop_id = marker.getSnippet().split(" - id: ")[1];
 
 		}else if (tv_to.getText().toString().isEmpty()) {
-			tv_to.setText("Para: " + marker.getSnippet());
-			marker.setIcon(BitmapDescriptorFactory
-					.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
-
-			_to_bus_stop_id = Integer.parseInt(bus_stop_id);
 			
-			save_route.setVisibility(View.VISIBLE);
-			//save_route.setBackgroundColor(Color.TRANSPARENT);
+			//_to_bus_stop_id = Integer.parseInt(bus_stop_id);
+			_to_bus_stop_id = marker.getSnippet().split(" - id: ")[1];
+			
+			if (!tv_from.getText().toString().split(": ")[1].equals(marker.getSnippet().split(" - id: ")[0])) {
+			
+				tv_to.setText("Para: " + marker.getSnippet().split(" - id: ")[0]);
+				marker.setIcon(BitmapDescriptorFactory
+						.defaultMarker(BitmapDescriptorFactory.HUE_GREEN));
+				
+				
+				save_route.setVisibility(View.VISIBLE);			
+			} else {
+				Toast.makeText(getApplicationContext(), "2x Ponto " + 
+						tv_from.getText().toString().split(": ")[1] + " selecionado!", Toast.LENGTH_SHORT).show();
+			}
+
 		}
 	}
 	//*/
@@ -241,11 +272,12 @@ public class Gmaps_Fragment extends FragmentActivity implements OnInfoWindowClic
 				// Adding a marker
 				mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude))
 						.title(jsonObject.getString("busline"))						
-						.snippet(jsonObject.getString("bus_stop"))
+						.snippet(jsonObject.getString("bus_stop") + " - id: " + jsonObject.getString("bus_stop_id"))
+						//.snippet(jsonObject.getString("bus_stop"))
 						);
 				//*
 				//-------------------
-				bus_stop_id = jsonObject.getString("bus_stop_id");				
+				//bus_stop_id = jsonObject.getString("bus_stop_id");				
 				//-------------------
 				mMap.setInfoWindowAdapter(new InfoWindowAdapter() {
 					 

@@ -37,7 +37,8 @@ public class JSONParser {
             // defaultHttpClient
             DefaultHttpClient httpClient = new DefaultHttpClient();
             HttpPost httpPost = new HttpPost(url);
-            httpPost.setEntity(new UrlEncodedFormEntity(params));
+            //httpPost.setEntity(new UrlEncodedFormEntity(params));
+            httpPost.setEntity(new UrlEncodedFormEntity(params, "utf-8"));
             //-----
             Log.d("FACEBOOK", httpPost.getURI().toString());
             Log.d("FACEBOOK", httpPost.getRequestLine().toString());
@@ -58,8 +59,11 @@ public class JSONParser {
         }
  
         try {
+            //BufferedReader reader = new BufferedReader(new InputStreamReader(
+            //        is, "iso-8859-1"), 8);
             BufferedReader reader = new BufferedReader(new InputStreamReader(
-                    is, "iso-8859-1"), 8);
+                    is, "utf-8"), 8);
+
             StringBuilder sb = new StringBuilder();
             String line = null;
             while ((line = reader.readLine()) != null) {

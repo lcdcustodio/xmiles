@@ -24,7 +24,8 @@ public class UserFunctions {
     //private static String registerURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/mazaah/login/"; 
     private static String loginURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String registerURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
-    private static String favoritesURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";    
+    private static String favoritesURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
+    private static String insert_favoritesURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String buslineURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String bus_stopURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     
@@ -35,6 +36,7 @@ public class UserFunctions {
     private static String login_tag = "login";
     private static String register_tag = "register";
     private static String favorites_tag = "favorites";
+    private static String insert_favorites_tag = "favorites_register";
     private static String busline_tag = "busline";
     private static String bus_stop_tag = "bus_stop";
      
@@ -77,6 +79,30 @@ public class UserFunctions {
         return json;
     }
     
+    public JSONObject insert_favoritesRoutes(String user_id, String name, String busline, String _from, String _to,
+    	    String city, String uf, String _to_bus_stop_id, String _from_bus_stop_id){
+		    //String city, String uf, int _to_bus_stop_id, int _from_bus_stop_id){
+        // Building Parameters
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("tag", insert_favorites_tag));
+        params.add(new BasicNameValuePair("user_id", user_id));
+        params.add(new BasicNameValuePair("name", name));
+        params.add(new BasicNameValuePair("busline", busline));
+        params.add(new BasicNameValuePair("_from", _from));
+        params.add(new BasicNameValuePair("_to", _to));
+        params.add(new BasicNameValuePair("city", city));
+        params.add(new BasicNameValuePair("uf", uf));
+        params.add(new BasicNameValuePair("_to_bus_stop_id", _to_bus_stop_id));
+        params.add(new BasicNameValuePair("_from_bus_stop_id", _from_bus_stop_id));
+        // getting JSON Object
+        JSONObject json = jsonParser.getJSONFromUrl(insert_favoritesURL, params);
+        //JSONObject json = jsonParser.getJSONFromUrl(registerURL, params);
+        // return json
+        Log.e(TAG, "insert_favoritesRoutes " + json.toString());        
+        return json;
+    }
+
+    
     public JSONObject busline(String id){
         // Building Parameters
         List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -107,7 +133,6 @@ public class UserFunctions {
      * @param email
      * @param password
      * */
-    //public JSONObject registerUser(String name, String email, String password){
     public JSONObject registerUser(String name, String id, String gender, String picURL){	
         // Building Parameters
         List<NameValuePair> params = new ArrayList<NameValuePair>();

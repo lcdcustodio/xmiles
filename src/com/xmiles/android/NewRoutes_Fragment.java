@@ -48,8 +48,8 @@ public class NewRoutes_Fragment extends FragmentActivity {
 	      //*******
 	  	  
 	      actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
-	      actionBar.setTitle(" Adicione Nova Rota");
-	      actionBar.setDisplayShowTitleEnabled(true);
+	      //actionBar.setTitle(" Adicione Nova Rota");
+	      //actionBar.setDisplayShowTitleEnabled(true);
 
 	      // Enable Action Bar
 	      actionBar.show();

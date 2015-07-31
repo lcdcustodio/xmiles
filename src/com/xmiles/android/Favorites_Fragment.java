@@ -13,10 +13,15 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
+import android.support.v4.content.CursorLoader;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -33,7 +38,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class Favorites_Fragment extends Fragment {
+public class Favorites_Fragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>  {
 
 	
 	private static final String TAG = "FACEBOOK";
@@ -49,7 +54,8 @@ public class Favorites_Fragment extends Fragment {
 	private static final Integer TYPE2 = 2;	
 	//---------------------
 	ListView mListFavorites;
-	SimpleCursorAdapter mAdapter;
+	Button Add_route;
+	TextView Route;
 	protected static JSONArray jsonArray;
 	protected static JSONObject json;
 	ProgressDialog progressBar;
@@ -60,16 +66,35 @@ public class Favorites_Fragment extends Fragment {
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+		
+		getActivity().registerReceiver(ProfileFragmentReceiver, new IntentFilter("fragmentupdater"));
  
 		View rootView = inflater.inflate(R.layout.fgmt_background, container, false);
+		View rootView1 = inflater.inflate(R.layout.favorites_add_routes_button, container, false);
+		//View rootView1 = inflater.inflate(R.layout.favorites_add_routes_button, null);
 		View rootView2 = inflater.inflate(R.layout.favorites_header, container, false);
 		
 		View custom = inflater.inflate(R.layout.favorites_fragment, null); 
-		//View custom2 = inflater.inflate(R.layout.favorites_add_routes_button, container, false);		
-		//View custom3 = inflater.inflate(R.layout.favorites_header, container, false);
 		
-		mListFavorites = (ListView) custom.findViewById(R.id.list_favorites);
-		
+		mListFavorites = (ListView) custom.findViewById(R.id.list_favorites);		
+		Add_route	   = (Button) rootView1.findViewById(R.id.button1);
+		Route          = (TextView) rootView2.findViewById(R.id.rotas);
+		//---------------		
+		//mListFavorites.addFooterView(rootView1);
+		//---------------		
+		Add_route.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v2) {
+            	//-------------
+            	//Toast.makeText(getActivity(), "Botao Nova Rota pressionado", Toast.LENGTH_SHORT).show();
+            	//------------
+                Intent intent = new Intent(getActivity(), NewRoutes_Fragment.class);
+                startActivity(intent);
+            }
+        });
+
+		//---------------
         progressBar = new ProgressDialog(getActivity());
 		progressBar.setCancelable(true);
 		progressBar.setMessage("Please, wait ...");
@@ -79,42 +104,73 @@ public class Favorites_Fragment extends Fragment {
 		
 		Favorites_Query fq = new Favorites_Query();
 		
+		((ViewGroup) rootView).addView(rootView1);
 		((ViewGroup) rootView).addView(rootView2);
 		((ViewGroup) rootView).addView(custom);
-		//((ViewGroup) rootView).addView(custom3);
-		//((ViewGroup) rootView).addView(custom2);
-        return rootView;
+		//((ViewGroup) rootView).addView(rootView1);
+		
+		/** Creating a loader for populating listview from sqlite database */
+		getLoaderManager().initLoader(0, null, this);
+		
+        // Create an empty adapter we will use to display the loaded data.
+		//FavoritesListAdapter mAdapter = new FavoritesListAdapter(getActivity());
+        //setListAdapter(mAdapter);
+		
+		return rootView;
     }
 	
 	
+	@Override
+	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
+		// TODO Auto-generated method stub
+		Uri uri = SqliteProvider.CONTENT_URI_USER_FAVORITES;
+		//data_userFavorites = getActivity().getContentResolver().query(uri, null, null, null, null);
+		
+		return new CursorLoader(getActivity(), uri, null, null, null, null);
+		//return data_userFavorites; 
+		//return null;
+	}
+
+	@Override
+	public void onLoadFinished(Loader<Cursor> arg0, Cursor data) {
+		// TODO Auto-generated method stub
+        if (data == null || data.getCount() == 0){
+        	Route.setText("Não há rotas cadastradas");		            	
+    	} else {
+    		Route.setText("ROTAS");
+    	}		
+		mListFavorites.setAdapter(new FavoritesListAdapter(getActivity(), data));
+
+		Log.d(TAG, "Favotires_Fgmnt onLoadFinished");
+
+		
+	}
+
+	@Override
+	public void onLoaderReset(Loader<Cursor> arg0) {
+		// TODO Auto-generated method stub
+		
+	}
 	
-	
+	private final BroadcastReceiver ProfileFragmentReceiver = new BroadcastReceiver() {
+
+
+		@Override
+		public void onReceive(Context arg0, Intent arg1) {
+			// TODO Auto-generated method stub
+			getLoaderManager().restartLoader(0, null, Favorites_Fragment.this);
+		}};
+
 	
 	
 	 @Override
 	    public void onDestroyView() {
 	        super.onDestroyView();
 	        
-	        Log.d(TAG, "onDestroy Routes_fgmt");
-	        /* 
-	        FragmentManager fragMgr = getFragmentManager();
-	        //Fragment currentFragment = (Fragment) fragMgr.findFragmentById(0);
-	        Fragment currentFragment = (Fragment) fragMgr.findFragmentById(R.id.frame_container);
-	        //Fragment currentFragment = (Fragment) fragMgr.findFragmentByTag("Routes_Fragment");
-	        Log.d(TAG, "onDestroy Routes_fgmt: " + currentFragment); 
-
-	        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
-		    ft.remove(currentFragment);
-		    ft.commit();
-		    //*
-	        if (currentFragment != null){	        	
-	        	FragmentTransaction fragTrans = fragMgr.beginTransaction();
-	            fragTrans.remove(currentFragment);
-	            //fragTrans.remove("Routes_Fragment");
-	            fragTrans.commit();
-	        }
-	        */
-	        
+	        Log.d(TAG, "onDestroy Favorites_fgmt");
+	        //-------------
+	        getActivity().unregisterReceiver(ProfileFragmentReceiver);
+	        //-------------
 	    }
 	 
 	 public class Favorites_Query {
@@ -130,22 +186,14 @@ public class Favorites_Fragment extends Fragment {
 				            Uri uri = SqliteProvider.CONTENT_URI_USER_FAVORITES;
 				        	//Cursor data = getActivity().getContentResolver().query(uri, null, null, null, null);
 				            data_userFavorites = getActivity().getContentResolver().query(uri, null, null, null, null);
-				        	/*
-				        	if (data != null && data.getCount() > 0){
-				        		data.moveToFirst();
-				        		//data.moveToNext();
-				        		//data.getCount();
-				        		
 
-				        		//Your code goes here
-				        		UserFunctions userFunc = new UserFunctions();
-				        		json = userFunc.favoritesRoutes(data.getString(KEY_ID));
-	
-				        		jsonArray = new JSONArray(json.getString("user"));
-				        		//Log.i(TAG,"testing 1: " + jsonArray.get(1));
+				            if (data_userFavorites == null || data_userFavorites.getCount() == 0){
 
+				            	Route.setText("Não há rotas cadastradas");		            	
+				        	} else {
+				        		Route.setText("ROTAS");
 				        	}
-				        	*/
+
 				    		        	
 					    } catch (Exception e) {
 					            e.printStackTrace();
@@ -177,7 +225,9 @@ public class Favorites_Fragment extends Fragment {
 
 	                                @Override
 	                                public void run() {
-	            						mListFavorites.setAdapter(new FavoritesListAdapter(getActivity()));
+	                                	
+	            						//mListFavorites.setAdapter(new FavoritesListAdapter(getActivity()));
+	                                	mListFavorites.setAdapter(new FavoritesListAdapter(getActivity(),data_userFavorites));
 	                                }
 	                            });
 	                            Thread.sleep(400);
@@ -194,30 +244,38 @@ public class Favorites_Fragment extends Fragment {
 	 }
 	 
 		public class FavoritesListAdapter extends BaseAdapter {
-		    private LayoutInflater mInflater;		    
+		    private LayoutInflater mInflater;
+		    Cursor favorites_info;
 
-		    public FavoritesListAdapter(FragmentActivity fragmentActivity) {
-		    	//friends_info = data; 	    		    	
+		    //public FavoritesListAdapter(FragmentActivity fragmentActivity) {
+		    public FavoritesListAdapter(FragmentActivity fragmentActivity, Cursor data) {	
+		    	favorites_info = data; 	    		    	
 		    }
 
 			@Override
 			public int getCount() {
 				// TODO Auto-generated method stub
 				//return jsonArray.length() + 1;
-				return data_userFavorites.getCount() + 1;
+				//return data_userFavorites.getCount() + 1;
+				//-------------------
+				//return data_userFavorites.getCount();
+				return favorites_info.getCount();
+				//-------------------
 				//return jsonArray.length();
 				
 			}
 			
 			@Override
 			public int getItemViewType(int position) {
-				
+				return TYPE1;
 				//if (position < jsonArray.length() ){
+				/*
 				if  (position < data_userFavorites.getCount() ){	
 					return TYPE1;
 				} else {
 					return TYPE2;
 				}
+				*/
 			}
 
 			@Override
@@ -262,27 +320,35 @@ public class Favorites_Fragment extends Fragment {
 			               holder1.info = (TextView) v.findViewById(R.id.info);
 			               v.setTag(holder1); 
 			        	   
-			               if (data_userFavorites.getCount() == 0) {
+			               if (favorites_info.getCount() == 0) {
+			               //if (data_userFavorites.getCount() == 0) {  	   
 			               //if (data_userFavorites.getCount() > 0) {
 			            	   
 			            	   holder1.name.setText( "Não há rotas cadastradas");
 			            	   //holder1.profile_pic.setVisibility(View.GONE);
 			               } else {
 			       
-				               data_userFavorites.moveToPosition(position);
-				              
+				               //data_userFavorites.moveToPosition(position);
+				               favorites_info.moveToPosition(position);
+				               /*
 				               holder1.name.setText( data_userFavorites.getString(KEY_BUSLINE));					 
 				               holder1.city.setText(data_userFavorites.getString(KEY_CITY) + " - " 
 				            		   + data_userFavorites.getString(KEY_UF));
 				               holder1._de.setText("De: " + data_userFavorites.getString(KEY_FROM));
 					           holder1.info.setText("Para: " + data_userFavorites.getString(KEY_TO));
+					           */
+				               holder1.name.setText( favorites_info.getString(KEY_BUSLINE));					 
+				               holder1.city.setText(favorites_info.getString(KEY_CITY) + " - " 
+				            		   + favorites_info.getString(KEY_UF));
+				               holder1._de.setText("De: " + favorites_info.getString(KEY_FROM));
+					           holder1.info.setText("Para: " + favorites_info.getString(KEY_TO));
 			            
 			               }
 
 			            return v;	
 
 
-
+			       /*     
 			       case 2:
 			    	   
 			    	   Type2Holder holder2; 
@@ -319,6 +385,7 @@ public class Favorites_Fragment extends Fragment {
 			        	   
 			    	   
 			           return v2;
+			       */
 			    	   
 			       default:
 			            break;
@@ -344,6 +411,7 @@ public class Favorites_Fragment extends Fragment {
 	        Button add_routes;
 
 	    }
+
 
 	    
 }
