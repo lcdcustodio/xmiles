@@ -15,8 +15,7 @@ import android.util.Log;
 /** A custom Content Provider to do the database operations */
 public class SqliteProvider extends ContentProvider{
 	
-	private static final String LOG = "Facebook_Places";
-	//public static final String PROVIDER_NAME = "com.facetooth_light.android.provider";
+	private static final String TAG = "FACEBOOK";
 	public static final String PROVIDER_NAME = "com.xmiles.android.provider";
 	
 	/** A uri to do operations on contacts table. A content provider is identified by its uri */
@@ -25,6 +24,10 @@ public class SqliteProvider extends ContentProvider{
 	public static final Uri CONTENT_URI_USER_FRIENDS = Uri.parse("content://" + PROVIDER_NAME + "/UserFriends");
 	public static final Uri CONTENT_URI_CITY_BUSLINE = Uri.parse("content://" + PROVIDER_NAME + "/CityBusline");
 	public static final Uri CONTENT_URI_USER_FAVORITES = Uri.parse("content://" + PROVIDER_NAME + "/UserFavorites");
+	public static final Uri CONTENT_URI_USER_PROFILE_create = Uri.parse("content://" + PROVIDER_NAME + "/UserProfile_create");
+	public static final Uri CONTENT_URI_USER_FAVORITES_create = Uri.parse("content://" + PROVIDER_NAME + "/UserFavorites_create");
+	public static final Uri CONTENT_URI_USER_FAVORITES_insert = Uri.parse("content://" + PROVIDER_NAME + "/UserFavorites_insert");
+	public static final Uri CONTENT_URI_CITY_BUSLINE_create = Uri.parse("content://" + PROVIDER_NAME + "/CityBusline_create");
 	
 	/** Constants to identify the requested operation */
 	private static final int USER_PROFILE = 1;
@@ -32,6 +35,10 @@ public class SqliteProvider extends ContentProvider{
 	private static final int USER_FRIENDS = 3;
 	private static final int CITY_BUSLINE = 4;
 	private static final int USER_FAVORITES = 5;
+	private static final int USER_PROFILE_create = 6;
+	private static final int USER_FAVORITES_create = 7;
+	private static final int USER_FAVORITES_insert = 8;
+	private static final int CITY_BUSLINE_create = 9;
 	
 	private static final UriMatcher uriMatcher ;
 	static {
@@ -41,6 +48,10 @@ public class SqliteProvider extends ContentProvider{
 		uriMatcher.addURI(PROVIDER_NAME, "UserFriends", USER_FRIENDS);
 		uriMatcher.addURI(PROVIDER_NAME, "CityBusline", CITY_BUSLINE);
 		uriMatcher.addURI(PROVIDER_NAME, "UserFavorites", USER_FAVORITES);
+		uriMatcher.addURI(PROVIDER_NAME, "UserProfile_create", USER_PROFILE_create);
+		uriMatcher.addURI(PROVIDER_NAME, "UserFavorites_create", USER_FAVORITES_create);
+		uriMatcher.addURI(PROVIDER_NAME, "UserFavorites_insert", USER_FAVORITES_insert);
+		uriMatcher.addURI(PROVIDER_NAME, "CityBusline_create", CITY_BUSLINE_create);
 	}
 	
 	/** This content provider does the database operations by this object */
@@ -77,16 +88,13 @@ public class SqliteProvider extends ContentProvider{
 	@Override
 	public Uri insert(Uri uri, ContentValues values) {
 		Uri _uri=null;
-		//long rowID = mDatabaseHelper.createUserProfile(values);		
+		
 	    switch (uriMatcher.match(uri)){
-		    case USER_PROFILE:
-		    	//------
-		    	//mDatabaseHelper.resetUserProfile();
-		    	//------
+		    case USER_PROFILE_create:
 		    	long rowID_1 = mDatabaseHelper.createUserProfile(values);
 				//Uri _uri=null;
 				if(rowID_1>0){
-					_uri = ContentUris.withAppendedId(CONTENT_URI_USER_PROFILE, rowID_1);
+					_uri = ContentUris.withAppendedId(CONTENT_URI_USER_PROFILE_create, rowID_1);
 				}else {		
 					try {
 						throw new SQLException("Failed to insert at TABLE_USER_PROFILE: " + uri);
@@ -97,7 +105,7 @@ public class SqliteProvider extends ContentProvider{
 			break;
 			
 		    case USER_PLACES:
-		    	long rowID_2 = mDatabaseHelper.createUserPlaces(values);
+		    	long rowID_2 = mDatabaseHelper.insertUserPlaces(values);
 				//Uri _uri=null;
 				if(rowID_2>0){
 					_uri = ContentUris.withAppendedId(CONTENT_URI_USER_PLACES, rowID_2);
@@ -110,11 +118,11 @@ public class SqliteProvider extends ContentProvider{
 				}
 			break;
 		    
-		    case CITY_BUSLINE:
+		    case CITY_BUSLINE_create:
 		    	long rowID_3 = mDatabaseHelper.createCityBusline(values);
 				//Uri _uri=null;
 				if(rowID_3>0){
-					_uri = ContentUris.withAppendedId(CONTENT_URI_CITY_BUSLINE, rowID_3);
+					_uri = ContentUris.withAppendedId(CONTENT_URI_CITY_BUSLINE_create, rowID_3);
 				}else {		
 					try {
 						throw new SQLException("Failed to insert at TABLE_CITY_BUSLINE: " + uri);
@@ -124,11 +132,11 @@ public class SqliteProvider extends ContentProvider{
 				}
 			break;
 			
-		    case USER_FAVORITES:
-		    	long rowID_4 = mDatabaseHelper.createUserFavorites(values);
+		    case USER_FAVORITES_insert:
+		    	long rowID_4 = mDatabaseHelper.insertUserFavorites(values);
 				//Uri _uri=null;
 				if(rowID_4>0){
-					_uri = ContentUris.withAppendedId(CONTENT_URI_USER_FAVORITES, rowID_4);
+					_uri = ContentUris.withAppendedId(CONTENT_URI_USER_FAVORITES_insert, rowID_4);
 				}else {		
 					try {
 						throw new SQLException("Failed to insert at TABLE_USER_FAVORITES: " + uri);
@@ -137,27 +145,25 @@ public class SqliteProvider extends ContentProvider{
 					}
 				}
 			break;			
-			
-			/*
-		    case USER_FRIENDS:
-		    	long rowID_3 = mDatabaseHelper.createUserFriends(values);
+
+		    case USER_FAVORITES_create:
+		    	long rowID_4b = mDatabaseHelper.createUserFavorites(values);
 				//Uri _uri=null;
-				if(rowID_3>0){
-					_uri = ContentUris.withAppendedId(CONTENT_URI_USER_FRIENDS, rowID_3);
+				if(rowID_4b>0){
+					_uri = ContentUris.withAppendedId(CONTENT_URI_USER_FAVORITES_create, rowID_4b);
 				}else {		
 					try {
-						throw new SQLException("Failed to insert at TABLE_USER_FRIENDS: " + uri);
+						throw new SQLException("Failed to insert at TABLE_USER_FAVORITES: " + uri);
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
 				}
-			break;
-			*/
-			
+			break;						
 		    }
 		return _uri;	
 	}
-
+	
+	
 	/** A callback method which is invoked when insert operation is requested on this content provider */
 	@Override
 	public int bulkInsert(Uri uri, ContentValues[] values) {
@@ -182,7 +188,7 @@ public class SqliteProvider extends ContentProvider{
 	                	 * sqlite returned: error code = 1, msg = near "null": syntax error, db=/data/data/com.facetooth_light.android/databases/b2h
 	                	 * mas esse erro não chega a para o APP
 	                	 */
-	                	//Log.d(LOG, "values " + values.toString());
+	                	//Log.d(TAG, "values " + values.toString());
 	                	//---------
 	                    long id = mDatabaseHelper.getWritableDatabase().insert(DatabaseHelper.TABLE_USER_PLACES, null, value);
 	                    if (id > 0)
@@ -217,10 +223,10 @@ public class SqliteProvider extends ContentProvider{
 	            }
 	            break;
 
-	        case USER_FAVORITES:
+	        case USER_FAVORITES_create:
 	            try {
 	            	//----
-	            	//mDatabaseHelper.resetUserFavorites();
+	            	mDatabaseHelper.resetUserFavorites();
 	            	//----
 	            	mDatabaseHelper.getWritableDatabase().beginTransaction();
 	                for (ContentValues value : values) {
@@ -280,15 +286,6 @@ public class SqliteProvider extends ContentProvider{
 
 	@Override
 	public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
-		/*
-		int cnt = 0;
-		if(uriMatcher.match(uri)==CONTACT_ID){
-			String contactID = uri.getPathSegments().get(1);
-			cnt = mDatabaseHelper.update(contentValues, contactID);
-			
-		}
-		return cnt;
-		*/
 		// TODO Auto-generated method stub
 		return 0;
 

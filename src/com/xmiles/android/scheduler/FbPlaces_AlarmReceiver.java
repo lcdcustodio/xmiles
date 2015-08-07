@@ -85,7 +85,7 @@ public class FbPlaces_AlarmReceiver extends WakefulBroadcastReceiver implements 
     public void onReceive(Context context, Intent intent) {   
         // BEGIN_INCLUDE(alarm_onreceive)
     	
-    	Log.i(TAG, "FbPlaces_AlarmReceiver onReceive");
+    	Log.i(TAG, "FbPlaces onReceive");
     	//*
 
     	getLocation(context);
@@ -131,12 +131,20 @@ public class FbPlaces_AlarmReceiver extends WakefulBroadcastReceiver implements 
     // BEGIN_INCLUDE(cancel_alarm)
     public void cancelAlarm(Context context) {
         // If the alarm has been set, cancel it.
-        if (alarmMgr!= null) {
+        /*
+    	if (alarmMgr!= null) {
             alarmMgr.cancel(alarmIntent);
         }
+        */
+        
+    	Log.d(TAG, "FbPlaces cancelAlarm");
+    	
+    	Intent intent = new Intent(context, FbPlaces_AlarmReceiver.class);
+    	alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+    	alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+    	alarmMgr.cancel(alarmIntent);	
        
     }
-    // END_INCLUDE(cancel_alarm)
 
     
     public void FbPlaces_Handler(final Context c){
@@ -220,6 +228,8 @@ public class FbPlaces_AlarmReceiver extends WakefulBroadcastReceiver implements 
 				                    values.put(DatabaseHelper.KEY_NEARBY, placeDetail.getString("name"));
 				                    values.put(DatabaseHelper.KEY_PICURL, picURL_Places.getJSONObject("picture").getJSONObject("data").getString("url"));
 				                    values.put(DatabaseHelper.KEY_CITY, jsonObject_location.getString("city"));
+				                    //new
+				                    values.put(DatabaseHelper.KEY_UF, jsonObject_location.getString("state"));
 				                    values.put(DatabaseHelper.KEY_CATEGORY, jsonArray_category.getJSONObject(0).getString("name"));
 				                    values.put(DatabaseHelper.KEY_DISTANCE, get_distance);
 				                    values.put(DatabaseHelper.KEY_U_LATITUDE, lat_double);
@@ -241,9 +251,12 @@ public class FbPlaces_AlarmReceiver extends WakefulBroadcastReceiver implements 
 			            	c.getContentResolver().bulkInsert(SqliteProvider.CONTENT_URI_USER_PLACES, valueList);
 			            	
 			            	
-							/** Restarting the MainActivity's loader to refresh the listview */
-			            	//Intent intent=new Intent("fragmentupdater");
-			            	//sendBroadcast(intent);
+							/** Restarting the ProfileFragment's loader to refresh the city TextView */
+			            	Intent intent=new Intent("profilefragmentupdater");
+			            	c.sendBroadcast(intent);
+
+			            	//stop FbPlaces service
+			            	cancelAlarm(c);
 
 			            	
 		            	}else {
@@ -272,6 +285,8 @@ public class FbPlaces_AlarmReceiver extends WakefulBroadcastReceiver implements 
 					}
 		            
             }
+
+
         });
 
     	

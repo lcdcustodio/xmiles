@@ -47,6 +47,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String KEY_NEARBY = "nearby";
 	public static final String KEY_PICURL = "picUrl";
 	public static final String KEY_CITY = "city";
+	
 	public static final String KEY_CATEGORY = "category";
 	public static final String KEY_DISTANCE = "distance";
 	public static final String KEY_U_LATITUDE = "user_latitude";
@@ -102,7 +103,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ TABLE_USER_PLACES + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
 			KEY_PLACE_ID + " TEXT," + KEY_NEARBY + " TEXT," +
 			KEY_PICURL + " TEXT," + 
-			KEY_CITY + " TEXT," + 
+			KEY_CITY + " TEXT," +
+			KEY_UF + " TEXT," +
 			KEY_CATEGORY + " TEXT," + 
 			KEY_DISTANCE + " TEXT," +
 			KEY_U_LATITUDE + " DOUBLE," +
@@ -189,8 +191,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public long createUserProfile(ContentValues contentValues) {
 		
 		//-----------
-		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_PROFILE);
-		mDB.execSQL(CREATE_TABLE_USER_PROFILE);
+		resetUserProfile();
+		//-----------		
+		long rowID = mDB.insert(TABLE_USER_PROFILE, null, contentValues);
+		return rowID;
+		
+	}
+	
+	public long insertUserProfile(ContentValues contentValues) {
+		
 		//-----------		
 		long rowID = mDB.insert(TABLE_USER_PROFILE, null, contentValues);
 		return rowID;
@@ -200,7 +209,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	 * Creating a UserPlaces
 	 */
 	
-	public long createUserPlaces(ContentValues contentValues) {		
+	public long insertUserPlaces(ContentValues contentValues) {		
 
 		long rowID = mDB.insert(TABLE_USER_PLACES, null, contentValues);
 		return rowID;
@@ -210,36 +219,42 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public long createCityBusline(ContentValues contentValues) {		
 
 		//-----------
-		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_CITY_BUSLINE);
-		mDB.execSQL(CREATE_TABLE_CITY_BUSLINE);
+		resetCityBusline();
 		//-----------		
 		long rowID = mDB.insert(TABLE_CITY_BUSLINE, null, contentValues);
 		return rowID;
 	
 	}
-	
-	public long createUserFavorites(ContentValues contentValues) {		
+
+	public long insertCityBusline(ContentValues contentValues) {		
 
 		//-----------
-		//mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_FAVORITES);
-		//mDB.execSQL(CREATE_TABLE_USER_FAVORITES);
+		long rowID = mDB.insert(TABLE_CITY_BUSLINE, null, contentValues);
+		return rowID;
+	
+	}
+	public long createUserFavorites(ContentValues contentValues) {		
+		
+		resetUserFavorites();
 		//-----------		
 		long rowID = mDB.insert(TABLE_USER_FAVORITES, null, contentValues);
 		return rowID;
 	
-	}	
-	/*
-	 * Creating a UserFriends
-	 */
+	}
 	
-	//public long createUserFriends(ContentValues contentValues) {		
+	public long insertUserFavorites(ContentValues contentValues) {		
+
+		//-----------		
+		long rowID = mDB.insert(TABLE_USER_FAVORITES, null, contentValues);
+		return rowID;
+	
+	}
+	
 	public void resetUserFriends() {
 		//-----------
 		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_FRIENDS);
 		mDB.execSQL(CREATE_TABLE_USER_FRIENDS);
 		//-----------		
-		//long rowID = mDB.insert(TABLE_USER_FRIENDS, null, contentValues);
-		//return rowID;
 	
 	}	
 	
@@ -250,8 +265,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		//-----------		
 	
 	}	
+	
+	public void resetCityBusline() {
+	
+		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_CITY_BUSLINE);
+		mDB.execSQL(CREATE_TABLE_CITY_BUSLINE);
 
-
+	}	
 	public void resetUserFavorites() {
 		//-----------
 		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_FAVORITES);
@@ -262,15 +282,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	/** Returns all the contacts in the table */
 	public Cursor get_UserPlaces(){
-        //return mDB.query(TABLE_USER_PLACES, new String[] { KEY_ROW_ID,  KEY_NAME , KEY_PHONE } , null, null, null, null, KEY_NAME + " asc ");
-		//return mDB.query(TABLE_USER_PLACES, new String[] {KEY_ROW_ID, KEY_NEARBY,KEY_CITY}, null, null, null, null, null);
-		return mDB.query(TABLE_USER_PLACES, new String[] {KEY_ROW_ID, KEY_NEARBY,KEY_CITY}, null, null, null, null, KEY_CREATED_AT + " desc ");
+		return mDB.query(TABLE_USER_PLACES, new String[] {KEY_ROW_ID, KEY_NEARBY,KEY_CITY,KEY_UF}, null, null, null, null, KEY_CREATED_AT + " desc ");
 	}
 
 	public Cursor get_UserProfile(){
         //return mDB.query(TABLE_USER_PLACES, new String[] { KEY_ROW_ID,  KEY_NAME , KEY_PHONE } , null, null, null, null, KEY_NAME + " asc ");
 		//return mDB.query(TABLE_USER_PLACES, new String[] {KEY_ROW_ID, KEY_NEARBY,KEY_CITY}, null, null, null, null, null);
-		return mDB.query(TABLE_USER_PROFILE, new String[] {KEY_ID, KEY_NAME}, null, null, null, null, null);
+		return mDB.query(TABLE_USER_PROFILE, new String[] {KEY_ID, KEY_NAME,KEY_PICTURE}, null, null, null, null, null);
 	}
 
 	public Cursor get_CityBusline(){
