@@ -22,7 +22,7 @@ import com.xmiles.android.sqlite.helper.DatabaseHelper;
 import com.xmiles.android.support.Support;
 import com.xmiles.android.webservice.UserFunctions;
 
-import com.xmiles.android.scheduler.Favorites_Update;
+import com.xmiles.android.scheduler.Favorites_Upload;
 import android.app.ActionBar;
 import android.app.ProgressDialog;
 import android.content.ContentValues;
@@ -163,8 +163,7 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 	    			contentValues.put(DatabaseHelper.KEY_TO_BUS_STOP_ID, _to_bus_stop_id);
 	    			contentValues.put(DatabaseHelper.KEY_BD_UPDATED, "YES");
 	    			contentValues.put(DatabaseHelper.KEY_CREATED_AT, support.getDateTime());	
-	    			
-	    			//getApplication().getContentResolver().insert(SqliteProvider.CONTENT_URI_USER_FAVORITES, contentValues);
+
 	    			getApplication().getContentResolver().insert(SqliteProvider.CONTENT_URI_USER_FAVORITES_insert, contentValues);
 	    			//-------------------
 	            	Intent intent=new Intent("fragmentupdater");
@@ -172,7 +171,7 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 	            	//-------------------
 	            	Log.e(TAG,"Favorites_Update StartUp");
 	        		//Your code goes here
-	            	Favorites_Update FA_Up = new Favorites_Update();	
+	            	Favorites_Upload FA_Up = new Favorites_Upload();	
 	        		FA_Up.setAlarm(getApplicationContext());
 
 	            	

@@ -40,10 +40,10 @@ public class JSONParser {
             //httpPost.setEntity(new UrlEncodedFormEntity(params));
             httpPost.setEntity(new UrlEncodedFormEntity(params, "utf-8"));
             //-----
-            Log.d("FACEBOOK", httpPost.getURI().toString());
-            Log.d("FACEBOOK", httpPost.getRequestLine().toString());
-            Log.d("FACEBOOK", httpPost.getEntity().toString());
-            Log.d("FACEBOOK", httpPost.getAllHeaders().toString());            
+            Log.i("FACEBOOK ", "httpPost.getURI(): " + httpPost.getURI().toString());
+            Log.w("FACEBOOK", "httpPost.getRequestLine(): " + httpPost.getRequestLine().toString());
+            Log.e("FACEBOOK", "httpPost.getEntity(): " + httpPost.getEntity().toString());
+            Log.v("FACEBOOK", "httpPost.getAllHeaders(): " + httpPost.getAllHeaders().toString());            
             //-----
  
             HttpResponse httpResponse = httpClient.execute(httpPost);           

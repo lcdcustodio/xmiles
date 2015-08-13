@@ -28,6 +28,12 @@ public class SqliteProvider extends ContentProvider{
 	public static final Uri CONTENT_URI_USER_FAVORITES_create = Uri.parse("content://" + PROVIDER_NAME + "/UserFavorites_create");
 	public static final Uri CONTENT_URI_USER_FAVORITES_insert = Uri.parse("content://" + PROVIDER_NAME + "/UserFavorites_insert");
 	public static final Uri CONTENT_URI_CITY_BUSLINE_create = Uri.parse("content://" + PROVIDER_NAME + "/CityBusline_create");
+	public static final Uri CONTENT_URI_USER_PLACES_create = Uri.parse("content://" + PROVIDER_NAME + "/UserPlaces_create");
+	public static final Uri CONTENT_URI_USER_ROUTES_create = Uri.parse("content://" + PROVIDER_NAME + "/UserRoutes_create");
+	public static final Uri CONTENT_URI_USER_ROUTES_insert = Uri.parse("content://" + PROVIDER_NAME + "/UserRoutes_insert");
+	public static final Uri CONTENT_URI_USER_ROUTES = Uri.parse("content://" + PROVIDER_NAME + "/UserRoutes");
+
+	
 	
 	/** Constants to identify the requested operation */
 	private static final int USER_PROFILE = 1;
@@ -39,6 +45,10 @@ public class SqliteProvider extends ContentProvider{
 	private static final int USER_FAVORITES_create = 7;
 	private static final int USER_FAVORITES_insert = 8;
 	private static final int CITY_BUSLINE_create = 9;
+	private static final int USER_PLACES_create = 10;
+	private static final int USER_ROUTES_create = 11;
+	private static final int USER_ROUTES_insert = 12;
+	private static final int USER_ROUTES = 13;
 	
 	private static final UriMatcher uriMatcher ;
 	static {
@@ -52,6 +62,10 @@ public class SqliteProvider extends ContentProvider{
 		uriMatcher.addURI(PROVIDER_NAME, "UserFavorites_create", USER_FAVORITES_create);
 		uriMatcher.addURI(PROVIDER_NAME, "UserFavorites_insert", USER_FAVORITES_insert);
 		uriMatcher.addURI(PROVIDER_NAME, "CityBusline_create", CITY_BUSLINE_create);
+		uriMatcher.addURI(PROVIDER_NAME, "UserPlaces_create", USER_PLACES_create);
+		uriMatcher.addURI(PROVIDER_NAME, "UserRoutes_create", USER_ROUTES_create);
+		uriMatcher.addURI(PROVIDER_NAME, "UserRoutes_insert", USER_ROUTES_insert);
+		uriMatcher.addURI(PROVIDER_NAME, "UserRoutes", USER_ROUTES);
 	}
 	
 	/** This content provider does the database operations by this object */
@@ -117,7 +131,22 @@ public class SqliteProvider extends ContentProvider{
 					}
 				}
 			break;
-		    
+
+		    case USER_PLACES_create:
+		    	long rowID_2b = mDatabaseHelper.insertUserPlaces(values);
+				//Uri _uri=null;
+				if(rowID_2b>0){
+					_uri = ContentUris.withAppendedId(CONTENT_URI_USER_PLACES_create, rowID_2b);
+				}else {		
+					try {
+						throw new SQLException("Failed to insert at TABLE_USER_PLACES: " + uri);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			break;
+			
+			
 		    case CITY_BUSLINE_create:
 		    	long rowID_3 = mDatabaseHelper.createCityBusline(values);
 				//Uri _uri=null;
@@ -177,6 +206,9 @@ public class SqliteProvider extends ContentProvider{
 	        switch (uriType) {
 	        case USER_PLACES:
 	            try {
+	            	//------------
+	            	mDatabaseHelper.resetUserPlaces();
+	            	//------------
 	            	mDatabaseHelper.getWritableDatabase().beginTransaction();
 	                for (ContentValues value : values) {
 	                	//---------
@@ -243,7 +275,46 @@ public class SqliteProvider extends ContentProvider{
 	            	mDatabaseHelper.getWritableDatabase().endTransaction();
 	            }
 	            break;
+
+	        case USER_ROUTES_create:
+	            try {
+	            	//----
+	            	mDatabaseHelper.resetUserRoutes();
+	            	//----
+	            	mDatabaseHelper.getWritableDatabase().beginTransaction();
+	                for (ContentValues value : values) {
+	                	//---------
+	                	//---------
+	                    long id = mDatabaseHelper.getWritableDatabase().insert(DatabaseHelper.TABLE_USER_ROUTES, null, value);
+	                    if (id > 0)
+	                        insertCount++;
+	                }
+	                mDatabaseHelper.getWritableDatabase().setTransactionSuccessful();
+	            } catch (Exception e) {
+	                // Your error handling
+	            } finally {
+	            	mDatabaseHelper.getWritableDatabase().endTransaction();
+	            }
+	            break;
 	            
+	        case USER_ROUTES_insert:
+	            try {
+	            	//----
+	            	mDatabaseHelper.getWritableDatabase().beginTransaction();
+	                for (ContentValues value : values) {
+	                	//---------
+	                	//---------
+	                    long id = mDatabaseHelper.getWritableDatabase().insert(DatabaseHelper.TABLE_USER_ROUTES, null, value);
+	                    if (id > 0)
+	                        insertCount++;
+	                }
+	                mDatabaseHelper.getWritableDatabase().setTransactionSuccessful();
+	            } catch (Exception e) {
+	                // Your error handling
+	            } finally {
+	            	mDatabaseHelper.getWritableDatabase().endTransaction();
+	            }
+	            break;
 	            
 	        default:
 	            throw new IllegalArgumentException("Unknown URI: " + uri);
@@ -261,8 +332,8 @@ public class SqliteProvider extends ContentProvider{
 	public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {	
 		
 		if(uriMatcher.match(uri)==USER_PLACES){
-			//return mDatabaseHelper.getAllContacts();
 			return mDatabaseHelper.get_UserPlaces();
+			
 		}else if (uriMatcher.match(uri)==USER_FRIENDS){
 			return mDatabaseHelper.get_FriendList();
 		
@@ -274,6 +345,9 @@ public class SqliteProvider extends ContentProvider{
 
 		}else if (uriMatcher.match(uri)==USER_FAVORITES){
 			return mDatabaseHelper.get_UserFavorites();		
+
+		}else if (uriMatcher.match(uri)==USER_ROUTES){
+			return mDatabaseHelper.get_UserRoutes();		
 			
 		}else{
 			return null;

@@ -55,7 +55,7 @@ import com.xmiles.android.facebook_api_support.Utility;
 import com.xmiles.android.fragment.EmConstrucao_Fragment;
 import com.xmiles.android.fragment.Favorites_Fragment;
 import com.xmiles.android.fragment.Profile_Fragment;
-import com.xmiles.android.scheduler.FbPlaces_AlarmReceiver;
+import com.xmiles.android.scheduler.FbPlaces_Download;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
 import com.xmiles.android.webservice.UserFunctions;
@@ -83,7 +83,7 @@ import com.xmiles.android.webservice.UserFunctions;
     //get Context        
     Context ctx;
 
-    FbPlaces_AlarmReceiver FbPlaces_alarm;
+    FbPlaces_Download FbPlaces_alarm;
     
     DatabaseHelper  mDatabaseHelper;
 	
@@ -98,7 +98,7 @@ import com.xmiles.android.webservice.UserFunctions;
       // define service
       //SampleAlarmReceiver alarm = new SampleAlarmReceiver();
   	  //alarm = new FbPlaces_AlarmReceiver(ctx);
-      FbPlaces_alarm = new FbPlaces_AlarmReceiver();
+      FbPlaces_alarm = new FbPlaces_Download();
       
       // enabling action bar app icon and behaving it as toggle button
       //getActionBar().setDisplayHomeAsUpEnabled(true);

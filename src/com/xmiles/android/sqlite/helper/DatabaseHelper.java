@@ -31,10 +31,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String TABLE_USER_FRIENDS = "user_friends";
 	public static final String TABLE_USER_FAVORITES = "user_favorites";
 	public static final String TABLE_CITY_BUSLINE = "city_busline";
+	public static final String TABLE_USER_ROUTES = "user_routes";
 
 	// Common column names
 	public static final String KEY_ROW_ID = "_id";
-	public static final String KEY_ID = "id";	
+	public static final String KEY_ID = "id"; // (= USER_ID)	
 	public static final String KEY_CREATED_AT = "created_at";
 
 	// USER PROFILE Table - column names
@@ -63,6 +64,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String KEY_FRIEND_DEVICE = "friend_device";
 
 	// USER FAVORITES Table - column names	
+	public static final String KEY_FAVORITE_ID = "favorite_id";
 	public static final String KEY_BUSLINE = "busline";
 	public static final String KEY_FROM = "_from";
 	public static final String KEY_TO = "_to";
@@ -70,6 +72,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String KEY_TO_BUS_STOP_ID = "_to_bus_stop_id";
 	public static final String KEY_FROM_BUS_STOP_ID = "_from_bus_stop_id";
 	public static final String KEY_BD_UPDATED = "bd_updated";
+	
+	// USER ROUTES Table - column names
+	public static final String KEY_BUS_STOP = "bus_stop";
+	public static final String KEY_BUS_STOP_ID = "bus_stop_id";
+	public static final String KEY_B_LATITUDE = "bus_stop_latitude";
+	public static final String KEY_B_LONGITUDE = "bus_stop_longitude";
+	public static final String KEY_FLAG = "flag";
+	
 	
 	// CITY BUSLINE Table - column names
 	public static final String KEY_CITY_BUSLINE = "city_busline";
@@ -116,7 +126,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	
 	private static final String CREATE_TABLE_USER_FAVORITES = "CREATE TABLE "
-			+ TABLE_USER_FAVORITES + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
+			+ TABLE_USER_FAVORITES + "(" + KEY_FAVORITE_ID + " integer primary key autoincrement ,"  +
 			KEY_ID + " TEXT," + KEY_NAME	+ " TEXT," +
 			KEY_BUSLINE + " TEXT," +
 			KEY_CITY + " TEXT," +
@@ -128,8 +138,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			KEY_BD_UPDATED + " TEXT," +
 			KEY_CREATED_AT	+ " DATETIME" + ")";
 
-	//KEY_FROM_BUS_STOP_ID + " BIGINT," +	
-	//KEY_TO_BUS_STOP_ID + " BIGINT," +	
+	private static final String CREATE_TABLE_USER_ROUTES = "CREATE TABLE "
+			+ TABLE_USER_ROUTES + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
+			KEY_ID + " TEXT," + KEY_FAVORITE_ID	+ " TEXT," +
+			KEY_BUSLINE + " TEXT," +
+			KEY_BUS_STOP + " TEXT," +
+			KEY_BUS_STOP_ID + " integer," + 
+			KEY_B_LATITUDE + "  DOUBLE," +
+			KEY_B_LONGITUDE + " DOUBLE," +			
+			KEY_FLAG + " TEXT," +
+			KEY_CREATED_AT	+ " DATETIME" + ")";
+
 	
     /** An instance variable for SQLiteDatabase */
     private SQLiteDatabase mDB;  
@@ -162,6 +181,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(CREATE_TABLE_USER_FRIENDS);
 		db.execSQL(CREATE_TABLE_USER_FAVORITES);
 		db.execSQL(CREATE_TABLE_CITY_BUSLINE);
+		db.execSQL(CREATE_TABLE_USER_ROUTES);
 	}
 
 	@Override
@@ -178,6 +198,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_PLACES);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_FRIENDS);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_CITY_BUSLINE);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_ROUTES);
 
 		// create new tables
 		onCreate(db);
@@ -216,6 +237,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	}
 
+
 	public long createCityBusline(ContentValues contentValues) {		
 
 		//-----------
@@ -250,6 +272,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	}
 	
+	public long insertUserRoutes(ContentValues contentValues) {		
+
+		//-----------		
+		long rowID = mDB.insert(TABLE_USER_ROUTES, null, contentValues);
+		return rowID;
+	
+	}
+	
 	public void resetUserFriends() {
 		//-----------
 		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_FRIENDS);
@@ -265,13 +295,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		//-----------		
 	
 	}	
+
+	public void resetUserPlaces() {
+		
+		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_PLACES);
+		mDB.execSQL(CREATE_TABLE_USER_PLACES);
+
+	}	
+
 	
 	public void resetCityBusline() {
 	
 		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_CITY_BUSLINE);
 		mDB.execSQL(CREATE_TABLE_CITY_BUSLINE);
 
-	}	
+	}
+	
 	public void resetUserFavorites() {
 		//-----------
 		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_FAVORITES);
@@ -279,6 +318,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		//-----------		
 	
 	}		
+	
+	public void resetUserRoutes() {
+		//-----------
+		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_ROUTES);
+		mDB.execSQL(CREATE_TABLE_USER_ROUTES);
+		//-----------		
+	
+	}		
+
 	
 	/** Returns all the contacts in the table */
 	public Cursor get_UserPlaces(){
@@ -299,9 +347,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	public Cursor get_UserFavorites(){
 		//return mDB.query(TABLE_USER_FAVORITES, new String[] {KEY_ID, KEY_NAME}, null, null, null, null, null);
-		return mDB.query(TABLE_USER_FAVORITES, new String[] {KEY_ID, KEY_NAME, KEY_BUSLINE, KEY_CITY, KEY_UF, KEY_FROM, KEY_TO,KEY_FROM_BUS_STOP_ID,KEY_TO_BUS_STOP_ID}, null, null, null, null, null);
+		return mDB.query(TABLE_USER_FAVORITES, new String[] {KEY_ID, KEY_NAME, KEY_BUSLINE, KEY_CITY, KEY_UF, KEY_FROM, KEY_TO,KEY_FROM_BUS_STOP_ID,KEY_TO_BUS_STOP_ID,KEY_FAVORITE_ID}, null, null, null, null, null);
 	}	
-	
+
+	public Cursor get_UserRoutes(){
+		
+		return mDB.query(TABLE_USER_ROUTES, new String[] {KEY_ID, KEY_FAVORITE_ID,KEY_BUS_STOP,KEY_BUS_STOP_ID,KEY_B_LATITUDE,KEY_B_LONGITUDE,KEY_FLAG}, null, null, null, null, null);
+	}	
+
 	/** Returns all the contacts in the table */
 	public Cursor get_FriendList(){        
 		//return mDB.query(TABLE_USER_FRIENDS, new String[] {KEY_FRIEND_ID, KEY_FRIEND_NAME}, null, null, null, null, null);

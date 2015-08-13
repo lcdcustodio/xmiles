@@ -14,7 +14,7 @@ import com.xmiles.android.R.layout;
 import com.xmiles.android.facebook_api_support.GetFacebookProfile;
 import com.xmiles.android.facebook_api_support.Utility;
 
-import com.xmiles.android.scheduler.FbPlaces_AlarmReceiver;
+import com.xmiles.android.scheduler.FbPlaces_Download;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
 import com.xmiles.android.support.Support;
@@ -44,7 +44,7 @@ public class Splash_Fragment extends Fragment {
 
 	JSONObject facebook_profile;
 	
-	FbPlaces_AlarmReceiver FbPlaces;
+	FbPlaces_Download FbPlaces;
 	
 	public Splash_Fragment() {
 	}
@@ -90,6 +90,10 @@ public class Splash_Fragment extends Fragment {
 			facebook_profile = new GetFacebookProfile().GetResult(Utility.mFacebook.getAccessToken());
 			//Log.i(TAG, "facebook_profile: " + facebook_profile);
 
+			// start FbPlaces service
+			FbPlaces = new FbPlaces_Download();
+			FbPlaces.setAlarm(getActivity());
+
 			
 			//------
 			
@@ -115,12 +119,32 @@ public class Splash_Fragment extends Fragment {
 				 */
                 if(Integer.parseInt(json_login.getString("success")) == 1){
     				
-                	//Log.i(TAG, "xMiles_Login: " + json_login);
-    				
+                	//Log.i(TAG, "xMiles_Login: " + json_login);    				
     				JSONObject json_favoritesRoutes = xMiles_favoritesRoutes(facebook_profile.getString("name"),
-    																		 facebook_profile.getString("id"));
-    				
+    																		 facebook_profile.getString("id"));    				
     				//Log.i(TAG, "xMiles_favoritesRoutes: " + json_favoritesRoutes);
+    				
+			        try {
+			        	
+			        	if (json_favoritesRoutes.getString("success") != null) {
+						    
+						    String res = json_favoritesRoutes.getString("success");
+						    if(Integer.parseInt(res) == 1){
+						    	
+						    	JSONArray jsonArray = new JSONArray(json_favoritesRoutes.getString("user"));						    	
+						    	//Log.w(TAG, "json_favoritesRoutes.lenght()" + jsonArray.length());
+						    	
+						    	xMiles_userRoutes(facebook_profile.getString("id"),
+						    					  jsonArray.length());
+						 
+						    }
+						    
+			        	}
+			        	
+					} catch (JSONException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}							
                 }
 
 
@@ -145,9 +169,6 @@ public class Splash_Fragment extends Fragment {
 			// will close this activity and lauch main activity
 			// close this activity
 
-			// start FbPlaces service
-			FbPlaces = new FbPlaces_AlarmReceiver();
-			FbPlaces.setAlarm(getActivity());
 
 			
             Intent intent = new Intent(getActivity(), MainActivity.class);
@@ -182,6 +203,82 @@ public class Splash_Fragment extends Fragment {
         }
     	return null;
         
+    }
+    
+    public void xMiles_userRoutes (String user_id, Integer total_routes){
+    	
+		//Your code goes here
+    	//------------
+		UserFunctions userFunc = new UserFunctions();
+		
+		for (int favorite_id = 1; favorite_id <= total_routes; favorite_id++) {
+			//-----------
+	    	ContentValues[] valueList;
+	    	JSONArray jsonArray;
+	    	//-----------			
+			JSONObject json = userFunc.userRoutes(user_id,Integer.toString(favorite_id));
+
+			try {
+				
+	        	if (json.getString("success") != null) {
+				    
+				    String res = json.getString("success");
+				    if(Integer.parseInt(res) == 1){
+				    	
+				    	jsonArray = new JSONArray(json.getString("user"));			    	
+				    	valueList = new ContentValues[jsonArray.length()];
+				    	
+				    	
+						for (int position = 0; position < jsonArray.length(); position++) {	
+							
+							JSONObject jsonObject = null;
+							
+							try {
+								ContentValues values = new ContentValues();
+								jsonObject = jsonArray.getJSONObject(position);
+								
+								values.put(DatabaseHelper.KEY_ID, user_id);
+								values.put(DatabaseHelper.KEY_FAVORITE_ID, Integer.toString(favorite_id));
+								values.put(DatabaseHelper.KEY_BUSLINE, jsonObject.getString("busline"));
+								values.put(DatabaseHelper.KEY_BUS_STOP, jsonObject.getString("bus_stop"));								
+								values.put(DatabaseHelper.KEY_BUS_STOP_ID, jsonObject.getString("bus_stop_id"));
+								values.put(DatabaseHelper.KEY_B_LATITUDE, jsonObject.getString("latitude"));
+								values.put(DatabaseHelper.KEY_B_LONGITUDE, jsonObject.getString("longitude"));
+								values.put(DatabaseHelper.KEY_FLAG, jsonObject.getString("from_or_to_flag"));
+								values.put(DatabaseHelper.KEY_CREATED_AT, jsonObject.getString("created_at"));
+
+								valueList[position] = values;					
+								//-----------
+								
+							} catch (JSONException e) {
+								// TODO Auto-generated catch block
+								e.printStackTrace();
+							}
+							
+						}
+						
+						if (favorite_id == 1) {							
+							getActivity().getContentResolver().bulkInsert(SqliteProvider.CONTENT_URI_USER_ROUTES_create, valueList);
+							
+						} else {							
+							getActivity().getContentResolver().bulkInsert(SqliteProvider.CONTENT_URI_USER_ROUTES_insert, valueList);
+							
+						}
+
+
+
+				    }
+				    	
+				}
+	        	
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
+		}
+
+    	
     }
     
     public JSONObject xMiles_favoritesRoutes(String username, String user_id) {

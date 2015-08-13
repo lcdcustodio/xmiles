@@ -118,9 +118,10 @@
         
         
         
-        <receiver android:name="com.xmiles.android.scheduler.FbPlaces_AlarmReceiver"></receiver>
-        <receiver android:name="com.xmiles.android.scheduler.Favorites_AlarmReceiver"></receiver>
-        <receiver android:name="com.xmiles.android.scheduler.Favorites_Update"></receiver>
+        <receiver android:name="com.xmiles.android.scheduler.FbPlaces_Download"></receiver>
+        <receiver android:name="com.xmiles.android.scheduler.Favorites_Upload"></receiver>
+        <receiver android:name="com.xmiles.android.scheduler.UserRoutes_Download"></receiver>
+        
         <!--service android:enabled="true" android:name="com.xmiles.android.scheduler.ServiceLocation" />
         <service android:enabled="true" android:name="com.xmiles.android.scheduler.ServiceLocation" />  --> 
         
