@@ -15,6 +15,7 @@ import com.xmiles.android.facebook_api_support.GetFacebookProfile;
 import com.xmiles.android.facebook_api_support.Utility;
 
 import com.xmiles.android.scheduler.FbPlaces_Download;
+import com.xmiles.android.scheduler.Scanning;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
 import com.xmiles.android.support.Support;
@@ -95,6 +96,7 @@ public class Splash_Fragment extends Fragment {
 			FbPlaces.setAlarm(getActivity());
 
 
+
 			//------
 
             Support support = new Support();
@@ -136,19 +138,6 @@ public class Splash_Fragment extends Fragment {
 
 						    	xMiles_userRoutes(facebook_profile.getString("id"),
 						    					  jsonArray.length());
-								//Your code goes here
-						    	//------------
-						    	//------------						    	
-					            Uri uri = SqliteProvider.CONTENT_URI_USER_ROUTES_FLAG;
-					        	Cursor data_temp_flag = getActivity().getContentResolver().query(uri, null, null, null, null);
-					        	Log.w(TAG, "CONTENT_URI_USER_ROUTES_FLAG (count): " + data_temp_flag.getCount());
-						    	//------------						    	
-					            Uri uri_2 = SqliteProvider.CONTENT_URI_USER_ROUTES;
-					        	Cursor data_temp = getActivity().getContentResolver().query(uri_2, null, null, null, null);
-					        	Log.v(TAG, "CONTENT_URI_USER_ROUTES (count): " + data_temp.getCount());
-						    	
-						    	//------------
-						    	//------------					        	
 						    }
 
 			        	}
@@ -180,7 +169,6 @@ public class Splash_Fragment extends Fragment {
 			// After completing http call
 			// will close this activity and lauch main activity
 			// close this activity
-
 
 
             Intent intent = new Intent(getActivity(), MainActivity.class);

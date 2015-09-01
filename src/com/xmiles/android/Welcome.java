@@ -8,6 +8,7 @@ import com.xmiles.android.facebook_api_support.Utility;
 import com.xmiles.android.facebook_api_support.SessionEvents.AuthListener;
 import com.xmiles.android.fragment.FbLogin_Fragment;
 import com.xmiles.android.fragment.Splash_Fragment;
+import com.xmiles.android.support.GPSTracker;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,52 +21,53 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class Welcome extends FragmentActivity {
-	
-	// Your Facebook APP ID	
+
+	// Your Facebook APP ID
 	private static final String APP_ID = "844332932270301";
 	// TAG
     private static final String TAG = "FACEBOOK";
 
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
-        //----hide action bar---        
+
+        //----hide action bar---
         getActionBar().hide();
 
   	    // Create the Facebook Object using the app id.
   	    Utility.mFacebook = new Facebook(APP_ID);
-        
+
   	    // Instantiate the asynrunner object for asynchronous api calls.
-        Utility.mAsyncRunner = new AsyncFacebookRunner(Utility.mFacebook);        
-        
+        Utility.mAsyncRunner = new AsyncFacebookRunner(Utility.mFacebook);
+
         // restore session if one exists
         SessionStore.restore(Utility.mFacebook, this);
         SessionEvents.addAuthListener(new FbAPIsAuthListener());
-        
-        if (Utility.mFacebook.isSessionValid()) {	
+
+
+        if (Utility.mFacebook.isSessionValid()) {
           	//----------
           	Log.i(TAG, "" + "FB Sessions " + Utility.mFacebook.isSessionValid());
 
-    		//requestUserData();		
+    		//requestUserData();
 		    android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-		    android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();        
+		    android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();
 		    fragmentTransaction.replace(R.id.frame_container, new Splash_Fragment());
 		    fragmentTransaction.commit();
 
-          	
+
     	} else {
-    			
+
     	    android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-    	    android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();        
+    	    android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();
     	    fragmentTransaction.replace(R.id.frame_container, new FbLogin_Fragment());
     	    fragmentTransaction.commit();
 
- 
+
     	}
-		
+
 	}
 	/*
 	@Override
@@ -85,12 +87,12 @@ public class Welcome extends FragmentActivity {
 
 	      @Override
 	      public void onAuthSucceed() {
-	    	  //requestUserData();		
+	    	  //requestUserData();
 			  android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-			  android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();        
+			  android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();
 			  fragmentTransaction.replace(R.id.frame_container, new Splash_Fragment());
 			  fragmentTransaction.commit();
-	    	  
+
 	      }
 
 	      @Override

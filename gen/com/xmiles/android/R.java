@@ -1107,6 +1107,7 @@ containing a value of this type.
          */
         public static final int common_signin_button_text_long=0x7f060026;
         public static final int computer=0x7f06004a;
+        public static final int content_notification_01=0x7f060051;
         public static final int create_calendar_message=0x7f060005;
         public static final int create_calendar_title=0x7f060004;
         public static final int decline=0x7f060003;
@@ -1118,6 +1119,7 @@ containing a value of this type.
         public static final int rotas=0x7f060049;
         public static final int store_picture_message=0x7f060001;
         public static final int store_picture_title=0x7f060000;
+        public static final int title_notification_01=0x7f060050;
         public static final int video=0x7f06004d;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 

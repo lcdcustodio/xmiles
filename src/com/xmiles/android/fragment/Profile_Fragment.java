@@ -5,9 +5,11 @@ package com.xmiles.android.fragment;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 
 import com.xmiles.android.R;
+import com.xmiles.android.Welcome;
 import com.xmiles.android.R.id;
 import com.xmiles.android.R.layout;
 import com.xmiles.android.adapter.ImageAdapter;
+import com.xmiles.android.support.GPSTracker;
 import com.xmiles.android.support.LoadImageURL;
 
 import android.support.v4.app.Fragment;
@@ -58,6 +60,9 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 	private static final Integer KEY_PICURL = 2;
 	Cursor data_profile;
 
+    // GPSTracker class
+	GPSTracker gps;
+
 	
 	static final String[] MOBILE_OS = new String[] { "Gravar", "Rotas",	
 				"Ranking", "Histórico" };
@@ -82,6 +87,14 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 		View rootView2 = inflater.inflate(R.layout.profile_fgmt_gridview, container, false);
 		gridView = (GridView) rootView2.findViewById(R.id.gridView1);
 		gridView.setAdapter(new ImageAdapter(getActivity(), MOBILE_OS));
+		//----------------------
+        //Check Service Location
+        gps = new GPSTracker(getActivity(),0);
+
+        if(!gps.canGetGPSLocation() && !gps.canGetNW_Location()){
+			gps.showSettingsAlert();
+		}
+		//----------------------
 		
 		gridView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v,

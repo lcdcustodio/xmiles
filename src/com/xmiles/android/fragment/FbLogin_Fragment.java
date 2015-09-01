@@ -10,6 +10,7 @@ import com.xmiles.android.facebook_api_support.Utility;
 import com.xmiles.android.facebook_api_support.SessionEvents;
 import com.xmiles.android.facebook_api_support.SessionStore;
 import com.xmiles.android.facebook_api_support.SessionEvents.AuthListener;
+import com.xmiles.android.scheduler.Scanning;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -97,6 +98,12 @@ public class FbLogin_Fragment extends Fragment {
 	}
 	
 	public void Splash(){
+		
+		// start Scanning service
+		Scanning sc = new Scanning();			
+		sc.setAlarm(getActivity());
+
+		
 		//requestUserData();		
 	    android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
 	    android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();        

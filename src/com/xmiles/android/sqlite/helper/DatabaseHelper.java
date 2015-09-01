@@ -362,7 +362,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 		//return mDB.query(TABLE_USER_ROUTES_FLAG, new String[] {KEY_FAVORITE_ID, KEY_BUS_STOP_ID, KEY_B_LATITUDE, KEY_B_LONGITUDE, KEY_FLAG, KEY_M_DISTANCE_K}, null, null, null, null, null);
 		String WHERE =  "flag= 'YES' ";
-		return mDB.query(TABLE_USER_ROUTES, new String[] {KEY_FAVORITE_ID, KEY_BUS_STOP_ID, KEY_FLAG}, WHERE, null, null, null, null);
+		return mDB.query(TABLE_USER_ROUTES, new String[] {KEY_FAVORITE_ID, KEY_BUS_STOP_ID, KEY_B_LATITUDE, KEY_B_LONGITUDE, KEY_FLAG, KEY_M_DISTANCE_K}, WHERE, null, null, null, null);
 	}
 
 

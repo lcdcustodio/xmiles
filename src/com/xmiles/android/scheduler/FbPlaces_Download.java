@@ -294,7 +294,8 @@ public class FbPlaces_Download extends WakefulBroadcastReceiver implements Locat
     
     
     //*
-    public Location getLocation(Context ctx) {
+    //public Location getLocation(Context ctx) {
+    private Location getLocation(Context ctx) {
     
     	
         try {
