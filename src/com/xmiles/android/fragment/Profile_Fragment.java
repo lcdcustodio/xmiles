@@ -89,7 +89,9 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 		gridView.setAdapter(new ImageAdapter(getActivity(), MOBILE_OS));
 		//----------------------
         //Check Service Location
-        gps = new GPSTracker(getActivity(),0);
+        //gps = new GPSTracker(getActivity(),0);
+		gps = new GPSTracker(getActivity());
+		gps.getLocation(0);
 
         if(!gps.canGetGPSLocation() && !gps.canGetNW_Location()){
 			gps.showSettingsAlert();

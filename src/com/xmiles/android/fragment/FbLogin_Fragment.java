@@ -10,6 +10,7 @@ import com.xmiles.android.facebook_api_support.Utility;
 import com.xmiles.android.facebook_api_support.SessionEvents;
 import com.xmiles.android.facebook_api_support.SessionStore;
 import com.xmiles.android.facebook_api_support.SessionEvents.AuthListener;
+import com.xmiles.android.scheduler.Getting_UserLocation;
 import com.xmiles.android.scheduler.Scanning;
 
 import android.os.Bundle;
@@ -100,9 +101,13 @@ public class FbLogin_Fragment extends Fragment {
 	public void Splash(){
 		
 		// start Scanning service
-		Scanning sc = new Scanning();			
-		sc.setAlarm(getActivity());
+		//Scanning sc = new Scanning();			
+		//sc.setAlarm(getActivity());
 
+		// start Getting_Location service
+		Getting_UserLocation gl = new Getting_UserLocation();
+		gl.setAlarm(getActivity());
+		
 		
 		//requestUserData();		
 	    android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();

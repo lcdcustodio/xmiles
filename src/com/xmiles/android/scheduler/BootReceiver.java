@@ -24,16 +24,27 @@ public class BootReceiver extends BroadcastReceiver {
 		
 		if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")){
 			
-			Uri uri = SqliteProvider.CONTENT_URI_USER_PROFILE;
-			Cursor user_profile = context.getContentResolver().query(uri, null, null, null, null);
-			//------------
-			Log.i(TAG, "CONTENT_URI_USER_PROFILE (count): " + user_profile.getCount());		
-			//------------		
-			if (user_profile.getCount() > 0) {
-				
-				// start Scanning service
-				Scanning sc = new Scanning();			
-				sc.setAlarm(context);				
+			try {
+				//DO something
+				Uri uri = SqliteProvider.CONTENT_URI_USER_PROFILE;
+				Cursor user_profile = context.getContentResolver().query(uri, null, null, null, null);
+				//------------
+				Log.i(TAG, "CONTENT_URI_USER_PROFILE (count): " + user_profile.getCount());		
+				//------------		
+				if (user_profile.getCount() > 0) {
+					
+					// start Scanning service
+					//Scanning sc = new Scanning();			
+					//sc.setAlarm(context);
+					
+					// start Getting_Location service
+					Getting_UserLocation gl = new Getting_UserLocation();
+					gl.setAlarm(context);
+				}
+
+			}catch(Exception e){
+				// here you can catch all the exceptions
+				e.printStackTrace();
 			}
 
         }

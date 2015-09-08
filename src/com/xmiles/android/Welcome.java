@@ -8,7 +8,7 @@ import com.xmiles.android.facebook_api_support.Utility;
 import com.xmiles.android.facebook_api_support.SessionEvents.AuthListener;
 import com.xmiles.android.fragment.FbLogin_Fragment;
 import com.xmiles.android.fragment.Splash_Fragment;
-import com.xmiles.android.support.GPSTracker;
+
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

@@ -44,8 +44,10 @@ public class Scanning extends WakefulBroadcastReceiver{
 	GPSTracker gps;
 	
 	//USER ROUTES Table - column names
-	private static final Integer KEY_B_LATITUDE = 2;
-	private static final Integer KEY_B_LONGITUDE = 3;
+	private static final Integer KEY_FAVORITE_ID  = 0;
+	private static final Integer KEY_BUS_STOP_ID  = 1;
+	private static final Integer KEY_B_LATITUDE   = 2;
+	private static final Integer KEY_B_LONGITUDE  = 3;
 	private static final Integer KEY_M_DISTANCE_K = 5;
 
 
@@ -97,7 +99,9 @@ public class Scanning extends WakefulBroadcastReceiver{
     public void Scanning_Handler(final Context ctx){
 
         //get Latitude/Longitude
-        gps = new GPSTracker(ctx,1);
+        //gps = new GPSTracker(ctx,1);
+        gps = new GPSTracker(ctx);
+        gps.getLocation(1);
 
 		GeoPoint curGeoPoint = new GeoPoint(
                 (int) (gps.getLatitude()  * 1E6),
@@ -120,11 +124,13 @@ public class Scanning extends WakefulBroadcastReceiver{
 
 
 			//if (distance < Double.parseDouble(data_flag.getString(KEY_M_DISTANCE_K))){
+			// TESTE... NECESSARIO TROCAR PARA A CONDICAO ACIMA
 			if (distance < 0.5){				
 				
 				Log.w(TAG, "Distance " + distance + " is LOWER THAN dist_THR is " + data_flag.getString(KEY_M_DISTANCE_K));
 				
 				if(!gps.canGetGPSLocation()){
+				
 					
 					NotificationManager mNotificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
 
@@ -146,6 +152,18 @@ public class Scanning extends WakefulBroadcastReceiver{
 				    notification.setLatestEventInfo(ctx, contentTitle, contentText, contentIntent);
 				    mNotificationManager.notify(NOTIFICATION_ID,notification);
 					
+				} else {
+					// Stop Scanning receiver
+					cancelAlarm(ctx);
+					
+					// Start ScoreAlgorithm service
+					//ctx.startService(new Intent(ctx, ScoreAlgorithm.class));					
+					Intent serviceIntent = new Intent(ctx,ScoreAlgorithm.class);
+					serviceIntent.putExtra("FAVORITE_ID", data_flag.getString(KEY_FAVORITE_ID));
+					serviceIntent.putExtra("BUS_STOP_ID", data_flag.getString(KEY_BUS_STOP_ID));					
+					
+					ctx.startService(serviceIntent);
+					
 				}
 				
 			} else {
@@ -157,10 +175,6 @@ public class Scanning extends WakefulBroadcastReceiver{
 		}
 		
 		//cancelAlarm(ctx);
-
-
-
-
 
 
 	}

@@ -9,13 +9,13 @@ import org.json.JSONObject;
 import com.xmiles.android.MainActivity;
 
 import com.xmiles.android.R;
-import com.xmiles.android.R.id;
-import com.xmiles.android.R.layout;
+
 import com.xmiles.android.facebook_api_support.GetFacebookProfile;
 import com.xmiles.android.facebook_api_support.Utility;
 
 import com.xmiles.android.scheduler.FbPlaces_Download;
-import com.xmiles.android.scheduler.Scanning;
+import com.xmiles.android.scheduler.Getting_UserLocation;
+
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
 import com.xmiles.android.support.Support;
@@ -94,11 +94,22 @@ public class Splash_Fragment extends Fragment {
 			// start FbPlaces service
 			FbPlaces = new FbPlaces_Download();
 			FbPlaces.setAlarm(getActivity());
-
-
-
-			//------
-
+			//------------------
+			/* 
+			 *  TRY to cancel Getting_Location receiver 
+			 *  if is running in order to ensure that receiver is working
+			 */
+			Getting_UserLocation gl = new Getting_UserLocation();
+		    try {
+		    	
+		    	gl.cancelAlarm(getActivity());
+		    	
+		    	gl.setAlarm(getActivity());
+		    	
+		    } catch (Exception e) {
+		        Log.e(TAG, "Getting_Location service was not canceled. " + e.toString());
+		    }
+			//------------------
             Support support = new Support();
 
 			/** Setting up values to insert into UserProfile table */

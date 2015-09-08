@@ -16,7 +16,7 @@ import android.util.Log;
 public class DatabaseHelper extends SQLiteOpenHelper {
 
 	// Logcat tag
-	private static final String LOG = "FACEBOOK";
+	private static final String TAG = "FACEBOOK";
 
 	// Database Version
 	private static final int DATABASE_VERSION = 1;
@@ -32,6 +32,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String TABLE_CITY_BUSLINE = "city_busline";
 	public static final String TABLE_USER_ROUTES = "user_routes";
 	public static final String TABLE_USER_ROUTES_FLAG = "user_routes_flag";
+	public static final String TABLE_USER_LOCATION = "user_location";
 
 	// Common column names
 	public static final String KEY_ROW_ID = "_id";
@@ -85,6 +86,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	// CITY BUSLINE Table - column names
 	public static final String KEY_CITY_BUSLINE = "city_busline";
 
+	// USER LOCATION Table - column names
+	public static final String KEY_LOCATION_PROVIDER = "location_provider";
+	public static final String KEY_SPEED			 = "speed";
+	
 	// Table Create Statements
 	private static final String CREATE_TABLE_USER_PROFILE = "CREATE TABLE "
 			+ TABLE_USER_PROFILE + "(" + KEY_ID + " TEXT," + KEY_NAME
@@ -151,6 +156,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			KEY_M_DISTANCE_K + " TEXT," +
 			KEY_CREATED_AT	+ " DATETIME" + ")";
 
+	private static final String CREATE_TABLE_USER_LOCATION = "CREATE TABLE "
+			+ TABLE_USER_LOCATION + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
+			KEY_U_LATITUDE + " DOUBLE," +
+			KEY_U_LONGITUDE + " DOUBLE," +
+			KEY_SPEED + " DOUBLE," +
+			KEY_LOCATION_PROVIDER + " TEXT," +
+			KEY_CREATED_AT	+ " DATETIME" + ")";
+
+	
     /** An instance variable for SQLiteDatabase */
     private SQLiteDatabase mDB;
 
@@ -183,6 +197,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(CREATE_TABLE_USER_FAVORITES);
 		db.execSQL(CREATE_TABLE_CITY_BUSLINE);
 		db.execSQL(CREATE_TABLE_USER_ROUTES);
+		db.execSQL(CREATE_TABLE_USER_LOCATION);
 
 	}
 
@@ -201,6 +216,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_FRIENDS);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_CITY_BUSLINE);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_ROUTES);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_LOCATION);		
 
 		// create new tables
 		onCreate(db);
@@ -282,6 +298,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	}
 
+	public long createUserLocation(ContentValues contentValues) {
+
+		resetUserLocation();
+		//-----------
+		long rowID = mDB.insert(TABLE_USER_LOCATION, null, contentValues);
+		return rowID;
+
+	}
+
+	public long insertUserLocation(ContentValues contentValues) {
+
+		//-----------
+		long rowID = mDB.insert(TABLE_USER_LOCATION, null, contentValues);
+		return rowID;
+
+	}
 
 	public void resetUserFriends() {
 		//-----------
@@ -330,6 +362,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	}
 
+	public void resetUserLocation() {
+		//-----------
+		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_LOCATION);
+		mDB.execSQL(CREATE_TABLE_USER_LOCATION);
+		//-----------
+
+	}
 
 	/** Returns all the contacts in the table */
 	public Cursor get_UserPlaces(){
@@ -363,6 +402,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		//return mDB.query(TABLE_USER_ROUTES_FLAG, new String[] {KEY_FAVORITE_ID, KEY_BUS_STOP_ID, KEY_B_LATITUDE, KEY_B_LONGITUDE, KEY_FLAG, KEY_M_DISTANCE_K}, null, null, null, null, null);
 		String WHERE =  "flag= 'YES' ";
 		return mDB.query(TABLE_USER_ROUTES, new String[] {KEY_FAVORITE_ID, KEY_BUS_STOP_ID, KEY_B_LATITUDE, KEY_B_LONGITUDE, KEY_FLAG, KEY_M_DISTANCE_K}, WHERE, null, null, null, null);
+	}
+
+	public Cursor get_UserLocation(){
+
+		return mDB.query(TABLE_USER_LOCATION, new String[] {KEY_ID, KEY_U_LATITUDE, KEY_U_LONGITUDE, KEY_SPEED, KEY_LOCATION_PROVIDER, KEY_B_LONGITUDE, KEY_CREATED_AT}, null, null, null, null, null);
 	}
 
 

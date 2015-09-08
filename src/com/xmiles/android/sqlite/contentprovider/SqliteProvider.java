@@ -33,6 +33,9 @@ public class SqliteProvider extends ContentProvider{
 	public static final Uri CONTENT_URI_USER_ROUTES_insert = Uri.parse("content://" + PROVIDER_NAME + "/UserRoutes_insert");
 	public static final Uri CONTENT_URI_USER_ROUTES = Uri.parse("content://" + PROVIDER_NAME + "/UserRoutes");
 	public static final Uri CONTENT_URI_USER_ROUTES_FLAG = Uri.parse("content://" + PROVIDER_NAME + "/UserRoutesFlag");
+	public static final Uri CONTENT_URI_USER_LOCATION_create = Uri.parse("content://" + PROVIDER_NAME + "/UserLocation_create");
+	public static final Uri CONTENT_URI_USER_LOCATION_insert = Uri.parse("content://" + PROVIDER_NAME + "/UserLocation_insert");
+	public static final Uri CONTENT_URI_USER_LOCATION = Uri.parse("content://" + PROVIDER_NAME + "/UserLocation");
 
 
 
@@ -51,7 +54,9 @@ public class SqliteProvider extends ContentProvider{
 	private static final int USER_ROUTES_insert = 12;
 	private static final int USER_ROUTES = 13;
 	private static final int USER_ROUTES_FLAG = 14;
-
+	private static final int USER_LOCATION_create = 15;
+	private static final int USER_LOCATION_insert = 16;
+	private static final int USER_LOCATION = 17;
 
 
 	private static final UriMatcher uriMatcher ;
@@ -71,6 +76,10 @@ public class SqliteProvider extends ContentProvider{
 		uriMatcher.addURI(PROVIDER_NAME, "UserRoutes_insert", USER_ROUTES_insert);
 		uriMatcher.addURI(PROVIDER_NAME, "UserRoutes", USER_ROUTES);
 		uriMatcher.addURI(PROVIDER_NAME, "UserRoutesFlag", USER_ROUTES_FLAG);
+		uriMatcher.addURI(PROVIDER_NAME, "UserLocation_create", USER_LOCATION_create);
+		uriMatcher.addURI(PROVIDER_NAME, "UserLocation_insert", USER_LOCATION_insert);
+		uriMatcher.addURI(PROVIDER_NAME, "UserLocation", USER_LOCATION);
+
 	}
 
 	/** This content provider does the database operations by this object */
@@ -193,6 +202,35 @@ public class SqliteProvider extends ContentProvider{
 					}
 				}
 			break;
+			
+		    case USER_LOCATION_insert:
+		    	long rowID_5 = mDatabaseHelper.insertUserLocation(values);
+				//Uri _uri=null;
+				if(rowID_5>0){
+					_uri = ContentUris.withAppendedId(CONTENT_URI_USER_LOCATION_insert, rowID_5);
+				}else {
+					try {
+						throw new SQLException("Failed to insert at TABLE_USER_LOCATION: " + uri);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			break;
+
+		    case USER_LOCATION_create:
+		    	long rowID_5b = mDatabaseHelper.createUserLocation(values);
+				//Uri _uri=null;
+				if(rowID_5b>0){
+					_uri = ContentUris.withAppendedId(CONTENT_URI_USER_LOCATION_create, rowID_5b);
+				}else {
+					try {
+						throw new SQLException("Failed to insert at TABLE_USER_LOCATION: " + uri);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			break;
+
 		    }
 		return _uri;
 	}
@@ -357,6 +395,8 @@ public class SqliteProvider extends ContentProvider{
 		}else if (uriMatcher.match(uri)==USER_ROUTES_FLAG){
 			return mDatabaseHelper.get_UserRoutesFlag();
 
+		}else if (uriMatcher.match(uri)==USER_LOCATION){
+			return mDatabaseHelper.get_UserLocation();
 
 		}else{
 			return null;
