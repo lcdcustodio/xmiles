@@ -406,7 +406,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	public Cursor get_UserLocation(){
 
-		return mDB.query(TABLE_USER_LOCATION, new String[] {KEY_ID, KEY_U_LATITUDE, KEY_U_LONGITUDE, KEY_SPEED, KEY_LOCATION_PROVIDER, KEY_B_LONGITUDE, KEY_CREATED_AT}, null, null, null, null, null);
+		return mDB.query(TABLE_USER_LOCATION, new String[] {KEY_ROW_ID, KEY_U_LATITUDE, KEY_U_LONGITUDE, KEY_SPEED, KEY_LOCATION_PROVIDER, KEY_CREATED_AT}, null, null, null, null, null);
 	}
 
 

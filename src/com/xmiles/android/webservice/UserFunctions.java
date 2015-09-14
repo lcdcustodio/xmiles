@@ -27,6 +27,7 @@ public class UserFunctions {
     private static String buslineURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String bus_stopURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String user_routesURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
+    private static String user_locationURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     
     
     
@@ -37,6 +38,7 @@ public class UserFunctions {
     private static String busline_tag = "busline";
     private static String bus_stop_tag = "bus_stop";
     private static String user_routes_tag = "user_routes";
+    private static String user_location_tag = "userlocation_register";
      
     // constructor
     public UserFunctions(){
@@ -76,7 +78,67 @@ public class UserFunctions {
         Log.e(TAG, "favorites_Routes " + json.toString());
         return json;
     }
+    /*
+    public JSONObject userLocation(String [] user_location_id, 
+								   String [] user_id, 
+								   String [] latitude,
+								   String [] longitude,
+								   String [] speed,
+								   String [] location_provider,
+								   String [] bus_stop_radius_flag,
+								   String [] bus_stop_radius_count,
+								   String [] favorite_id,
+								   String [] bus_stop_id,
+								   String [] created_at,
+								   int length){
+	*/							   
+    public JSONObject userLocation(StringBuilder user_location_id, 
+    							   StringBuilder user_id, 
+    							   StringBuilder latitude,
+    							   StringBuilder longitude,
+    							   StringBuilder speed,
+    							   StringBuilder location_provider,
+    							   StringBuilder bus_stop_radius_flag,
+    							   StringBuilder bus_stop_radius_count,
+    							   StringBuilder favorite_id,
+    							   StringBuilder bus_stop_id,
+    							   StringBuilder created_at){
+    	    	
+    	// Building Parameters
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        
+        //int i = 0;
+        //----
+        //Log.w(TAG, "user_location_id.toString(): " + user_location_id.toString());
+        //Log.v(TAG, "user_location_id.length: " + user_location_id.length);
+        //StringBuilder sb = new StringBuilder();
+        //sb.append(user_location_id[i] + ";" + user_id[i]);
+        //Log.i(TAG, "StringBuilder: " + sb);
+        //----
+        //for (int i = 0; i < length; i++) {
+        
+	    params.add(new BasicNameValuePair("tag", user_location_tag));
+	    params.add(new BasicNameValuePair("user_location_id", user_location_id.toString()));
+	    params.add(new BasicNameValuePair("user_id", user_id.toString()));
+	    params.add(new BasicNameValuePair("latitude", latitude.toString()));
+	    params.add(new BasicNameValuePair("longitude", longitude.toString()));        
+	    params.add(new BasicNameValuePair("speed", speed.toString()));
+	    params.add(new BasicNameValuePair("location_provider", location_provider.toString()));
+	    params.add(new BasicNameValuePair("bus_stop_radius_flag", bus_stop_radius_flag.toString()));
+	    params.add(new BasicNameValuePair("bus_stop_radius_count", bus_stop_radius_count.toString()));		   
+	    params.add(new BasicNameValuePair("favorite_id", favorite_id.toString()));
+	    params.add(new BasicNameValuePair("bus_stop_id", bus_stop_id.toString()));
+	    params.add(new BasicNameValuePair("created_at", created_at.toString()));
+ 
+        //}        
+        
+        JSONObject json = jsonParser.getJSONFromUrl(user_locationURL, params);
+        
+        Log.e(TAG, "USer_Location " + json.toString());
+        return json;
+    }
 
+    
     
     public JSONObject userRoutes(String user_id, String favorite_id){
         // Building Parameters
@@ -109,7 +171,7 @@ public class UserFunctions {
         params.add(new BasicNameValuePair("favorite_id", favorite_id));
         // getting JSON Object
         JSONObject json = jsonParser.getJSONFromUrl(insert_favoritesURL, params);
-        //JSONObject json = jsonParser.getJSONFromUrl(registerURL, params);
+
         // return json
         Log.e(TAG, "insert_favoritesRoutes " + json.toString());        
         return json;

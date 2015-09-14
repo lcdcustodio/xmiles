@@ -5,6 +5,9 @@ import com.xmiles.android.R;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -37,6 +40,8 @@ public class GPSTracker extends Service implements LocationListener {
     double latitude; // latitude
     double longitude; // longitude
     double speed;     //speed    
+    
+    public static final int NOTIFICATION_ID = 1; // An ID used to post the notification.
 
     String location_provider;	
 
@@ -49,16 +54,6 @@ public class GPSTracker extends Service implements LocationListener {
 		this.mContext = context;
 		
 	}
-	/*
-	public GPSTracker(Context context, int type) {
-		this.mContext = context;
-		
-		if (type != 100){
-			getLocation(type);	
-		}
-		
-	}
-	*/
 
 	public void getLocation(int option) {
 		try {
@@ -89,71 +84,6 @@ public class GPSTracker extends Service implements LocationListener {
 					}
 
 				 break;
-			 }
-			 case 1: {
-		            if (!isGPSEnabled && !isNetworkEnabled) {
-		                // no network provider is enabled
-		            } else {
-
-		                // if GPS Enabled get lat/long using GPS Services
-		                if (isGPSEnabled) {
-		                	
-		                	this.canGetGPSLocation = true;
-		                	
-		                    if (location == null) {
-		                    	locationManager.requestLocationUpdates(
-		                                LocationManager.GPS_PROVIDER,
-		                                0, 0, this);
-		                    	
-		                    	Log.d(TAG, "GPS Enabled");		                    	
-		                    	Log.i(TAG, "locationManager.getProviders(true): " + locationManager.getProviders(true));
-		                    	
-		                    	Criteria crit = new Criteria();
-		                    	crit.setAccuracy(Criteria.ACCURACY_FINE);
-		                    	crit.setPowerRequirement(Criteria.POWER_LOW);    
-		                    	// Gets the best matched provider, and only if it's on
-		                    	String provider = locationManager.getBestProvider(crit, true);
-		                    	Log.v(TAG, ".getBestProviders(crit, true): " + provider);
-
-
-		                        if (locationManager != null) {
-		                            location = locationManager
-		                                    .getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		                            
-		                            Log.v(TAG, "GPS getAccuracy()" + location.getAccuracy());
-		                            
-		                            if (location != null) {
-		                                latitude = location.getLatitude();
-		                                longitude = location.getLongitude();
-		                                
-		                            }
-		                        }
-		                    }
-		                }    
-		                // 2nd get location from Network Provider
-		                //if (isNetworkEnabled) {
-		                else if (isNetworkEnabled) {
-		                	
-		                	this.canGetNW_Location = true;
-		                	
-		                	locationManager.requestLocationUpdates(
-		                            LocationManager.NETWORK_PROVIDER,
-		                            0, 0, this);
-
-		                    Log.d(TAG, "Network");
-
-		                    if (locationManager != null) {
-		                        location = locationManager
-		                                .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		                        if (location != null) {
-		                            latitude = location.getLatitude();
-		                            longitude = location.getLongitude();
-		                        }
-		                    }
-		                }
-		            
-		         }
-		     break;
 			 }			 
 			 case 2: {
 					if (!isGPSEnabled && !isNetworkEnabled) {
@@ -179,7 +109,7 @@ public class GPSTracker extends Service implements LocationListener {
 						}
 						// if GPS Enabled get lat/long using GPS Services
 						if (isGPSEnabled) {
-							if (location == null) {
+							//if (location == null) {
 								locationManager.requestLocationUpdates(
 										LocationManager.GPS_PROVIDER,
 										0, 0, this);
@@ -207,7 +137,7 @@ public class GPSTracker extends Service implements LocationListener {
 										}										
 									}
 								}
-							}
+							//}
 						}
 					}
 
@@ -301,6 +231,29 @@ public class GPSTracker extends Service implements LocationListener {
 
         // Showing Alert Message
         alertDialog.show();
+	}
+	
+	public void Notification_MSG(){
+		NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+
+	    int icon = R.drawable.xmiles_logo_rev06;
+	    CharSequence tickerText = mContext.getString(R.string.title_notification_01);
+	    long time = System.currentTimeMillis();
+
+	    Notification notification = new Notification(icon, tickerText, time);
+	    notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
+
+	    
+	    CharSequence contentTitle = mContext.getString(R.string.title_notification_01);
+	    CharSequence contentText = mContext.getString(R.string.content_notification_01);
+	    
+        PendingIntent contentIntent = PendingIntent.getActivity(mContext, 0,
+                new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0);
+	    
+	    
+	    notification.setLatestEventInfo(mContext, contentTitle, contentText, contentIntent);
+	    mNotificationManager.notify(NOTIFICATION_ID,notification);
+
 	}
 
 	@Override

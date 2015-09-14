@@ -3,18 +3,22 @@ package com.xmiles.android.scheduler;
 import java.util.Calendar;
 
 import com.google.android.maps.GeoPoint;
+import com.xmiles.android.R;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
 import com.xmiles.android.support.GPSTracker;
 import com.xmiles.android.support.Support;
 
 import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.provider.Settings;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
 
@@ -24,11 +28,14 @@ public class Getting_UserLocation extends WakefulBroadcastReceiver{
 	private AlarmManager alarmMgr; 			// The app's AlarmManager, which provides access to the system alarm services.
 	private PendingIntent alarmIntent; 		// The pending intent that is triggered when the alarm fires.
 	private static String TAG = "FACEBOOK"; //TAG    
-    public static final int NOTIFICATION_ID = 1; // An ID used to post the notification.
+    
 	
 	// The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 1 * 10; // 10 seconds
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 1 * 30; // 30 seconds
 
+	private static final Integer KEY_ID = 0;
+	//private static final Integer MAX_POINTS = 600;
+	private static final Integer MAX_POINTS = 420; 
     // GPSTracker class
 	GPSTracker gps;
 
@@ -68,7 +75,7 @@ public class Getting_UserLocation extends WakefulBroadcastReceiver{
 
 		Calendar calendar = Calendar.getInstance();
 
-		alarmMgr.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 15 * MIN_TIME_BW_UPDATES, alarmIntent);
+		alarmMgr.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), MIN_TIME_BW_UPDATES, alarmIntent);
 	}
 	/**
 	* Cancels the alarm.
@@ -93,6 +100,14 @@ public class Getting_UserLocation extends WakefulBroadcastReceiver{
     	
         //get Latitude/Longitude
         gps = new GPSTracker(ctx);
+        //----------------------------
+        // check isGPSEnabled
+        gps.getLocation(0);
+        if(!gps.canGetGPSLocation()) {
+        	
+        	gps.Notification_MSG();
+        }
+        //-----------------------------
         gps.getLocation(2);
 
         
@@ -124,8 +139,23 @@ public class Getting_UserLocation extends WakefulBroadcastReceiver{
 		//ctx.getContentResolver().insert(SqliteProvider.CONTENT_URI_USER_LOCATION_create, contentValues);
 		ctx.getContentResolver().insert(SqliteProvider.CONTENT_URI_USER_LOCATION_insert, contentValues);
 	    
-		// cancel Getting Location
-    	cancelAlarm(ctx);	    
+		
+        Uri uri = SqliteProvider.CONTENT_URI_USER_LOCATION;
+    	Cursor data_userLocation = ctx.getContentResolver().query(uri, null, null, null, null);
+    	data_userLocation.moveToLast();
+    	//--------------
+    	Log.i(TAG, "data_userLocation.getInt(KEY_ID): " + data_userLocation.getInt(KEY_ID));
+    	//--------------
+    	if (data_userLocation.getInt(KEY_ID) > MAX_POINTS ) {	
+
+    		// cancel Getting Location
+        	cancelAlarm(ctx);	    
+        	
+        	UserLocation_Upload ulu = new UserLocation_Upload();
+        	ulu.setAlarm(ctx);
+    		
+    	}
+
 
     }
 }
