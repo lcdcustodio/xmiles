@@ -38,8 +38,8 @@ public class BootReceiver extends BroadcastReceiver {
 					//sc.setAlarm(context);
 					
 					// start Getting_Location service
-					Getting_UserLocation gl = new Getting_UserLocation();
-					gl.setAlarm(context);
+					//Getting_UserLocation gl = new Getting_UserLocation();
+					//gl.setAlarm(context);
 				}
 
 			}catch(Exception e){

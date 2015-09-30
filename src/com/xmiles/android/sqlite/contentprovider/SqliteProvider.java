@@ -36,6 +36,8 @@ public class SqliteProvider extends ContentProvider{
 	public static final Uri CONTENT_URI_USER_LOCATION_create = Uri.parse("content://" + PROVIDER_NAME + "/UserLocation_create");
 	public static final Uri CONTENT_URI_USER_LOCATION_insert = Uri.parse("content://" + PROVIDER_NAME + "/UserLocation_insert");
 	public static final Uri CONTENT_URI_USER_LOCATION = Uri.parse("content://" + PROVIDER_NAME + "/UserLocation");
+	public static final Uri CONTENT_URI_BUS_GPS_DATA_insert = Uri.parse("content://" + PROVIDER_NAME + "/BusGpsData_insert");
+	public static final Uri CONTENT_URI_BUS_GPS_DATA = Uri.parse("content://" + PROVIDER_NAME + "/BusGpsData");
 
 
 
@@ -57,6 +59,8 @@ public class SqliteProvider extends ContentProvider{
 	private static final int USER_LOCATION_create = 15;
 	private static final int USER_LOCATION_insert = 16;
 	private static final int USER_LOCATION = 17;
+	private static final int BUS_GPS_DATA_insert = 18;
+	private static final int BUS_GPS_DATA = 19;
 
 
 	private static final UriMatcher uriMatcher ;
@@ -79,6 +83,8 @@ public class SqliteProvider extends ContentProvider{
 		uriMatcher.addURI(PROVIDER_NAME, "UserLocation_create", USER_LOCATION_create);
 		uriMatcher.addURI(PROVIDER_NAME, "UserLocation_insert", USER_LOCATION_insert);
 		uriMatcher.addURI(PROVIDER_NAME, "UserLocation", USER_LOCATION);
+		uriMatcher.addURI(PROVIDER_NAME, "BusGpsData_insert", BUS_GPS_DATA_insert);
+		uriMatcher.addURI(PROVIDER_NAME, "BusGpsData", BUS_GPS_DATA);
 
 	}
 
@@ -217,6 +223,21 @@ public class SqliteProvider extends ContentProvider{
 				}
 			break;
 
+		    case BUS_GPS_DATA_insert:
+		    	long rowID_6 = mDatabaseHelper.insertBusGpsData(values);
+				//Uri _uri=null;
+				if(rowID_6>0){
+					_uri = ContentUris.withAppendedId(CONTENT_URI_BUS_GPS_DATA_insert, rowID_6);
+				}else {
+					try {
+						throw new SQLException("Failed to insert at TABLE_BUS_GPS_DATA: " + uri);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			break;
+
+			
 		    case USER_LOCATION_create:
 		    	long rowID_5b = mDatabaseHelper.createUserLocation(values);
 				//Uri _uri=null;
@@ -359,6 +380,25 @@ public class SqliteProvider extends ContentProvider{
 	            }
 	            break;
 
+	        case BUS_GPS_DATA_insert:
+	            try {
+	            	//----
+	            	mDatabaseHelper.getWritableDatabase().beginTransaction();
+	                for (ContentValues value : values) {
+	                	//---------
+	                	//---------
+	                    long id = mDatabaseHelper.getWritableDatabase().insert(DatabaseHelper.TABLE_BUS_GPS_DATA, null, value);
+	                    if (id > 0)
+	                        insertCount++;
+	                }
+	                mDatabaseHelper.getWritableDatabase().setTransactionSuccessful();
+	            } catch (Exception e) {
+	                // Your error handling
+	            } finally {
+	            	mDatabaseHelper.getWritableDatabase().endTransaction();
+	            }
+	            break;
+	            
 	        default:
 	            throw new IllegalArgumentException("Unknown URI: " + uri);
 	        }
@@ -398,6 +438,9 @@ public class SqliteProvider extends ContentProvider{
 		}else if (uriMatcher.match(uri)==USER_LOCATION){
 			return mDatabaseHelper.get_UserLocation();
 
+		}else if (uriMatcher.match(uri)==BUS_GPS_DATA){
+			return mDatabaseHelper.get_BusGpsData();
+			
 		}else{
 			return null;
 		}

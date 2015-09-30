@@ -28,8 +28,8 @@ public class UserFunctions {
     private static String bus_stopURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String user_routesURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String user_locationURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
-    
-    
+    //------------------------------------    
+    private static String bus_gpsdataURL = "http://rest.riob.us/v3/search/382";
     
     private static String login_tag = "login";
     private static String register_tag = "register";
@@ -53,8 +53,6 @@ public class UserFunctions {
      * @param email
      * @param password
      * */
-    //public JSONObject loginUser(String email, String password){
-    //public JSONObject loginUser(String email, String id){
     public JSONObject loginUser(String id){
         // Building Parameters
         List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -66,7 +64,15 @@ public class UserFunctions {
         Log.e(TAG, "loginUser " + json.toString());
         return json;
     }
+    /*
+    public JSONObject get_gpsbusdata(){
 
+    	JSONObject json = jsonParser.getJSONFromHttpGet(bus_gpsdataURL);        
+
+    	Log.e(TAG, "get_gpsbusdata " + json.toString());
+        return json;
+    }
+    */
     public JSONObject favoritesRoutes(String id){
         // Building Parameters
         List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -78,20 +84,6 @@ public class UserFunctions {
         Log.e(TAG, "favorites_Routes " + json.toString());
         return json;
     }
-    /*
-    public JSONObject userLocation(String [] user_location_id, 
-								   String [] user_id, 
-								   String [] latitude,
-								   String [] longitude,
-								   String [] speed,
-								   String [] location_provider,
-								   String [] bus_stop_radius_flag,
-								   String [] bus_stop_radius_count,
-								   String [] favorite_id,
-								   String [] bus_stop_id,
-								   String [] created_at,
-								   int length){
-	*/							   
     public JSONObject userLocation(StringBuilder user_location_id, 
     							   StringBuilder user_id, 
     							   StringBuilder latitude,
@@ -107,16 +99,6 @@ public class UserFunctions {
     	// Building Parameters
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         
-        //int i = 0;
-        //----
-        //Log.w(TAG, "user_location_id.toString(): " + user_location_id.toString());
-        //Log.v(TAG, "user_location_id.length: " + user_location_id.length);
-        //StringBuilder sb = new StringBuilder();
-        //sb.append(user_location_id[i] + ";" + user_id[i]);
-        //Log.i(TAG, "StringBuilder: " + sb);
-        //----
-        //for (int i = 0; i < length; i++) {
-        
 	    params.add(new BasicNameValuePair("tag", user_location_tag));
 	    params.add(new BasicNameValuePair("user_location_id", user_location_id.toString()));
 	    params.add(new BasicNameValuePair("user_id", user_id.toString()));
@@ -130,7 +112,6 @@ public class UserFunctions {
 	    params.add(new BasicNameValuePair("bus_stop_id", bus_stop_id.toString()));
 	    params.add(new BasicNameValuePair("created_at", created_at.toString()));
  
-        //}        
         
         JSONObject json = jsonParser.getJSONFromUrl(user_locationURL, params);
         
@@ -224,17 +205,5 @@ public class UserFunctions {
         Log.e(TAG, "registerUser " + json.toString());        
         return json;
     }
-    /* 
-    public JSONArray face2me_users() {
-    	// ----------------------------
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("tag", face2me_users_tag));
-        // ----------------------------
-        JSONArray contacts = null;
-        // ----------------------------
-		contacts = jsonArrayParser.getJSONFromUrl(face2me_users, params);
-		//Log.e(TAG, "JSONArray " + contacts.toString());
-        return contacts;
-    }
-    */
+
 }

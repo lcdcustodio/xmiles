@@ -6,12 +6,12 @@ import com.facebook.android.FacebookError;
 import com.xmiles.android.R;
 import com.xmiles.android.R.id;
 import com.xmiles.android.R.layout;
+import com.xmiles.android.backup.Scanning;
 import com.xmiles.android.facebook_api_support.Utility;
 import com.xmiles.android.facebook_api_support.SessionEvents;
 import com.xmiles.android.facebook_api_support.SessionStore;
 import com.xmiles.android.facebook_api_support.SessionEvents.AuthListener;
 import com.xmiles.android.scheduler.Getting_UserLocation;
-import com.xmiles.android.scheduler.Scanning;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -105,8 +105,8 @@ public class FbLogin_Fragment extends Fragment {
 		//sc.setAlarm(getActivity());
 
 		// start Getting_Location service
-		Getting_UserLocation gl = new Getting_UserLocation();
-		gl.setAlarm(getActivity());
+		//Getting_UserLocation gl = new Getting_UserLocation();
+		//gl.setAlarm(getActivity());
 		
 		
 		//requestUserData();		

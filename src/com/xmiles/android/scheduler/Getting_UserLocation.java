@@ -31,10 +31,10 @@ public class Getting_UserLocation extends WakefulBroadcastReceiver{
     
 	
 	// The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 1 * 30; // 30 seconds
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 1 * 30; // 10 seconds (360 points/hour)
 
 	private static final Integer KEY_ID = 0;
-	//private static final Integer MAX_POINTS = 600;
+	//private static final Integer MAX_POINTS = 720;  // 720 points / 360 = 2 HOURS
 	private static final Integer MAX_POINTS = 420; 
     // GPSTracker class
 	GPSTracker gps;
@@ -123,7 +123,7 @@ public class Getting_UserLocation extends WakefulBroadcastReceiver{
 	    Log.w(TAG, "Getting Loc. Longitude: " + Long);
 	    //--------------
 	    Log.i(TAG, "getProvider(): " + gps.getProvider());
-
+	    Log.e(TAG, "getAccuracy(): " + gps.getAccuracy());
 		//------------------
         Support support = new Support();
 
@@ -136,7 +136,6 @@ public class Getting_UserLocation extends WakefulBroadcastReceiver{
 		contentValues.put(DatabaseHelper.KEY_LOCATION_PROVIDER, gps.getProvider());
 		contentValues.put(DatabaseHelper.KEY_CREATED_AT, support.getDateTime());
 
-		//ctx.getContentResolver().insert(SqliteProvider.CONTENT_URI_USER_LOCATION_create, contentValues);
 		ctx.getContentResolver().insert(SqliteProvider.CONTENT_URI_USER_LOCATION_insert, contentValues);
 	    
 		

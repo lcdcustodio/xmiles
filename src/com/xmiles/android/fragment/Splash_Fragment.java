@@ -2,6 +2,7 @@ package com.xmiles.android.fragment;
 
 
 
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -14,6 +15,7 @@ import com.xmiles.android.facebook_api_support.GetFacebookProfile;
 import com.xmiles.android.facebook_api_support.Utility;
 
 import com.xmiles.android.scheduler.FbPlaces_Download;
+import com.xmiles.android.scheduler.Getting_GpsBusData;
 import com.xmiles.android.scheduler.Getting_UserLocation;
 
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
@@ -21,15 +23,8 @@ import com.xmiles.android.sqlite.helper.DatabaseHelper;
 import com.xmiles.android.support.Support;
 import com.xmiles.android.webservice.UserFunctions;
 
-import android.app.ActionBar;
-import android.app.FragmentTransaction;
-import android.app.ActionBar.Tab;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -86,7 +81,6 @@ public class Splash_Fragment extends Fragment {
 			Log.i(TAG, "Splash_Fragment - doInBackground");
 			//------
 
-
 			// facebook profile
 			facebook_profile = new GetFacebookProfile().GetResult(Utility.mFacebook.getAccessToken());
 			//Log.i(TAG, "facebook_profile: " + facebook_profile);
@@ -94,11 +88,19 @@ public class Splash_Fragment extends Fragment {
 			// start FbPlaces service
 			FbPlaces = new FbPlaces_Download();
 			FbPlaces.setAlarm(getActivity());
+			
+			//GPS BUS DATA TEST 
+			//UserFunctions userFunc = new UserFunctions();
+			//JSONObject json = userFunc.get_gpsbusdata();
+			Getting_GpsBusData gbd = new Getting_GpsBusData();
+			gbd.setAlarm(getActivity());
+			
 			//------------------
 			/* 
 			 *  TRY to cancel Getting_Location receiver 
 			 *  if is running in order to ensure that receiver is working
 			 */
+			/*
 			Getting_UserLocation gl = new Getting_UserLocation();
 		    try {
 		    	
@@ -109,6 +111,7 @@ public class Splash_Fragment extends Fragment {
 		    } catch (Exception e) {
 		        Log.e(TAG, "Getting_Location service was not canceled. " + e.toString());
 		    }
+		    */
 			//------------------
             Support support = new Support();
 

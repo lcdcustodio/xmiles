@@ -121,9 +121,9 @@
         <receiver android:name="com.xmiles.android.scheduler.FbPlaces_Download"></receiver>
         <receiver android:name="com.xmiles.android.scheduler.Favorites_Upload"></receiver>
         <receiver android:name="com.xmiles.android.scheduler.UserRoutes_Download"></receiver>
-        <!--receiver android:name="com.xmiles.android.scheduler.Scanning"></receiver>   -->
         <receiver android:name="com.xmiles.android.scheduler.Getting_UserLocation"></receiver>
-        <receiver android:name="com.xmiles.android.scheduler.UserLocation_Upload"></receiver>        
+        <receiver android:name="com.xmiles.android.scheduler.UserLocation_Upload"></receiver>
+        <receiver android:name="com.xmiles.android.scheduler.Getting_GpsBusData"></receiver>        
         
         <receiver android:name="com.xmiles.android.scheduler.BootReceiver"
                 android:enabled="true">

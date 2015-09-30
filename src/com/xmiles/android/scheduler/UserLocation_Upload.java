@@ -29,7 +29,7 @@ public class UserLocation_Upload extends WakefulBroadcastReceiver {
 		private static String TAG = "FACEBOOK";
 	    
 		// The minimum time between updates in milliseconds
-	    private static final long MIN_TIME_BW_UPDATES = 1000 * 1 * 100; // 100 seconds
+	    private static final long MIN_TIME_BW_UPDATES = 1000 * 1 * 3600; // 3600 seconds
 	
 		protected static JSONArray jsonArray;
 		protected static JSONObject json;

@@ -12,7 +12,8 @@ import android.app.Service;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.location.Criteria;
+
+import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -21,9 +22,11 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
 
-//public class GPSTracker implements LocationListener {
-public class GPSTracker extends Service implements LocationListener {
 
+//public class GPSTracker implements LocationListener {
+//public class GPSTracker extends Service implements LocationListener {
+public class GPSTracker extends Service implements LocationListener, android.location.GpsStatus.Listener {
+	
 	private final Context mContext;
 
 	// flag for GPS status
@@ -37,9 +40,10 @@ public class GPSTracker extends Service implements LocationListener {
 	boolean canGetNW_Location = false;
 
 	Location location; // location
-    double latitude; // latitude
-    double longitude; // longitude
-    double speed;     //speed    
+    double latitude;   // latitude
+    double longitude;  // longitude
+    double speed;      // speed    
+    double accuracy;   // accuracy
     
     public static final int NOTIFICATION_ID = 1; // An ID used to post the notification.
 
@@ -98,9 +102,10 @@ public class GPSTracker extends Service implements LocationListener {
 								location = locationManager
 										.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 								if (location != null) {
-									latitude = location.getLatitude();
+									latitude  = location.getLatitude();
 									longitude = location.getLongitude();
-									speed = location.getSpeed();
+									speed     = location.getSpeed();
+									accuracy  = location.getAccuracy();
 									//----------
 									location_provider = "NETWORK_PROVIDER";
 									//----------									
@@ -118,9 +123,10 @@ public class GPSTracker extends Service implements LocationListener {
 									location = locationManager
 											.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 									if (location != null) {
-										latitude = location.getLatitude();
+										latitude  = location.getLatitude();
 										longitude = location.getLongitude();
-										speed = location.getSpeed();
+										speed     = location.getSpeed();
+										accuracy  = location.getAccuracy();
 										//----------
 										location_provider = "GPS_PROVIDER";
 										//----------										
@@ -128,9 +134,10 @@ public class GPSTracker extends Service implements LocationListener {
 										location = locationManager
 												.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 										if (location != null) {
-											latitude = location.getLatitude();
+											latitude  = location.getLatitude();
 											longitude = location.getLongitude();
-											speed = location.getSpeed();
+											speed     = location.getSpeed();
+											accuracy  = location.getAccuracy();
 											//----------
 											location_provider = "NETWORK_PROVIDER";
 											//----------										
@@ -175,6 +182,11 @@ public class GPSTracker extends Service implements LocationListener {
 	public double getSpeed(){
 		return this.speed;
 	}
+	
+	public double getAccuracy(){
+		return this.accuracy;
+	}
+
 
 	
 	public String getProvider(){
@@ -199,13 +211,9 @@ public class GPSTracker extends Service implements LocationListener {
 	public void showSettingsAlert(){
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
 
-        // Setting Dialog Title
-        //alertDialog.setTitle("xMiles Alerta:");
         alertDialog.setTitle(mContext.getString(R.string.title_notification_01));
         
 
-        // Setting Dialog Message
-        //alertDialog.setMessage("Serviço de Localização não está habilitado. Necessário ativá-lo.");
         alertDialog.setMessage(mContext.getString(R.string.content_notification_01));
 
         // On pressing Settings button
@@ -275,6 +283,38 @@ public class GPSTracker extends Service implements LocationListener {
 	@Override
 	public IBinder onBind(Intent arg0) {
 		return null;
+	}
+
+	@Override
+	public void onGpsStatusChanged(int event) {
+		// TODO Auto-generated method stub
+        switch(event) 
+        {
+            case GpsStatus.GPS_EVENT_STARTED:            	
+                //Toast.makeText(mContext, "GPS_SEARCHING", Toast.LENGTH_SHORT).show();
+            	Log.w(TAG,"GPS_SEARCHING");
+                System.out.println("TAG - GPS searching: ");                        
+                break;
+            case GpsStatus.GPS_EVENT_STOPPED:    
+                System.out.println("TAG - GPS Stopped");
+                Log.w(TAG,"GPS Stopped");
+                break;
+            case GpsStatus.GPS_EVENT_FIRST_FIX:
+
+                /*
+                 * GPS_EVENT_FIRST_FIX Event is called when GPS is locked            
+                 */
+                    //Toast.makeText(mContext, "GPS_LOCKED", Toast.LENGTH_SHORT).show();
+                    Log.w(TAG,"GPS_LOCKED");
+                    //Location gpslocation = locationManager
+                    //        .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+
+
+                break;
+            case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
+ //                 System.out.println("TAG - GPS_EVENT_SATELLITE_STATUS");
+                break;                  
+       }
 	}
 
 }
