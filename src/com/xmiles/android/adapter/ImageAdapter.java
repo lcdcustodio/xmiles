@@ -31,7 +31,7 @@ public class ImageAdapter extends BaseAdapter {
 			gridView = new View(context);
 
 			// get layout from mobile.xml
-			gridView = inflater.inflate(R.layout.mobile, null);
+			gridView = inflater.inflate(R.layout.profile_fgmt_gridview_custom_items, null);
 
 			// set value into textview
 			TextView textView = (TextView) gridView
@@ -44,6 +44,12 @@ public class ImageAdapter extends BaseAdapter {
 
 			String mobile = mobileValues[position];
 
+			if (mobile.equals("Mapa")) {
+				imageView.setImageResource(R.drawable.livefleet);
+			} else if (mobile.equals("Histórico")) {
+				imageView.setImageResource(R.drawable.report);
+			}
+			/*
 			if (mobile.equals("Ranking")) {
 				imageView.setImageResource(R.drawable.livefleet);
 			} else if (mobile.equals("Histórico")) {
@@ -54,6 +60,7 @@ public class ImageAdapter extends BaseAdapter {
 				imageView.setImageResource(R.drawable.dashboard);
 				//imageView.setImageResource(R.drawable.replay);
 			}
+			*/
 
 		} else {
 			gridView = (View) convertView;

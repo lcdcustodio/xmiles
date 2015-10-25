@@ -229,9 +229,7 @@ public class GPSTracker extends Service implements LocationListener, android.loc
             public void onClick(DialogInterface dialog, int which) {
             dialog.cancel();
             //------------------
-            //Intent intent = new Intent(mContext, MainActivity.class);
-            //mContext.startActivity(intent);
-            ((Activity) mContext).finish();
+            //((Activity) mContext).finish();
             //------------------
 
             }

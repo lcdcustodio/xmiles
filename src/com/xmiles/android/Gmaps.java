@@ -241,7 +241,45 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 	      return true;
 	  }
 
-	
+	public void renderFbPlaces() {
+		
+		//for (int position = 0; position < 5; position++) {	
+			
+		//}
+		try {
+        	//-------------
+            Uri uri_1 = SqliteProvider.CONTENT_URI_USER_PLACES;
+            Cursor data_places = getApplication().getContentResolver().query(uri_1, null, null, null, null);
+            data_places.moveToFirst();
+            int i = 0;
+            int KEY_NEARBY = 1;
+            int KEY_U_LATITUDE = 4;
+            int KEY_U_LONGITUDE = 5;
+            int KEY_PICURL = 6;            
+        	//-------------
+    		while (data_places.moveToNext()) {   			
+
+	        	//Your code goes here
+    			
+    			//if ( i < 5){
+    				latitude = Double.parseDouble(data_places.getString(KEY_U_LATITUDE));
+    				longitude = Double.parseDouble(data_places.getString(KEY_U_LONGITUDE));
+    				//-----------
+    				// Adding a marker
+    				mMap.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude))
+    						.title(data_places.getString(KEY_NEARBY))						
+    						.snippet(data_places.getString(KEY_NEARBY))
+    						.icon(BitmapDescriptorFactory
+							.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+    				//*
+    			//}
+    			i=+1;
+    		}
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+		
+	}
 	public void renderMarkerOptions(JSONArray bus_stop){
 		
 		
@@ -416,6 +454,7 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 	                                @Override
 	                                public void run() {
 	                                	renderMarkerOptions(jsonArray);
+	                                	//renderFbPlaces();
 	                                }
 	                            });
 	                            Thread.sleep(400);

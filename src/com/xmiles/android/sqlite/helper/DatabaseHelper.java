@@ -405,7 +405,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	/** Returns all the contacts in the table */
 	public Cursor get_UserPlaces(){
-		return mDB.query(TABLE_USER_PLACES, new String[] {KEY_ROW_ID, KEY_NEARBY,KEY_CITY,KEY_UF}, null, null, null, null, KEY_CREATED_AT + " desc ");
+		//return mDB.query(TABLE_USER_PLACES, new String[] {KEY_ROW_ID, KEY_NEARBY,KEY_CITY,KEY_UF}, null, null, null, null, KEY_CREATED_AT + " desc ");
+		return mDB.query(TABLE_USER_PLACES, new String[] {KEY_ROW_ID, KEY_NEARBY,KEY_CITY,KEY_UF,KEY_U_LATITUDE, KEY_U_LONGITUDE, KEY_PICURL}, null, null, null, null, null);
+		//return mDB.query(TABLE_USER_PLACES, new String[] {KEY_ROW_ID, KEY_NEARBY,KEY_U_LATITUDE, KEY_U_LONGITUDE, KEY_PICURL}, null, null, null, null, null);
+
 	}
 
 	public Cursor get_UserProfile(){
@@ -444,7 +447,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	public Cursor get_BusGpsData(){
 
-		return mDB.query(TABLE_BUS_GPS_DATA, new String[] {KEY_ROW_ID, KEY_CREATED_AT, KEY_BUSCODE, KEY_BUSLINE, KEY_B_LATITUDE, KEY_B_LONGITUDE, KEY_SPEED, KEY_SENSE}, null, null, null, null, null);
+		return mDB.query(TABLE_BUS_GPS_DATA, new String[] {KEY_ROW_ID, KEY_CREATED_AT, KEY_BUSCODE, KEY_BUSLINE, KEY_B_LATITUDE, KEY_B_LONGITUDE, KEY_SPEED, KEY_DIRECTION}, null, null, null, null, null);
 	}
 
 	

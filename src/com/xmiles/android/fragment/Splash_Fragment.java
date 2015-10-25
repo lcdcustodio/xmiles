@@ -86,14 +86,12 @@ public class Splash_Fragment extends Fragment {
 			//Log.i(TAG, "facebook_profile: " + facebook_profile);
 
 			// start FbPlaces service
-			FbPlaces = new FbPlaces_Download();
-			FbPlaces.setAlarm(getActivity());
+			//FbPlaces = new FbPlaces_Download();
+			//FbPlaces.setAlarm(getActivity());
 			
 			//GPS BUS DATA TEST 
-			//UserFunctions userFunc = new UserFunctions();
-			//JSONObject json = userFunc.get_gpsbusdata();
-			Getting_GpsBusData gbd = new Getting_GpsBusData();
-			gbd.setAlarm(getActivity());
+			//Getting_GpsBusData gbd = new Getting_GpsBusData();
+			//gbd.setAlarm(getActivity());
 			
 			//------------------
 			/* 
@@ -104,9 +102,9 @@ public class Splash_Fragment extends Fragment {
 			Getting_UserLocation gl = new Getting_UserLocation();
 		    try {
 		    	
-		    	gl.cancelAlarm(getActivity());
+		    	//gl.cancelAlarm(getActivity());
 		    	
-		    	gl.setAlarm(getActivity());
+		    	//gl.setAlarm(getActivity());
 		    	
 		    } catch (Exception e) {
 		        Log.e(TAG, "Getting_Location service was not canceled. " + e.toString());

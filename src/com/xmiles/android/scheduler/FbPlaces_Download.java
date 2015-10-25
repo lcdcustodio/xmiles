@@ -77,8 +77,8 @@ public class FbPlaces_Download extends WakefulBroadcastReceiver implements Locat
     int MAX_DISTANCE = 5000;
     
     //Facebook place distance require
-    //int MAX_N_PLACES = 30;
-    int MAX_N_PLACES = 5;
+    int MAX_N_PLACES = 30;
+    //int MAX_N_PLACES = 5;
 
     
     @Override

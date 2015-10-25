@@ -11,6 +11,7 @@
     <string name="email">EMail</string>
     <string name="new_route">Nova Rota</string>
     <string name="title_notification_01">GPS está desabilitado</string>
-    <string name="content_notification_01">Necessário ativar GPS para acumular pontos</string>
+    <string name="content_notification_01">Necessário ativar o GPS para acumular pontos</string>
+    <string name="buscode">Digite o código do ônibus</string>
     
 </resources>

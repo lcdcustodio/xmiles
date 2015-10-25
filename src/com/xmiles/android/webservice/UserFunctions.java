@@ -28,9 +28,8 @@ public class UserFunctions {
     private static String bus_stopURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String user_routesURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String user_locationURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
+    private static String bus_gpsURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     //------------------------------------    
-    private static String bus_gpsdataURL = "http://rest.riob.us/v3/search/382";
-    
     private static String login_tag = "login";
     private static String register_tag = "register";
     private static String favorites_tag = "favorites";
@@ -39,6 +38,7 @@ public class UserFunctions {
     private static String bus_stop_tag = "bus_stop";
     private static String user_routes_tag = "user_routes";
     private static String user_location_tag = "userlocation_register";
+    private static String bus_gps_tag = "busgps_register";
      
     // constructor
     public UserFunctions(){
@@ -64,15 +64,7 @@ public class UserFunctions {
         Log.e(TAG, "loginUser " + json.toString());
         return json;
     }
-    /*
-    public JSONObject get_gpsbusdata(){
 
-    	JSONObject json = jsonParser.getJSONFromHttpGet(bus_gpsdataURL);        
-
-    	Log.e(TAG, "get_gpsbusdata " + json.toString());
-        return json;
-    }
-    */
     public JSONObject favoritesRoutes(String id){
         // Building Parameters
         List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -84,6 +76,38 @@ public class UserFunctions {
         Log.e(TAG, "favorites_Routes " + json.toString());
         return json;
     }
+    
+    public JSONObject busGps(StringBuilder gps_bus_id, 
+			   				 StringBuilder user_id, 
+			   				 StringBuilder latitude,
+			   				 StringBuilder longitude,
+			   				 StringBuilder speed,
+			   				 StringBuilder buscode,
+			   				 StringBuilder busline,
+			   				 StringBuilder direction,
+			   				 StringBuilder created_at){
+
+	// Building Parameters
+	List<NameValuePair> params = new ArrayList<NameValuePair>();
+	
+	params.add(new BasicNameValuePair("tag", bus_gps_tag));
+	params.add(new BasicNameValuePair("gps_bus_id", gps_bus_id.toString()));
+	params.add(new BasicNameValuePair("user_id", user_id.toString()));
+	params.add(new BasicNameValuePair("latitude", latitude.toString()));
+	params.add(new BasicNameValuePair("longitude", longitude.toString()));        
+	params.add(new BasicNameValuePair("speed", speed.toString()));
+	params.add(new BasicNameValuePair("buscode", buscode.toString()));
+	params.add(new BasicNameValuePair("busline", busline.toString()));
+	params.add(new BasicNameValuePair("direction", direction.toString()));		   
+	params.add(new BasicNameValuePair("created_at", created_at.toString()));
+		
+	JSONObject json = jsonParser.getJSONFromUrl(bus_gpsURL, params);
+	
+	Log.e(TAG, "Bus_Gps " + json.toString());
+	return json;
+	}
+    
+    
     public JSONObject userLocation(StringBuilder user_location_id, 
     							   StringBuilder user_id, 
     							   StringBuilder latitude,

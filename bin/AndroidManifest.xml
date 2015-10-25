@@ -123,7 +123,8 @@
         <receiver android:name="com.xmiles.android.scheduler.UserRoutes_Download"></receiver>
         <receiver android:name="com.xmiles.android.scheduler.Getting_UserLocation"></receiver>
         <receiver android:name="com.xmiles.android.scheduler.UserLocation_Upload"></receiver>
-        <receiver android:name="com.xmiles.android.scheduler.Getting_GpsBusData"></receiver>        
+        <receiver android:name="com.xmiles.android.scheduler.Getting_GpsBusData"></receiver> 
+        <receiver android:name="com.xmiles.android.scheduler.GpsBusData_Upload"></receiver>       
         
         <receiver android:name="com.xmiles.android.scheduler.BootReceiver"
                 android:enabled="true">

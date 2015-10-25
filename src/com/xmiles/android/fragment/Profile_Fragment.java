@@ -11,12 +11,14 @@ import com.xmiles.android.R.layout;
 import com.xmiles.android.adapter.ImageAdapter;
 import com.xmiles.android.support.GPSTracker;
 import com.xmiles.android.support.LoadImageURL;
+import com.xmiles.android.support.Score_Algorithm;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -28,10 +30,14 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -45,6 +51,8 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 	TextView score;
 	ImageView mUserPic;
 	GridView gridView;
+	Button   score_btn;
+	AutoCompleteTextView buscode_search;
 	//TAG
 	private static final String TAG = "FACEBOOK";
 	String json_name;
@@ -62,10 +70,11 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 
     // GPSTracker class
 	GPSTracker gps;
-
+    // Score Algorithm class
+	Score_Algorithm sca;
 	
-	static final String[] MOBILE_OS = new String[] { "Gravar", "Rotas",	
-				"Ranking", "Histórico" };
+	static final String[] MOBILE_OS = new String[] { "Mapa", "Histórico" };
+
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -82,32 +91,76 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
         score = (TextView) rootView.findViewById(R.id.locat);
         city = (TextView) rootView.findViewById(R.id.info);
         mUserPic = (ImageView) rootView.findViewById(R.id.profile_pic);
-
+        //-------
+        View rootView1 = inflater.inflate(R.layout.profile_score_button, container, false);
+        score_btn = (Button) rootView1.findViewById(R.id.button1);
 		//-------
+        View rootView1b = inflater.inflate(R.layout.profile_buscode_autocomplete_textview, container, false);
+        buscode_search = (AutoCompleteTextView) rootView1b.findViewById(R.id.search);
+        //-------
 		View rootView2 = inflater.inflate(R.layout.profile_fgmt_gridview, container, false);
 		gridView = (GridView) rootView2.findViewById(R.id.gridView1);
 		gridView.setAdapter(new ImageAdapter(getActivity(), MOBILE_OS));
 		//----------------------
-        //Check Service Location
-        //gps = new GPSTracker(getActivity(),0);
-		gps = new GPSTracker(getActivity());
-		gps.getLocation(0);
-
-        if(!gps.canGetGPSLocation() && !gps.canGetNW_Location()){
-			gps.showSettingsAlert();
-		}
 		//----------------------
+	    //HANDLE EVENT - TYPE BUSCODE
+		buscode_search.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                String searchContent = buscode_search.getText().toString();
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {//&&
+                        //Util.isValidString(searchContent)) {
+
+                	Toast.makeText(getActivity()," - em construção!", Toast.LENGTH_SHORT).show();
+
+                    //Check Service Location
+            		gps = new GPSTracker(getActivity());
+            		gps.getLocation(0);
+
+                    if(!gps.canGetGPSLocation()){	
+            			gps.showSettingsAlert();
+            		} else {
+            			sca = new Score_Algorithm(getActivity());
+            			//sca.showBuscodeDialog();
+
+            		}
+
+
+                }
+                return false;
+            }
+
+        });		
 		
+		score_btn.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v2) {
+            	
+                //Check Service Location
+            	/*
+        		gps = new GPSTracker(getActivity());
+        		gps.getLocation(0);
+
+                if(!gps.canGetGPSLocation()){	
+        			gps.showSettingsAlert();
+        		} else {
+        			sca = new Score_Algorithm(getActivity());
+        			sca.showBuscodeDialog();
+
+        		}
+        		*/
+
+
+            }
+		});
+        
+        
 		gridView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v,
 					int position, long id) {
-                        //------------------------------------------------		                
-                        //------------------------------------------------		                
-                        //progressdialog = ProgressDialog.show(Main.this, "",
-                        //getString(R.string.please_wait), true, true);
-                        //------------------------------------------------		                
-                        //------------------------------------------------					
-
+             
 				switch(position){
 				 case 0:{
 					 
@@ -127,40 +180,19 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 					
 					break;				
 				 }				
-				 case 2:{
-
-						Toast.makeText(
-								getActivity(),
-								((TextView) v.findViewById(R.id.grid_item_label))
-										.getText() + " - em construção!", Toast.LENGTH_SHORT).show();
-
-					 
-				 	break; 
-				 }
-				 case 3:{
-					 
-						Toast.makeText(
-								getActivity(),
-								((TextView) v.findViewById(R.id.grid_item_label))
-										.getText() + " - em construção!", Toast.LENGTH_SHORT).show();
-						
-					break;					 
-				  }				 
 				}				
 			}
 		});
 		
         //---------------		
-        ((ViewGroup) custom).addView(rootView);
+		((ViewGroup) custom).addView(rootView);
+		
+		((ViewGroup) custom).addView(rootView1b);
 
 		((ViewGroup) custom).addView(rootView2);
+	
+		((ViewGroup) custom).addView(rootView1);
         //------        
-        /*
-        progressBar = new ProgressDialog(getActivity());
-		progressBar.setCancelable(true);
-		progressBar.setMessage("Please, wait ...");
-		progressBar.show();
-		*/
 		//--------------		
 		UserProfile_Query upq = new UserProfile_Query();
 		//--------------
@@ -190,16 +222,6 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 	        //-------------
 	        getActivity().unregisterReceiver(ProfileFragmentReceiver);
 	        //-------------
-	        /* 
-	        FragmentManager fragMgr = getFragmentManager();
-	        Fragment currentFragment = (Fragment) fragMgr.findFragmentById(0);
-
-	        if (currentFragment != null){	        	
-	        	FragmentTransaction fragTrans = fragMgr.beginTransaction();
-	            fragTrans.remove(currentFragment);
-	            fragTrans.commit();
-	        }
-	        */
 	    }
 
 	 public class UserProfile_Query {
@@ -210,13 +232,11 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 				    @Override
 				    public void run() {
 				        try {
-
 				            
 				            Uri uri = SqliteProvider.CONTENT_URI_USER_PROFILE;
 
 				            data_profile = getActivity().getContentResolver().query(uri, null, null, null, null);
 				            data_profile.moveToFirst();
-
 				    		        	
 					    } catch (Exception e) {
 					            e.printStackTrace();
@@ -248,7 +268,6 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 	                                @Override
 	                                public void run() {
 	                                	
-	            	                	//city.setText(json_city);
 	            	                	name.setText(data_profile.getString(KEY_NAME));
 	            	                	score.setText("Pontuação: 0 km");
 	    			                    	
@@ -301,7 +320,6 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 		if(data.moveToFirst()){
 			city.setText(data.getString(KEY_CITY) + " - " + data.getString(KEY_UF));
 		}
-
 	}
 
 	@Override

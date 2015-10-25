@@ -45,7 +45,7 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 
 	private static final Integer KEY_ID = 0;
 	//private static final Integer MAX_POINTS = 720;  // 720 points / 360 = 2 HOURS
-	private static final Integer MAX_POINTS = 420; 
+	private static final Integer MAX_POINTS = 1420; 
     // GPSTracker class
 	GPSTracker gps;
 
@@ -144,67 +144,30 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 	     } catch (Exception e) {
 	         throw new RuntimeException(e);
 	     }
-		
+		/*
 		// cancel Getting GpsBusData
     	cancelAlarm(ctx);
 
-    	/*
-        //get Latitude/Longitude
-        gps = new GPSTracker(ctx);
-        //----------------------------
-        // check isGPSEnabled
-        gps.getLocation(0);
-        if(!gps.canGetGPSLocation()) {
-        	
-        	gps.Notification_MSG();
-        }
-        //-----------------------------
-        gps.getLocation(2);
+    	GpsBusData_Upload gbd = new GpsBusData_Upload();
+    	gbd.setAlarm(ctx);
+	    */
 
-        
-		GeoPoint curGeoPoint = new GeoPoint(
-                (int) (gps.getLatitude()  * 1E6),
-                (int) (gps.getLongitude() * 1E6));
-
-	    float Lat    = (float) (curGeoPoint.getLatitudeE6() / 1E6);
-	    float Long   = (float) (curGeoPoint.getLongitudeE6() / 1E6);
-	    double Speed = (gps.getSpeed()*3600)/1000;		
-	    //--------------	    
-	    Log.w(TAG, "Getting Loc. Latitude: " + Lat);
-	    Log.w(TAG, "Getting Loc. Longitude: " + Long);
-	    //--------------
-	    Log.i(TAG, "getProvider(): " + gps.getProvider());
-	    Log.e(TAG, "getAccuracy(): " + gps.getAccuracy());
-		//------------------
-        Support support = new Support();
-
-		ContentValues contentValues = new ContentValues();
-
-		contentValues.put(DatabaseHelper.KEY_U_LATITUDE, Lat);
-		contentValues.put(DatabaseHelper.KEY_U_LONGITUDE, Long);
-		contentValues.put(DatabaseHelper.KEY_SPEED, Speed);
-		contentValues.put(DatabaseHelper.KEY_LOCATION_PROVIDER, gps.getProvider());
-		contentValues.put(DatabaseHelper.KEY_CREATED_AT, support.getDateTime());
-
-		ctx.getContentResolver().insert(SqliteProvider.CONTENT_URI_USER_LOCATION_insert, contentValues);
-	    
-		
-        Uri uri = SqliteProvider.CONTENT_URI_USER_LOCATION;
-    	Cursor data_userLocation = ctx.getContentResolver().query(uri, null, null, null, null);
-    	data_userLocation.moveToLast();
+        Uri uri = SqliteProvider.CONTENT_URI_BUS_GPS_DATA;
+    	Cursor data_busgps = ctx.getContentResolver().query(uri, null, null, null, null);
+    	data_busgps.moveToLast();
     	//--------------
-    	Log.i(TAG, "data_userLocation.getInt(KEY_ID): " + data_userLocation.getInt(KEY_ID));
+    	Log.i(TAG, "data_busgps.getInt(KEY_ID): " + data_busgps.getInt(KEY_ID));
     	//--------------
-    	if (data_userLocation.getInt(KEY_ID) > MAX_POINTS ) {	
+    	if (data_busgps.getInt(KEY_ID) > MAX_POINTS ) {	
 
-    		// cancel Getting Location
-        	cancelAlarm(ctx);	    
-        	
-        	UserLocation_Upload ulu = new UserLocation_Upload();
-        	ulu.setAlarm(ctx);
+    		// cancel Getting GpsBusData
+        	cancelAlarm(ctx);
+
+        	GpsBusData_Upload gbd = new GpsBusData_Upload();
+        	gbd.setAlarm(ctx);
     		
     	}
-    	*/
+ 
 
     }
 }

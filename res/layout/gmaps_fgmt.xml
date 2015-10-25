@@ -48,6 +48,14 @@
       	  
     	</fragment>
     	
+    	<AutoCompleteTextView
+        android:id="@+id/search"        
+        style="@style/search_buscode"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="@string/buscode" />
+    
+    	
     </RelativeLayout>
     	
 

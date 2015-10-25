@@ -35,7 +35,7 @@ public class Getting_UserLocation extends WakefulBroadcastReceiver{
 
 	private static final Integer KEY_ID = 0;
 	//private static final Integer MAX_POINTS = 720;  // 720 points / 360 = 2 HOURS
-	private static final Integer MAX_POINTS = 420; 
+	private static final Integer MAX_POINTS = 220; 
     // GPSTracker class
 	GPSTracker gps;
 

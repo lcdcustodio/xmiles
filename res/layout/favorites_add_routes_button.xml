@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:text="Nova Rota"
         style="@style/button_text" />
-    
+        <!-- android:text="Nova Rota" -->
     
 
 </LinearLayout>
