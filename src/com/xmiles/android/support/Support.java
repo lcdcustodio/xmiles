@@ -24,6 +24,31 @@ public class Support {
 		return dateFormat.format(date);
 	}
 	
+	
+	public String fixDateTime(String timeStamp) {
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat(
+				"yyyy-MM-dd HH:mm:ss");
+		
+		String day   		  = timeStamp.split("-")[1];
+		String month 		  = timeStamp.split("-")[0];
+		String year_and_hour  = timeStamp.split("-")[2];
+		//String hour  = timeStamp.split(" ")[1];
+		
+		String dateInString = year_and_hour.split(" ")[0] + "-" + month + "-" + day + " " + year_and_hour.split(" ")[1];
+		//Date date = new Date();
+		//return dateFormat.format(date);
+		java.util.Date date = null;
+		try {
+			date = dateFormat.parse(dateInString);			
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return dateFormat.format(date);
+	}
+	
 	public String getLocalTime(String timeStamp){
 		
 		String hour = timeStamp.split("T")[1].substring(0, 

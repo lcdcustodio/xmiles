@@ -9,20 +9,20 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.json.JSONArray;
+
 
 import android.os.AsyncTask;
 import android.util.Log;
 
 public class DataRioHttpGetAsyncTask  extends AsyncTask<String, Void, String> {
     
-	//protected static JSONArray jsonArray;
+
 	protected static String jsonArray;
 	
 	@Override
-    protected String doInBackground(String... urls) {
+    protected String doInBackground(String... buscodes) {
           
-        return GET(urls[0]);
+        return GET(buscodes[0]);
     }
 	// onPostExecute displays the results of the AsyncTask.	
     @Override
@@ -35,7 +35,7 @@ public class DataRioHttpGetAsyncTask  extends AsyncTask<String, Void, String> {
    }
 
     
-    public static String GET(String url){
+    public static String GET(String buscode){
 		InputStream inputStream = null;
 		String result = "";
 		try {
@@ -44,14 +44,14 @@ public class DataRioHttpGetAsyncTask  extends AsyncTask<String, Void, String> {
 			HttpClient httpclient = new DefaultHttpClient();
 			
 	        // Cria o GET e define a URL
-	        //HttpGet httpget=new HttpGet(ENDPOINT + linhaDeOnibus);
-			HttpGet httpget=new HttpGet(url);	
-	        // Define o tipo de dados para a correta execução do http GET
+			//String url = "http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/onibus/";
+			//HttpGet httpget=new HttpGet(url + buscode);
+			HttpGet httpget=new HttpGet(buscode);
+	        // Define http GET Header
 	        httpget.setHeader("Content-Type", "application/json");
 	        httpget.setHeader("Accept", "application/json");
 			
 			// make GET request to the given URL
-			//HttpResponse httpResponse = httpclient.execute(new HttpGet(url));
 	        HttpResponse httpResponse = httpclient.execute(httpget);
 			
 			// receive response as inputStream

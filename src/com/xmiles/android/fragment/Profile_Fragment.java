@@ -2,7 +2,13 @@ package com.xmiles.android.fragment;
 
 
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.xmiles.android.scheduler.Getting_GpsBusData;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
+import com.xmiles.android.sqlite.helper.DatabaseHelper;
 
 import com.xmiles.android.R;
 import com.xmiles.android.Welcome;
@@ -12,6 +18,7 @@ import com.xmiles.android.adapter.ImageAdapter;
 import com.xmiles.android.support.GPSTracker;
 import com.xmiles.android.support.LoadImageURL;
 import com.xmiles.android.support.Score_Algorithm;
+import com.xmiles.android.support.Support;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -21,6 +28,7 @@ import android.support.v4.content.Loader;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -112,7 +120,7 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {//&&
                         //Util.isValidString(searchContent)) {
 
-                	Toast.makeText(getActivity()," - em construção!", Toast.LENGTH_SHORT).show();
+                	
 
                     //Check Service Location
             		gps = new GPSTracker(getActivity());
@@ -122,8 +130,57 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
             			gps.showSettingsAlert();
             		} else {
             			sca = new Score_Algorithm(getActivity());
-            			//sca.showBuscodeDialog();
+            			
+            			//JSONObject json = sca.getBusPosition("C41383");
+            			Support support = new Support();
+            			String url = "http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/onibus/";
+            			JSONObject json = sca.getBusPosition(url, searchContent);
+            			try {
 
+							String json_header = json.getString("COLUMNS");
+	
+							if (!json_header.equals("[\"MENSAGEM\"]")){
+								
+								Toast.makeText(getActivity(), searchContent + " encontrado no sistema!", Toast.LENGTH_SHORT).show();
+
+								Log.i("FACEBOOK", "getBusPosition: " + json.getString("DATA"));
+								
+								String [] dataBusArray = json.getString("DATA").substring(2, json.getString("DATA").length()-2).split(",");
+								
+								Log.v("FACEBOOK", "dataBusArray[0]: " + dataBusArray[0].substring(1, dataBusArray[0].length()-1));
+								Log.v("FACEBOOK", "fixDateTime: " + support.fixDateTime(dataBusArray[0].substring(1, dataBusArray[0].length()-1)));
+								Log.v("FACEBOOK", "dataBusArray[1]: " + dataBusArray[1]);
+								Log.v("FACEBOOK", "dataBusArray[3]: " + dataBusArray[3]);
+								Log.v("FACEBOOK", "dataBusArray[4]: " + dataBusArray[4]);
+								
+								
+								/** Setting up values to insert into UserProfile table */
+								ContentValues contentValues = new ContentValues();
+								contentValues.put(DatabaseHelper.KEY_CREATED_AT, support.fixDateTime(dataBusArray[0].substring(1, dataBusArray[0].length()-1)));
+								contentValues.put(DatabaseHelper.KEY_BUSCODE, dataBusArray[1]);
+								contentValues.put(DatabaseHelper.KEY_B_LATITUDE, dataBusArray[3]);
+								contentValues.put(DatabaseHelper.KEY_B_LONGITUDE, dataBusArray[4]);
+
+								getActivity().getContentResolver().insert(SqliteProvider.CONTENT_URI_BUS_GPS_DATA_insert, contentValues);
+
+								
+								//GPS BUS DATA TEST 
+								//Getting_GpsBusData gbd = new Getting_GpsBusData();
+								//gbd.setAlarm(getActivity());
+
+							} else {
+								
+								String url_brt = "http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/brt/";
+								JSONObject json_brt = sca.getBrtPosition(url_brt, searchContent.substring(1, searchContent.length()));
+								Log.v("FACEBOOK", "getBrtPosition: " + json_brt.getString("COLUMNS"));
+
+
+							}
+							
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
             		}
 
 

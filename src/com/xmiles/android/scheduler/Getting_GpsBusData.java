@@ -41,7 +41,7 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
     
 	
 	// The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 1 * 60; // 10 seconds (360 points/hour)
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 1 * 60; // 60 seconds
 
 	private static final Integer KEY_ID = 0;
 	//private static final Integer MAX_POINTS = 720;  // 720 points / 360 = 2 HOURS
