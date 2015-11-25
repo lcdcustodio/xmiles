@@ -74,6 +74,17 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 	private static final Integer KEY_CITY = 2;
 	private static final Integer KEY_NAME = 1;
 	private static final Integer KEY_PICURL = 2;
+	
+	
+	private static final Integer index_STIME     = 0;
+	private static final Integer index_BUSCODE   = 1;
+	private static final Integer index_LATITUDE  = 3;
+	private static final Integer index_LONGITUDE = 4;
+	private static final Integer index_SPEED 	 = 5;
+	private static final Integer index_DIRECTION = 6;
+	private static final Integer index_BUSLINE	 = 2;
+
+	
 	Cursor data_profile;
 
     // GPSTracker class
@@ -120,8 +131,6 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {//&&
                         //Util.isValidString(searchContent)) {
 
-                	
-
                     //Check Service Location
             		gps = new GPSTracker(getActivity());
             		gps.getLocation(0);
@@ -147,32 +156,44 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 								
 								String [] dataBusArray = json.getString("DATA").substring(2, json.getString("DATA").length()-2).split(",");
 								
-								Log.v("FACEBOOK", "dataBusArray[0]: " + dataBusArray[0].substring(1, dataBusArray[0].length()-1));
-								Log.v("FACEBOOK", "fixDateTime: " + support.fixDateTime(dataBusArray[0].substring(1, dataBusArray[0].length()-1)));
-								Log.v("FACEBOOK", "dataBusArray[1]: " + dataBusArray[1]);
-								Log.v("FACEBOOK", "dataBusArray[3]: " + dataBusArray[3]);
-								Log.v("FACEBOOK", "dataBusArray[4]: " + dataBusArray[4]);
-								
-								
 								/** Setting up values to insert into UserProfile table */
+								/*
 								ContentValues contentValues = new ContentValues();
-								contentValues.put(DatabaseHelper.KEY_CREATED_AT, support.fixDateTime(dataBusArray[0].substring(1, dataBusArray[0].length()-1)));
-								contentValues.put(DatabaseHelper.KEY_BUSCODE, dataBusArray[1]);
-								contentValues.put(DatabaseHelper.KEY_B_LATITUDE, dataBusArray[3]);
-								contentValues.put(DatabaseHelper.KEY_B_LONGITUDE, dataBusArray[4]);
+								contentValues.put(DatabaseHelper.KEY_CREATED_AT, support.fixDateTime(dataBusArray[index_STIME].replace("\"","")));
+								contentValues.put(DatabaseHelper.KEY_BUSCODE, dataBusArray[index_BUSCODE].replace("\"",""));
+								contentValues.put(DatabaseHelper.KEY_B_LATITUDE, dataBusArray[index_LATITUDE]);
+								contentValues.put(DatabaseHelper.KEY_B_LONGITUDE, dataBusArray[index_LONGITUDE]);																
+								contentValues.put(DatabaseHelper.KEY_SPEED, dataBusArray[index_SPEED]);
+								contentValues.put(DatabaseHelper.KEY_DIRECTION, dataBusArray[index_DIRECTION]);
+								contentValues.put(DatabaseHelper.KEY_BUSLINE, dataBusArray[index_BUSLINE].replace("\"",""));								
 
 								getActivity().getContentResolver().insert(SqliteProvider.CONTENT_URI_BUS_GPS_DATA_insert, contentValues);
+								*/
+								//----------------------
+								//----------------------
+								ContentValues cV = new ContentValues();
+								cV.put(DatabaseHelper.KEY_BUSCODE, dataBusArray[index_BUSCODE].replace("\"",""));
+								cV.put(DatabaseHelper.KEY_URL, url);
+								
+								getActivity().getContentResolver().insert(SqliteProvider.CONTENT_URI_BUS_GPS_URL_insert, cV);
+								//----------------------
+								//----------------------
 
 								
 								//GPS BUS DATA TEST 
-								//Getting_GpsBusData gbd = new Getting_GpsBusData();
-								//gbd.setAlarm(getActivity());
+								Getting_GpsBusData gbd = new Getting_GpsBusData();
+								gbd.setAlarm(getActivity());
 
 							} else {
 								
 								String url_brt = "http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/brt/";
 								JSONObject json_brt = sca.getBrtPosition(url_brt, searchContent.substring(1, searchContent.length()));
 								Log.v("FACEBOOK", "getBrtPosition: " + json_brt.getString("COLUMNS"));
+								
+								if (json_header.equals("[\"MENSAGEM\"]")){
+									
+									Toast.makeText(getActivity(), searchContent + " não encontrado no sistema!", Toast.LENGTH_SHORT).show();
+								}
 
 
 							}
@@ -189,29 +210,6 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
             }
 
         });		
-		
-		score_btn.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v2) {
-            	
-                //Check Service Location
-            	/*
-        		gps = new GPSTracker(getActivity());
-        		gps.getLocation(0);
-
-                if(!gps.canGetGPSLocation()){	
-        			gps.showSettingsAlert();
-        		} else {
-        			sca = new Score_Algorithm(getActivity());
-        			sca.showBuscodeDialog();
-
-        		}
-        		*/
-
-
-            }
-		});
         
         
 		gridView.setOnItemClickListener(new OnItemClickListener() {

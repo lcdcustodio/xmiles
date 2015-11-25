@@ -24,6 +24,26 @@ public class Support {
 		return dateFormat.format(date);
 	}
 	
+	public String DiffTime(String time1, String time2){
+		
+		
+
+		SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+		Date date1 = null;
+		Date date2 = null;
+		try {
+			date1 = format.parse(time1);
+			date2 = format.parse(time2);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		//Difference is in milliseconds/1000 = seconds.
+		long difference = (date1.getTime() - date2.getTime())/1000; 
+		
+		return Long.toString(difference);
+	}
 	
 	public String fixDateTime(String timeStamp) {
 		

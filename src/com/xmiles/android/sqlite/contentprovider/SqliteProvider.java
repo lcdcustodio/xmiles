@@ -38,6 +38,8 @@ public class SqliteProvider extends ContentProvider{
 	public static final Uri CONTENT_URI_USER_LOCATION = Uri.parse("content://" + PROVIDER_NAME + "/UserLocation");
 	public static final Uri CONTENT_URI_BUS_GPS_DATA_insert = Uri.parse("content://" + PROVIDER_NAME + "/BusGpsData_insert");
 	public static final Uri CONTENT_URI_BUS_GPS_DATA = Uri.parse("content://" + PROVIDER_NAME + "/BusGpsData");
+	public static final Uri CONTENT_URI_BUS_GPS_URL_insert = Uri.parse("content://" + PROVIDER_NAME + "/BusGpsUrl_insert");
+	public static final Uri CONTENT_URI_BUS_GPS_URL = Uri.parse("content://" + PROVIDER_NAME + "/BusGpsUrl");
 
 
 
@@ -61,6 +63,8 @@ public class SqliteProvider extends ContentProvider{
 	private static final int USER_LOCATION = 17;
 	private static final int BUS_GPS_DATA_insert = 18;
 	private static final int BUS_GPS_DATA = 19;
+	private static final int BUS_GPS_URL_insert = 20;
+	private static final int BUS_GPS_URL = 21;
 
 
 	private static final UriMatcher uriMatcher ;
@@ -85,6 +89,8 @@ public class SqliteProvider extends ContentProvider{
 		uriMatcher.addURI(PROVIDER_NAME, "UserLocation", USER_LOCATION);
 		uriMatcher.addURI(PROVIDER_NAME, "BusGpsData_insert", BUS_GPS_DATA_insert);
 		uriMatcher.addURI(PROVIDER_NAME, "BusGpsData", BUS_GPS_DATA);
+		uriMatcher.addURI(PROVIDER_NAME, "BusGpsUrl_insert", BUS_GPS_URL_insert);
+		uriMatcher.addURI(PROVIDER_NAME, "BusGpsUrl", BUS_GPS_URL);
 
 	}
 
@@ -237,6 +243,19 @@ public class SqliteProvider extends ContentProvider{
 				}
 			break;
 
+		    case BUS_GPS_URL_insert:
+		    	long rowID_7 = mDatabaseHelper.insertBusGpsURl(values);
+				//Uri _uri=null;
+				if(rowID_7>0){
+					_uri = ContentUris.withAppendedId(CONTENT_URI_BUS_GPS_URL_insert, rowID_7);
+				}else {
+					try {
+						throw new SQLException("Failed to insert at TABLE_BUS_GPS_URL: " + uri);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			break;
 			
 		    case USER_LOCATION_create:
 		    	long rowID_5b = mDatabaseHelper.createUserLocation(values);
@@ -440,6 +459,9 @@ public class SqliteProvider extends ContentProvider{
 
 		}else if (uriMatcher.match(uri)==BUS_GPS_DATA){
 			return mDatabaseHelper.get_BusGpsData();
+
+		}else if (uriMatcher.match(uri)==BUS_GPS_URL){
+			return mDatabaseHelper.get_BusGpsUrl();
 			
 		}else{
 			return null;

@@ -89,10 +89,6 @@ public class Splash_Fragment extends Fragment {
 			//FbPlaces = new FbPlaces_Download();
 			//FbPlaces.setAlarm(getActivity());
 			
-			//GPS BUS DATA TEST 
-			//Getting_GpsBusData gbd = new Getting_GpsBusData();
-			//gbd.setAlarm(getActivity());
-			
 			//------------------
 			/* 
 			 *  TRY to cancel Getting_Location receiver 
@@ -133,10 +129,9 @@ public class Splash_Fragment extends Fragment {
 				 */
                 if(Integer.parseInt(json_login.getString("success")) == 1){
 
-                	//Log.i(TAG, "xMiles_Login: " + json_login);
     				JSONObject json_favoritesRoutes = xMiles_favoritesRoutes(facebook_profile.getString("name"),
     																		 facebook_profile.getString("id"));
-    				//Log.i(TAG, "xMiles_favoritesRoutes: " + json_favoritesRoutes);
+
 
 			        try {
 
@@ -148,8 +143,8 @@ public class Splash_Fragment extends Fragment {
 						    	JSONArray jsonArray = new JSONArray(json_favoritesRoutes.getString("user"));
 						    	//Log.w(TAG, "json_favoritesRoutes.lenght()" + jsonArray.length());
 
-						    	xMiles_userRoutes(facebook_profile.getString("id"),
-						    					  jsonArray.length());
+						    	//xMiles_userRoutes(facebook_profile.getString("id"),
+						    	//				  jsonArray.length());
 						    }
 
 			        	}

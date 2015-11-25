@@ -29,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String TABLE_USER_LOCATION = "user_location";
 	//-----------------
 	public static final String TABLE_BUS_GPS_DATA = "bus_gps_data";
-
+	public static final String TABLE_BUS_GPS_URL = "bus_gps_url";
 
 	// Common column names
 	public static final String KEY_ROW_ID = "_id";
@@ -86,7 +86,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	// USER LOCATION Table - column names
 	public static final String KEY_LOCATION_PROVIDER = "location_provider";
 	public static final String KEY_SPEED			 = "speed";
-	
+	//-------------------------------------
+	//-----------new columns---------------
+	public static final String KEY_DIFF_DISTANCE     = "diff_distance";
+	public static final String KEY_DIFF_TIME         = "diff_time";
+	public static final String KEY_LOCATION_STATUS   = "location_status";
+	public static final String KEY_ACCURACY          = "accuracy";
+	//-------------------------------------
+	//-------------------------------------
 	// GPS BUS DATA Table - column names	
 	public static final String KEY_BUSCODE   = "buscode";
 	public static final String KEY_SENSE = "sense";
@@ -166,6 +173,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			KEY_U_LONGITUDE + " DOUBLE," +
 			KEY_SPEED + " DOUBLE," +
 			KEY_LOCATION_PROVIDER + " TEXT," +
+			//-------------------------------
+			//------- new columns------------
+			//-------------------------------			
+			KEY_DIFF_DISTANCE + " DOUBLE," +
+			KEY_DIFF_TIME + " DOUBLE," +
+			KEY_LOCATION_STATUS + " TEXT," +
+			KEY_ACCURACY + " DOUBLE," +
+			//-------------------------------			
+			//------- end new columns--------
+			//-------------------------------			
 			KEY_CREATED_AT	+ " DATETIME" + ")";
 
 	private static final String CREATE_TABLE_BUS_GPS_DATA = "CREATE TABLE "
@@ -177,9 +194,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			KEY_B_LONGITUDE + " DOUBLE," +
 			KEY_SPEED + " DOUBLE," +
 			KEY_DIRECTION + " TEXT," +
-			KEY_SENSE + " TEXT," +
+			KEY_SENSE + " TEXT" + ")";
+	
+	private static final String CREATE_TABLE_BUS_GPS_URL = "CREATE TABLE "
+			+ TABLE_BUS_GPS_URL + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
+			KEY_BUSCODE + " TEXT," +
 			KEY_URL + " TEXT" + ")";
-
+	
 	
     /** An instance variable for SQLiteDatabase */
     private SQLiteDatabase mDB;
@@ -216,7 +237,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(CREATE_TABLE_USER_LOCATION);
 		//---------------------
 		db.execSQL(CREATE_TABLE_BUS_GPS_DATA);		
-
+		db.execSQL(CREATE_TABLE_BUS_GPS_URL);
 	}
 
 	@Override
@@ -237,7 +258,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_LOCATION);
 		//--------------------
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_BUS_GPS_DATA);
-		
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_BUS_GPS_URL);
 		// create new tables
 		onCreate(db);
 	}
@@ -342,6 +363,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return rowID;
 
 	}
+
+	public long insertBusGpsURl(ContentValues contentValues) {
+
+		//-----------
+		long rowID = mDB.insert(TABLE_BUS_GPS_URL, null, contentValues);
+		return rowID;
+
+	}
 	
 	public void resetUserFriends() {
 		//-----------
@@ -405,6 +434,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		//-----------
 	}
 	
+	public void resetBusGpsUrl() {
+		//-----------
+		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_BUS_GPS_URL);
+		mDB.execSQL(CREATE_TABLE_BUS_GPS_URL);
+		//-----------
+	}
+
+	
 	/** Returns all the contacts in the table */
 	public Cursor get_UserPlaces(){
 		//return mDB.query(TABLE_USER_PLACES, new String[] {KEY_ROW_ID, KEY_NEARBY,KEY_CITY,KEY_UF}, null, null, null, null, KEY_CREATED_AT + " desc ");
@@ -444,15 +481,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	public Cursor get_UserLocation(){
 
-		return mDB.query(TABLE_USER_LOCATION, new String[] {KEY_ROW_ID, KEY_U_LATITUDE, KEY_U_LONGITUDE, KEY_SPEED, KEY_LOCATION_PROVIDER, KEY_CREATED_AT}, null, null, null, null, null);
+		//return mDB.query(TABLE_USER_LOCATION, new String[] {KEY_ROW_ID, KEY_U_LATITUDE, KEY_U_LONGITUDE, KEY_SPEED, KEY_LOCATION_PROVIDER, KEY_CREATED_AT}, null, null, null, null, null);
+		return mDB.query(TABLE_USER_LOCATION, new String[] {KEY_ROW_ID, KEY_U_LATITUDE, KEY_U_LONGITUDE, KEY_SPEED, KEY_LOCATION_PROVIDER, KEY_CREATED_AT,KEY_DIFF_DISTANCE,KEY_DIFF_TIME,KEY_LOCATION_STATUS,KEY_ACCURACY}, null, null, null, null, null);
+																																          
+
 	}
 
 	public Cursor get_BusGpsData(){
 
-		//return mDB.query(TABLE_BUS_GPS_DATA, new String[] {KEY_ROW_ID, KEY_CREATED_AT, KEY_BUSCODE, KEY_BUSLINE, KEY_B_LATITUDE, KEY_B_LONGITUDE, KEY_SPEED, KEY_DIRECTION}, null, null, null, null, null);
-		return mDB.query(TABLE_BUS_GPS_DATA, new String[] {KEY_ROW_ID, KEY_CREATED_AT, KEY_BUSCODE, KEY_BUSLINE, KEY_B_LATITUDE, KEY_B_LONGITUDE, KEY_SPEED, KEY_DIRECTION, KEY_URL}, null, null, null, null, null);
+		return mDB.query(TABLE_BUS_GPS_DATA, new String[] {KEY_ROW_ID, KEY_CREATED_AT, KEY_BUSCODE, KEY_BUSLINE, KEY_B_LATITUDE, KEY_B_LONGITUDE, KEY_SPEED, KEY_DIRECTION}, null, null, null, null, null);
+		//return mDB.query(TABLE_BUS_GPS_DATA, new String[] {KEY_ROW_ID, KEY_CREATED_AT, KEY_BUSCODE, KEY_BUSLINE, KEY_B_LATITUDE, KEY_B_LONGITUDE, KEY_SPEED, KEY_DIRECTION, KEY_URL}, null, null, null, null, null);
 	}
 
+	public Cursor get_BusGpsUrl(){
+
+		return mDB.query(TABLE_BUS_GPS_URL, new String[] {KEY_ROW_ID, KEY_BUSCODE, KEY_URL}, null, null, null, null, null);
+	}
 	
 	/** Returns all the contacts in the table */
 	public Cursor get_FriendList(){

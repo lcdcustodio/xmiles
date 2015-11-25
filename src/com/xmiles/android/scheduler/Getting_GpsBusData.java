@@ -1,6 +1,7 @@
 package com.xmiles.android.scheduler;
 
 import java.sql.Date;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -13,7 +14,9 @@ import com.google.android.maps.GeoPoint;
 import com.xmiles.android.R;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
+import com.xmiles.android.support.Distance_calc;
 import com.xmiles.android.support.GPSTracker;
+import com.xmiles.android.support.Score_Algorithm;
 import com.xmiles.android.support.Support;
 import com.xmiles.android.webservice.DataRioHttpGetAsyncTask;
 import com.xmiles.android.webservice.HttpGetAsyncTask;
@@ -31,6 +34,7 @@ import android.net.Uri;
 import android.provider.Settings;
 import android.support.v4.content.WakefulBroadcastReceiver;
 import android.util.Log;
+import android.widget.Toast;
 
 public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 
@@ -44,8 +48,24 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
     private static final long MIN_TIME_BW_UPDATES = 1000 * 1 * 60; // 60 seconds
 
 	private static final Integer KEY_ID = 0;
+	private static final Integer KEY_URL = 2;
+	//private static final Integer KEY_BUSCODE = 2;
+	private static final Integer KEY_BUSCODE_URL = 1;
+	
+	
+	private static final Integer index_STIME     = 0;
+	private static final Integer index_BUSCODE   = 1;
+	private static final Integer index_LATITUDE  = 3;
+	private static final Integer index_LONGITUDE = 4;
+	private static final Integer index_SPEED 	 = 5;
+	private static final Integer index_DIRECTION = 6;
+	private static final Integer index_BUSLINE	 = 2;
+
+
+	
 	//private static final Integer MAX_POINTS = 720;  // 720 points / 360 = 2 HOURS
-	private static final Integer MAX_POINTS = 1420; 
+	//private static final Integer MAX_POINTS = 1420;
+	private static final Integer MAX_POINTS = 10;
     // GPSTracker class
 	GPSTracker gps;
 
@@ -57,16 +77,15 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 	 		 			
 		try {
 			//DO something
-			Uri uri = SqliteProvider.CONTENT_URI_USER_ROUTES_FLAG;
-			Cursor data_temp_flag = ctx.getContentResolver().query(uri, null, null, null, null);
-			//------------
-			Log.w(TAG, "CONTENT_URI_USER_ROUTES_FLAG (count): " + data_temp_flag.getCount());		
-			//------------		
-			if (data_temp_flag.getCount() > 0) {
-				
-				GBD_Handler(ctx);
-				
-			}
+
+			Uri uri = SqliteProvider.CONTENT_URI_BUS_GPS_URL;
+			Cursor bus_gps_url = ctx.getContentResolver().query(uri, null, null, null, null);
+			bus_gps_url.moveToFirst();
+			Log.i(TAG, "bus_gps_data.getInt(KEY_URL): " + bus_gps_url.getString(KEY_URL));
+			Log.v(TAG, "bus_gps_data.getInt(KEY_BUSCODE_URL): " + bus_gps_url.getString(KEY_BUSCODE_URL));
+			
+			GBD_Handler(ctx, bus_gps_url.getString(KEY_URL), bus_gps_url.getString(KEY_BUSCODE_URL));
+			
 
 		}catch(Exception e){
 			// here you can catch all the exceptions
@@ -105,60 +124,108 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 		alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
 		alarmMgr.cancel(alarmIntent);
 	}
-
-    public void GBD_Handler(final Context ctx){
+	
+    public void GBD_Handler(final Context ctx, String url, String buscode){
     	
+    	String [] dataBusArray;
 
 		try {
 			
-			JSONArray jsonArray = new JSONArray(new HttpGetAsyncTask().execute("http://rest.riob.us/v3/search/382").get());
-			//JSONArray jA 	    = new JSONArray(new DataRioHttpGetAsyncTask().execute("http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/onibus/382").get());
+			Support support = new Support();
+			Score_Algorithm sca = new Score_Algorithm(ctx);
+			JSONObject json = sca.getBusPosition(url, buscode);
 			
-			ContentValues[] valueList;
-			valueList = new ContentValues[jsonArray.length()];
+			dataBusArray = json.getString("DATA").substring(2, json.getString("DATA").length()-2).split(",");
 			
-			for (int position = 0; position < jsonArray.length(); position++) {
-				
-				JSONObject json = 	new JSONObject(jsonArray.getString(position));
-				
-				Support support = new Support();
-				
-				/** Setting up values to insert into UserProfile table */
-				ContentValues values = new ContentValues();
+			/** Setting up values to insert into UserProfile table */
+			ContentValues contentValues = new ContentValues();
+			contentValues.put(DatabaseHelper.KEY_CREATED_AT, support.fixDateTime(dataBusArray[index_STIME].replace("\"","")));
+			contentValues.put(DatabaseHelper.KEY_BUSCODE, dataBusArray[index_BUSCODE].replace("\"",""));
+			contentValues.put(DatabaseHelper.KEY_B_LATITUDE, dataBusArray[index_LATITUDE]);
+			contentValues.put(DatabaseHelper.KEY_B_LONGITUDE, dataBusArray[index_LONGITUDE]);
+			//contentValues.put(DatabaseHelper.KEY_URL, url);
+			//-------------------
+			contentValues.put(DatabaseHelper.KEY_SPEED, dataBusArray[index_SPEED]);
+			contentValues.put(DatabaseHelper.KEY_DIRECTION, dataBusArray[index_DIRECTION]);
+			contentValues.put(DatabaseHelper.KEY_BUSLINE, dataBusArray[index_BUSLINE].replace("\"",""));
 
-				values.put(DatabaseHelper.KEY_CREATED_AT, support.getLocalTime(json.getString("timeStamp")));
-				values.put(DatabaseHelper.KEY_BUSCODE, json.getString("order"));
-				values.put(DatabaseHelper.KEY_SPEED, json.getString("speed"));
-				values.put(DatabaseHelper.KEY_BUSLINE, json.getString("line"));
-				values.put(DatabaseHelper.KEY_SENSE, json.getString("sense"));
-				values.put(DatabaseHelper.KEY_DIRECTION, json.getString("direction"));
-				values.put(DatabaseHelper.KEY_B_LATITUDE, json.getString("latitude"));
-				values.put(DatabaseHelper.KEY_B_LONGITUDE, json.getString("longitude"));
-				
-				valueList[position] = values;
-							
-			}
-			
-			ctx.getContentResolver().bulkInsert(SqliteProvider.CONTENT_URI_BUS_GPS_DATA_insert, valueList);
-			
+			ctx.getContentResolver().insert(SqliteProvider.CONTENT_URI_BUS_GPS_DATA_insert, contentValues);
+
 	     } catch (Exception e) {
 	         throw new RuntimeException(e);
 	     }
-		/*
-		// cancel Getting GpsBusData
-    	cancelAlarm(ctx);
+	    //----------------------------------------
+		//***** Getting UserLocation *************
+	    //----------------------------------------		
+        //get Latitude/Longitude
+        gps = new GPSTracker(ctx);
+        //----------------------------
+        // check isGPSEnabled
+        gps.getLocation(0);
+        if(!gps.canGetGPSLocation()) {
+        	
+        	gps.Notification_MSG();
+        }
+        //-----------------------------
+        gps.getLocation(2);
 
-    	GpsBusData_Upload gbd = new GpsBusData_Upload();
-    	gbd.setAlarm(ctx);
-	    */
+        
+		GeoPoint curGeoPoint = new GeoPoint(
+                (int) (gps.getLatitude()  * 1E6),
+                (int) (gps.getLongitude() * 1E6));
 
-        Uri uri = SqliteProvider.CONTENT_URI_BUS_GPS_DATA;
-    	Cursor data_busgps = ctx.getContentResolver().query(uri, null, null, null, null);
-    	data_busgps.moveToLast();
-    	//--------------
-    	Log.i(TAG, "data_busgps.getInt(KEY_ID): " + data_busgps.getInt(KEY_ID));
-    	//--------------
-    	if (data_busgps.getInt(KEY_ID) > MAX_POINTS ) {	
+	    float Lat    = (float) (curGeoPoint.getLatitudeE6() / 1E6);
+	    float Long   = (float) (curGeoPoint.getLongitudeE6() / 1E6);
+	    double Speed = (gps.getSpeed()*3600)/1000;		
+	    //--------------	    
+	    Log.w(TAG, "Getting Loc. Latitude: " + Lat);
+	    Log.w(TAG, "Getting Loc. Longitude: " + Long);
+	    //--------------
+	    Log.i(TAG, "getProvider(): " + gps.getProvider());
+	    Log.e(TAG, "getAccuracy(): " + gps.getAccuracy());
+		//------------------
+        Support support = new Support();
+
+		/** Setting up values to insert into UserProfile table */
+		ContentValues contentValues = new ContentValues();
+
+		contentValues.put(DatabaseHelper.KEY_U_LATITUDE, Lat);
+		contentValues.put(DatabaseHelper.KEY_U_LONGITUDE, Long);
+		contentValues.put(DatabaseHelper.KEY_SPEED, Speed);
+		contentValues.put(DatabaseHelper.KEY_LOCATION_PROVIDER, gps.getProvider());
+		contentValues.put(DatabaseHelper.KEY_CREATED_AT, support.getDateTime());
+
+		//ctx.getContentResolver().insert(SqliteProvider.CONTENT_URI_USER_LOCATION_insert, contentValues);
+		//-----------------------------------------
+		//--Evaluting Measurements (User vs. BUS)--
+		//-----------------------------------------
+		
+  	    Distance_calc dist_calc = new Distance_calc();
+  	    //String get_distance = String.format("%.2f",dist_calc.calculo(Double.parseDouble(dataBusArray[index_LATITUDE]), Lat, Double.parseDouble(dataBusArray[index_LONGITUDE]), Long));
+  	    Double get_distance = dist_calc.calculo(Double.parseDouble(dataBusArray[index_LATITUDE]), Lat, Double.parseDouble(dataBusArray[index_LONGITUDE]), Long);
+  	    DecimalFormat df = new DecimalFormat("##.##");
+  	    
+  	    String get_diff_time = support.DiffTime(support.getDateTime().split(" ")[1], 
+  	    		support.fixDateTime(dataBusArray[index_STIME].replace("\"","")).split(" ")[1]);
+  	    
+  	    Toast.makeText(ctx, "Bus and User distance (km):  " +  df.format(get_distance) 
+  	    		+ " DiffTime (sec): " + get_diff_time, Toast.LENGTH_SHORT).show();
+  	    
+  	    
+  	    //contentValues.put(DatabaseHelper.KEY_DIFF_DISTANCE, Double.parseDouble(df.format(get_distance)));
+  	    contentValues.put(DatabaseHelper.KEY_DIFF_DISTANCE, get_distance);
+  	    contentValues.put(DatabaseHelper.KEY_DIFF_TIME, Double.parseDouble(get_diff_time));
+		contentValues.put(DatabaseHelper.KEY_ACCURACY, gps.getAccuracy());
+  	    
+		
+		ctx.getContentResolver().insert(SqliteProvider.CONTENT_URI_USER_LOCATION_insert, contentValues);
+  	    //-----------------------------------------
+  	    //-----------------------------------------
+		Uri uri = SqliteProvider.CONTENT_URI_BUS_GPS_DATA;
+		Cursor bus_gps_data = ctx.getContentResolver().query(uri, null, null, null, null);
+		bus_gps_data.moveToLast();
+  	  
+    	//if (bus_gps_data.getInt(KEY_ID) > MAX_POINTS ) {	
 
     		// cancel Getting GpsBusData
         	cancelAlarm(ctx);
@@ -166,8 +233,9 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
         	GpsBusData_Upload gbd = new GpsBusData_Upload();
         	gbd.setAlarm(ctx);
     		
-    	}
- 
+    	//}
+    	
 
     }
+    
 }

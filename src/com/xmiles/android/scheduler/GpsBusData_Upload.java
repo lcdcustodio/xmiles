@@ -44,7 +44,18 @@ public class GpsBusData_Upload extends WakefulBroadcastReceiver {
 		private static final Integer KEY_B_LONGITUDE = 5;
 		private static final Integer KEY_SPEED 		 = 6;
 		private static final Integer KEY_DIRECTION 	 = 7;
-		
+		//-----------------------------
+		private static final Integer KEY_U_ROW_ID 			 = 0;
+		private static final Integer KEY_U_LATITUDE 		 = 1;
+		private static final Integer KEY_U_LONGITUDE 		 = 2;
+		private static final Integer KEY_U_SPEED 			 = 3;
+		private static final Integer KEY_U_LOCATION_PROVIDER = 4;
+		private static final Integer KEY_U_CREATED_AT 		 = 5;
+		private static final Integer KEY_U_DIFF_DISTANCE 	 = 6;
+		private static final Integer KEY_U_DIFF_TIME 		 = 7;
+		private static final Integer KEY_U_LOCATION_STATUS   = 8;
+		private static final Integer KEY_U_ACCURACY 		 = 9;
+		//-----------------------------		
 		
 		
 	   public void onReceive(Context context, Intent intent) {   
@@ -95,10 +106,12 @@ public class GpsBusData_Upload extends WakefulBroadcastReceiver {
 			            Uri uri_1 = SqliteProvider.CONTENT_URI_USER_PROFILE;
 			            Cursor data_profile = c.getContentResolver().query(uri_1, null, null, null, null);
 			            data_profile.moveToFirst();
-			        	//-------------
-			        	
+			        	//-------------			        	
 			            Uri uri_2 = SqliteProvider.CONTENT_URI_BUS_GPS_DATA;
 			        	Cursor data_GpsBusData = c.getContentResolver().query(uri_2, null, null, null, null);
+			        	//-------------			        	
+			            Uri uri_3 = SqliteProvider.CONTENT_URI_USER_LOCATION;
+			        	Cursor data_UserLocation = c.getContentResolver().query(uri_3, null, null, null, null);			        	
 			        	//------------			        	
 			        	UserFunctions userFunc = new UserFunctions();
 			        	//------------------
@@ -112,34 +125,81 @@ public class GpsBusData_Upload extends WakefulBroadcastReceiver {
 			            StringBuilder direction		    	= new StringBuilder();
 			            StringBuilder created_at			= new StringBuilder();
 			    		//---------------------			        	
-			        	
+			            StringBuilder u_locat_id			= new StringBuilder();
+			            StringBuilder u_latitude			= new StringBuilder();
+			            StringBuilder u_longitude			= new StringBuilder();
+			            StringBuilder u_speed				= new StringBuilder();			            
+			            StringBuilder u_locat_provider		= new StringBuilder();
+			            StringBuilder u_created_at			= new StringBuilder();
+			            StringBuilder u_diff_dist			= new StringBuilder();
+			            StringBuilder u_diff_time			= new StringBuilder();
+			            StringBuilder u_locat_status		= new StringBuilder();
+			            StringBuilder u_accuracy			= new StringBuilder();
+			    		//---------------------
+			            
 			    		while (data_GpsBusData.moveToNext()) {
 
 			    			
 			    			Log.d(TAG, "data_GpsBusData.getString(KEY_B_LATITUDE): "+ data_GpsBusData.getString(KEY_B_LATITUDE));
 				        	//Your code goes here
-			    			gps_bus_id.append(data_GpsBusData.getString(KEY_ID));
-			    			user_id.append(data_profile.getString(KEY_ID));
-			    			latitude.append(data_GpsBusData.getString(KEY_B_LATITUDE));
-			    			longitude.append(data_GpsBusData.getString(KEY_B_LONGITUDE));
-			    			speed.append(data_GpsBusData.getString(KEY_SPEED));
-			    			buscode.append(data_GpsBusData.getString(KEY_BUSCODE));
-			    			busline.append(data_GpsBusData.getString(KEY_BUSLINE));
-			    			direction.append(data_GpsBusData.getString(KEY_DIRECTION));
-			    			created_at.append(data_GpsBusData.getString(KEY_CREATED_AT));
 			    			
-			    			if (!data_GpsBusData.isLast()){
-			    				gps_bus_id.append(";");
-				    			user_id.append(";");
-				    			latitude.append(";");
-				    			longitude.append(";");
-				    			speed.append(";");
-				    			buscode.append(";");
-				    			busline.append(";");
-				    			direction.append(";");
-				    			created_at.append(";");			    				
-			    			}
+			    			
+				    		gps_bus_id.append(data_GpsBusData.getString(KEY_ID));
+				    		user_id.append(data_profile.getString(KEY_ID));
+				    		latitude.append(data_GpsBusData.getString(KEY_B_LATITUDE));
+				    		longitude.append(data_GpsBusData.getString(KEY_B_LONGITUDE));
+				    		speed.append(data_GpsBusData.getString(KEY_SPEED));
+				    		buscode.append(data_GpsBusData.getString(KEY_BUSCODE));
+				    		busline.append(data_GpsBusData.getString(KEY_BUSLINE));
+				    		direction.append(data_GpsBusData.getString(KEY_DIRECTION));
+				    		created_at.append(data_GpsBusData.getString(KEY_CREATED_AT));
+				    			
+				    			
+				    		if (!data_GpsBusData.isLast()){
+				    			gps_bus_id.append(";");
+					    		user_id.append(";");
+					    		latitude.append(";");
+					    		longitude.append(";");
+					    		speed.append(";");
+					    		buscode.append(";");
+					    		busline.append(";");
+					    		direction.append(";");
+					    		created_at.append(";");			  
+				    		}
+			    			
 
+			    		}
+			    		
+			    		
+			    		while (data_UserLocation.moveToNext()) {
+			    			
+			    			//------------------------------------
+			    			u_locat_id.append(data_UserLocation.getString(KEY_U_ROW_ID)); 
+			    			u_latitude.append(data_UserLocation.getString(KEY_U_LATITUDE));
+			    			u_longitude.append(data_UserLocation.getString(KEY_U_LONGITUDE));
+			    			u_speed.append(data_UserLocation.getString(KEY_U_SPEED));
+			    			u_locat_provider.append(data_UserLocation.getString(KEY_U_LOCATION_PROVIDER));
+			    			u_created_at.append(data_UserLocation.getString(KEY_U_CREATED_AT));
+			    			u_diff_dist.append(data_UserLocation.getString(KEY_U_DIFF_DISTANCE));
+			    			u_diff_time.append(data_UserLocation.getString(KEY_U_DIFF_TIME));
+			    			u_locat_status.append(data_UserLocation.getString(KEY_U_LOCATION_STATUS));
+			    			u_accuracy.append(data_UserLocation.getString(KEY_U_ACCURACY));
+			    			//-------------------------------------
+			    			if (!data_UserLocation.isLast()){
+
+				    			u_locat_id.append(";");
+				    			u_latitude.append(";");
+				    			u_longitude.append(";");
+				    			u_speed.append(";");
+				    			u_locat_provider.append(";");
+				    			u_created_at.append(";");
+				    			u_diff_dist.append(";");
+				    			u_diff_time.append(";");
+				    			u_locat_status.append(";");
+				    			u_accuracy.append(";");
+			    			}
+			    			
+			    			
 			    		}
 			        	
 			        	//Your code goes here	        			
@@ -151,7 +211,19 @@ public class GpsBusData_Upload extends WakefulBroadcastReceiver {
 			        								 buscode,
 			        								 busline,
 			        								 direction,
-			        								 created_at
+			        								 created_at,
+			        								 //----------
+			        								 u_locat_id,
+			        								 u_latitude,
+			        								 u_longitude,
+			        								 u_speed,
+			        								 u_locat_provider,
+			        								 u_created_at,
+			        								 u_diff_dist,
+			        								 u_diff_time,
+			        								 u_locat_status,
+			        								 u_accuracy
+			        								 //----------
 			        								 );
 			        	
 			    		        	
