@@ -45,7 +45,7 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
     
 	
 	// The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 1 * 60; // 60 seconds
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 1 * 30; // 60 seconds
 
 	private static final Integer KEY_ID = 0;
 	private static final Integer KEY_URL = 2;
@@ -66,6 +66,7 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 	//private static final Integer MAX_POINTS = 720;  // 720 points / 360 = 2 HOURS
 	//private static final Integer MAX_POINTS = 1420;
 	private static final Integer MAX_POINTS = 10;
+	//private static final Integer MAX_POINTS = 3;
     // GPSTracker class
 	GPSTracker gps;
 
@@ -208,8 +209,8 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
   	    String get_diff_time = support.DiffTime(support.getDateTime().split(" ")[1], 
   	    		support.fixDateTime(dataBusArray[index_STIME].replace("\"","")).split(" ")[1]);
   	    
-  	    Toast.makeText(ctx, "Bus and User distance (km):  " +  df.format(get_distance) 
-  	    		+ " DiffTime (sec): " + get_diff_time, Toast.LENGTH_SHORT).show();
+  	    //Toast.makeText(ctx, "Bus and User distance (km):  " +  df.format(get_distance) 
+  	    //		+ " DiffTime (sec): " + get_diff_time, Toast.LENGTH_SHORT).show();
   	    
   	    
   	    //contentValues.put(DatabaseHelper.KEY_DIFF_DISTANCE, Double.parseDouble(df.format(get_distance)));
@@ -224,8 +225,12 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 		Uri uri = SqliteProvider.CONTENT_URI_BUS_GPS_DATA;
 		Cursor bus_gps_data = ctx.getContentResolver().query(uri, null, null, null, null);
 		bus_gps_data.moveToLast();
-  	  
-    	//if (bus_gps_data.getInt(KEY_ID) > MAX_POINTS ) {	
+		
+		//-----------------------------
+    	Intent intent=new Intent("profilefragmentupdater");
+    	ctx.sendBroadcast(intent);
+		//-----------------------------  	  
+    	if (bus_gps_data.getInt(KEY_ID) > MAX_POINTS ) {	
 
     		// cancel Getting GpsBusData
         	cancelAlarm(ctx);
@@ -233,7 +238,7 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
         	GpsBusData_Upload gbd = new GpsBusData_Upload();
         	gbd.setAlarm(ctx);
     		
-    	//}
+    	}
     	
 
     }

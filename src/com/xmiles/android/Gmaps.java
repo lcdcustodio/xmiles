@@ -151,8 +151,6 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 		    			contentValues.put(DatabaseHelper.KEY_NAME, data.getString(KEY_NAME));
 		        	}
 		        	//---------------
-		        	//Log.e(TAG, "_from_bus_stop_id: " + _from_bus_stop_id);
-	    			//Log.d(TAG, "_to_bus_stop_id: " + _to_bus_stop_id);
 	    			//---------------
 	    			contentValues.put(DatabaseHelper.KEY_BUSLINE, busline);
 	    			contentValues.put(DatabaseHelper.KEY_CITY, city.split(" - ")[0]);

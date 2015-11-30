@@ -6,11 +6,23 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.xmiles.android.scheduler.Getting_GpsBusData;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
 
+import com.xmiles.android.NewRoutes;
 import com.xmiles.android.R;
+import com.xmiles.android.Users;
 import com.xmiles.android.Welcome;
 import com.xmiles.android.R.id;
 import com.xmiles.android.R.layout;
@@ -18,12 +30,14 @@ import com.xmiles.android.adapter.ImageAdapter;
 import com.xmiles.android.support.GPSTracker;
 import com.xmiles.android.support.LoadImageURL;
 import com.xmiles.android.support.Score_Algorithm;
-import com.xmiles.android.support.Support;
+import com.xmiles.android.webservice.UserFunctions;
 
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.text.InputType;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -33,33 +47,32 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.database.Cursor;
-import android.graphics.drawable.Drawable;
+
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
-public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>  {
-
-	TextView name;
-	TextView city;
-	TextView score;
-	ImageView mUserPic;
-	GridView gridView;
-	Button   score_btn;
+//public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>  {
+public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, OnInfoWindowClickListener  {
+	
+	ProgressDialog progressBar;
+		
 	AutoCompleteTextView buscode_search;
 	//TAG
 	private static final String TAG = "FACEBOOK";
@@ -67,23 +80,28 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 	String json_id;
 	String json_city;	
 	String picURL;
-	//ProgressDialog progressBar;  
-	private Handler mHandler;
 	//---
 	private static final Integer KEY_UF   = 3;
 	private static final Integer KEY_CITY = 2;
 	private static final Integer KEY_NAME = 1;
 	private static final Integer KEY_PICURL = 2;
 	
+	private static final Integer KEY_BUSCODE 	 = 2;
+	private static final Integer KEY_B_LATITUDE  = 4;
+	private static final Integer KEY_B_LONGITUDE = 5;
+	private static final Integer KEY_U_DIFF_TIME = 7;
+	private static final Integer KEY_U_DIFF_DISTANCE = 6;
+	private static final Integer KEY_U_LOCATION_PROVIDER = 4;
 	
-	private static final Integer index_STIME     = 0;
 	private static final Integer index_BUSCODE   = 1;
-	private static final Integer index_LATITUDE  = 3;
-	private static final Integer index_LONGITUDE = 4;
-	private static final Integer index_SPEED 	 = 5;
-	private static final Integer index_DIRECTION = 6;
-	private static final Integer index_BUSLINE	 = 2;
-
+	private static final Integer index_BUSLINE   = 2;
+	private static GoogleMap mMap;
+	// --- 
+	TextView tv_busline;
+	TextView tv_buscode;
+	TextView tv_p_connected;
+	TextView tv_info;
+	RelativeLayout frame_bus;
 	
 	Cursor data_profile;
 
@@ -92,34 +110,52 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
     // Score Algorithm class
 	Score_Algorithm sca;
 	
-	static final String[] MOBILE_OS = new String[] { "Mapa", "Histórico" };
 
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
- 
-		mHandler = new Handler();
 		
 		getActivity().registerReceiver(ProfileFragmentReceiver, new IntentFilter("profilefragmentupdater"));
 		
-		View custom = inflater.inflate(R.layout.fgmt_background, container, false);
-        View rootView = inflater.inflate(R.layout.profile_fgmt_custom, container, false);
+		View ViewRoot = inflater.inflate(R.layout.fgmt_background, container, false);
+		View ViewMap = inflater.inflate(R.layout.profile_gmaps_fgmt, container, false);
+		
+		FragmentManager fm = getChildFragmentManager();
+		SupportMapFragment fragment = (SupportMapFragment) fm.findFragmentById(R.id.gmap_addroutes);
+
+    	mMap = fragment.getMap();       
+    	mMap.setMyLocationEnabled(true);
+    	mMap.setOnInfoWindowClickListener(this);
+    	
+    	mMap.setOnMyLocationChangeListener(myLocationChangeListener);
+    	
+        //Check Service Location
+		gps = new GPSTracker(getActivity());
+		gps.getLocation(0);
+
+        if(!gps.canGetGPSLocation()){	
+			gps.showSettingsAlert();
+		} else{
+			
+			//renderMarker marker = new renderMarker();
+			//gps.getLocation(2);
+			
+			//Log.w(TAG, "gps.getLatitude(): " + gps.getLatitude());			
+			//Log.w(TAG, "gps.getLongitude(): " + gps.getLongitude());
+		}
         
-        name = (TextView) rootView.findViewById(R.id.name);
-        score = (TextView) rootView.findViewById(R.id.locat);
-        city = (TextView) rootView.findViewById(R.id.info);
-        mUserPic = (ImageView) rootView.findViewById(R.id.profile_pic);
+	    tv_busline = (TextView) ViewMap.findViewById(R.id.busline);	    
+	    tv_buscode = (TextView) ViewMap.findViewById(R.id.buscode);	    
+	    tv_p_connected = (TextView) ViewMap.findViewById(R.id.people_connected);
+	    tv_info = (TextView) ViewMap.findViewById(R.id.info);	    
+	    frame_bus = (RelativeLayout) ViewMap.findViewById(R.id.frame_bus);
+	    
+	    frame_bus.setVisibility(View.INVISIBLE);
+        //-------		
+        buscode_search = (AutoCompleteTextView) ViewMap.findViewById(R.id.search);
         //-------
-        View rootView1 = inflater.inflate(R.layout.profile_score_button, container, false);
-        score_btn = (Button) rootView1.findViewById(R.id.button1);
-		//-------
-        View rootView1b = inflater.inflate(R.layout.profile_buscode_autocomplete_textview, container, false);
-        buscode_search = (AutoCompleteTextView) rootView1b.findViewById(R.id.search);
-        //-------
-		View rootView2 = inflater.inflate(R.layout.profile_fgmt_gridview, container, false);
-		gridView = (GridView) rootView2.findViewById(R.id.gridView1);
-		gridView.setAdapter(new ImageAdapter(getActivity(), MOBILE_OS));
+        
 		//----------------------
 		//----------------------
 	    //HANDLE EVENT - TYPE BUSCODE
@@ -128,11 +164,20 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
             public boolean onKey(View v, int keyCode, KeyEvent event) {
                 String searchContent = buscode_search.getText().toString();
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-                        (keyCode == KeyEvent.KEYCODE_ENTER)) {//&&
-                        //Util.isValidString(searchContent)) {
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+                	
+                	//Progress Dialog
+                    progressBar = new ProgressDialog(getActivity());
+            		progressBar.setCancelable(true);
+            		progressBar.setMessage(getActivity().getString(R.string.please_wait));
+            		progressBar.show();
 
-                    //Check Service Location
-            		gps = new GPSTracker(getActivity());
+                	//Hide keyboard                	
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
+                            Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(buscode_search.getWindowToken(), 0);
+                	
+                    //Check Service Location            		
             		gps.getLocation(0);
 
                     if(!gps.canGetGPSLocation()){	
@@ -140,11 +185,14 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
             		} else {
             			sca = new Score_Algorithm(getActivity());
             			
-            			//JSONObject json = sca.getBusPosition("C41383");
-            			Support support = new Support();
+            			//"C41383"            			
             			String url = "http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/onibus/";
             			JSONObject json = sca.getBusPosition(url, searchContent);
             			try {
+            				//-----------------------
+            				progressBar.dismiss();
+            				frame_bus.setVisibility(View.VISIBLE);
+            				//-----------------------
 
 							String json_header = json.getString("COLUMNS");
 	
@@ -156,19 +204,7 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 								
 								String [] dataBusArray = json.getString("DATA").substring(2, json.getString("DATA").length()-2).split(",");
 								
-								/** Setting up values to insert into UserProfile table */
-								/*
-								ContentValues contentValues = new ContentValues();
-								contentValues.put(DatabaseHelper.KEY_CREATED_AT, support.fixDateTime(dataBusArray[index_STIME].replace("\"","")));
-								contentValues.put(DatabaseHelper.KEY_BUSCODE, dataBusArray[index_BUSCODE].replace("\"",""));
-								contentValues.put(DatabaseHelper.KEY_B_LATITUDE, dataBusArray[index_LATITUDE]);
-								contentValues.put(DatabaseHelper.KEY_B_LONGITUDE, dataBusArray[index_LONGITUDE]);																
-								contentValues.put(DatabaseHelper.KEY_SPEED, dataBusArray[index_SPEED]);
-								contentValues.put(DatabaseHelper.KEY_DIRECTION, dataBusArray[index_DIRECTION]);
-								contentValues.put(DatabaseHelper.KEY_BUSLINE, dataBusArray[index_BUSLINE].replace("\"",""));								
-
-								getActivity().getContentResolver().insert(SqliteProvider.CONTENT_URI_BUS_GPS_DATA_insert, contentValues);
-								*/
+								/** Setting up values to insert into UserProfile table */		
 								//----------------------
 								//----------------------
 								ContentValues cV = new ContentValues();
@@ -177,8 +213,14 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 								
 								getActivity().getContentResolver().insert(SqliteProvider.CONTENT_URI_BUS_GPS_URL_insert, cV);
 								//----------------------
+								/*
+								tv_busline.setText("Linha: " + dataBusArray[index_BUSLINE].replace("\"",""));							    
+							    tv_buscode.setText("Código: " + dataBusArray[index_BUSCODE].replace("\"",""));
+							    tv_p_connected.setText("Conexões: ZERO");
+							    //tv_info.setText("Dica: convide outros passageiros para pontuar com você!");
+							    tv_info.setText(getActivity().getString(R.string.sample_string));
+							    */
 								//----------------------
-
 								
 								//GPS BUS DATA TEST 
 								Getting_GpsBusData gbd = new Getting_GpsBusData();
@@ -209,57 +251,87 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
                 return false;
             }
 
-        });		
-        
-        
-		gridView.setOnItemClickListener(new OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View v,
-					int position, long id) {
-             
-				switch(position){
-				 case 0:{
-					 
-						Toast.makeText(
-								getActivity(),
-								((TextView) v.findViewById(R.id.grid_item_label))
-										.getText() + " - em construção!", Toast.LENGTH_SHORT).show();
-					
-					break;					 
-				 }
-				 case 1:{
-					 
-						Toast.makeText(
-								getActivity(),
-								((TextView) v.findViewById(R.id.grid_item_label))
-										.getText() + " - em construção!", Toast.LENGTH_SHORT).show();
-					
-					break;				
-				 }				
-				}				
-			}
-		});
+        });    
 		
         //---------------		
-		((ViewGroup) custom).addView(rootView);
-		
-		((ViewGroup) custom).addView(rootView1b);
-
-		((ViewGroup) custom).addView(rootView2);
-	
-		((ViewGroup) custom).addView(rootView1);
+		((ViewGroup) ViewRoot).addView(ViewMap);
         //------        
-		//--------------		
-		UserProfile_Query upq = new UserProfile_Query();
-		//--------------
 		
 		/** Creating a loader for populating city TextView from sqlite database */
 		getLoaderManager().initLoader(0, null, this);
 
-        return custom;
+        return ViewRoot;
         
     }
 	
-	
+	private GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
+	    @Override
+	    public void onMyLocationChange(Location location) {
+	    	
+	        LatLng loc = new LatLng(location.getLatitude(), location.getLongitude());
+
+	        // switch Off gmaps update
+	        mMap.setOnMyLocationChangeListener(null);
+	        //--------------------------
+	        //--------------------------
+	        if(mMap != null){
+
+	        	//mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, 14.0f));
+	            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, 11.0f));
+	            
+		        //--------------------------
+		        //----FAKE BUS POSITION-----
+		        //--------------------------	        	        
+				// lets place some 05 random markers
+	            //*
+				for (int i = 0; i < 5; i++) {
+					// random latitude and logitude
+					double[] randomLocation = createRandLocation(location.getLatitude(),
+							location.getLongitude());
+					
+		            // Adding a marker
+					Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(randomLocation[0], randomLocation[1]))
+							.title("Pessoas no ônibus")						
+							.snippet("Clique aqui e veja que está no ônibus")							
+							.icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_gmaps_icon_yellow)));
+					
+					marker.showInfoWindow();	
+
+				 }	
+				 //*/
+	             /*
+	            
+                 Uri uri_2 = SqliteProvider.CONTENT_URI_BUS_GPS_DATA;
+	        	 Cursor data_GpsBusData = getActivity().getContentResolver().query(uri_2, null, null, null, null);
+	        	 //-------------			        	
+	             Uri uri_3 = SqliteProvider.CONTENT_URI_USER_LOCATION;
+	        	 Cursor data_UserLocation = getActivity().getContentResolver().query(uri_3, null, null, null, null);			        	
+
+	        	 if (data_GpsBusData.getCount()>0 && data_UserLocation.getCount()>0){
+	        		 
+			         // switch Off gmaps update
+			         mMap.setOnMyLocationChangeListener(null);
+	        		 
+	        		 data_GpsBusData.moveToLast();
+	        		 data_UserLocation.moveToLast();
+			         
+	        		 // Adding a marker
+					 Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(data_GpsBusData.getDouble(KEY_B_LATITUDE), 
+								data_GpsBusData.getDouble(KEY_B_LONGITUDE)))
+								.title("Distancia: " + data_UserLocation.getString(KEY_U_DIFF_DISTANCE))						
+								.snippet("TimeOffset: " + data_UserLocation.getString(KEY_U_DIFF_TIME))							
+								.icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_gmaps_icon_blue)));
+						
+					 marker.showInfoWindow();
+
+	        	 }
+
+		         */	            
+	        }
+	    }
+
+	};
+
 	private final BroadcastReceiver ProfileFragmentReceiver = new BroadcastReceiver() {
 
 
@@ -279,35 +351,44 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 	        //-------------
 	    }
 
-	 public class UserProfile_Query {
+	 public class renderMarker{
 		 
-		 public UserProfile_Query(){
-			 
-			 Thread thread = new Thread(new Runnable(){
-				    @Override
-				    public void run() {
-				        try {
-				            
-				            Uri uri = SqliteProvider.CONTENT_URI_USER_PROFILE;
+		 
+		 public renderMarker(){
+		 
+		     Thread thread = new Thread(new Runnable(){
+			    @Override
+			    public void run() {
+			        try {
 
-				            data_profile = getActivity().getContentResolver().query(uri, null, null, null, null);
-				            data_profile.moveToFirst();
-				    		        	
-					    } catch (Exception e) {
-					            e.printStackTrace();
-					    }
-					}
-			});
+			        	//Your code goes here
+			        	/*
+			        	jsonArray = null;
+			        	
+			        	UserFunctions userFunc = new UserFunctions();
+			        	json = userFunc.bus_stop(bl, ct);
 
-			thread.start();
-			//-----------
+			        	jsonArray = new JSONArray(json.getString("busline"));
+			        	*/
+			        	//Log.i(TAG,"testing 1: " + jsonArray.get(1));
+
+			        
+			    		        	
+				    } catch (Exception e) {
+				            e.printStackTrace();
+				    }
+				}
+		   });
+
+		   thread.start();
+		   //-----------
 			try {
 				thread.join();
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			//-----------			
+			//----------
 			runThread();			 
 
 		 }
@@ -322,29 +403,17 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 
 	                                @Override
 	                                public void run() {
-	                                	
-	            	                	name.setText(data_profile.getString(KEY_NAME));
-	            	                	score.setText("Pontuação: 0 km");
-	    			                    	
-	    			        		        mHandler.post(new Runnable() {	
-	    			                            @Override
-	    			                            public void run() {
-	    			                            	try {
-	    			                    	
-				    			                    	Context c = getActivity();
-				    			                    	//Log.e(LOG,"picURL: " + data_profile.getString(KEY_PICURL));
-				    			                    	Drawable drawable = new LoadImageURL(data_profile.getString(KEY_PICURL),c).execute().get();	    			                    	
-				    			                    	mUserPic.setImageDrawable(drawable);		                   
-	    		    			                    } catch (Exception e) {
-	    		    			        				// TODO Auto-generated catch block
-	    		    			        				e.printStackTrace();
-	    		    			                    }
-	    			                    	
-	    			                            }
-	    			        		        });
+	                                	//renderMarkerOptions(jsonArray);
+	                                	//renderFbPlaces();
+	                        			//mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(gps.getLatitude(),
+	                        			//		gps.getLongitude()), 11.0f));
+	                        			//Log.w(TAG, "gps.getLatitude(): " + gps.getLatitude());			
+	                        			//Log.w(TAG, "gps.getLongitude(): " + gps.getLongitude());
+
+
 	                                }
 	                            });
-	                            Thread.sleep(100);
+	                            Thread.sleep(400);
 	                            //progressBar.dismiss();
 	                            
 	                        } catch (InterruptedException e) {
@@ -353,18 +422,21 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 
 	                }
 	            }.start();
-	        }
+	        }       
 
+		 
 	 }
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
 		// TODO Auto-generated method stub
 		//return null;
-		Uri uri = SqliteProvider.CONTENT_URI_USER_PLACES;
 		
-		return new CursorLoader(getActivity(), uri, null, null, null, null);
+		//Uri uri = SqliteProvider.CONTENT_URI_USER_PLACES;		
+		//return new CursorLoader(getActivity(), uri, null, null, null, null);
 
+		Uri uri = SqliteProvider.CONTENT_URI_BUS_GPS_DATA;
+		return new CursorLoader(getActivity(), uri, null, null, null, null);
 		
 	}
 
@@ -373,8 +445,40 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 		// TODO Auto-generated method stub
 		Log.d(TAG, "Profile_Fgmnt onLoadFinished");
 		if(data.moveToFirst()){
-			city.setText(data.getString(KEY_CITY) + " - " + data.getString(KEY_UF));
+			//city.setText(data.getString(KEY_CITY) + " - " + data.getString(KEY_UF));
 		}
+		
+        Uri uri_2 = SqliteProvider.CONTENT_URI_BUS_GPS_DATA;
+   	    Cursor data_GpsBusData = getActivity().getContentResolver().query(uri_2, null, null, null, null);
+   	    //-------------			        	
+        Uri uri_3 = SqliteProvider.CONTENT_URI_USER_LOCATION;
+   	    Cursor data_UserLocation = getActivity().getContentResolver().query(uri_3, null, null, null, null);			        	
+
+	   	if (data_GpsBusData.getCount()>0 && data_UserLocation.getCount()>0){
+	   		 
+		   		 
+	   		data_GpsBusData.moveToLast();
+	   		data_UserLocation.moveToLast();
+		    
+	   		//mMap.clear();
+	   		// Adding a marker	   		
+			Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(data_GpsBusData.getDouble(KEY_B_LATITUDE), 
+							data_GpsBusData.getDouble(KEY_B_LONGITUDE)))
+							.title(data_GpsBusData.getString(KEY_BUSCODE))						
+							.snippet("Clique e veja que está no ônibus")							
+							.icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_gmaps_icon_blue)));
+					
+			marker.showInfoWindow();
+			
+			
+			tv_busline.setText("Distancia (km): " + data_UserLocation.getString(KEY_U_DIFF_DISTANCE));							    
+		    tv_buscode.setText("TimeOffset (sec): " + data_UserLocation.getString(KEY_U_DIFF_TIME));
+		    tv_p_connected.setText("Location Source: " + data_UserLocation.getString(KEY_U_LOCATION_PROVIDER));		    
+		    //tv_info.setText(getActivity().getString(R.string.sample_string));
+
+	
+	   	 }
+		
 	}
 
 	@Override
@@ -383,6 +487,31 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 		
 	}
 
+	@Override
+	public void onInfoWindowClick(Marker arg0) {
+		// TODO Auto-generated method stub
+        //Intent intent = new Intent(getActivity(), NewRoutes.class);
+		
+    	//Progress Dialog
+		/*
+        progressBar = new ProgressDialog(getActivity());
+		progressBar.setCancelable(true);
+		progressBar.setMessage(getActivity().getString(R.string.please_wait));
+		progressBar.show();
+		*/
+        Intent intent = new Intent(getActivity(), Users.class);
+        startActivity(intent);
+	}
+
+	/*
+	 * creating random postion around a location for testing purpose only
+	 */
+	private double[] createRandLocation(double latitude, double longitude) {
+
+		return new double[] { latitude + ((Math.random() - 0.5) / 500),
+				longitude + ((Math.random() - 0.5) / 500),
+				150 + ((Math.random() - 0.5) * 10) };
+	}
 
 
 }

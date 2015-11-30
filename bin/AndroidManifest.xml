@@ -102,9 +102,21 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:name="com.xmiles.android.Gmaps">
+        </activity>
             
-     
+        <activity
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:name="com.xmiles.android.Users">
                         
+        </activity>
+        
+        
+        <activity
+            android:label="@string/app_name"
+
+            android:screenOrientation="portrait"
+            android:name="com.xmiles.android.fragment.Users_Fragment">            
         </activity>
 
 	        <meta-data android:name="com.google.android.gms.version" 

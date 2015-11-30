@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">xMiles</string>
-    <string name="please_wait">Por Favor, Espere.</string>    
+    <string name="please_wait">Por Favor, Aguarde!</string>    
     <string name="phone">Phone</string>
     <string name="rotas">Rotas</string>
     <string name="computer">Computer</string>
@@ -13,5 +13,6 @@
     <string name="title_notification_01">GPS está desabilitado</string>
     <string name="content_notification_01">Necessário ativar o GPS para acumular pontos</string>
     <string name="buscode">Digite o código do ônibus</string>
-    
+    <string name="sample_string"><![CDATA[some test line 1 <br />some test line 2]]></string>
+        
 </resources>
