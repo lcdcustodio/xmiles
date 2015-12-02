@@ -45,7 +45,7 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
     
 	
 	// The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 1 * 30; // 60 seconds
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 1 * 20; // 60 seconds
 
 	private static final Integer KEY_ID = 0;
 	private static final Integer KEY_URL = 2;
@@ -65,8 +65,8 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 	
 	//private static final Integer MAX_POINTS = 720;  // 720 points / 360 = 2 HOURS
 	//private static final Integer MAX_POINTS = 1420;
-	private static final Integer MAX_POINTS = 10;
-	//private static final Integer MAX_POINTS = 3;
+	//private static final Integer MAX_POINTS = 10;
+	private static final Integer MAX_POINTS = 2;
     // GPSTracker class
 	GPSTracker gps;
 
@@ -81,7 +81,7 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 
 			Uri uri = SqliteProvider.CONTENT_URI_BUS_GPS_URL;
 			Cursor bus_gps_url = ctx.getContentResolver().query(uri, null, null, null, null);
-			bus_gps_url.moveToFirst();
+			bus_gps_url.moveToLast();
 			Log.i(TAG, "bus_gps_data.getInt(KEY_URL): " + bus_gps_url.getString(KEY_URL));
 			Log.v(TAG, "bus_gps_data.getInt(KEY_BUSCODE_URL): " + bus_gps_url.getString(KEY_BUSCODE_URL));
 			
@@ -209,9 +209,6 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
   	    String get_diff_time = support.DiffTime(support.getDateTime().split(" ")[1], 
   	    		support.fixDateTime(dataBusArray[index_STIME].replace("\"","")).split(" ")[1]);
   	    
-  	    //Toast.makeText(ctx, "Bus and User distance (km):  " +  df.format(get_distance) 
-  	    //		+ " DiffTime (sec): " + get_diff_time, Toast.LENGTH_SHORT).show();
-  	    
   	    
   	    //contentValues.put(DatabaseHelper.KEY_DIFF_DISTANCE, Double.parseDouble(df.format(get_distance)));
   	    contentValues.put(DatabaseHelper.KEY_DIFF_DISTANCE, get_distance);
@@ -229,7 +226,10 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 		//-----------------------------
     	Intent intent=new Intent("profilefragmentupdater");
     	ctx.sendBroadcast(intent);
-		//-----------------------------  	  
+		//-----------------------------
+	    Log.e(TAG, "bus_gps_data.getInt(KEY_ID): " + bus_gps_data.getInt(KEY_ID));
+
+    	
     	if (bus_gps_data.getInt(KEY_ID) > MAX_POINTS ) {	
 
     		// cancel Getting GpsBusData

@@ -952,7 +952,8 @@ containing a value of this type.
         public static final int profile_gmaps_fgmt=0x7f030025;
         public static final int profile_score_button=0x7f030026;
         public static final int splash=0x7f030027;
-        public static final int users_items=0x7f030028;
+        public static final int user_header=0x7f030028;
+        public static final int users_items=0x7f030029;
     }
     public static final class menu {
         public static final int gmaps_type=0x7f0b0000;

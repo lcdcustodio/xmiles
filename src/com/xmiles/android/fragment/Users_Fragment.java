@@ -77,7 +77,7 @@ public class Users_Fragment extends Fragment implements LoaderManager.LoaderCall
  
 		View rootView = inflater.inflate(R.layout.fgmt_background, container, false);
 
-		//View rootView2 = inflater.inflate(R.layout.favorites_header, container, false);
+		View rootView2 = inflater.inflate(R.layout.user_header, container, false);
 		
 		View custom = inflater.inflate(R.layout.favorites_fragment, null); 
 		
@@ -100,9 +100,8 @@ public class Users_Fragment extends Fragment implements LoaderManager.LoaderCall
 		
 		Users_Query uq = new Users_Query();
 		
-		//((ViewGroup) rootView).addView(rootView2);
+		((ViewGroup) rootView).addView(rootView2);
 		((ViewGroup) rootView).addView(custom);
-		//((ViewGroup) rootView).addView(rootView1);
 		
 		/** Creating a loader for populating listview from sqlite database */
 		//getLoaderManager().initLoader(0, null, this);

@@ -268,6 +268,9 @@ public class GpsBusData_Upload extends WakefulBroadcastReceiver {
 			                	DatabaseHelper mDatabaseHelper;
 			                	mDatabaseHelper = new DatabaseHelper(c);
 			                	mDatabaseHelper.resetBusGpsData();
+			                	//------------------------
+			                	mDatabaseHelper.resetUserLocation();
+			                	mDatabaseHelper.resetBusGpsUrl();
 			                	//------------------------			                	
 			                	cancelAlarm(c);
 			                }

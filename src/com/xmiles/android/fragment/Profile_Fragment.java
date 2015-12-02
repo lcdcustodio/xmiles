@@ -81,10 +81,12 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 	String json_city;	
 	String picURL;
 	//---
+	private static final Integer KEY_ID = 0;
 	private static final Integer KEY_UF   = 3;
 	private static final Integer KEY_CITY = 2;
 	private static final Integer KEY_NAME = 1;
 	private static final Integer KEY_PICURL = 2;
+	private static final Integer MAX_POINTS = 2;
 	
 	private static final Integer KEY_BUSCODE 	 = 2;
 	private static final Integer KEY_B_LATITUDE  = 4;
@@ -213,14 +215,6 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 								
 								getActivity().getContentResolver().insert(SqliteProvider.CONTENT_URI_BUS_GPS_URL_insert, cV);
 								//----------------------
-								/*
-								tv_busline.setText("Linha: " + dataBusArray[index_BUSLINE].replace("\"",""));							    
-							    tv_buscode.setText("Código: " + dataBusArray[index_BUSCODE].replace("\"",""));
-							    tv_p_connected.setText("Conexões: ZERO");
-							    //tv_info.setText("Dica: convide outros passageiros para pontuar com você!");
-							    tv_info.setText(getActivity().getString(R.string.sample_string));
-							    */
-								//----------------------
 								
 								//GPS BUS DATA TEST 
 								Getting_GpsBusData gbd = new Getting_GpsBusData();
@@ -283,7 +277,7 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 		        //----FAKE BUS POSITION-----
 		        //--------------------------	        	        
 				// lets place some 05 random markers
-	            //*
+	            /*
 				for (int i = 0; i < 5; i++) {
 					// random latitude and logitude
 					double[] randomLocation = createRandLocation(location.getLatitude(),
@@ -298,7 +292,7 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 					marker.showInfoWindow();	
 
 				 }	
-				 //*/
+				 */
 	             /*
 	            
                  Uri uri_2 = SqliteProvider.CONTENT_URI_BUS_GPS_DATA;
@@ -460,22 +454,39 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 	   		data_GpsBusData.moveToLast();
 	   		data_UserLocation.moveToLast();
 		    
-	   		//mMap.clear();
+	   		mMap.clear();
 	   		// Adding a marker	   		
 			Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(data_GpsBusData.getDouble(KEY_B_LATITUDE), 
 							data_GpsBusData.getDouble(KEY_B_LONGITUDE)))
 							.title(data_GpsBusData.getString(KEY_BUSCODE))						
-							.snippet("Clique e veja que está no ônibus")							
+							.snippet("Clique e veja quem está no ônibus")							
 							.icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_gmaps_icon_blue)));
 					
 			marker.showInfoWindow();
 			
+			Log.w(TAG, "data_GpsBusData.getInt(KEY_ID): " + data_GpsBusData.getInt(KEY_ID));
 			
-			tv_busline.setText("Distancia (km): " + data_UserLocation.getString(KEY_U_DIFF_DISTANCE));							    
-		    tv_buscode.setText("TimeOffset (sec): " + data_UserLocation.getString(KEY_U_DIFF_TIME));
-		    tv_p_connected.setText("Location Source: " + data_UserLocation.getString(KEY_U_LOCATION_PROVIDER));		    
-		    //tv_info.setText(getActivity().getString(R.string.sample_string));
-
+			if (data_GpsBusData.getInt(KEY_ID) <= MAX_POINTS ) {
+			
+				//tv_busline
+				tv_buscode.setText("Distancia (km): " + data_UserLocation.getString(KEY_U_DIFF_DISTANCE));
+				//if (Double.parseDouble(data_UserLocation.getString(KEY_U_DIFF_DISTANCE))<5){
+					tv_busline.setText("#hop: " + data_GpsBusData.getString(KEY_ID)); 
+				//} else {
+					//tv_busline.setText("");
+				//}
+				tv_p_connected.setText("TimeOffset (sec): " + data_UserLocation.getString(KEY_U_DIFF_TIME));
+				tv_info.setText("Location Source: " + data_UserLocation.getString(KEY_U_LOCATION_PROVIDER));		    
+			    //tv_info.setText(getActivity().getString(R.string.sample_string));
+			} else {
+				frame_bus.setVisibility(View.INVISIBLE);
+				/*
+				tv_busline.setText("Você está desconectado do ônibus");
+				tv_buscode.setText("");
+				tv_p_connected.setText("");
+				tv_info.setText("");
+				*/
+			}
 	
 	   	 }
 		
@@ -492,13 +503,7 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 		// TODO Auto-generated method stub
         //Intent intent = new Intent(getActivity(), NewRoutes.class);
 		
-    	//Progress Dialog
-		/*
-        progressBar = new ProgressDialog(getActivity());
-		progressBar.setCancelable(true);
-		progressBar.setMessage(getActivity().getString(R.string.please_wait));
-		progressBar.show();
-		*/
+
         Intent intent = new Intent(getActivity(), Users.class);
         startActivity(intent);
 	}

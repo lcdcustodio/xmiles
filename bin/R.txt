@@ -452,7 +452,8 @@ int layout profile_fgmt_gridview_custom_items 0x7f030024
 int layout profile_gmaps_fgmt 0x7f030025
 int layout profile_score_button 0x7f030026
 int layout splash 0x7f030027
-int layout users_items 0x7f030028
+int layout user_header 0x7f030028
+int layout users_items 0x7f030029
 int menu gmaps_type 0x7f0b0000
 int menu main 0x7f0b0001
 int menu main_frame 0x7f0b0002
