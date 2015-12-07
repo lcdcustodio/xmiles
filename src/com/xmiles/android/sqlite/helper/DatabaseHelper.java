@@ -99,6 +99,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String KEY_SENSE = "sense";
 	public static final String KEY_DIRECTION = "direction";
 	public static final String KEY_URL = "url";
+	public static final String KEY_SCORE = "score";
 	
 	
 	// Table Create Statements
@@ -194,7 +195,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			KEY_B_LONGITUDE + " DOUBLE," +
 			KEY_SPEED + " DOUBLE," +
 			KEY_DIRECTION + " TEXT," +
-			KEY_SENSE + " TEXT" + ")";
+			KEY_SENSE + " TEXT," + 
+			KEY_SCORE + " DOUBLE" + ")";
 	
 	private static final String CREATE_TABLE_BUS_GPS_URL = "CREATE TABLE "
 			+ TABLE_BUS_GPS_URL + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
@@ -489,7 +491,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	public Cursor get_BusGpsData(){
 
-		return mDB.query(TABLE_BUS_GPS_DATA, new String[] {KEY_ROW_ID, KEY_CREATED_AT, KEY_BUSCODE, KEY_BUSLINE, KEY_B_LATITUDE, KEY_B_LONGITUDE, KEY_SPEED, KEY_DIRECTION}, null, null, null, null, null);
+		return mDB.query(TABLE_BUS_GPS_DATA, new String[] {KEY_ROW_ID, KEY_CREATED_AT, KEY_BUSCODE, KEY_BUSLINE, KEY_B_LATITUDE, KEY_B_LONGITUDE, KEY_SPEED, KEY_DIRECTION, KEY_SCORE}, null, null, null, null, null);
 		//return mDB.query(TABLE_BUS_GPS_DATA, new String[] {KEY_ROW_ID, KEY_CREATED_AT, KEY_BUSCODE, KEY_BUSLINE, KEY_B_LATITUDE, KEY_B_LONGITUDE, KEY_SPEED, KEY_DIRECTION, KEY_URL}, null, null, null, null, null);
 	}
 

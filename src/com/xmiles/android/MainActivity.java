@@ -43,7 +43,7 @@ public class MainActivity extends FragmentActivity {
 
 	      actionBar.addTab(tab1);
 	      actionBar.selectTab(tab1);
-	    //*  	
+	    /*  	
 	    Tab tab2 = actionBar
 	          .newTab()
 	          .setText("FAVORITOS")
@@ -51,8 +51,8 @@ public class MainActivity extends FragmentActivity {
 	          .setTabListener(new MyTabsListener(fgmt_favoritos));
 	      
 	      actionBar.addTab(tab2);
-	     //*/
-	     /* 
+	     */
+	     ///* 
 	     Tab tab2 = actionBar
 	    	   .newTab()
 	    	   .setText("RECOMPENSAS")
@@ -60,7 +60,7 @@ public class MainActivity extends FragmentActivity {
 	    	   .setTabListener(new MyTabsListener(fgmt_ranking));
 	    	  
 	      actionBar.addTab(tab2);
-	      */
+	      //*/
 	      
 	      
 	    Tab tab3 = actionBar

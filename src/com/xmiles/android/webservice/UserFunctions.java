@@ -96,7 +96,9 @@ public class UserFunctions {
 			   				 StringBuilder u_diff_dist,
 			   				 StringBuilder u_diff_time,
 			   				 StringBuilder u_locat_status,
-			   				 StringBuilder u_accuracy			   				 
+			   				 StringBuilder u_accuracy,
+			   				 //-------------------------
+			   				 StringBuilder score
 			   			     //-------------------------
 			   				 ){
 
@@ -124,6 +126,8 @@ public class UserFunctions {
 	params.add(new BasicNameValuePair("u_diff_time", u_diff_time.toString()));
 	params.add(new BasicNameValuePair("u_locat_status", u_locat_status.toString()));
 	params.add(new BasicNameValuePair("u_accuracy", u_accuracy.toString()));
+	//-------------------------------------------------
+	params.add(new BasicNameValuePair("score", score.toString()));
 	//-------------------------------------------------
 		
 	JSONObject json = jsonParser.getJSONFromUrl(bus_gpsURL, params);

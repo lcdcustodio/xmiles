@@ -1,0 +1,20 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:gravity="center"
+    android:layout_width="130dp"
+    android:orientation="vertical"
+    android:background="@color/facebook"    
+    android:layout_height="110dp"
+    android:id="@+id/gmaps_info">
+
+
+    <TextView
+      android:id="@+id/text_1"      
+      style="@style/score_text_3"/> 
+    
+    <TextView
+      android:id="@+id/text_2"          
+      android:text="@string/busmsg1"
+      style="@style/score_text_4"/>
+      <!--android:layout_below="@id/text_1"  -->	
+    
+</LinearLayout>

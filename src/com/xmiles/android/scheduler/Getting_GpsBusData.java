@@ -61,6 +61,9 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 	private static final Integer index_DIRECTION = 6;
 	private static final Integer index_BUSLINE	 = 2;
 
+	private static final Integer KEY_B_LATITUDE  = 4;
+	private static final Integer KEY_B_LONGITUDE = 5;
+	private static final Integer KEY_SCORE		 = 8;
 
 	
 	//private static final Integer MAX_POINTS = 720;  // 720 points / 360 = 2 HOURS
@@ -82,8 +85,8 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 			Uri uri = SqliteProvider.CONTENT_URI_BUS_GPS_URL;
 			Cursor bus_gps_url = ctx.getContentResolver().query(uri, null, null, null, null);
 			bus_gps_url.moveToLast();
-			Log.i(TAG, "bus_gps_data.getInt(KEY_URL): " + bus_gps_url.getString(KEY_URL));
-			Log.v(TAG, "bus_gps_data.getInt(KEY_BUSCODE_URL): " + bus_gps_url.getString(KEY_BUSCODE_URL));
+			//Log.i(TAG, "bus_gps_data.getInt(KEY_URL): " + bus_gps_url.getString(KEY_URL));
+			//Log.v(TAG, "bus_gps_data.getInt(KEY_BUSCODE_URL): " + bus_gps_url.getString(KEY_BUSCODE_URL));
 			
 			GBD_Handler(ctx, bus_gps_url.getString(KEY_URL), bus_gps_url.getString(KEY_BUSCODE_URL));
 			
@@ -137,14 +140,34 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 			JSONObject json = sca.getBusPosition(url, buscode);
 			
 			dataBusArray = json.getString("DATA").substring(2, json.getString("DATA").length()-2).split(",");
-			
+			//--------------------
+			Uri uri_2 = SqliteProvider.CONTENT_URI_BUS_GPS_DATA;
+			Cursor bus_score = ctx.getContentResolver().query(uri_2, null, null, null, null);
+			//--------------------
+			Distance_calc score = new Distance_calc();
+			//--------------------
 			/** Setting up values to insert into UserProfile table */
+
 			ContentValues contentValues = new ContentValues();
 			contentValues.put(DatabaseHelper.KEY_CREATED_AT, support.fixDateTime(dataBusArray[index_STIME].replace("\"","")));
 			contentValues.put(DatabaseHelper.KEY_BUSCODE, dataBusArray[index_BUSCODE].replace("\"",""));
 			contentValues.put(DatabaseHelper.KEY_B_LATITUDE, dataBusArray[index_LATITUDE]);
 			contentValues.put(DatabaseHelper.KEY_B_LONGITUDE, dataBusArray[index_LONGITUDE]);
-			//contentValues.put(DatabaseHelper.KEY_URL, url);
+			
+			if (bus_score.getCount()>0) {
+				bus_score.moveToLast();
+				Double get_score =  bus_score.getDouble(KEY_SCORE) +
+									score.calculo(Double.parseDouble(dataBusArray[index_LATITUDE]), 
+												 bus_score.getFloat(KEY_B_LATITUDE), 
+												 Double.parseDouble(dataBusArray[index_LONGITUDE]), 
+												 bus_score.getFloat(KEY_B_LONGITUDE));
+				
+				contentValues.put(DatabaseHelper.KEY_SCORE, get_score);
+			} else {
+				contentValues.put(DatabaseHelper.KEY_SCORE, 0.0);
+			}
+
+
 			//-------------------
 			contentValues.put(DatabaseHelper.KEY_SPEED, dataBusArray[index_SPEED]);
 			contentValues.put(DatabaseHelper.KEY_DIRECTION, dataBusArray[index_DIRECTION]);
@@ -179,11 +202,6 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 	    float Long   = (float) (curGeoPoint.getLongitudeE6() / 1E6);
 	    double Speed = (gps.getSpeed()*3600)/1000;		
 	    //--------------	    
-	    Log.w(TAG, "Getting Loc. Latitude: " + Lat);
-	    Log.w(TAG, "Getting Loc. Longitude: " + Long);
-	    //--------------
-	    Log.i(TAG, "getProvider(): " + gps.getProvider());
-	    Log.e(TAG, "getAccuracy(): " + gps.getAccuracy());
 		//------------------
         Support support = new Support();
 
@@ -196,21 +214,18 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 		contentValues.put(DatabaseHelper.KEY_LOCATION_PROVIDER, gps.getProvider());
 		contentValues.put(DatabaseHelper.KEY_CREATED_AT, support.getDateTime());
 
-		//ctx.getContentResolver().insert(SqliteProvider.CONTENT_URI_USER_LOCATION_insert, contentValues);
 		//-----------------------------------------
 		//--Evaluting Measurements (User vs. BUS)--
 		//-----------------------------------------
 		
   	    Distance_calc dist_calc = new Distance_calc();
-  	    //String get_distance = String.format("%.2f",dist_calc.calculo(Double.parseDouble(dataBusArray[index_LATITUDE]), Lat, Double.parseDouble(dataBusArray[index_LONGITUDE]), Long));
+
   	    Double get_distance = dist_calc.calculo(Double.parseDouble(dataBusArray[index_LATITUDE]), Lat, Double.parseDouble(dataBusArray[index_LONGITUDE]), Long);
   	    DecimalFormat df = new DecimalFormat("##.##");
   	    
   	    String get_diff_time = support.DiffTime(support.getDateTime().split(" ")[1], 
   	    		support.fixDateTime(dataBusArray[index_STIME].replace("\"","")).split(" ")[1]);
-  	    
-  	    
-  	    //contentValues.put(DatabaseHelper.KEY_DIFF_DISTANCE, Double.parseDouble(df.format(get_distance)));
+
   	    contentValues.put(DatabaseHelper.KEY_DIFF_DISTANCE, get_distance);
   	    contentValues.put(DatabaseHelper.KEY_DIFF_TIME, Double.parseDouble(get_diff_time));
 		contentValues.put(DatabaseHelper.KEY_ACCURACY, gps.getAccuracy());

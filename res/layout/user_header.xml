@@ -11,7 +11,7 @@
 	        android:layout_width="fill_parent"
 	        android:layout_height="wrap_content"
 	        android:layout_alignParentRight="true"
-	        android:layout_marginTop="10dip"
+	        android:layout_marginTop="5dip"
 	        android:layout_marginLeft="10dip"
 	        style="@style/NusProfileUserName"
 	        android:layout_alignWithParentIfMissing="true"

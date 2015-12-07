@@ -12,7 +12,10 @@
     <string name="new_route">Nova Rota</string>
     <string name="title_notification_01">GPS está desabilitado</string>
     <string name="content_notification_01">Necessário ativar o GPS para acumular pontos</string>
-    <string name="buscode">Digite o código do ônibus</string>
+    <string name="buscode">Digite o código do ônibus (ex: C41383)</string>
+    <string name="busmsg1">Clique aqui e conecte-se ao ônibus</string>
+    <string name="busmsg2">Você está conectado ao ônibus</string>
+    <string name="busmsg3">Clique aqui e veja quem mais está conectado!</string>
     <string name="sample_string"><![CDATA[some test line 1 <br />some test line 2]]></string>
         
 </resources>

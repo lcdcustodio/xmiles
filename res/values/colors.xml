@@ -24,6 +24,7 @@
 	<color name="profile_user_name">#ff333333</color>    
     <color name="profile_user_sub_title">#ff777777</color>
     <color name="transparent">#00000000</color>
+    <color name="black_transparent">#99000000</color>
     <color name="foursquare_blue">#ff0aaeef</color>
     <color name="divider_line">#ffc5c0ba</color>
     <color name="standard_gray_e2e2e0">#ffe2e2e0</color> 

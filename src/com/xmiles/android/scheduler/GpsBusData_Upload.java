@@ -44,6 +44,7 @@ public class GpsBusData_Upload extends WakefulBroadcastReceiver {
 		private static final Integer KEY_B_LONGITUDE = 5;
 		private static final Integer KEY_SPEED 		 = 6;
 		private static final Integer KEY_DIRECTION 	 = 7;
+		private static final Integer KEY_SCORE		 = 8;
 		//-----------------------------
 		private static final Integer KEY_U_ROW_ID 			 = 0;
 		private static final Integer KEY_U_LATITUDE 		 = 1;
@@ -136,11 +137,13 @@ public class GpsBusData_Upload extends WakefulBroadcastReceiver {
 			            StringBuilder u_locat_status		= new StringBuilder();
 			            StringBuilder u_accuracy			= new StringBuilder();
 			    		//---------------------
+			            StringBuilder score					= new StringBuilder();
+
 			            
 			    		while (data_GpsBusData.moveToNext()) {
 
 			    			
-			    			Log.d(TAG, "data_GpsBusData.getString(KEY_B_LATITUDE): "+ data_GpsBusData.getString(KEY_B_LATITUDE));
+			    			//Log.d(TAG, "data_GpsBusData.getString(KEY_B_LATITUDE): "+ data_GpsBusData.getString(KEY_B_LATITUDE));
 				        	//Your code goes here
 			    			
 			    			
@@ -153,8 +156,9 @@ public class GpsBusData_Upload extends WakefulBroadcastReceiver {
 				    		busline.append(data_GpsBusData.getString(KEY_BUSLINE));
 				    		direction.append(data_GpsBusData.getString(KEY_DIRECTION));
 				    		created_at.append(data_GpsBusData.getString(KEY_CREATED_AT));
-				    			
-				    			
+				    		//---------------------
+				    		score.append("0.0");	
+				    		
 				    		if (!data_GpsBusData.isLast()){
 				    			gps_bus_id.append(";");
 					    		user_id.append(";");
@@ -164,7 +168,10 @@ public class GpsBusData_Upload extends WakefulBroadcastReceiver {
 					    		buscode.append(";");
 					    		busline.append(";");
 					    		direction.append(";");
-					    		created_at.append(";");			  
+					    		created_at.append(";");
+					    		score.append(";");
+				    		} else if (data_GpsBusData.isLast()){
+				    			score.append(data_GpsBusData.getString(KEY_SCORE));
 				    		}
 			    			
 
@@ -222,7 +229,9 @@ public class GpsBusData_Upload extends WakefulBroadcastReceiver {
 			        								 u_diff_dist,
 			        								 u_diff_time,
 			        								 u_locat_status,
-			        								 u_accuracy
+			        								 u_accuracy,
+			        								 //----------
+			        								 score
 			        								 //----------
 			        								 );
 			        	
