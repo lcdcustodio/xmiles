@@ -14,7 +14,7 @@ import com.google.android.maps.GeoPoint;
 import com.xmiles.android.R;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
-import com.xmiles.android.support.Distance_calc;
+import com.xmiles.android.support.GetDistance;
 import com.xmiles.android.support.GPSTracker;
 import com.xmiles.android.support.Score_Algorithm;
 import com.xmiles.android.support.Support;
@@ -64,12 +64,18 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 	private static final Integer KEY_B_LATITUDE  = 4;
 	private static final Integer KEY_B_LONGITUDE = 5;
 	private static final Integer KEY_SCORE		 = 8;
+	private static final Integer KEY_U_DIFF_TIME = 7;
+	private static final Integer KEY_U_DIFF_DISTANCE = 6;
 
 	
 	//private static final Integer MAX_POINTS = 720;  // 720 points / 360 = 2 HOURS
 	//private static final Integer MAX_POINTS = 1420;
 	//private static final Integer MAX_POINTS = 10;
-	private static final Integer MAX_POINTS = 2;
+	private static final Integer MAX_POINTS = 4;
+	private static final Integer MAX_DIST 	  = 3; //3km
+	private static final Integer MAX_TIME_OFFSET = 300; //300secs = 5min
+
+	
     // GPSTracker class
 	GPSTracker gps;
 
@@ -85,8 +91,6 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 			Uri uri = SqliteProvider.CONTENT_URI_BUS_GPS_URL;
 			Cursor bus_gps_url = ctx.getContentResolver().query(uri, null, null, null, null);
 			bus_gps_url.moveToLast();
-			//Log.i(TAG, "bus_gps_data.getInt(KEY_URL): " + bus_gps_url.getString(KEY_URL));
-			//Log.v(TAG, "bus_gps_data.getInt(KEY_BUSCODE_URL): " + bus_gps_url.getString(KEY_BUSCODE_URL));
 			
 			GBD_Handler(ctx, bus_gps_url.getString(KEY_URL), bus_gps_url.getString(KEY_BUSCODE_URL));
 			
@@ -144,7 +148,7 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 			Uri uri_2 = SqliteProvider.CONTENT_URI_BUS_GPS_DATA;
 			Cursor bus_score = ctx.getContentResolver().query(uri_2, null, null, null, null);
 			//--------------------
-			Distance_calc score = new Distance_calc();
+			GetDistance score = new GetDistance();
 			//--------------------
 			/** Setting up values to insert into UserProfile table */
 
@@ -163,6 +167,10 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 												 bus_score.getFloat(KEY_B_LONGITUDE));
 				
 				contentValues.put(DatabaseHelper.KEY_SCORE, get_score);
+				//------------------
+				Log.v(TAG, "bus_score.getDouble(KEY_SCORE): " + bus_score.getDouble(KEY_SCORE));
+				Log.w(TAG, "get_score: " + get_score);
+				//------------------				
 			} else {
 				contentValues.put(DatabaseHelper.KEY_SCORE, 0.0);
 			}
@@ -218,7 +226,7 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 		//--Evaluting Measurements (User vs. BUS)--
 		//-----------------------------------------
 		
-  	    Distance_calc dist_calc = new Distance_calc();
+  	    GetDistance dist_calc = new GetDistance();
 
   	    Double get_distance = dist_calc.calculo(Double.parseDouble(dataBusArray[index_LATITUDE]), Lat, Double.parseDouble(dataBusArray[index_LONGITUDE]), Long);
   	    DecimalFormat df = new DecimalFormat("##.##");
@@ -238,15 +246,22 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 		Cursor bus_gps_data = ctx.getContentResolver().query(uri, null, null, null, null);
 		bus_gps_data.moveToLast();
 		
+        Uri uri_3 = SqliteProvider.CONTENT_URI_USER_LOCATION;
+   	    Cursor data_UserLocation = ctx.getContentResolver().query(uri_3, null, null, null, null);			        	
+   	    data_UserLocation.moveToLast();
+   	    
 		//-----------------------------
     	Intent intent=new Intent("profilefragmentupdater");
     	ctx.sendBroadcast(intent);
 		//-----------------------------
 	    Log.e(TAG, "bus_gps_data.getInt(KEY_ID): " + bus_gps_data.getInt(KEY_ID));
 
-    	
-    	if (bus_gps_data.getInt(KEY_ID) > MAX_POINTS ) {	
+		//if (data_UserLocation.getDouble(KEY_U_DIFF_DISTANCE) >= MAX_DIST ||
+		//		 data_UserLocation.getDouble(KEY_U_DIFF_TIME) >= MAX_TIME_OFFSET) {
 
+	    
+    	if (bus_gps_data.getInt(KEY_ID) > MAX_POINTS ) {	
+			Toast.makeText(ctx, "Você não está mais conectado!", Toast.LENGTH_LONG).show();
     		// cancel Getting GpsBusData
         	cancelAlarm(ctx);
 

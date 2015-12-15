@@ -5,12 +5,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
+
 import com.xmiles.android.NewRoutes;
 import com.xmiles.android.R;
 import com.xmiles.android.R.id;
 import com.xmiles.android.R.layout;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.support.LoadImageURL;
+import com.xmiles.android.support.imageloader.LazyAdapter;
 import com.xmiles.android.webservice.UserFunctions;
 
 import android.support.v4.app.Fragment;
@@ -53,7 +55,7 @@ public class Users_Fragment extends Fragment implements LoaderManager.LoaderCall
 	private static final Integer KEY_PICURL = 2;	
 	//---------------------
 	protected static final Integer TYPE1 = 1;
-	private static final Integer TYPE2 = 2;	
+	
 	//---------------------
 	ListView mListFavorites;
 	Button Add_route;
@@ -63,6 +65,11 @@ public class Users_Fragment extends Fragment implements LoaderManager.LoaderCall
 	ProgressDialog progressBar;
 	Cursor data_userFavorites;
 	
+	//-----------------------
+	LazyAdapter adapter;
+	ListView list;
+	
+	//-----------------------	
 	private Handler mHandler;
 	
 	public Users_Fragment(){}
@@ -81,7 +88,8 @@ public class Users_Fragment extends Fragment implements LoaderManager.LoaderCall
 		
 		View custom = inflater.inflate(R.layout.favorites_fragment, null); 
 		
-		mListFavorites = (ListView) custom.findViewById(R.id.list_favorites);		
+		mListFavorites = (ListView) custom.findViewById(R.id.list_favorites);
+		list 		   = (ListView) custom.findViewById(R.id.list_favorites);
 		//Route          = (TextView) rootView2.findViewById(R.id.rotas);
 		//---------------		
 		//mListFavorites.addFooterView(rootView1);
@@ -175,18 +183,7 @@ public class Users_Fragment extends Fragment implements LoaderManager.LoaderCall
 				    public void run() {
 				        try {
 
-				        	/*
-				            Uri uri = SqliteProvider.CONTENT_URI_USER_FAVORITES;
-				        	//Cursor data = getActivity().getContentResolver().query(uri, null, null, null, null);
-				            data_userFavorites = getActivity().getContentResolver().query(uri, null, null, null, null);
 
-				            if (data_userFavorites == null || data_userFavorites.getCount() == 0){
-
-				            	Route.setText("Não há rotas cadastradas");		            	
-				        	} else {
-				        		Route.setText("ROTAS");
-				        	}
-				        	*/
 				            Uri uri = SqliteProvider.CONTENT_URI_USER_PROFILE;
 
 				            data_userFavorites = getActivity().getContentResolver().query(uri, null, null, null, null);
@@ -225,7 +222,11 @@ public class Users_Fragment extends Fragment implements LoaderManager.LoaderCall
 	                                public void run() {
 	                                	
 	            						//mListFavorites.setAdapter(new FavoritesListAdapter(getActivity()));
-	                                	mListFavorites.setAdapter(new FavoritesListAdapter(getActivity(),data_userFavorites));
+	                                	//mListFavorites.setAdapter(new FavoritesListAdapter(getActivity(),data_userFavorites));
+	                            		// Getting adapter by passing xml data ArrayList
+	                                    adapter=new LazyAdapter(getActivity(), data_userFavorites);        
+	                                    list.setAdapter(adapter);
+
 	                                }
 	                            });
 	                            //Thread.sleep(400);

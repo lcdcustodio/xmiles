@@ -157,7 +157,7 @@ public class GpsBusData_Upload extends WakefulBroadcastReceiver {
 				    		direction.append(data_GpsBusData.getString(KEY_DIRECTION));
 				    		created_at.append(data_GpsBusData.getString(KEY_CREATED_AT));
 				    		//---------------------
-				    		score.append("0.0");	
+	
 				    		
 				    		if (!data_GpsBusData.isLast()){
 				    			gps_bus_id.append(";");
@@ -169,9 +169,10 @@ public class GpsBusData_Upload extends WakefulBroadcastReceiver {
 					    		busline.append(";");
 					    		direction.append(";");
 					    		created_at.append(";");
-					    		score.append(";");
+					    		score.append("0.0;");
 				    		} else if (data_GpsBusData.isLast()){
 				    			score.append(data_GpsBusData.getString(KEY_SCORE));
+				    	    	Log.w(TAG, "data_GpsBusData.getString(KEY_SCORE): " + data_GpsBusData.getString(KEY_SCORE));
 				    		}
 			    			
 
@@ -204,6 +205,7 @@ public class GpsBusData_Upload extends WakefulBroadcastReceiver {
 				    			u_diff_time.append(";");
 				    			u_locat_status.append(";");
 				    			u_accuracy.append(";");
+				    			
 			    			}
 			    			
 			    			
@@ -280,7 +282,8 @@ public class GpsBusData_Upload extends WakefulBroadcastReceiver {
 			                	//------------------------
 			                	mDatabaseHelper.resetUserLocation();
 			                	mDatabaseHelper.resetBusGpsUrl();
-			                	//------------------------			                	
+			                	//------------------------
+			                	
 			                	cancelAlarm(c);
 			                }
 			            }

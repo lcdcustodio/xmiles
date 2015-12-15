@@ -6,7 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.google.android.gms.maps.CameraUpdate;
+
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
@@ -87,7 +87,9 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 	private static final Integer KEY_CITY = 2;
 	private static final Integer KEY_NAME = 1;
 	private static final Integer KEY_PICURL = 2;
-	private static final Integer MAX_POINTS = 2;
+	private static final Integer MAX_POINTS = 4;
+	private static final Integer MAX_DIST 	  = 3; //3km
+	private static final Integer MAX_TIME_OFFSET = 300; //300secs = 5min
 	
 	private static final Integer KEY_BUSCODE 	 = 2;
 	private static final Integer KEY_B_LATITUDE  = 4;
@@ -109,9 +111,7 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 	TextView tv_p_connected;
 	TextView tv_info;
 	RelativeLayout frame_bus;
-	RelativeLayout score_status;
-	
-	Cursor data_profile;
+
 
     // GPSTracker class
 	GPSTracker gps;
@@ -151,9 +151,7 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 	    tv_p_connected = (TextView) ViewMap.findViewById(R.id.people_connected);
 	    tv_info = (TextView) ViewMap.findViewById(R.id.info);	    
 	    frame_bus = (RelativeLayout) ViewMap.findViewById(R.id.frame_bus);
-	    score_status = (RelativeLayout) ViewMap.findViewById(R.id.score_status);
-	    
-	    score_status.setVisibility(View.INVISIBLE);
+
 	    frame_bus.setVisibility(View.INVISIBLE);
         //-------		
         buscode_search = (AutoCompleteTextView) ViewMap.findViewById(R.id.search);
@@ -216,15 +214,24 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 								
 								getActivity().getContentResolver().insert(SqliteProvider.CONTENT_URI_BUS_GPS_URL_insert, cV);
 								//----------------------
+								Toast.makeText(getActivity(), "Ônibus " + dataBusArray[index_BUSCODE].replace("\"","") + " encontrado", Toast.LENGTH_LONG).show();
 								tv_busline.setText("Ônibus " + dataBusArray[index_BUSCODE].replace("\"","") + " encontrado");
+								tv_buscode.setText("");
+								tv_info.setText("");
+								tv_p_connected.setText("");
 								//----------------------
 						   		mMap.clear();
+						   		
+						        LatLng loc = new LatLng(Double.parseDouble(dataBusArray[index_LATITUDE]), 
+						        						Double.parseDouble(dataBusArray[index_LONGITUDE]));
+
 						   		// Adding a marker	   		
-								Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(Double.parseDouble(dataBusArray[index_LATITUDE]), 
-												Double.parseDouble(dataBusArray[index_LONGITUDE])))
+								Marker marker = mMap.addMarker(new MarkerOptions().position(loc)
 												.title(dataBusArray[index_BUSCODE].replace("\"",""))						
 												.snippet(getActivity().getString(R.string.busmsg1))							
 												.icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_gmaps_icon_yellow)));
+								
+								mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, 11.0f));
 								
 								mMap.setInfoWindowAdapter(new InfoWindowAdapter() {
 									 
@@ -251,15 +258,9 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 						 
 						            }
 						        });
-								
-								
 										
 								marker.showInfoWindow();
 
-								
-								//GPS BUS DATA TEST 
-								//Getting_GpsBusData gbd = new Getting_GpsBusData();
-								//gbd.setAlarm(getActivity());
 
 							} else {
 								
@@ -269,7 +270,7 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 								
 								if (json_header.equals("[\"MENSAGEM\"]")){
 									
-									Toast.makeText(getActivity(), searchContent + " não encontrado no sistema!", Toast.LENGTH_SHORT).show();
+									Toast.makeText(getActivity(), searchContent + " não encontrado no sistema!", Toast.LENGTH_LONG).show();
 									frame_bus.setVisibility(View.INVISIBLE);
 								}
 
@@ -313,27 +314,6 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 
 	        	//mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, 14.0f));
 	            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, 11.0f));
-	            
-		        //--------------------------
-		        //----FAKE BUS POSITION-----
-		        //--------------------------	        	        
-				// lets place some 05 random markers
-	            /*
-				for (int i = 0; i < 5; i++) {
-					// random latitude and logitude
-					double[] randomLocation = createRandLocation(location.getLatitude(),
-							location.getLongitude());
-					
-		            // Adding a marker
-					Marker marker = mMap.addMarker(new MarkerOptions().position(new LatLng(randomLocation[0], randomLocation[1]))
-							.title("Pessoas no ônibus")						
-							.snippet("Clique aqui e veja que está no ônibus")							
-							.icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_gmaps_icon_yellow)));
-					
-					marker.showInfoWindow();	
-
-				 }	
-				 */
 	                   
 	        }
 	    }
@@ -363,7 +343,6 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 	@Override
 	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
 		// TODO Auto-generated method stub
-		//return null;
 
 		Uri uri = SqliteProvider.CONTENT_URI_BUS_GPS_DATA;
 		return new CursorLoader(getActivity(), uri, null, null, null, null);
@@ -397,18 +376,11 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 			
 			mMap.setInfoWindowAdapter(new InfoWindowAdapter() {
 				 
-	            // Use default InfoWindow frame
 	            @Override
 	            public View getInfoWindow(Marker arg0) {
-	                //return null;
 	                // Getting view from the layout file info_window_layout
 	                View v = getActivity().getLayoutInflater().inflate(R.layout.profile_infowindow_score, null);
 	               
-	                // Set desired height and width
-	                //v.setLayoutParams(new RelativeLayout.LayoutParams(400, RelativeLayout.LayoutParams.WRAP_CONTENT));
-	                //v.setLayoutParams(new RelativeLayout.LayoutParams(400, RelativeLayout.LayoutParams.FILL_PARENT));
-	                
-	 
 	                // Returning the view containing InfoWindow contents
 	                return v;
 	            }
@@ -416,7 +388,6 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 	            // Defines the contents of the InfoWindow
 	            @Override
 	            public View getInfoContents(Marker arg0) {
-	 
 
 	                return null;
 	 
@@ -425,8 +396,10 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 			
 			marker.showInfoWindow();
 			
-			Log.w(TAG, "data_GpsBusData.getInt(KEY_ID): " + data_GpsBusData.getInt(KEY_ID));
 			
+			//if (data_UserLocation.getDouble(KEY_U_DIFF_DISTANCE) <= MAX_DIST &&
+			//		 data_UserLocation.getDouble(KEY_U_DIFF_TIME) <= MAX_TIME_OFFSET) {
+				
 			if (data_GpsBusData.getInt(KEY_ID) <= MAX_POINTS ) {
 			
 				//tv_busline
@@ -475,15 +448,16 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 		
 		if (arg0.getSnippet().equals(getActivity().getString(R.string.busmsg1))){
 
-			//GPS BUS DATA TEST
 			
-			//frame_bus.setVisibility(View.VISIBLE);
+			//*
 			buscode_search.setEnabled(false);
-			//buscode_search.setVisibility(View.INVISIBLE);
+			
 			
 			Getting_GpsBusData gbd = new Getting_GpsBusData();
 			gbd.setAlarm(getActivity());
-			
+			//*/
+	        //Intent intent = new Intent(getActivity(), Users.class);
+	        //startActivity(intent);
 			
 
 		} else if(arg0.getSnippet().equals(getActivity().getString(R.string.busmsg2))) {
@@ -495,15 +469,6 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 
 	}
 
-	/*
-	 * creating random postion around a location for testing purpose only
-	 */
-	private double[] createRandLocation(double latitude, double longitude) {
-
-		return new double[] { latitude + ((Math.random() - 0.5) / 500),
-				longitude + ((Math.random() - 0.5) / 500),
-				150 + ((Math.random() - 0.5) * 10) };
-	}
 
 
 }

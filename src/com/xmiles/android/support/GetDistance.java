@@ -1,6 +1,6 @@
 package com.xmiles.android.support;
 
-public class Distance_calc {
+public class GetDistance {
 	
 	private double result;
 	

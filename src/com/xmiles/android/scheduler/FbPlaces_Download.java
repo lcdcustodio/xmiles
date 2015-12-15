@@ -29,7 +29,7 @@ import com.xmiles.android.facebook_places.Facebook_Places;
 import com.xmiles.android.facebook_places.Facebook_picURL_Places;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
-import com.xmiles.android.support.Distance_calc;
+import com.xmiles.android.support.GetDistance;
 import com.xmiles.android.support.Support;
 
 /**
@@ -220,7 +220,7 @@ public class FbPlaces_Download extends WakefulBroadcastReceiver implements Locat
 					    			
 					    			jsonArray_category = findPlaces.getJSONObject(i).getJSONArray("category_list");
 			
-					  	    	    Distance_calc dist_calc = new Distance_calc();
+					  	    	    GetDistance dist_calc = new GetDistance();
 					  	    	    String get_distance = String.format("%.2f",dist_calc.calculo(jsonObject_location.getDouble("latitude"), Lat, jsonObject_location.getDouble("longitude"), Long));
 					  	    	    
 					  	    	    /** Setting up values to insert into UserPlaces table */

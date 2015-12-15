@@ -4,7 +4,7 @@ import java.util.Calendar;
 
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
-import com.xmiles.android.support.Distance_calc;
+import com.xmiles.android.support.GetDistance;
 import com.xmiles.android.support.GPSTracker;
 
 import com.xmiles.android.R;
@@ -113,7 +113,7 @@ public class Scanning extends WakefulBroadcastReceiver{
 	    Log.w(TAG, "Scanning Lat: " + Lat);
 	    Log.w(TAG, "Scanning Long: " + Long);	    
 
-		Distance_calc dist_calc = new Distance_calc();
+		GetDistance dist_calc = new GetDistance();
 		//------------
 		Uri uri = SqliteProvider.CONTENT_URI_USER_ROUTES_FLAG;
 		Cursor data_flag = ctx.getContentResolver().query(uri, null, null, null, null);
