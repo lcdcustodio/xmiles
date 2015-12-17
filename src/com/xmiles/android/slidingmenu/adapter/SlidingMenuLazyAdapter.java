@@ -144,7 +144,9 @@ public class SlidingMenuLazyAdapter extends BaseAdapter {
 		        
 		        // Setting all values in listview
 		        title.setText(users_info.getString(KEY_NAME));
-		        artist.setText("Pontuação: 0 km");
+		        //artist.setText("Pontuação: 0 km");
+		        //artist.setText("Pontos: " + users_info.getString(KEY_SCORE));
+		        artist.setText("Pontuação: " + users_info.getString(KEY_SCORE));
 		        
 				Drawable drawable = null;
 				try {

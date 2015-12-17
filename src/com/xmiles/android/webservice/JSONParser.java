@@ -73,7 +73,7 @@ public class JSONParser {
                 //sb.append(line + "n");
                 sb.append(line + "\n");
                 //-----
-                Log.i("FACEBOOK", line);
+                //Log.i("FACEBOOK", line);
                 //-----
             }
             is.close();

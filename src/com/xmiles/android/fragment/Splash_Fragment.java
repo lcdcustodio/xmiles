@@ -20,6 +20,7 @@ import com.xmiles.android.scheduler.Getting_UserLocation;
 
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
+import com.xmiles.android.support.GetDeviceName;
 import com.xmiles.android.support.Support;
 import com.xmiles.android.webservice.UserFunctions;
 
@@ -97,19 +98,24 @@ public class Splash_Fragment extends Fragment {
 				contentValues.put(DatabaseHelper.KEY_PICTURE, facebook_profile.optJSONObject("picture").optJSONObject("data").getString("url"));
 				contentValues.put(DatabaseHelper.KEY_CREATED_AT, support.getDateTime());
 				//-------------
+            	//REWARDS
+            	xMiles_getRewards();				
+				//-------------				
 				JSONObject json_login = xMiles_Login(facebook_profile.getString("name"),
 							 			facebook_profile.getString("id"),
 							 			facebook_profile.getString("gender"),
 							 			facebook_profile.optJSONObject("picture").optJSONObject("data").getString("url"));
-
+				//-------------
+				Log.e(TAG,"getDeviceName(): " + new GetDeviceName().getDeviceName());
+				
+				contentValues.put(DatabaseHelper.KEY_SCORE, new JSONObject(json_login.getString("user")).getString("score"));
+				//-------------				
 				/*
-				 * If Login success = 1 then GET REWARDS and later
+				 * If Login success = 1 then GET Blabla and later
 				 * [new] TABLE_USER_ROUTES
 				 */
                 if(Integer.parseInt(json_login.getString("success")) == 1){
                 	
-                	//REWARDS
-                	xMiles_getRewards();
 
     				JSONObject json_favoritesRoutes = xMiles_favoritesRoutes(facebook_profile.getString("name"),
     																		 facebook_profile.getString("id"));

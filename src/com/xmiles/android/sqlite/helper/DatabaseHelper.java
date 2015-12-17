@@ -111,9 +111,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String CREATE_TABLE_USER_PROFILE = "CREATE TABLE "
 			+ TABLE_USER_PROFILE + "(" + KEY_ID + " TEXT," + KEY_NAME
 			+ " TEXT," + KEY_PICTURE + " TEXT," +
-			//KEY_DEVICE + " TEXT," + KEY_CREATED_AT
-			KEY_CREATED_AT
-			+ " DATETIME" + ")";
+			KEY_SCORE + " TEXT," +
+			KEY_CREATED_AT	+ " DATETIME" + ")";
 
 	private static final String CREATE_TABLE_CITY_BUSLINE = "CREATE TABLE "
 			+ TABLE_CITY_BUSLINE + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
@@ -486,7 +485,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public Cursor get_UserProfile(){
         //return mDB.query(TABLE_USER_PLACES, new String[] { KEY_ROW_ID,  KEY_NAME , KEY_PHONE } , null, null, null, null, KEY_NAME + " asc ");
 		//return mDB.query(TABLE_USER_PLACES, new String[] {KEY_ROW_ID, KEY_NEARBY,KEY_CITY}, null, null, null, null, null);
-		return mDB.query(TABLE_USER_PROFILE, new String[] {KEY_ID, KEY_NAME,KEY_PICTURE}, null, null, null, null, null);
+		return mDB.query(TABLE_USER_PROFILE, new String[] {KEY_ID, KEY_NAME,KEY_PICTURE, KEY_SCORE}, null, null, null, null, null);
 	}
 
 	public Cursor get_CityBusline(){

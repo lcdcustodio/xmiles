@@ -63,7 +63,7 @@ public class UserFunctions {
         params.add(new BasicNameValuePair("fb_id", id));
         JSONObject json = jsonParser.getJSONFromUrl(loginURL, params);
         // return json        
-        Log.e(TAG, "loginUser " + json.toString());
+        Log.i(TAG, "loginUser " + json.toString());
         return json;
     }
 
@@ -73,7 +73,7 @@ public class UserFunctions {
         params.add(new BasicNameValuePair("tag", user_rewards_tag));
         JSONObject json = jsonParser.getJSONFromUrl(user_rewardsURL, params);
         // return json        
-        Log.e(TAG, "getRewards " + json.toString());
+        Log.w(TAG, "getRewards " + json.toString());
         return json;
     }
 
