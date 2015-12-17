@@ -88,7 +88,7 @@ public class Users_Fragment extends Fragment implements LoaderManager.LoaderCall
 		
 		View custom = inflater.inflate(R.layout.favorites_fragment, null); 
 		
-		mListFavorites = (ListView) custom.findViewById(R.id.list_favorites);
+		//mListFavorites = (ListView) custom.findViewById(R.id.list_favorites);
 		list 		   = (ListView) custom.findViewById(R.id.list_favorites);
 		//Route          = (TextView) rootView2.findViewById(R.id.rotas);
 		//---------------		
@@ -135,12 +135,7 @@ public class Users_Fragment extends Fragment implements LoaderManager.LoaderCall
 	@Override
 	public void onLoadFinished(Loader<Cursor> arg0, Cursor data) {
 		// TODO Auto-generated method stub
-        if (data == null || data.getCount() == 0){
-        	Route.setText("Não há rotas cadastradas");		            	
-    	} else {
-    		Route.setText("ROTAS");
-    	}		
-		mListFavorites.setAdapter(new FavoritesListAdapter(getActivity(), data));
+		//mListFavorites.setAdapter(new FavoritesListAdapter(getActivity(), data));
 
 		Log.d(TAG, "Favotires_Fgmnt onLoadFinished");
 
@@ -221,9 +216,6 @@ public class Users_Fragment extends Fragment implements LoaderManager.LoaderCall
 	                                @Override
 	                                public void run() {
 	                                	
-	            						//mListFavorites.setAdapter(new FavoritesListAdapter(getActivity()));
-	                                	//mListFavorites.setAdapter(new FavoritesListAdapter(getActivity(),data_userFavorites));
-	                            		// Getting adapter by passing xml data ArrayList
 	                                    adapter=new LazyAdapter(getActivity(), data_userFavorites);        
 	                                    list.setAdapter(adapter);
 
@@ -243,124 +235,7 @@ public class Users_Fragment extends Fragment implements LoaderManager.LoaderCall
 
 	 }
 	 
-		public class FavoritesListAdapter extends BaseAdapter {
-		    private LayoutInflater mInflater;
-		    Cursor users_info;
 
-		    //public FavoritesListAdapter(FragmentActivity fragmentActivity) {
-		    public FavoritesListAdapter(FragmentActivity fragmentActivity, Cursor data) {	
-		    	users_info = data; 	    		    	
-		    }
-
-			@Override
-			public int getCount() {
-				// TODO Auto-generated method stub
-				//return jsonArray.length() + 1;
-				//return data_userFavorites.getCount() + 1;
-				//-------------------
-				//return data_userFavorites.getCount();
-				//return favorites_info.getCount();
-				return 5;
-				//-------------------
-
-				
-			}
-			
-			@Override
-			public int getItemViewType(int position) {
-				return TYPE1;
-				//if (position < jsonArray.length() ){
-				/*
-				if  (position < data_userFavorites.getCount() ){	
-					return TYPE1;
-				} else {
-					return TYPE2;
-				}
-				*/
-			}
-
-			@Override
-			public Object getItem(int arg0) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			@Override
-			public long getItemId(int arg0) {
-				// TODO Auto-generated method stub
-				return 0;
-			}
-
-			@Override
-			public View getView(final int position, View convertView, ViewGroup arg2) {				
-
-				
-				int viewType = this.getItemViewType(position);
-
-				
-			    switch(viewType){
-			       case 1:
-			           
-			    	   final Type1Holder holder1; 
-
-			           View v = convertView;
-			           
-						if (mInflater == null){
-							mInflater = (LayoutInflater) getActivity()
-				                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-						}
-			           
-			           //if (v == null) { 
-			        	   v = mInflater.inflate(R.layout.users_items, null);
-			        	   holder1 = new Type1Holder (); 
-			               
-			        	   holder1.profile_pic = (ImageView) v.findViewById(R.id.profile_pic);
-			               holder1.name = (TextView) v.findViewById(R.id.name);
-			               holder1.score = (TextView) v.findViewById(R.id.score);
-			               v.setTag(holder1); 
-
-			               //users_info.moveToPosition(position);
-			               users_info.moveToLast();
-				           holder1.name.setText( users_info.getString(KEY_NAME));					 
-				           holder1.score.setText("Pontuação: 0 km");
-				           //*
-	        		        mHandler.post(new Runnable() {	
-	                            @Override
-	                            public void run() {
-	                            	try {
-	                    	
-	                            		
-    			                    	Context c = getActivity();
-    			                    	Drawable drawable = new LoadImageURL(users_info.getString(KEY_PICURL),c).execute().get();	    			                    	
-    			                    	holder1.profile_pic.setImageDrawable(drawable);		                   
-    			                    } catch (Exception e) {
-    			        				// TODO Auto-generated catch block
-    			        				e.printStackTrace();
-    			                    }
-	                    	
-	                            }
-	        		        });
-	        		        //*/
-
-			            return v;	
-			    	   
-			       default:
-			            break;
-			        	   
-			    }
-				return null;
-				
-
-			}
-		}
-
-	    
-	    class Type1Holder {
-	        ImageView profile_pic;
-	        TextView name;
-	        TextView score;
-
-	    }
 
 	    
 }

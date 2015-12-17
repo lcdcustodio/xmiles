@@ -29,17 +29,19 @@ public class UserFunctions {
     private static String user_routesURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String user_locationURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String bus_gpsURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
+    private static String user_rewardsURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     //------------------------------------    
-    private static String login_tag = "login";
-    private static String register_tag = "register";
-    private static String favorites_tag = "favorites";
+    private static String login_tag 		= "login";
+    private static String register_tag 		= "register";
+    private static String favorites_tag 	= "favorites";
     private static String insert_favorites_tag = "favorites_register";
-    private static String busline_tag = "busline";
-    private static String bus_stop_tag = "bus_stop";
-    private static String user_routes_tag = "user_routes";
+    private static String busline_tag 		= "busline";
+    private static String bus_stop_tag 		= "bus_stop";
+    private static String user_routes_tag 	= "user_routes";
     private static String user_location_tag = "userlocation_register";
-    private static String bus_gps_tag = "busgps_register";
-     
+    private static String bus_gps_tag 		= "busgps_register";
+    private static String user_rewards_tag  = "rewards";
+    //------------------------------------     
     // constructor
     public UserFunctions(){
         jsonParser = new JSONParser();
@@ -62,6 +64,16 @@ public class UserFunctions {
         JSONObject json = jsonParser.getJSONFromUrl(loginURL, params);
         // return json        
         Log.e(TAG, "loginUser " + json.toString());
+        return json;
+    }
+
+    public JSONObject getRewards(){
+        // Building Parameters
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("tag", user_rewards_tag));
+        JSONObject json = jsonParser.getJSONFromUrl(user_rewardsURL, params);
+        // return json        
+        Log.e(TAG, "getRewards " + json.toString());
         return json;
     }
 

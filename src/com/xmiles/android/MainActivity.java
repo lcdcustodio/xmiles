@@ -4,6 +4,8 @@ package com.xmiles.android;
 
 
 
+
+
 import com.xmiles.android.fragment.EmConstrucao_Fragment;
 import com.xmiles.android.fragment.Favorites_Fragment;
 import com.xmiles.android.fragment.Profile_Fragment;
@@ -21,7 +23,9 @@ import android.support.v4.widget.DrawerLayout;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity {
 
@@ -55,7 +59,7 @@ public class MainActivity extends FragmentActivity {
 
 	    Tab tab1 = actionBar
 	          .newTab()
-	          .setText("INÍCIO")
+	          .setText("MAPA")
 	          //.setIcon(R.drawable.android_logo)
 	          .setTabListener(new MyTabsListener(fgmt_inicio));
 
@@ -64,7 +68,7 @@ public class MainActivity extends FragmentActivity {
 
 	      Tab tab2 = actionBar
 	    	   .newTab()
-	    	   .setText("RECOMPENSAS")
+	    	   .setText("HISTÓRICO")
 	    	   //.setIcon(R.drawable.windows_logo)
 	    	   .setTabListener(new MyTabsListener(fgmt_ranking));
 	    	  
@@ -88,10 +92,13 @@ public class MainActivity extends FragmentActivity {
 	          
 	    mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 	    mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
-      
-        adapter=new SlidingMenuLazyAdapter(getApplicationContext());        
-        mDrawerList.setAdapter(adapter);
-        
+	    
+	    runThread();
+        //adapter=new SlidingMenuLazyAdapter(getApplicationContext());        
+        //mDrawerList.setAdapter(adapter);
+	    mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
+	    
+	    
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
 				R.drawable.ic_drawer, //nav menu toggle icon
 				R.string.app_name, // nav drawer open - description for accessibility
@@ -115,19 +122,31 @@ public class MainActivity extends FragmentActivity {
 
 	}
 	
+	 private void runThread(){
+	     runOnUiThread (new Thread(new Runnable() {
+		 //new Thread() {
+	         public void run() {
+
+	        	 adapter=new SlidingMenuLazyAdapter(getApplicationContext());        
+	             mDrawerList.setAdapter(adapter);
+	             
+	             try {
+					Thread.sleep(50);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	         }
+	     }));
+		 //}.start();
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main_frame, menu);
 		return true;
 	}
-	/*
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-
-		return super.onOptionsItemSelected(item);
-	}
-	*/
 
 	
 	  protected class MyTabsListener implements ActionBar.TabListener{
@@ -193,5 +212,20 @@ public class MainActivity extends FragmentActivity {
 			mDrawerToggle.onConfigurationChanged(newConfig);
 		}
 
+		/**
+		 * Slide menu item click listener
+		 * */
+		private class SlideMenuClickListener implements
+				ListView.OnItemClickListener {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position,
+					long id) {
+				// display view for selected nav drawer item
+				//displayView(position);
+				if (position > 1){
+					Toast.makeText(getApplicationContext(), "Necessário atingir pontuação mínima da recompensa", Toast.LENGTH_SHORT).show();
+				}
+			}
+		}
 
 }

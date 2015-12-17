@@ -40,8 +40,8 @@ public class SqliteProvider extends ContentProvider{
 	public static final Uri CONTENT_URI_BUS_GPS_DATA = Uri.parse("content://" + PROVIDER_NAME + "/BusGpsData");
 	public static final Uri CONTENT_URI_BUS_GPS_URL_insert = Uri.parse("content://" + PROVIDER_NAME + "/BusGpsUrl_insert");
 	public static final Uri CONTENT_URI_BUS_GPS_URL = Uri.parse("content://" + PROVIDER_NAME + "/BusGpsUrl");
-
-
+	public static final Uri CONTENT_URI_REWARDS_create = Uri.parse("content://" + PROVIDER_NAME + "/Rewards_create");
+	public static final Uri CONTENT_URI_REWARDS = Uri.parse("content://" + PROVIDER_NAME + "/Rewards");
 
 	/** Constants to identify the requested operation */
 	private static final int USER_PROFILE = 1;
@@ -65,6 +65,8 @@ public class SqliteProvider extends ContentProvider{
 	private static final int BUS_GPS_DATA = 19;
 	private static final int BUS_GPS_URL_insert = 20;
 	private static final int BUS_GPS_URL = 21;
+	private static final int REWARDS_create = 22;
+	private static final int REWARDS = 23;
 
 
 	private static final UriMatcher uriMatcher ;
@@ -91,6 +93,8 @@ public class SqliteProvider extends ContentProvider{
 		uriMatcher.addURI(PROVIDER_NAME, "BusGpsData", BUS_GPS_DATA);
 		uriMatcher.addURI(PROVIDER_NAME, "BusGpsUrl_insert", BUS_GPS_URL_insert);
 		uriMatcher.addURI(PROVIDER_NAME, "BusGpsUrl", BUS_GPS_URL);
+		uriMatcher.addURI(PROVIDER_NAME, "Rewards_create", REWARDS_create);
+		uriMatcher.addURI(PROVIDER_NAME, "Rewards", REWARDS);
 
 	}
 
@@ -284,7 +288,6 @@ public class SqliteProvider extends ContentProvider{
 	    try {
 
 	        uriType = uriMatcher.match(uri);
-	        //SQLiteDatabase sqlDB = mDatabaseHelper.getWritableDatabase();
 
 	        switch (uriType) {
 	        case USER_PLACES:
@@ -295,14 +298,6 @@ public class SqliteProvider extends ContentProvider{
 	            	mDatabaseHelper.getWritableDatabase().beginTransaction();
 	                for (ContentValues value : values) {
 	                	//---------
-	                	/**
-	                	 * Por algum motivo ainda desconhecido quando o array de
-	                	 * places é da ordem de 100-400 amostras, no metade das
-	                	 * primeiras 30 amostras, o json contém um valor = null
-	                	 * apresentando o seguinte erro:
-	                	 * sqlite returned: error code = 1, msg = near "null": syntax error, db=/data/data/com.facetooth_light.android/databases/b2h
-	                	 * mas esse erro não chega a para o APP
-	                	 */
 	                	//Log.d(TAG, "values " + values.toString());
 	                	//---------
 	                    long id = mDatabaseHelper.getWritableDatabase().insert(DatabaseHelper.TABLE_USER_PLACES, null, value);
@@ -358,6 +353,27 @@ public class SqliteProvider extends ContentProvider{
 	            	mDatabaseHelper.getWritableDatabase().endTransaction();
 	            }
 	            break;
+	            
+	        case REWARDS_create:
+	            try {
+	            	//----
+	            	mDatabaseHelper.resetRewards();
+	            	//----
+	            	mDatabaseHelper.getWritableDatabase().beginTransaction();
+	                for (ContentValues value : values) {
+	                	//---------
+	                	//---------
+	                    long id = mDatabaseHelper.getWritableDatabase().insert(DatabaseHelper.TABLE_REWARDS, null, value);
+	                    if (id > 0)
+	                        insertCount++;
+	                }
+	                mDatabaseHelper.getWritableDatabase().setTransactionSuccessful();
+	            } catch (Exception e) {
+	                // Your error handling
+	            } finally {
+	            	mDatabaseHelper.getWritableDatabase().endTransaction();
+	            }
+	            break;	            
 
 	        case USER_ROUTES_create:
 	            try {
@@ -462,6 +478,9 @@ public class SqliteProvider extends ContentProvider{
 
 		}else if (uriMatcher.match(uri)==BUS_GPS_URL){
 			return mDatabaseHelper.get_BusGpsUrl();
+			
+		}else if (uriMatcher.match(uri)==REWARDS){
+			return mDatabaseHelper.get_Rewards();			
 			
 		}else{
 			return null;

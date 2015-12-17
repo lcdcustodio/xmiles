@@ -85,27 +85,6 @@ public class Splash_Fragment extends Fragment {
 			facebook_profile = new GetFacebookProfile().GetResult(Utility.mFacebook.getAccessToken());
 			//Log.i(TAG, "facebook_profile: " + facebook_profile);
 
-			// start FbPlaces service
-			//FbPlaces = new FbPlaces_Download();
-			//FbPlaces.setAlarm(getActivity());
-			
-			//------------------
-			/* 
-			 *  TRY to cancel Getting_Location receiver 
-			 *  if is running in order to ensure that receiver is working
-			 */
-			/*
-			Getting_UserLocation gl = new Getting_UserLocation();
-		    try {
-		    	
-		    	//gl.cancelAlarm(getActivity());
-		    	
-		    	//gl.setAlarm(getActivity());
-		    	
-		    } catch (Exception e) {
-		        Log.e(TAG, "Getting_Location service was not canceled. " + e.toString());
-		    }
-		    */
 			//------------------
             Support support = new Support();
 
@@ -124,10 +103,13 @@ public class Splash_Fragment extends Fragment {
 							 			facebook_profile.optJSONObject("picture").optJSONObject("data").getString("url"));
 
 				/*
-				 * If Login success = 1 then Check TABLE_USER_FAVORITES and later
+				 * If Login success = 1 then GET REWARDS and later
 				 * [new] TABLE_USER_ROUTES
 				 */
                 if(Integer.parseInt(json_login.getString("success")) == 1){
+                	
+                	//REWARDS
+                	xMiles_getRewards();
 
     				JSONObject json_favoritesRoutes = xMiles_favoritesRoutes(facebook_profile.getString("name"),
     																		 facebook_profile.getString("id"));
@@ -353,4 +335,60 @@ public class Splash_Fragment extends Fragment {
 
     	return json;
     }
+    
+    public void xMiles_getRewards() {
+		//Your code goes here
+    	//------------
+    	ContentValues[] valueList;
+    	JSONArray jsonArray;
+    	//-----------
+		UserFunctions userFunc = new UserFunctions();
+		JSONObject json = userFunc.getRewards();
+
+        try {
+
+        	if (json.getString("success") != null) {
+
+			    String res = json.getString("success");
+			    if(Integer.parseInt(res) == 1){
+
+			    	jsonArray = new JSONArray(json.getString("rewards"));
+			    	valueList = new ContentValues[jsonArray.length()];
+
+					for (int position = 0; position < jsonArray.length(); position++) {
+
+						JSONObject jsonObject = null;
+
+						try {
+							ContentValues values = new ContentValues();
+							jsonObject = jsonArray.getJSONObject(position);
+
+							values.put(DatabaseHelper.KEY_REWARD, jsonObject.getString("reward_name"));
+							values.put(DatabaseHelper.KEY_REWARD_TYPE, jsonObject.getString("reward_type"));
+							values.put(DatabaseHelper.KEY_SCORE, jsonObject.getString("score"));
+							values.put(DatabaseHelper.KEY_QUANTITY, jsonObject.getString("quantity"));
+							values.put(DatabaseHelper.KEY_PICURL, jsonObject.getString("picurl"));
+
+							valueList[position] = values;
+
+
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+					}
+
+					getActivity().getContentResolver().bulkInsert(SqliteProvider.CONTENT_URI_REWARDS_create, valueList);
+
+			    }
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+    	//return json;
+    }
+
 }
