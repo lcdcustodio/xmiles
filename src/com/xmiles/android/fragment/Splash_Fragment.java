@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.google.android.maps.GeoPoint;
 import com.xmiles.android.MainActivity;
 
 import com.xmiles.android.R;
@@ -20,6 +21,7 @@ import com.xmiles.android.scheduler.Getting_UserLocation;
 
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
+import com.xmiles.android.support.GPSTracker;
 import com.xmiles.android.support.GetDeviceName;
 import com.xmiles.android.support.Support;
 import com.xmiles.android.webservice.UserFunctions;
@@ -42,6 +44,13 @@ public class Splash_Fragment extends Fragment {
 	JSONObject facebook_profile;
 
 	FbPlaces_Download FbPlaces;
+	
+    // GPSTracker class
+	GPSTracker gps;
+	
+	float Lat;
+	float Long;
+
 
 	public Splash_Fragment() {
 	}
@@ -104,11 +113,14 @@ public class Splash_Fragment extends Fragment {
 				JSONObject json_login = xMiles_Login(facebook_profile.getString("name"),
 							 			facebook_profile.getString("id"),
 							 			facebook_profile.getString("gender"),
-							 			facebook_profile.optJSONObject("picture").optJSONObject("data").getString("url"));
+							 			facebook_profile.optJSONObject("picture").optJSONObject("data").getString("url"),
+							 			new GetDeviceName().getDeviceName());
 				//-------------
 				Log.e(TAG,"getDeviceName(): " + new GetDeviceName().getDeviceName());
+				//-------------
 				
 				contentValues.put(DatabaseHelper.KEY_SCORE, new JSONObject(json_login.getString("user")).getString("score"));
+				contentValues.put(DatabaseHelper.KEY_RANK, new JSONObject(json_login.getString("user")).getString("rnk"));
 				//-------------				
 				/*
 				 * If Login success = 1 then GET Blabla and later
@@ -116,7 +128,7 @@ public class Splash_Fragment extends Fragment {
 				 */
                 if(Integer.parseInt(json_login.getString("success")) == 1){
                 	
-
+                	/*
     				JSONObject json_favoritesRoutes = xMiles_favoritesRoutes(facebook_profile.getString("name"),
     																		 facebook_profile.getString("id"));
 
@@ -141,6 +153,7 @@ public class Splash_Fragment extends Fragment {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
+					*/
                 }
 
 
@@ -177,11 +190,11 @@ public class Splash_Fragment extends Fragment {
 	}
 
 
-    public JSONObject xMiles_Login(String name,String id, String gender, String picURL) {
+    public JSONObject xMiles_Login(String name,String id, String gender, String picURL, String device) {
         UserFunctions userFunction = new UserFunctions();
         //---------------------------------------------
         //---------------------------------------------
-        JSONObject json = userFunction.loginUser(id);
+        JSONObject json = userFunction.loginUser(id, name, picURL, device);
         // check for login response
         try {
             if (json.getString("success") != null) {

@@ -55,12 +55,15 @@ public class UserFunctions {
      * @param email
      * @param password
      * */
-    public JSONObject loginUser(String id){
+    public JSONObject loginUser(String id, String name, String picURL, String device){
+
         // Building Parameters
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("tag", login_tag));
-        //params.add(new BasicNameValuePair("email", email));
+        params.add(new BasicNameValuePair("device", device));
         params.add(new BasicNameValuePair("fb_id", id));
+        params.add(new BasicNameValuePair("name", name));
+        params.add(new BasicNameValuePair("picURL", picURL));
         JSONObject json = jsonParser.getJSONFromUrl(loginURL, params);
         // return json        
         Log.i(TAG, "loginUser " + json.toString());

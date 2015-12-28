@@ -18,7 +18,7 @@ public class Score_Algorithm {
 	
 	public Score_Algorithm(Context ctx) {
 		this.mContext = ctx;		
-		//Log.w(TAG,"Score_Algorithm: " + "");
+
 		
 	}
 	

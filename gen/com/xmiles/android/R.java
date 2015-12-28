@@ -816,7 +816,7 @@ containing a value of this type.
     }
     public static final class id {
         public static final int _de=0x7f070046;
-        public static final int about_it=0x7f070070;
+        public static final int about_it=0x7f070071;
         public static final int adjust_height=0x7f070003;
         public static final int adjust_width=0x7f070002;
         public static final int artist=0x7f070062;
@@ -859,7 +859,7 @@ containing a value of this type.
         public static final int com_facebook_usersettingsfragment_profile_name=0x7f07003f;
         public static final int donate_with_google=0x7f070015;
         public static final int drawer_layout=0x7f07001c;
-        public static final int duration=0x7f070069;
+        public static final int duration=0x7f07006a;
         public static final int fblogin=0x7f070048;
         public static final int frame_bus=0x7f07005a;
         public static final int frame_busline=0x7f07004e;
@@ -875,7 +875,7 @@ containing a value of this type.
         public static final int header=0x7f070049;
         public static final int holo_dark=0x7f070008;
         public static final int holo_light=0x7f070009;
-        public static final int how_works=0x7f070071;
+        public static final int how_works=0x7f070072;
         public static final int hybrid=0x7f070007;
         public static final int imageView1=0x7f070054;
         public static final int imageView123=0x7f070059;
@@ -890,45 +890,46 @@ containing a value of this type.
         public static final int list_slidermenu=0x7f07001e;
         public static final int locat=0x7f070055;
         public static final int match_parent=0x7f070010;
-        public static final int menu_more=0x7f07006f;
+        public static final int menu_more=0x7f070070;
         public static final int monochrome=0x7f070018;
         public static final int name=0x7f070024;
-        public static final int new_route=0x7f07006e;
+        public static final int new_route=0x7f07006f;
         public static final int none=0x7f070001;
         public static final int normal=0x7f070004;
         public static final int people_connected=0x7f07005c;
         public static final int picker_subtitle=0x7f070036;
-        public static final int policies=0x7f070072;
+        public static final int policies=0x7f070073;
         public static final int production=0x7f07000a;
         public static final int profile_pic=0x7f070023;
+        public static final int rank=0x7f070063;
         public static final int rel01=0x7f07004b;
         public static final int relativeLayout1=0x7f070056;
-        public static final int reward=0x7f070064;
-        public static final int reward_image=0x7f070063;
-        public static final int reward_score=0x7f070067;
-        public static final int rewards=0x7f070068;
+        public static final int reward=0x7f070065;
+        public static final int reward_image=0x7f070064;
+        public static final int reward_score=0x7f070068;
+        public static final int rewards=0x7f070069;
         public static final int rotas=0x7f070044;
-        public static final int rua=0x7f07006c;
+        public static final int rua=0x7f07006d;
         public static final int sandbox=0x7f07000c;
-        public static final int satelite=0x7f07006b;
+        public static final int satelite=0x7f07006c;
         public static final int satellite=0x7f070005;
-        public static final int score=0x7f07006a;
+        public static final int score=0x7f07006b;
         public static final int search=0x7f07004d;
         public static final int selectionDetails=0x7f07000f;
         public static final int slide=0x7f070019;
         public static final int small=0x7f07001a;
         public static final int strict_sandbox=0x7f07000d;
         public static final int terrain=0x7f070006;
-        public static final int terreno=0x7f07006d;
+        public static final int terreno=0x7f07006e;
         public static final int test=0x7f07000b;
         public static final int text_1=0x7f07005d;
         public static final int text_2=0x7f07005e;
         public static final int thumbnail=0x7f07005f;
         public static final int title=0x7f070061;
-        public static final int total=0x7f070066;
+        public static final int total=0x7f070067;
         public static final int txtLabel=0x7f070041;
         public static final int txt_header=0x7f07004a;
-        public static final int type=0x7f070065;
+        public static final int type=0x7f070066;
         public static final int wrap_content=0x7f070011;
     }
     public static final class integer {

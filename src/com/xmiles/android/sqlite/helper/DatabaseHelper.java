@@ -107,11 +107,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String KEY_REWARD_TYPE  = "reward_type";
 	public static final String KEY_QUANTITY 	= "quantity";
 	
+	// REWARDS Table - column names	
+	public static final String KEY_RANK   	= "rank";
+	
 	// Table Create Statements
 	private static final String CREATE_TABLE_USER_PROFILE = "CREATE TABLE "
 			+ TABLE_USER_PROFILE + "(" + KEY_ID + " TEXT," + KEY_NAME
 			+ " TEXT," + KEY_PICTURE + " TEXT," +
-			KEY_SCORE + " TEXT," +
+			KEY_SCORE  + " TEXT," +
+			KEY_RANK   + " TEXT," +			
 			KEY_CREATED_AT	+ " DATETIME" + ")";
 
 	private static final String CREATE_TABLE_CITY_BUSLINE = "CREATE TABLE "
@@ -485,7 +489,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public Cursor get_UserProfile(){
         //return mDB.query(TABLE_USER_PLACES, new String[] { KEY_ROW_ID,  KEY_NAME , KEY_PHONE } , null, null, null, null, KEY_NAME + " asc ");
 		//return mDB.query(TABLE_USER_PLACES, new String[] {KEY_ROW_ID, KEY_NEARBY,KEY_CITY}, null, null, null, null, null);
-		return mDB.query(TABLE_USER_PROFILE, new String[] {KEY_ID, KEY_NAME,KEY_PICTURE, KEY_SCORE}, null, null, null, null, null);
+		return mDB.query(TABLE_USER_PROFILE, new String[] {KEY_ID, KEY_NAME, KEY_PICTURE, KEY_SCORE, KEY_RANK}, null, null, null, null, null);
 	}
 
 	public Cursor get_CityBusline(){

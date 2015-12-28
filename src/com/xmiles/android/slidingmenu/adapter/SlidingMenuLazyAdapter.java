@@ -41,7 +41,8 @@ public class SlidingMenuLazyAdapter extends BaseAdapter {
 	//--------
 	private static final Integer KEY_REWARD = 0;
 	private static final Integer KEY_REWARD_TYPE = 1;
-	private static final Integer KEY_SCORE = 3;	
+	private static final Integer KEY_SCORE = 3;
+	private static final Integer KEY_RANK = 4;	
 	private static final Integer KEY_QUANTITY = 4;
 	
 	private Cursor users_info;
@@ -129,8 +130,9 @@ public class SlidingMenuLazyAdapter extends BaseAdapter {
 
 	    	TextView title = (TextView)vi1.findViewById(R.id.title); // title
 		    TextView artist = (TextView)vi1.findViewById(R.id.artist); // artist name		        
+		    TextView rank = (TextView)vi1.findViewById(R.id.rank); // rank
 		    ImageView profile_pic = (ImageView) vi1.findViewById(R.id.list_image);
-        	
+
 	        TextView reward_vi3 = (TextView)vi3.findViewById(R.id.reward);
 	        TextView type_vi3   = (TextView)vi3.findViewById(R.id.type);
 	        ImageView reward_image_vi3 = (ImageView) vi3.findViewById(R.id.reward_image);
@@ -144,9 +146,9 @@ public class SlidingMenuLazyAdapter extends BaseAdapter {
 		        
 		        // Setting all values in listview
 		        title.setText(users_info.getString(KEY_NAME));
-		        //artist.setText("Pontuação: 0 km");
-		        //artist.setText("Pontos: " + users_info.getString(KEY_SCORE));
-		        artist.setText("Pontuação: " + users_info.getString(KEY_SCORE));
+		        //artist.setText("Pontuação: " + users_info.getString(KEY_SCORE));
+		        artist.setText(users_info.getString(KEY_SCORE) + " pontos");
+		        rank.setText(users_info.getString(KEY_RANK) + "° no ranking");
 		        
 				Drawable drawable = null;
 				try {

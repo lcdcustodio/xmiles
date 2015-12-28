@@ -47,7 +47,7 @@ public class MainActivity extends FragmentActivity {
 		
 		//*******
 	    Fragment fgmt_inicio 	= new Profile_Fragment();
-	    Fragment fgmt_favoritos = new Favorites_Fragment();
+	    //Fragment fgmt_favoritos = new Favorites_Fragment();
 	    Fragment fgmt_ranking 	= new EmConstrucao_Fragment();
 	    //*******
 	    
@@ -65,7 +65,7 @@ public class MainActivity extends FragmentActivity {
 
 	      actionBar.addTab(tab1);
 	      actionBar.selectTab(tab1);
-
+	      /*
 	      Tab tab2 = actionBar
 	    	   .newTab()
 	    	   .setText("HISTÓRICO")
@@ -73,7 +73,7 @@ public class MainActivity extends FragmentActivity {
 	    	   .setTabListener(new MyTabsListener(fgmt_ranking));
 	    	  
 	      actionBar.addTab(tab2);
-
+		  */	
 	      
 	      
 	    Tab tab3 = actionBar
