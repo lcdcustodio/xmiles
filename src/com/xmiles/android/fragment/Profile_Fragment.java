@@ -87,7 +87,10 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 	private static final Integer KEY_CITY = 2;
 	private static final Integer KEY_NAME = 1;
 	private static final Integer KEY_PICURL = 2;
-	private static final Integer MAX_POINTS = 4;
+	private static final Integer KEY_FLAG = 3;
+	
+	//private static final Integer MAX_POINTS = 4;
+	private static final Integer MAX_POINTS = 1;
 	private static final Integer MAX_DIST 	  = 3; //3km
 	private static final Integer MAX_TIME_OFFSET = 300; //300secs = 5min
 	
@@ -107,6 +110,7 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 	private static GoogleMap mMap;
 	// --- 
 	TextView tv_busline;
+	TextView tv_flag;
 	TextView tv_buscode;
 	TextView tv_p_connected;
 	TextView tv_info;
@@ -146,13 +150,16 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 			gps.showSettingsAlert();
 		} 
         
-	    tv_busline = (TextView) ViewMap.findViewById(R.id.busline);	    
+	    tv_busline = (TextView) ViewMap.findViewById(R.id.busline);
+	    tv_flag = (TextView) ViewMap.findViewById(R.id.flag);
 	    tv_buscode = (TextView) ViewMap.findViewById(R.id.buscode);	    
 	    tv_p_connected = (TextView) ViewMap.findViewById(R.id.people_connected);
 	    tv_info = (TextView) ViewMap.findViewById(R.id.info);	    
 	    frame_bus = (RelativeLayout) ViewMap.findViewById(R.id.frame_bus);
 
 	    frame_bus.setVisibility(View.INVISIBLE);
+        //-------	    
+	    Log.w(TAG, "frame_bus.getVisibility(): " + frame_bus.getVisibility());
         //-------		
         buscode_search = (AutoCompleteTextView) ViewMap.findViewById(R.id.search);
         //-------
@@ -200,6 +207,10 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 							if (!json_header.equals("[\"MENSAGEM\"]")){
 								
 								frame_bus.setVisibility(View.VISIBLE);
+						        //-------	    
+							    Log.w(TAG, "frame_bus.getVisibility(): " + frame_bus.getVisibility());
+						        //-------		
+
 
 								Log.i("FACEBOOK", "getBusPosition: " + json.getString("DATA"));
 								
@@ -211,11 +222,14 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 								ContentValues cV = new ContentValues();
 								cV.put(DatabaseHelper.KEY_BUSCODE, dataBusArray[index_BUSCODE].replace("\"",""));
 								cV.put(DatabaseHelper.KEY_URL, url);
-								
+								//----------------------------
+								cV.put(DatabaseHelper.KEY_FLAG, 0);
+								//----------------------------								
 								getActivity().getContentResolver().insert(SqliteProvider.CONTENT_URI_BUS_GPS_URL_insert, cV);
 								//----------------------
-								Toast.makeText(getActivity(), "Ônibus " + dataBusArray[index_BUSCODE].replace("\"","") + " encontrado", Toast.LENGTH_LONG).show();
+								//Toast.makeText(getActivity(), "Ônibus " + dataBusArray[index_BUSCODE].replace("\"","") + " encontrado", Toast.LENGTH_LONG).show();
 								tv_busline.setText("Ônibus " + dataBusArray[index_BUSCODE].replace("\"","") + " encontrado");
+								tv_flag.setText("");
 								tv_buscode.setText("");
 								tv_info.setText("");
 								tv_p_connected.setText("");
@@ -264,14 +278,17 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 
 							} else {
 								
-								String url_brt = "http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/brt/";
-								JSONObject json_brt = sca.getBrtPosition(url_brt, searchContent.substring(1, searchContent.length()));
-								Log.v("FACEBOOK", "getBrtPosition: " + json_brt.getString("COLUMNS"));
+								//String url_brt = "http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/brt/";
+								//JSONObject json_brt = sca.getBrtPosition(url_brt, searchContent.substring(1, searchContent.length()));
+								//Log.v("FACEBOOK", "getBrtPosition: " + json_brt.getString("COLUMNS"));
 								
 								if (json_header.equals("[\"MENSAGEM\"]")){
 									
 									Toast.makeText(getActivity(), searchContent + " não encontrado no sistema!", Toast.LENGTH_LONG).show();
 									frame_bus.setVisibility(View.INVISIBLE);
+									//-----------------------
+									sca.GpsNotFound(url, searchContent);
+									//-----------------------
 								}
 
 							}
@@ -358,7 +375,12 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
    	    Cursor data_GpsBusData = getActivity().getContentResolver().query(uri_2, null, null, null, null);
    	    //-------------			        	
         Uri uri_3 = SqliteProvider.CONTENT_URI_USER_LOCATION;
-   	    Cursor data_UserLocation = getActivity().getContentResolver().query(uri_3, null, null, null, null);			        	
+   	    Cursor data_UserLocation = getActivity().getContentResolver().query(uri_3, null, null, null, null);
+   	    //-------------
+		Uri uri_4 = SqliteProvider.CONTENT_URI_BUS_GPS_URL;
+		Cursor bus_gps_url = getActivity().getContentResolver().query(uri_4, null, null, null, null);
+		bus_gps_url.moveToLast();
+
 
 	   	if (data_GpsBusData.getCount()>0 && data_UserLocation.getCount()>0){
 	   		 
@@ -396,15 +418,23 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 			
 			marker.showInfoWindow();
 			
+			if (frame_bus.getVisibility() != 0 ){
+				
+				frame_bus.setVisibility(View.VISIBLE);
+				buscode_search.setEnabled(false);
+				//mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(data_GpsBusData.getDouble(KEY_B_LATITUDE), 
+				//		data_GpsBusData.getDouble(KEY_B_LONGITUDE)), 11.0f));
+			}
 			
 			//if (data_UserLocation.getDouble(KEY_U_DIFF_DISTANCE) <= MAX_DIST &&
 			//		 data_UserLocation.getDouble(KEY_U_DIFF_TIME) <= MAX_TIME_OFFSET) {
-				
-			if (data_GpsBusData.getInt(KEY_ID) <= MAX_POINTS ) {
+			if (bus_gps_url.getInt(KEY_FLAG) <= MAX_POINTS) {	
+			//if (data_GpsBusData.getInt(KEY_ID) <= MAX_POINTS ) {
 			
 				//tv_busline
 				tv_buscode.setText("Distancia (km): " + data_UserLocation.getString(KEY_U_DIFF_DISTANCE));
-				tv_busline.setText("#hop: " + data_GpsBusData.getString(KEY_ID)); 
+				tv_busline.setText("#hop: " + data_GpsBusData.getString(KEY_ID));
+				tv_flag.setText("#hop(D>3km TO>5min): " + bus_gps_url.getInt(KEY_FLAG));
 				tv_p_connected.setText("TimeOffset (sec): " + data_UserLocation.getString(KEY_U_DIFF_TIME));
 				tv_info.setText("Location Source: " + data_UserLocation.getString(KEY_U_LOCATION_PROVIDER));		    
 
@@ -464,6 +494,9 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 			
 	        Intent intent = new Intent(getActivity(), Users.class);
 	        startActivity(intent);
+	        //--------------------
+	        Toast.makeText(getActivity(), "Em construção", Toast.LENGTH_LONG).show();
+	        //--------------------	        
 			
 		}
 

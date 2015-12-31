@@ -109,6 +109,9 @@ public class Splash_Fragment extends Fragment {
 				//-------------
             	//REWARDS
             	xMiles_getRewards();				
+            	//RANKING
+            	xMiles_getRanking();				
+            	
 				//-------------				
 				JSONObject json_login = xMiles_Login(facebook_profile.getString("name"),
 							 			facebook_profile.getString("id"),
@@ -409,5 +412,61 @@ public class Splash_Fragment extends Fragment {
 
     	//return json;
     }
+    
+    public void xMiles_getRanking() {
+		//Your code goes here
+    	//------------
+    	ContentValues[] valueList;
+    	JSONArray jsonArray;
+    	//-----------
+		UserFunctions userFunc = new UserFunctions();
+		JSONObject json = userFunc.getRanking();
+
+        try {
+
+        	if (json.getString("success") != null) {
+
+			    String res = json.getString("success");
+			    if(Integer.parseInt(res) == 1){
+
+			    	jsonArray = new JSONArray(json.getString("ranking"));
+			    	valueList = new ContentValues[jsonArray.length()];
+
+					for (int position = 0; position < jsonArray.length(); position++) {
+
+						JSONObject jsonObject = null;
+
+						try {
+							ContentValues values = new ContentValues();
+							jsonObject = jsonArray.getJSONObject(position);
+
+							values.put(DatabaseHelper.KEY_ID, jsonObject.getString("user_id"));
+							values.put(DatabaseHelper.KEY_NAME, jsonObject.getString("name"));
+							values.put(DatabaseHelper.KEY_SCORE, jsonObject.getString("score"));
+							values.put(DatabaseHelper.KEY_PICURL, jsonObject.getString("picurl"));
+							values.put(DatabaseHelper.KEY_CREATED_AT, jsonObject.getString("last_update_at"));
+							
+							valueList[position] = values;
+
+
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+					}
+
+					getActivity().getContentResolver().bulkInsert(SqliteProvider.CONTENT_URI_RANKING_create, valueList);
+
+			    }
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+    	//return json;
+    }
+
 
 }

@@ -9,6 +9,7 @@ package com.xmiles.android;
 import com.xmiles.android.fragment.EmConstrucao_Fragment;
 import com.xmiles.android.fragment.Favorites_Fragment;
 import com.xmiles.android.fragment.Profile_Fragment;
+import com.xmiles.android.fragment.Ranking_Fragment;
 import com.xmiles.android.slidingmenu.adapter.SlidingMenuLazyAdapter;
 
 import android.app.ActionBar;
@@ -48,7 +49,8 @@ public class MainActivity extends FragmentActivity {
 		//*******
 	    Fragment fgmt_inicio 	= new Profile_Fragment();
 	    //Fragment fgmt_favoritos = new Favorites_Fragment();
-	    Fragment fgmt_ranking 	= new EmConstrucao_Fragment();
+	    //Fragment fgmt_ranking 	= new EmConstrucao_Fragment();
+	    Fragment fgmt_ranking 	= new Ranking_Fragment();
 	    //*******
 	    
 	    ActionBar actionBar = getActionBar();
@@ -181,7 +183,24 @@ public class MainActivity extends FragmentActivity {
 			// Handle action bar actions click
 			switch (item.getItemId()) {
 			case R.id.about_it:
+				
+				Toast.makeText(getApplicationContext(), "Em construção", Toast.LENGTH_LONG).show();
+				
 				return true;
+				
+			case R.id.how_works:
+				
+				Toast.makeText(getApplicationContext(), "Em construção", Toast.LENGTH_LONG).show();
+				
+				return true;
+
+			case R.id.policies:
+				
+				Toast.makeText(getApplicationContext(), "Em construção", Toast.LENGTH_LONG).show();
+				
+				return true;
+				
+				
 			default:
 				return super.onOptionsItemSelected(item);
 			}

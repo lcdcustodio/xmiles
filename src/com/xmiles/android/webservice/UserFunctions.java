@@ -30,6 +30,8 @@ public class UserFunctions {
     private static String user_locationURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String bus_gpsURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String user_rewardsURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
+    private static String gps_notfoundURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
+    private static String user_rankingURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     //------------------------------------    
     private static String login_tag 		= "login";
     private static String register_tag 		= "register";
@@ -41,6 +43,8 @@ public class UserFunctions {
     private static String user_location_tag = "userlocation_register";
     private static String bus_gps_tag 		= "busgps_register";
     private static String user_rewards_tag  = "rewards";
+    private static String gps_notfound_tag  = "gps_notfound";
+    private static String user_ranking_tag  = "ranking";
     //------------------------------------     
     // constructor
     public UserFunctions(){
@@ -69,7 +73,33 @@ public class UserFunctions {
         Log.i(TAG, "loginUser " + json.toString());
         return json;
     }
+    
+    public JSONObject gps_Notfound(String user_id, String name, String url, String buscode, String created_at){
 
+        // Building Parameters
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("tag", gps_notfound_tag));
+        params.add(new BasicNameValuePair("user_id", user_id));
+        params.add(new BasicNameValuePair("name", name));
+        params.add(new BasicNameValuePair("buscode", buscode));
+        params.add(new BasicNameValuePair("url", url));
+        params.add(new BasicNameValuePair("created_at", created_at));
+        JSONObject json = jsonParser.getJSONFromUrl(gps_notfoundURL, params);
+        // return json        
+        Log.i(TAG, "gps_notfoundURL " + json.toString());
+        return json;
+    }
+
+    public JSONObject getRanking(){
+        // Building Parameters
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("tag", user_ranking_tag));
+        JSONObject json = jsonParser.getJSONFromUrl(user_rankingURL, params);
+        // return json        
+        Log.w(TAG, "getRanking " + json.toString());
+        return json;
+    }
+    
     public JSONObject getRewards(){
         // Building Parameters
         List<NameValuePair> params = new ArrayList<NameValuePair>();

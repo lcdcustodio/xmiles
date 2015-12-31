@@ -24,7 +24,8 @@ import android.widget.Toast;
 public class FbLogin_Fragment extends Fragment {
 
 	// Facebook Permissions	
-	public String[] permissions = { "read_stream", "publish_actions", "user_photos", "user_location" };
+	//public String[] permissions = { "read_stream", "publish_actions", "user_photos", "user_location" };
+	public String[] permissions = { "read_stream", "publish_actions", "user_photos", "user_location", "user_friends" };
 	//TAG
 	private static final String TAG = "FACEBOOK";
 

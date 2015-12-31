@@ -24,7 +24,8 @@ public class LazyAdapter extends BaseAdapter {
     public ImageLoader imageLoader; 
     
 	private static final Integer KEY_NAME = 1;
-	private static final Integer KEY_PICURL = 2;	
+	private static final Integer KEY_PICURL = 2;
+	private static final Integer KEY_SCORE = 3;
 	private Cursor users_info;
     
     public LazyAdapter(Activity a, Cursor data) {
@@ -63,7 +64,8 @@ public class LazyAdapter extends BaseAdapter {
         
         // Setting all values in listview
         title.setText(users_info.getString(KEY_NAME));
-        artist.setText("Pontuação: 0 km");
+        //artist.setText("Pontuação: 0 km");
+        artist.setText(users_info.getString(KEY_SCORE) + " pontos");     
         duration.setText("Curtir");
         imageLoader.DisplayImage(users_info.getString(KEY_PICURL), thumb_image);
         return vi;

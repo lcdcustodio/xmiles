@@ -31,6 +31,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String TABLE_BUS_GPS_DATA = "bus_gps_data";
 	public static final String TABLE_BUS_GPS_URL = "bus_gps_url";
 	public static final String TABLE_REWARDS = "rewards";
+	public static final String TABLE_RANKING = "ranking";
 
 	// Common column names
 	public static final String KEY_ROW_ID = "_id";
@@ -209,7 +210,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	private static final String CREATE_TABLE_BUS_GPS_URL = "CREATE TABLE "
 			+ TABLE_BUS_GPS_URL + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
 			KEY_BUSCODE + " TEXT," +
-			KEY_URL + " TEXT" + ")";
+			KEY_URL + " TEXT," +
+			KEY_FLAG + " integer" + ")";
 
 	private static final String CREATE_TABLE_REWARDS = "CREATE TABLE "
 			+ TABLE_REWARDS + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
@@ -217,6 +219,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			KEY_REWARD_TYPE + " TEXT," + 
 			KEY_PICURL 		+ " TEXT," +
 			KEY_QUANTITY 	+ " TEXT," +
+			KEY_SCORE 		+ " TEXT,"  +
+			KEY_CREATED_AT	+ " DATETIME" + ")";
+
+	private static final String CREATE_TABLE_RANKING = "CREATE TABLE "
+			+ TABLE_RANKING + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
+			KEY_ID			+ " TEXT," +
+			KEY_NAME		+ " TEXT," + 
+			KEY_PICURL 		+ " TEXT," +
 			KEY_SCORE 		+ " TEXT,"  +
 			KEY_CREATED_AT	+ " DATETIME" + ")";
 
@@ -259,6 +269,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(CREATE_TABLE_BUS_GPS_URL);
 		//---------------------
 		db.execSQL(CREATE_TABLE_REWARDS);
+		db.execSQL(CREATE_TABLE_RANKING);
 	}
 
 	@Override
@@ -281,6 +292,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_BUS_GPS_DATA);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_BUS_GPS_URL);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_REWARDS);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_RANKING);
 		// create new tables
 		onCreate(db);
 	}
@@ -402,6 +414,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	}
 
+	public long insertRanking(ContentValues contentValues) {
+
+		//-----------
+		long rowID = mDB.insert(TABLE_RANKING, null, contentValues);
+		return rowID;
+
+	}
 	
 	public void resetUserFriends() {
 		//-----------
@@ -478,6 +497,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		mDB.execSQL(CREATE_TABLE_REWARDS);
 		//-----------
 	}	
+	
+	public void resetRanking() {
+		//-----------
+		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_RANKING);
+		mDB.execSQL(CREATE_TABLE_RANKING);
+		//-----------
+	}	
+	
 	/** Returns all the contacts in the table */
 	public Cursor get_UserPlaces(){
 		//return mDB.query(TABLE_USER_PLACES, new String[] {KEY_ROW_ID, KEY_NEARBY,KEY_CITY,KEY_UF}, null, null, null, null, KEY_CREATED_AT + " desc ");
@@ -531,7 +558,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	public Cursor get_BusGpsUrl(){
 
-		return mDB.query(TABLE_BUS_GPS_URL, new String[] {KEY_ROW_ID, KEY_BUSCODE, KEY_URL}, null, null, null, null, null);
+		return mDB.query(TABLE_BUS_GPS_URL, new String[] {KEY_ROW_ID, KEY_BUSCODE, KEY_URL, KEY_FLAG}, null, null, null, null, null);
 	}
 	
 	public Cursor get_Rewards(){
@@ -539,6 +566,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return mDB.query(TABLE_REWARDS, new String[] {KEY_REWARD, KEY_REWARD_TYPE, KEY_PICURL, KEY_SCORE, KEY_QUANTITY}, null, null, null, null, null);
 	}
 	
+	public Cursor get_Ranking(){
+
+		return mDB.query(TABLE_RANKING, new String[] {KEY_ID, KEY_NAME, KEY_PICURL, KEY_SCORE}, null, null, null, null, null);
+	}
+
 	
 	/** Returns all the contacts in the table */
 	public Cursor get_FriendList(){

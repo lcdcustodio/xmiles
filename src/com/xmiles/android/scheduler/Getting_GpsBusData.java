@@ -45,10 +45,11 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
     
 	
 	// The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 1 * 20; // 60 seconds
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 1 * 20; // 20 seconds
 
 	private static final Integer KEY_ID = 0;
 	private static final Integer KEY_URL = 2;
+	private static final Integer KEY_FLAG = 3;
 	//private static final Integer KEY_BUSCODE = 2;
 	private static final Integer KEY_BUSCODE_URL = 1;
 	
@@ -69,9 +70,8 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 
 	
 	//private static final Integer MAX_POINTS = 720;  // 720 points / 360 = 2 HOURS
-	//private static final Integer MAX_POINTS = 1420;
-	//private static final Integer MAX_POINTS = 10;
-	private static final Integer MAX_POINTS = 4;
+	//private static final Integer MAX_POINTS = 4;
+	private static final Integer MAX_POINTS = 1;
 	private static final Integer MAX_DIST 	  = 3; //3km
 	private static final Integer MAX_TIME_OFFSET = 300; //300secs = 5min
 
@@ -92,7 +92,7 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 			Cursor bus_gps_url = ctx.getContentResolver().query(uri, null, null, null, null);
 			bus_gps_url.moveToLast();
 			
-			GBD_Handler(ctx, bus_gps_url.getString(KEY_URL), bus_gps_url.getString(KEY_BUSCODE_URL));
+			GBD_Handler(ctx, bus_gps_url.getString(KEY_URL), bus_gps_url.getString(KEY_BUSCODE_URL), bus_gps_url.getInt(KEY_FLAG));
 			
 
 		}catch(Exception e){
@@ -133,7 +133,7 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 		alarmMgr.cancel(alarmIntent);
 	}
 	
-    public void GBD_Handler(final Context ctx, String url, String buscode){
+    public void GBD_Handler(final Context ctx, String url, String buscode, int flag){
     	
     	String [] dataBusArray;
 
@@ -251,25 +251,39 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
    	    data_UserLocation.moveToLast();
    	    
 		//-----------------------------
-    	Intent intent=new Intent("profilefragmentupdater");
-    	ctx.sendBroadcast(intent);
+    	//Intent intent=new Intent("profilefragmentupdater");
+    	//ctx.sendBroadcast(intent);
 		//-----------------------------
 	    Log.e(TAG, "bus_gps_data.getInt(KEY_ID): " + bus_gps_data.getInt(KEY_ID));
 
-		//if (data_UserLocation.getDouble(KEY_U_DIFF_DISTANCE) >= MAX_DIST ||
-		//		 data_UserLocation.getDouble(KEY_U_DIFF_TIME) >= MAX_TIME_OFFSET) {
+		if (data_UserLocation.getDouble(KEY_U_DIFF_DISTANCE) >= MAX_DIST ||
+				 data_UserLocation.getDouble(KEY_U_DIFF_TIME) >= MAX_TIME_OFFSET) {
+
+    		ContentValues cV = new ContentValues();
+    		cV.put(DatabaseHelper.KEY_BUSCODE, buscode);
+    		cV.put(DatabaseHelper.KEY_URL, url);
+    		cV.put(DatabaseHelper.KEY_FLAG, flag + 1);
+    		//----------------------------								
+    		ctx.getContentResolver().insert(SqliteProvider.CONTENT_URI_BUS_GPS_URL_insert, cV);
 
 	    
-    	if (bus_gps_data.getInt(KEY_ID) > MAX_POINTS ) {	
-			Toast.makeText(ctx, "Você não está mais conectado!", Toast.LENGTH_LONG).show();
-    		// cancel Getting GpsBusData
-        	cancelAlarm(ctx);
+	    	//if (bus_gps_data.getInt(KEY_ID) > MAX_POINTS ) {
+			if (flag + 1 > MAX_POINTS ) {
+				Toast.makeText(ctx, "Você não está mais conectado!", Toast.LENGTH_LONG).show();
+	    		// cancel Getting GpsBusData
+	        	cancelAlarm(ctx);
+	
+	        	GpsBusData_Upload gbd = new GpsBusData_Upload();
+	        	gbd.setAlarm(ctx);
+	    		
+	    	}
+		}
+		
+		//-----------------------------
+    	Intent intent=new Intent("profilefragmentupdater");
+    	ctx.sendBroadcast(intent);
+		//-----------------------------
 
-        	GpsBusData_Upload gbd = new GpsBusData_Upload();
-        	gbd.setAlarm(ctx);
-    		
-    	}
-    	
 
     }
     

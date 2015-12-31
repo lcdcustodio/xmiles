@@ -42,6 +42,8 @@ public class SqliteProvider extends ContentProvider{
 	public static final Uri CONTENT_URI_BUS_GPS_URL = Uri.parse("content://" + PROVIDER_NAME + "/BusGpsUrl");
 	public static final Uri CONTENT_URI_REWARDS_create = Uri.parse("content://" + PROVIDER_NAME + "/Rewards_create");
 	public static final Uri CONTENT_URI_REWARDS = Uri.parse("content://" + PROVIDER_NAME + "/Rewards");
+	public static final Uri CONTENT_URI_RANKING_create = Uri.parse("content://" + PROVIDER_NAME + "/Ranking_create");
+	public static final Uri CONTENT_URI_RANKING = Uri.parse("content://" + PROVIDER_NAME + "/Ranking");
 
 	/** Constants to identify the requested operation */
 	private static final int USER_PROFILE = 1;
@@ -67,6 +69,8 @@ public class SqliteProvider extends ContentProvider{
 	private static final int BUS_GPS_URL = 21;
 	private static final int REWARDS_create = 22;
 	private static final int REWARDS = 23;
+	private static final int RANKING_create = 24;
+	private static final int RANKING = 25;
 
 
 	private static final UriMatcher uriMatcher ;
@@ -95,6 +99,8 @@ public class SqliteProvider extends ContentProvider{
 		uriMatcher.addURI(PROVIDER_NAME, "BusGpsUrl", BUS_GPS_URL);
 		uriMatcher.addURI(PROVIDER_NAME, "Rewards_create", REWARDS_create);
 		uriMatcher.addURI(PROVIDER_NAME, "Rewards", REWARDS);
+		uriMatcher.addURI(PROVIDER_NAME, "Ranking_create", RANKING_create);
+		uriMatcher.addURI(PROVIDER_NAME, "Ranking", RANKING);
 
 	}
 
@@ -375,6 +381,28 @@ public class SqliteProvider extends ContentProvider{
 	            }
 	            break;	            
 
+	        case RANKING_create:
+	            try {
+	            	//----
+	            	mDatabaseHelper.resetRanking();
+	            	//----
+	            	mDatabaseHelper.getWritableDatabase().beginTransaction();
+	                for (ContentValues value : values) {
+	                	//---------
+	                	//---------
+	                    long id = mDatabaseHelper.getWritableDatabase().insert(DatabaseHelper.TABLE_RANKING, null, value);
+	                    if (id > 0)
+	                        insertCount++;
+	                }
+	                mDatabaseHelper.getWritableDatabase().setTransactionSuccessful();
+	            } catch (Exception e) {
+	                // Your error handling
+	            } finally {
+	            	mDatabaseHelper.getWritableDatabase().endTransaction();
+	            }
+	            break;	            
+	            
+	            
 	        case USER_ROUTES_create:
 	            try {
 	            	//----
@@ -481,6 +509,9 @@ public class SqliteProvider extends ContentProvider{
 			
 		}else if (uriMatcher.match(uri)==REWARDS){
 			return mDatabaseHelper.get_Rewards();			
+
+		}else if (uriMatcher.match(uri)==RANKING){
+			return mDatabaseHelper.get_Ranking();			
 			
 		}else{
 			return null;
