@@ -1,13 +1,8 @@
 package com.xmiles.android;
 
-
-
-
-
-
-
 import com.xmiles.android.fragment.EmConstrucao_Fragment;
 import com.xmiles.android.fragment.Favorites_Fragment;
+import com.xmiles.android.fragment.Feed_Fragment;
 import com.xmiles.android.fragment.Profile_Fragment;
 import com.xmiles.android.fragment.Ranking_Fragment;
 import com.xmiles.android.slidingmenu.adapter.SlidingMenuLazyAdapter;
@@ -48,8 +43,8 @@ public class MainActivity extends FragmentActivity {
 		
 		//*******
 	    Fragment fgmt_inicio 	= new Profile_Fragment();
-	    //Fragment fgmt_favoritos = new Favorites_Fragment();
-	    //Fragment fgmt_ranking 	= new EmConstrucao_Fragment();
+	    //Fragment fgmt_newsfeed 	= new EmConstrucao_Fragment();
+	    Fragment fgmt_newsfeed 	= new Feed_Fragment();
 	    Fragment fgmt_ranking 	= new Ranking_Fragment();
 	    //*******
 	    
@@ -63,20 +58,19 @@ public class MainActivity extends FragmentActivity {
 	          .newTab()
 	          .setText("MAPA")
 	          //.setIcon(R.drawable.android_logo)
+
 	          .setTabListener(new MyTabsListener(fgmt_inicio));
 
 	      actionBar.addTab(tab1);
 	      actionBar.selectTab(tab1);
-	      /*
-	      Tab tab2 = actionBar
+
+	    Tab tab2 = actionBar
 	    	   .newTab()
-	    	   .setText("HISTÓRICO")
+	    	   .setText("FEED")
 	    	   //.setIcon(R.drawable.windows_logo)
-	    	   .setTabListener(new MyTabsListener(fgmt_ranking));
+	    	   .setTabListener(new MyTabsListener(fgmt_newsfeed));
 	    	  
 	      actionBar.addTab(tab2);
-		  */	
-	      
 	      
 	    Tab tab3 = actionBar
 	              .newTab()
