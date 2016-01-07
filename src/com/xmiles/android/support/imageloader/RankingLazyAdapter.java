@@ -71,7 +71,7 @@ public class RankingLazyAdapter extends BaseAdapter {
         // Setting all values in listview
         title.setText(ranking_info.getString(KEY_NAME));
         artist.setText(ranking_info.getString(KEY_SCORE) + " pontos");     
-        duration.setText(position + 1 + " °");
+        duration.setText(position + 1 + " ° lugar");
         imageLoader.DisplayImage(ranking_info.getString(KEY_PICURL), thumb_image);
         
         /*

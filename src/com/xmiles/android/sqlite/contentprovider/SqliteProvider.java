@@ -44,6 +44,8 @@ public class SqliteProvider extends ContentProvider{
 	public static final Uri CONTENT_URI_REWARDS = Uri.parse("content://" + PROVIDER_NAME + "/Rewards");
 	public static final Uri CONTENT_URI_RANKING_create = Uri.parse("content://" + PROVIDER_NAME + "/Ranking_create");
 	public static final Uri CONTENT_URI_RANKING = Uri.parse("content://" + PROVIDER_NAME + "/Ranking");
+	public static final Uri CONTENT_URI_NEWSFEED_create = Uri.parse("content://" + PROVIDER_NAME + "/Newsfeed_create");
+	public static final Uri CONTENT_URI_NEWSFEED = Uri.parse("content://" + PROVIDER_NAME + "/Newsfeed");
 
 	/** Constants to identify the requested operation */
 	private static final int USER_PROFILE = 1;
@@ -71,6 +73,8 @@ public class SqliteProvider extends ContentProvider{
 	private static final int REWARDS = 23;
 	private static final int RANKING_create = 24;
 	private static final int RANKING = 25;
+	private static final int NEWSFEED_create = 26;
+	private static final int NEWSFEED = 27;
 
 
 	private static final UriMatcher uriMatcher ;
@@ -101,6 +105,9 @@ public class SqliteProvider extends ContentProvider{
 		uriMatcher.addURI(PROVIDER_NAME, "Rewards", REWARDS);
 		uriMatcher.addURI(PROVIDER_NAME, "Ranking_create", RANKING_create);
 		uriMatcher.addURI(PROVIDER_NAME, "Ranking", RANKING);
+		uriMatcher.addURI(PROVIDER_NAME, "Newsfeed_create", NEWSFEED_create);
+		uriMatcher.addURI(PROVIDER_NAME, "Newsfeed", NEWSFEED);
+		
 
 	}
 
@@ -402,6 +409,28 @@ public class SqliteProvider extends ContentProvider{
 	            }
 	            break;	            
 	            
+	        case NEWSFEED_create:
+	            try {
+	            	//----
+	            	mDatabaseHelper.resetNewsfeed();
+	            	//----
+	            	mDatabaseHelper.getWritableDatabase().beginTransaction();
+	                for (ContentValues value : values) {
+	                	//---------
+	                	//---------
+	                    long id = mDatabaseHelper.getWritableDatabase().insert(DatabaseHelper.TABLE_NEWSFEED, null, value);
+	                    if (id > 0)
+	                        insertCount++;
+	                }
+	                mDatabaseHelper.getWritableDatabase().setTransactionSuccessful();
+	            } catch (Exception e) {
+	                // Your error handling
+	            } finally {
+	            	mDatabaseHelper.getWritableDatabase().endTransaction();
+	            }
+	            break;	            
+	            
+	            
 	            
 	        case USER_ROUTES_create:
 	            try {
@@ -512,6 +541,9 @@ public class SqliteProvider extends ContentProvider{
 
 		}else if (uriMatcher.match(uri)==RANKING){
 			return mDatabaseHelper.get_Ranking();			
+			
+		}else if (uriMatcher.match(uri)==NEWSFEED){
+			return mDatabaseHelper.get_Newsfeed();			
 			
 		}else{
 			return null;

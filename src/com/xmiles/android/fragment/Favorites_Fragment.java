@@ -10,6 +10,7 @@ import com.xmiles.android.R;
 import com.xmiles.android.R.id;
 import com.xmiles.android.R.layout;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
+import com.xmiles.android.sqlite.helper.DatabaseHelper;
 import com.xmiles.android.webservice.UserFunctions;
 
 import android.support.v4.app.Fragment;
@@ -54,9 +55,21 @@ public class Favorites_Fragment extends Fragment implements LoaderManager.Loader
 	private static final Integer KEY_FROM = 5;
 	private static final Integer KEY_TO = 6;
 	//---------------------
+	public static final String KEY_FAVORITE_ID = "favorite_id";
+	public static final String KEY_BUSLINE_ = "busline";
+	//---------------------
 	protected static final Integer TYPE1 = 1;
 	private static final Integer TYPE2 = 2;	
 	//---------------------
+	private static final String projection[] = new String[]{DatabaseHelper.KEY_FAVORITE_ID,
+			DatabaseHelper.KEY_ID, DatabaseHelper.KEY_NAME,
+			DatabaseHelper.KEY_BUSLINE, DatabaseHelper.KEY_CITY,
+			DatabaseHelper.KEY_UF, DatabaseHelper.KEY_FROM,
+			DatabaseHelper.KEY_TO, DatabaseHelper.KEY_FROM_BUS_STOP_ID,
+			DatabaseHelper.KEY_TO_BUS_STOP_ID};
+	
+	
+	//--------------------
 	ListView mListFavorites;
 	Button Add_route;
 	TextView Route;
@@ -129,9 +142,19 @@ public class Favorites_Fragment extends Fragment implements LoaderManager.Loader
 		// TODO Auto-generated method stub
 		Uri uri = SqliteProvider.CONTENT_URI_USER_FAVORITES;
 		
-		return new CursorLoader(getActivity(), uri, null, null, null, null);
-		//return data_userFavorites; 
-		//return null;
+		//return new CursorLoader(getActivity(), uri, null, null, null, null);
+		//String sortOrder = KEY_FAVORITE_ID + " DESC";
+		String sortOrder = KEY_BUSLINE_ + " ASC";
+		//DatabaseHelper.KEY_FAVORITE_ID
+		//return new CursorLoader(getActivity(), uri, null, null, null, sortOrder);
+		
+
+		//CursorLoader loader = new CursorLoader(getActivity(), uri, projection, null, null, DatabaseHelper.KEY_BUSLINE + " ASC");
+		CursorLoader loader = new CursorLoader(getActivity(), uri, projection, null, null, null);
+		loader.setSortOrder(DatabaseHelper.KEY_BUSLINE + " DESC");
+		//return new CursorLoader(getActivity(), uri, projection, null, null, DatabaseHelper.KEY_FAVORITE_ID + " DESC");
+		//return new CursorLoader(getActivity(), uri, projection, null, null, DatabaseHelper.KEY_BUSLINE + " ASC");
+		return loader;
 	}
 
 	@Override
@@ -189,6 +212,8 @@ public class Favorites_Fragment extends Fragment implements LoaderManager.Loader
 				            Uri uri = SqliteProvider.CONTENT_URI_USER_FAVORITES;
 				        	//Cursor data = getActivity().getContentResolver().query(uri, null, null, null, null);
 				            data_userFavorites = getActivity().getContentResolver().query(uri, null, null, null, null);
+				            //data_userFavorites = getActivity().getContentResolver().query(uri, projection, null, null, DatabaseHelper.KEY_FAVORITE_ID + " DESC");
+				            //data_userFavorites = getActivity().getContentResolver().query(uri, projection, null, null, DatabaseHelper.KEY_FAVORITE_ID + " DESC");
 
 				            if (data_userFavorites == null || data_userFavorites.getCount() == 0){
 

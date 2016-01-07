@@ -10,6 +10,7 @@ import com.xmiles.android.slidingmenu.adapter.SlidingMenuLazyAdapter;
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.app.ActionBar.Tab;
+import android.app.SearchManager;
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -21,6 +22,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity {
@@ -43,7 +45,7 @@ public class MainActivity extends FragmentActivity {
 		
 		//*******
 	    Fragment fgmt_inicio 	= new Profile_Fragment();
-	    //Fragment fgmt_newsfeed 	= new EmConstrucao_Fragment();
+	    //Fragment fgmt_newsfeed 	= new Favorites_Fragment();
 	    Fragment fgmt_newsfeed 	= new Feed_Fragment();
 	    Fragment fgmt_ranking 	= new Ranking_Fragment();
 	    //*******
@@ -96,7 +98,7 @@ public class MainActivity extends FragmentActivity {
 	    
 	    
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-				R.drawable.ic_drawer, //nav menu toggle icon
+				R.drawable.ic_drawer_rev03, //nav menu toggle icon
 				R.string.app_name, // nav drawer open - description for accessibility
 				R.string.app_name// nav drawer close - description for accessibility
 		) {
@@ -141,6 +143,20 @@ public class MainActivity extends FragmentActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main_frame, menu);
+		/*
+		getMenuInflater().inflate(R.menu.options_menu, menu);	
+		
+		 // Associate searchable configuration with the SearchView
+	    SearchManager searchManager =
+	           (SearchManager) getSystemService(getApplicationContext().SEARCH_SERVICE);
+	    SearchView searchView =
+	            (SearchView) menu.findItem(R.id.search).getActionView();
+	    searchView.setSearchableInfo(
+	            searchManager.getSearchableInfo(getComponentName()));
+		
+	    // Do not iconify the widget;expand it by default
+	    searchView.setIconifiedByDefault(true);	    
+	    */
 		return true;
 	}
 

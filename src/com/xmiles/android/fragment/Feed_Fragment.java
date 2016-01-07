@@ -15,6 +15,7 @@ import com.xmiles.android.R.layout;
 import com.xmiles.android.listviewfeed.FeedItem;
 import com.xmiles.android.listviewfeed.FeedListAdapter;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
+import com.xmiles.android.sqlite.helper.DatabaseHelper;
 import com.xmiles.android.support.imageloader.RankingLazyAdapter;
 import com.xmiles.android.webservice.UserFunctions;
 
@@ -53,17 +54,22 @@ import android.widget.Toast;
 public class Feed_Fragment extends Fragment {
 
 	private static final String TAG = "FACEBOOK";
-	private static final Integer KEY_NAME = 1;
-	private static final Integer KEY_PICURL = 2;	
-	//---------------------
-	protected static final Integer TYPE1 = 1;
 	
+	private static final Integer KEY_ID         = 1;
+	private static final Integer KEY_NAME       = 2;
+	private static final Integer KEY_IMAGE      = 3;
+	private static final Integer KEY_STATUS     = 4;
+	private static final Integer KEY_PICURL     = 5;
+	private static final Integer KEY_TIME_STAMP = 6;
+	private static final Integer KEY_URL        = 7;
+	//---------------------
 	//---------------------
 	ProgressDialog progressBar;
 	private ListView listView;
 	private FeedListAdapter listAdapter;
 	private List<FeedItem> feedItems;
 	private JSONObject json;
+	private Cursor data_newsfeed;
 	//-----------------------	
 	
 	public Feed_Fragment(){}
@@ -120,9 +126,11 @@ public class Feed_Fragment extends Fragment {
 
 		    		    	//Your code goes here
 		    		    	//------------			        	
-		    		    	UserFunctions userFunc = new UserFunctions();
+		    		    	//UserFunctions userFunc = new UserFunctions();
 		    		    	//------------------		    		    	
-		                    json = userFunc.getNewsfeed();
+		                    //json = userFunc.getNewsfeed();
+				            Uri uri = SqliteProvider.CONTENT_URI_NEWSFEED;
+				            data_newsfeed = getActivity().getContentResolver().query(uri, null, null, null, null);
 
 				    		        	
 					    } catch (Exception e) {
@@ -156,10 +164,8 @@ public class Feed_Fragment extends Fragment {
 	                                @Override
 	                                public void run() {
 	                                	
-	                                	//listAdapter = new FeedListAdapter(getActivity(), feedItems);
-	                            		//listView.setAdapter(listAdapter);
 	                    		    	//Your code goes here            	
-	                    		    	parseJsonFeed(json);
+	                    		    	parseJsonFeed(data_newsfeed);
 
 	                                }
 	                            });
@@ -180,41 +186,37 @@ public class Feed_Fragment extends Fragment {
 		/**
 		 * Parsing json reponse and passing the data to feed view list adapter
 		 * */
-		private void parseJsonFeed(JSONObject response) {
-			try {
-				//JSONArray feedArray = response.getJSONArray("feed");
-				JSONArray feedArray = new JSONArray(response.getString("feed"));
+		private void parseJsonFeed(Cursor newsfeed) {
+			
+			Log.w(TAG, "newsfeed.getCount(): " + newsfeed.getCount());
+			
+			for (int i = 0; i < newsfeed.getCount(); i++) {
 
-				for (int i = 0; i < feedArray.length(); i++) {
-					JSONObject feedObj = (JSONObject) feedArray.get(i);
+				data_newsfeed.moveToPosition(i);
+				
+				FeedItem item = new FeedItem();
+				item.setId(data_newsfeed.getInt(KEY_ID));
+				item.setName(data_newsfeed.getString(KEY_NAME));
 
-					FeedItem item = new FeedItem();
-					item.setId(feedObj.getInt("id"));
-					item.setName(feedObj.getString("name"));
+				// Image might be null sometimes
+				String image = data_newsfeed.isNull(KEY_IMAGE) ? null : data_newsfeed
+						.getString(KEY_IMAGE);  
+				item.setImge(image);
 
-					// Image might be null sometimes
-					String image = feedObj.isNull("image") ? null : feedObj
-							.getString("image");
-					item.setImge(image);
-					item.setStatus(feedObj.getString("status"));
-					//item.setProfilePic(feedObj.getString("profilePic"));
-					item.setProfilePic(feedObj.getString("profilepic"));				
-					//item.setTimeStamp(feedObj.getString("timeStamp"));
-					item.setTimeStamp(feedObj.getString("time_stamp"));				
+				item.setStatus(data_newsfeed.getString(KEY_STATUS));
+				item.setProfilePic(data_newsfeed.getString(KEY_PICURL));				
+				item.setTimeStamp(data_newsfeed.getString(KEY_TIME_STAMP));				
 
-					// url might be null sometimes
-					String feedUrl = feedObj.isNull("url") ? null : feedObj
-							.getString("url");
-					item.setUrl(feedUrl);
+				// url might be null sometimes
+				String feedUrl = data_newsfeed.isNull(KEY_URL) ? null : data_newsfeed
+						.getString(KEY_URL);
+				item.setUrl(feedUrl);
 
-					feedItems.add(item);
-				}
-
-				// notify data changes to list adapater
-				listAdapter.notifyDataSetChanged();
-			} catch (JSONException e) {
-				e.printStackTrace();
+				feedItems.add(item);
 			}
+
+			// notify data changes to list adapater
+			listAdapter.notifyDataSetChanged();
 		}
 
 

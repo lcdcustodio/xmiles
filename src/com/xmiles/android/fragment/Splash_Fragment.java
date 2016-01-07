@@ -131,6 +131,9 @@ public class Splash_Fragment extends Fragment {
 				 */
                 if(Integer.parseInt(json_login.getString("success")) == 1){
                 	
+                	//NEWSFEED
+                	xMiles_getNewsfeed(facebook_profile.getString("id"));				
+                	
                 	/*
     				JSONObject json_favoritesRoutes = xMiles_favoritesRoutes(facebook_profile.getString("name"),
     																		 facebook_profile.getString("id"));
@@ -356,6 +359,73 @@ public class Splash_Fragment extends Fragment {
 		}
 
     	return json;
+    }
+    
+    public void xMiles_getNewsfeed(String user_id){
+    	
+		//Your code goes here
+    	//------------
+    	ContentValues[] valueList;
+    	JSONArray jsonArray;
+    	//-----------
+		UserFunctions userFunc = new UserFunctions();
+		JSONObject json = userFunc.getNewsfeed();
+    	
+        try {
+
+        	if (json.getString("success") != null) {
+
+			    String res = json.getString("success");
+			    if(Integer.parseInt(res) == 1){
+			    	jsonArray = new JSONArray(json.getString("feed"));
+			    	valueList = new ContentValues[jsonArray.length()];
+
+					for (int position = 0; position < jsonArray.length(); position++) {
+
+						JSONObject jsonObject = null;
+
+						try {
+							ContentValues values = new ContentValues();
+							jsonObject = jsonArray.getJSONObject(position);
+
+							values.put(DatabaseHelper.KEY_ID, jsonObject.getString("id"));
+							values.put(DatabaseHelper.KEY_NAME, jsonObject.getString("name"));
+							
+							// Image might be null sometimes
+							String image = jsonObject.isNull("image") ? null : jsonObject
+									.getString("image");
+							
+							values.put(DatabaseHelper.KEY_IMAGE, image);
+							
+							values.put(DatabaseHelper.KEY_STATUS, jsonObject.getString("status"));
+							values.put(DatabaseHelper.KEY_PICURL, jsonObject.getString("profilepic"));
+							values.put(DatabaseHelper.KEY_TIME_STAMP, jsonObject.getString("time_stamp"));
+							
+							// url might be null sometimes
+							String feedUrl = jsonObject.isNull("url") ? null : jsonObject
+									.getString("url");							
+							
+							values.put(DatabaseHelper.KEY_URL, feedUrl);
+							
+							
+							valueList[position] = values;
+
+
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+					}
+
+					getActivity().getContentResolver().bulkInsert(SqliteProvider.CONTENT_URI_NEWSFEED_create, valueList);
+
+			    }
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
     
     public void xMiles_getRewards() {

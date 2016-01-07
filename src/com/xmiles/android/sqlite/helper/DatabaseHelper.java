@@ -32,7 +32,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String TABLE_BUS_GPS_URL = "bus_gps_url";
 	public static final String TABLE_REWARDS = "rewards";
 	public static final String TABLE_RANKING = "ranking";
-
+	//-----------------
+	public static final String TABLE_NEWSFEED = "newsfeed";
+	
 	// Common column names
 	public static final String KEY_ROW_ID = "_id";
 	public static final String KEY_ID = "id"; // (= USER_ID)
@@ -110,6 +112,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	// REWARDS Table - column names	
 	public static final String KEY_RANK   	= "rank";
+	
+	// NEWSFEDD Table - column names
+	public static final String KEY_IMAGE 	  = "image";
+	public static final String KEY_STATUS 	  = "status";
+	public static final String KEY_TIME_STAMP = "time_stamp";
 	
 	// Table Create Statements
 	private static final String CREATE_TABLE_USER_PROFILE = "CREATE TABLE "
@@ -230,6 +237,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			KEY_SCORE 		+ " TEXT,"  +
 			KEY_CREATED_AT	+ " DATETIME" + ")";
 
+	private static final String CREATE_TABLE_NEWSFEED = "CREATE TABLE "
+			+ TABLE_NEWSFEED + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
+			KEY_ID			+ " TEXT," +
+			KEY_NAME		+ " TEXT," +
+			KEY_IMAGE		+ " TEXT," +
+			KEY_STATUS		+ " TEXT," +			
+			KEY_PICURL 		+ " TEXT," +
+			KEY_TIME_STAMP 	+ " TEXT," +
+			KEY_URL     	+ " TEXT," +			
+			KEY_CREATED_AT	+ " DATETIME" + ")";
+	
 	
     /** An instance variable for SQLiteDatabase */
     private SQLiteDatabase mDB;
@@ -270,6 +288,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		//---------------------
 		db.execSQL(CREATE_TABLE_REWARDS);
 		db.execSQL(CREATE_TABLE_RANKING);
+		//---------------------
+		db.execSQL(CREATE_TABLE_NEWSFEED);		
 	}
 
 	@Override
@@ -293,6 +313,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_BUS_GPS_URL);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_REWARDS);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_RANKING);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEWSFEED);		
 		// create new tables
 		onCreate(db);
 	}
@@ -422,6 +443,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	}
 	
+	public long insertNewsfeed(ContentValues contentValues) {
+
+		//-----------
+		long rowID = mDB.insert(TABLE_NEWSFEED, null, contentValues);
+		return rowID;
+
+	}
+	
+	
 	public void resetUserFriends() {
 		//-----------
 		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_FRIENDS);
@@ -504,6 +534,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		mDB.execSQL(CREATE_TABLE_RANKING);
 		//-----------
 	}	
+
+	public void resetNewsfeed() {
+		//-----------
+		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_NEWSFEED);
+		mDB.execSQL(CREATE_TABLE_NEWSFEED);
+		//-----------
+	}	
+	
 	
 	/** Returns all the contacts in the table */
 	public Cursor get_UserPlaces(){
@@ -527,7 +565,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	public Cursor get_UserFavorites(){
 		//return mDB.query(TABLE_USER_FAVORITES, new String[] {KEY_ID, KEY_NAME}, null, null, null, null, null);
-		return mDB.query(TABLE_USER_FAVORITES, new String[] {KEY_ID, KEY_NAME, KEY_BUSLINE, KEY_CITY, KEY_UF, KEY_FROM, KEY_TO,KEY_FROM_BUS_STOP_ID,KEY_TO_BUS_STOP_ID,KEY_FAVORITE_ID}, null, null, null, null, null);
+		//return mDB.query(TABLE_USER_FAVORITES, new String[] {KEY_ID, KEY_NAME, KEY_BUSLINE, KEY_CITY, KEY_UF, KEY_FROM, KEY_TO,KEY_FROM_BUS_STOP_ID,KEY_TO_BUS_STOP_ID,KEY_FAVORITE_ID}, null, null, null, null, null);
+		return mDB.query(TABLE_USER_FAVORITES, new String[] {KEY_ID, KEY_NAME, KEY_BUSLINE, KEY_CITY, KEY_UF, KEY_FROM, KEY_TO,KEY_FROM_BUS_STOP_ID,KEY_TO_BUS_STOP_ID,KEY_FAVORITE_ID}, null, null, null, null, KEY_FAVORITE_ID + " DESC");
 	}
 
 	public Cursor get_UserRoutes(){
@@ -571,6 +610,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return mDB.query(TABLE_RANKING, new String[] {KEY_ID, KEY_NAME, KEY_PICURL, KEY_SCORE}, null, null, null, null, null);
 	}
 
+	public Cursor get_Newsfeed(){
+
+		return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL}, null, null, null, null, null);
+	}
 	
 	/** Returns all the contacts in the table */
 	public Cursor get_FriendList(){
