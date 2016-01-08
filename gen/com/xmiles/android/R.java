@@ -848,9 +848,9 @@ containing a value of this type.
         public static final int book_now=0x7f080014;
         public static final int bus_stop=0x7f080045;
         public static final int buscode=0x7f080066;
-        public static final int busline=0x7f080059;
+        public static final int busline=0x7f080056;
         public static final int button1=0x7f080042;
-        public static final int button_save_route=0x7f08005a;
+        public static final int button_save_route=0x7f080057;
         public static final int buyButton=0x7f08000e;
         public static final int buy_now=0x7f080013;
         public static final int buy_with_google=0x7f080012;
@@ -890,17 +890,17 @@ containing a value of this type.
         public static final int feedImage1=0x7f08004e;
         public static final int flag=0x7f080065;
         public static final int frame_bus=0x7f080064;
-        public static final int frame_busline=0x7f080058;
+        public static final int frame_busline=0x7f080055;
         public static final int frame_container=0x7f08001d;
         public static final int frame_logo=0x7f080020;
         public static final int friend_item=0x7f080022;
-        public static final int gmap_addroutes=0x7f080056;
+        public static final int gmap_addroutes=0x7f080054;
         public static final int gmaps_info=0x7f08005b;
         public static final int grayscale=0x7f080017;
         public static final int gridView1=0x7f08005d;
         public static final int grid_item_image=0x7f080061;
         public static final int grid_item_label=0x7f080062;
-        public static final int header=0x7f080053;
+        public static final int header=0x7f080058;
         public static final int holo_dark=0x7f080008;
         public static final int holo_light=0x7f080009;
         public static final int how_works=0x7f08007d;
@@ -932,7 +932,7 @@ containing a value of this type.
         public static final int profilePic=0x7f08004a;
         public static final int profile_pic=0x7f080023;
         public static final int rank=0x7f08006e;
-        public static final int rel01=0x7f080055;
+        public static final int rel01=0x7f080053;
         public static final int relativeLayout1=0x7f080060;
         public static final int reward=0x7f080070;
         public static final int reward_image=0x7f08006f;
@@ -944,7 +944,7 @@ containing a value of this type.
         public static final int satelite=0x7f080077;
         public static final int satellite=0x7f080005;
         public static final int score=0x7f080076;
-        public static final int search=0x7f080057;
+        public static final int search=0x7f08005a;
         public static final int selectionDetails=0x7f08000f;
         public static final int slide=0x7f080019;
         public static final int small=0x7f08001a;
@@ -961,7 +961,7 @@ containing a value of this type.
         public static final int txtLabel=0x7f080041;
         public static final int txtStatusMsg=0x7f08004c;
         public static final int txtUrl=0x7f08004d;
-        public static final int txt_header=0x7f080054;
+        public static final int txt_header=0x7f080059;
         public static final int type=0x7f080071;
         public static final int wrap_content=0x7f080011;
     }
@@ -1002,10 +1002,10 @@ containing a value of this type.
         public static final int feed_item=0x7f03001e;
         public static final int fgmt_background=0x7f03001f;
         public static final int gmaps_fgmt=0x7f030020;
-        public static final int gmaps_infowindow_items=0x7f030021;
-        public static final int main=0x7f030022;
-        public static final int newroutes_header=0x7f030023;
-        public static final int profile_buscode_autocomplete_textview=0x7f030024;
+        public static final int gmaps_fgmt_favorites=0x7f030021;
+        public static final int gmaps_infowindow_items=0x7f030022;
+        public static final int main=0x7f030023;
+        public static final int newroutes_header=0x7f030024;
         public static final int profile_fgmt_custom=0x7f030025;
         public static final int profile_fgmt_gridview=0x7f030026;
         public static final int profile_fgmt_gridview_custom_items=0x7f030027;
@@ -1013,13 +1013,14 @@ containing a value of this type.
         public static final int profile_infowindow_bus_found=0x7f030029;
         public static final int profile_infowindow_score=0x7f03002a;
         public static final int profile_score_button=0x7f03002b;
-        public static final int sliding_menu_profile=0x7f03002c;
-        public static final int sliding_menu_rewards=0x7f03002d;
-        public static final int sliding_menu_rewards_header=0x7f03002e;
-        public static final int splash=0x7f03002f;
-        public static final int user_header=0x7f030030;
-        public static final int users_custom_listview=0x7f030031;
-        public static final int users_items=0x7f030032;
+        public static final int search_buscode_autocomplete_textview=0x7f03002c;
+        public static final int sliding_menu_profile=0x7f03002d;
+        public static final int sliding_menu_rewards=0x7f03002e;
+        public static final int sliding_menu_rewards_header=0x7f03002f;
+        public static final int splash=0x7f030030;
+        public static final int user_header=0x7f030031;
+        public static final int users_custom_listview=0x7f030032;
+        public static final int users_items=0x7f030033;
     }
     public static final class menu {
         public static final int gmaps_type=0x7f0c0000;

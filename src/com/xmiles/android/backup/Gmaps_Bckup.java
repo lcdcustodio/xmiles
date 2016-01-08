@@ -92,7 +92,7 @@ public class Gmaps_Bckup extends FragmentActivity implements OnInfoWindowClickLi
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.gmaps_fgmt);
+        setContentView(R.layout.gmaps_fgmt_favorites);
 
         ActionBar actionBar = getActionBar();
 	    actionBar.setDisplayHomeAsUpEnabled(true);

@@ -5,10 +5,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 
-import com.xmiles.android.Gmaps;
 import com.xmiles.android.R;
 import com.xmiles.android.R.id;
 import com.xmiles.android.R.layout;
+import com.xmiles.android.backup.Gmaps_Favorites;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
 import com.xmiles.android.support.Support;
@@ -106,7 +106,7 @@ public class Busline_Fragment extends Fragment implements OnItemClickListener {
 		//String busline = c.getText().toString();
 		Toast.makeText(getActivity(), "Linha " + busline.getText().toString() + " selecionada", Toast.LENGTH_SHORT).show();
 		//------------		
-        Intent intent = new Intent(getActivity(), Gmaps.class);
+        Intent intent = new Intent(getActivity(), Gmaps_Favorites.class);
         
         Bundle args = new Bundle();
         args.putString("busline", busline.getText().toString());

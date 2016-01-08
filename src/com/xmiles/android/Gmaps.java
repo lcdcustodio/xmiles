@@ -64,14 +64,11 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 	TextView tv_city;
 	TextView tv_from;
 	TextView tv_to;
-	TextView tv_header;
+
 	Button save_route;
 	//----------
-	String city;
-	String busline;
+	String buscode;
 	//----------
-	//int _from_bus_stop_id;
-	//int _to_bus_stop_id;
 	String _from_bus_stop_id;
 	String _to_bus_stop_id;
 
@@ -96,8 +93,8 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 
 	    //---------------------
 	    Bundle args = getIntent().getExtras();
-	    busline = args.getString("busline");
-	    city = args.getString("city");
+	    buscode = args.getString("buscode");
+
 	    //---------------------
         progressBar = new ProgressDialog(this);
 		progressBar.setCancelable(true);
@@ -105,14 +102,13 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 		progressBar.show();
 		//-------------------
 	    
-	    Bus_Stop_Query bsq = new Bus_Stop_Query(busline,city);
+	    //Bus_Stop_Query bsq = new Bus_Stop_Query(busline,city);
 	    //----
-	    tv_header = (TextView) findViewById(R.id.txt_header);
-	    tv_header.setText("Selecione os pontos:");
+	 
 	    tv_busline = (TextView) findViewById(R.id.busline);
-	    tv_busline.setText(busline);
+	    //tv_busline.setText(busline);
 	    tv_city = (TextView) findViewById(R.id.city);
-	    tv_city.setText(city);
+	    //tv_city.setText(city);
 	    tv_from = (TextView) findViewById(R.id._de);
 	    tv_to = (TextView) findViewById(R.id.info);	    
 	    //----
@@ -152,9 +148,9 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 		        	}
 		        	//---------------
 	    			//---------------
-	    			contentValues.put(DatabaseHelper.KEY_BUSLINE, busline);
-	    			contentValues.put(DatabaseHelper.KEY_CITY, city.split(" - ")[0]);
-	    			contentValues.put(DatabaseHelper.KEY_UF, city.split(" - ")[1]);
+	    			//contentValues.put(DatabaseHelper.KEY_BUSLINE, busline);
+	    			//contentValues.put(DatabaseHelper.KEY_CITY, city.split(" - ")[0]);
+	    			//contentValues.put(DatabaseHelper.KEY_UF, city.split(" - ")[1]);
 	    			contentValues.put(DatabaseHelper.KEY_FROM, tv_from.getText().toString().split(": ")[1]);					
 	    			contentValues.put(DatabaseHelper.KEY_FROM_BUS_STOP_ID, _from_bus_stop_id);
 	    			contentValues.put(DatabaseHelper.KEY_TO, tv_to.getText().toString().split(": ")[1]);

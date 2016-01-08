@@ -9,6 +9,8 @@ import org.json.JSONObject;
 
 
 
+import com.xmiles.android.Gmaps;
+import com.xmiles.android.NewRoutes;
 import com.xmiles.android.R;
 import com.xmiles.android.R.id;
 import com.xmiles.android.R.layout;
@@ -16,6 +18,8 @@ import com.xmiles.android.listviewfeed.FeedItem;
 import com.xmiles.android.listviewfeed.FeedListAdapter;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
+import com.xmiles.android.support.GPSTracker;
+import com.xmiles.android.support.Score_Algorithm;
 import com.xmiles.android.support.imageloader.RankingLazyAdapter;
 import com.xmiles.android.webservice.UserFunctions;
 
@@ -39,10 +43,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.view.ViewGroup;
+import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -63,6 +70,7 @@ public class Feed_Fragment extends Fragment {
 	private static final Integer KEY_TIME_STAMP = 6;
 	private static final Integer KEY_URL        = 7;
 	//---------------------
+	AutoCompleteTextView buscode_search;
 	//---------------------
 	ProgressDialog progressBar;
 	private ListView listView;
@@ -71,6 +79,15 @@ public class Feed_Fragment extends Fragment {
 	private JSONObject json;
 	private Cursor data_newsfeed;
 	//-----------------------	
+	private View rootView;
+	private View searchBus;
+	//-----------------------
+    // GPSTracker class
+	GPSTracker gps;
+    // Score Algorithm class
+	Score_Algorithm sca;
+	
+
 	
 	public Feed_Fragment(){}
 	
@@ -78,10 +95,11 @@ public class Feed_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
  
-		View rootView = inflater.inflate(R.layout.fgmt_background, container, false);
+		rootView = inflater.inflate(R.layout.fgmt_background, container, false);
 
-		View custom = inflater.inflate(R.layout.feed_fgmt, null); 
+		searchBus = inflater.inflate(R.layout.search_buscode_autocomplete_textview, container, false);
 		
+		View custom = inflater.inflate(R.layout.feed_fgmt, null); 
 
 		listView 	= (ListView) custom.findViewById(R.id.list);
 		//---------------
@@ -89,7 +107,6 @@ public class Feed_Fragment extends Fragment {
 		listAdapter = new FeedListAdapter(getActivity(), feedItems);
 		listView.setAdapter(listAdapter);
 		//---------------
-		
         progressBar = new ProgressDialog(getActivity());
 		//*
         progressBar.setCancelable(true);
@@ -97,9 +114,65 @@ public class Feed_Fragment extends Fragment {
 		progressBar.show();
 		//*/
 		//--------------
+        //Check Service Location
+		gps = new GPSTracker(getActivity());
+		gps.getLocation(0);
+
+        if(!gps.canGetGPSLocation()){	
+			gps.showSettingsAlert();
+		} 
+		//--------------
 		
 		Feed_Query fq = new Feed_Query();
 		
+		//---------------
+		buscode_search = (AutoCompleteTextView) searchBus.findViewById(R.id.search);
+		//----------------------		
+    	//HANDLE EVENT - TYPE BUSCODE
+		buscode_search.setOnKeyListener(new View.OnKeyListener() {
+		    @Override
+		    public boolean onKey(View v, int keyCode, KeyEvent event) {
+				
+		    	String searchContent = buscode_search.getText().toString();
+				
+		    	if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+					(keyCode == KeyEvent.KEYCODE_ENTER)) {
+		    		
+                	//Hide keyboard                	
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
+                            Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(buscode_search.getWindowToken(), 0);
+                    
+                    //Hide searchBus AutoCompleteTextView
+                    ((ViewGroup) rootView).removeView(searchBus);
+                    
+		    		
+                    //Check Service Location            		
+            		gps.getLocation(0);
+
+                    if(!gps.canGetGPSLocation()){	
+            			gps.showSettingsAlert();
+            		} else {
+            			
+            	        Bundle args = new Bundle();
+            	        args.putString("buscode", searchContent);
+            			
+                        Intent intent = new Intent(getActivity(), Gmaps.class);
+                        
+                        intent.putExtras(args);
+                        
+                        startActivity(intent);
+
+            			
+            		}
+
+		    		
+				}
+				return false;
+		    }	
+		});    
+		//---------------		
+		((ViewGroup) rootView).addView(searchBus);		
 		((ViewGroup) rootView).addView(custom);
 		
 		
@@ -126,9 +199,6 @@ public class Feed_Fragment extends Fragment {
 
 		    		    	//Your code goes here
 		    		    	//------------			        	
-		    		    	//UserFunctions userFunc = new UserFunctions();
-		    		    	//------------------		    		    	
-		                    //json = userFunc.getNewsfeed();
 				            Uri uri = SqliteProvider.CONTENT_URI_NEWSFEED;
 				            data_newsfeed = getActivity().getContentResolver().query(uri, null, null, null, null);
 

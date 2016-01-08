@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"	
+    android:background="@color/standard_gray_e2e2e0"
+    android:layout_height="fill_parent" >
+	
+    <RelativeLayout 
+        	 android:id="@+id/header"
+			 android:layout_width="fill_parent"
+			 android:layout_height="35dp"
+			 android:background="@color/standard_gray_e2e2e0"			 
+			 android:layout_marginTop="0dp">
+			 
+            <TextView
+	        android:id="@+id/txt_header"	        	        
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_marginTop="8dip"
+	        android:layout_marginLeft="10dip"
+	        style="@style/NusProfileUserName"
+	        android:layout_alignWithParentIfMissing="true"
+	        android:gravity="center_vertical" />
+    
+
+	</RelativeLayout>
+    
+    
+    
+    <RelativeLayout 
+    	android:id="@+id/rel01"
+    	android:layout_below="@id/header"
+    	android:paddingLeft="2dp"
+    	android:paddingTop="2dp"
+    	android:paddingRight="2dp"
+    	android:paddingBottom="2dp"    	
+    	android:layout_width="match_parent"
+    	android:background="@color/grey"
+        android:layout_height="320dp">
+    
+     
+    <fragment
+        android:id="@+id/gmap_addroutes"         
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="fill_parent"        
+        android:layout_height="fill_parent">
+        
+      	  
+    	</fragment>
+    	
+    	<AutoCompleteTextView
+        android:id="@+id/search"        
+        style="@style/search_buscode"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:hint="@string/buscode" />
+    
+    	
+    </RelativeLayout>
+    	
+
+	    <RelativeLayout 
+    	android:id="@+id/frame_busline"
+    	android:layout_below="@id/rel01"
+    	android:layout_marginRight="10dp"
+    	android:layout_marginLeft="10dp"
+    	android:layout_marginTop="10dp"
+    	android:layout_marginBottom="5dp"    	
+    	android:layout_width="fill_parent"
+    	android:background="@color/standard_gray_e2e2e0"
+        android:layout_height="85dp">
+
+
+        
+        <RelativeLayout 
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"        
+        android:background="@drawable/background_with_shadow"
+        android:orientation="horizontal" >
+        <!-- android:background="@color/white"--> 
+        
+    	<ImageView
+        android:id="@+id/profile_pic"
+        android:background="@drawable/rounded_corner_favorites"        
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:layout_marginLeft="2dp"
+        android:layout_marginTop="6dp"                
+        android:src="@drawable/bus_ver5"
+        android:layout_marginRight="2dp" />
+
+    <TextView
+        android:id="@+id/busline"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/profile_pic"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="2dp"
+        style="@style/BusLine"
+        android:layout_alignWithParentIfMissing="true"
+        android:gravity="center_vertical" />
+
+        <TextView
+            android:id="@+id/city"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/profile_pic"
+            android:textColor="@color/grey"
+            android:layout_below="@id/busline"                        
+             />  
+    
+    
+        <ImageView
+        android:id="@+id/bus_stop"
+        android:background="@drawable/rounded_corner_favorites"        
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/city" 
+        android:layout_toRightOf="@id/profile_pic"                        
+        android:src="@drawable/bus_stop"/>
+        
+    
+    <TextView
+        android:id="@+id/_de"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"                
+        android:layout_below="@id/city"
+        android:layout_toRightOf="@id/bus_stop"
+        android:textColor="@color/blue"        
+        android:layout_alignParentRight="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:singleLine="true"
+        android:ellipsize="marquee" />    
+    
+    
+    <TextView
+        android:id="@+id/info"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/bus_stop"        
+        android:layout_below="@id/_de"
+        android:textColor="@color/green"        
+        android:layout_alignParentRight="true"
+        android:layout_alignWithParentIfMissing="true"
+        android:singleLine="true"
+        android:ellipsize="marquee" />
+    	
+    
+        
+    </RelativeLayout>
+        
+        
+        
+	</RelativeLayout>		 
+
+ 	    <Button
+        android:background="@drawable/red_button"
+        android:id="@+id/button_save_route"
+        android:layout_below="@id/frame_busline"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Salvar Rota"
+        style="@style/button_text" />   
+
+</RelativeLayout>

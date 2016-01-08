@@ -114,7 +114,7 @@ public class Profile_Fragment_bckup extends Fragment implements LoaderManager.Lo
         View rootView1 = inflater.inflate(R.layout.profile_score_button, container, false);
         score_btn = (Button) rootView1.findViewById(R.id.button1);
 		//-------
-        View rootView1b = inflater.inflate(R.layout.profile_buscode_autocomplete_textview, container, false);
+        View rootView1b = inflater.inflate(R.layout.search_buscode_autocomplete_textview, container, false);
         buscode_search = (AutoCompleteTextView) rootView1b.findViewById(R.id.search);
         //-------
 		View rootView2 = inflater.inflate(R.layout.profile_fgmt_gridview, container, false);

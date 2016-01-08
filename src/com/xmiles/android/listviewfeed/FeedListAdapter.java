@@ -13,6 +13,7 @@ import android.text.Html;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,10 @@ public class FeedListAdapter extends BaseAdapter {
 	private LayoutInflater inflater;
 	private List<FeedItem> feedItems;
 	ImageLoader imageLoader = AppController.getInstance().getImageLoader();
+	
+	//TAG
+	private static final String TAG = "FACEBOOK";
+
 
 	public FeedListAdapter(Activity activity, List<FeedItem> feedItems) {
 		this.activity = activity;
@@ -99,8 +104,22 @@ public class FeedListAdapter extends BaseAdapter {
 			url.setMovementMethod(LinkMovementMethod.getInstance());
 			url.setVisibility(View.VISIBLE);
 		} else {
-			// url is null, remove from the view
-			url.setVisibility(View.GONE);
+			
+			Log.e(TAG, "item.getName(): " + item.getName());
+			
+			if (item.getName().equals("xMiles")){
+
+				url.setText(Html.fromHtml("<a href=\"" + "http://ec2-54-209-160-58.compute-1.amazonaws.com/pictures/xmiles_logo_rev05_transparente.png" + "\">"
+						+ "www.xmiles.com.br" + "</a> "));
+
+				// Making url clickable
+				url.setMovementMethod(LinkMovementMethod.getInstance());
+				url.setVisibility(View.VISIBLE);
+				
+			} else {
+				// url is null, remove from the view
+				url.setVisibility(View.GONE);
+			}	
 		}
 
 		// user profile pic
