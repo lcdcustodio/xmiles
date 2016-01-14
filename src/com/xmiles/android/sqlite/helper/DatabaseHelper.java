@@ -612,7 +612,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	public Cursor get_Newsfeed(){
 
-		return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL}, null, null, null, null, null);
+		//return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL}, null, null, null, null, null);
+		return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL}, null, null, null, null, KEY_ROW_ID + " DESC");
 	}
 	
 	/** Returns all the contacts in the table */

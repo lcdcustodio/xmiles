@@ -12,6 +12,8 @@ import android.app.FragmentTransaction;
 import android.app.ActionBar.Tab;
 import android.app.SearchManager;
 import android.content.res.Configuration;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
@@ -52,10 +54,12 @@ public class MainActivity extends FragmentActivity {
 	    
 	    ActionBar actionBar = getActionBar();
 	    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+	    //Facebook Bar color
+	    //actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3b5998")));
 
 	    // Enable Action Bar
 	    actionBar.show();
-
+	    /*
 	    Tab tab1 = actionBar
 	          .newTab()
 	          .setText("MAPA")
@@ -65,7 +69,7 @@ public class MainActivity extends FragmentActivity {
 
 	      actionBar.addTab(tab1);
 	      actionBar.selectTab(tab1);
-
+		*/
 	    Tab tab2 = actionBar
 	    	   .newTab()
 	    	   .setText("FEED")
@@ -73,6 +77,7 @@ public class MainActivity extends FragmentActivity {
 	    	   .setTabListener(new MyTabsListener(fgmt_newsfeed));
 	    	  
 	      actionBar.addTab(tab2);
+	      actionBar.selectTab(tab2);
 	      
 	    Tab tab3 = actionBar
 	              .newTab()

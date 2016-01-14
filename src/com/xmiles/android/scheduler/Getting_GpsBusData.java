@@ -280,8 +280,8 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 		}
 		
 		//-----------------------------
-    	Intent intent=new Intent("profilefragmentupdater");
-    	ctx.sendBroadcast(intent);
+    	//Intent intent=new Intent("feedfragmentupdater");
+    	//ctx.sendBroadcast(intent);
 		//-----------------------------
 
 

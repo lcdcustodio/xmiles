@@ -46,6 +46,7 @@ public class SqliteProvider extends ContentProvider{
 	public static final Uri CONTENT_URI_RANKING = Uri.parse("content://" + PROVIDER_NAME + "/Ranking");
 	public static final Uri CONTENT_URI_NEWSFEED_create = Uri.parse("content://" + PROVIDER_NAME + "/Newsfeed_create");
 	public static final Uri CONTENT_URI_NEWSFEED = Uri.parse("content://" + PROVIDER_NAME + "/Newsfeed");
+	public static final Uri CONTENT_URI_NEWSFEED_insert = Uri.parse("content://" + PROVIDER_NAME + "/Newsfeed_insert");	
 
 	/** Constants to identify the requested operation */
 	private static final int USER_PROFILE = 1;
@@ -75,7 +76,7 @@ public class SqliteProvider extends ContentProvider{
 	private static final int RANKING = 25;
 	private static final int NEWSFEED_create = 26;
 	private static final int NEWSFEED = 27;
-
+	private static final int NEWSFEED_insert = 28;
 
 	private static final UriMatcher uriMatcher ;
 	static {
@@ -107,6 +108,7 @@ public class SqliteProvider extends ContentProvider{
 		uriMatcher.addURI(PROVIDER_NAME, "Ranking", RANKING);
 		uriMatcher.addURI(PROVIDER_NAME, "Newsfeed_create", NEWSFEED_create);
 		uriMatcher.addURI(PROVIDER_NAME, "Newsfeed", NEWSFEED);
+		uriMatcher.addURI(PROVIDER_NAME, "Newsfeed_insert", NEWSFEED_insert);		
 		
 
 	}
@@ -217,6 +219,20 @@ public class SqliteProvider extends ContentProvider{
 					}
 				}
 			break;
+			
+		    case NEWSFEED_insert:
+		    	long rowID_4d = mDatabaseHelper.insertNewsfeed(values);
+				//Uri _uri=null;
+				if(rowID_4d>0){
+					_uri = ContentUris.withAppendedId(CONTENT_URI_NEWSFEED_insert, rowID_4d);
+				}else {
+					try {
+						throw new SQLException("Failed to insert at TABLE_NEWSFEED: " + uri);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			break;			
 
 		    case USER_FAVORITES_create:
 		    	long rowID_4b = mDatabaseHelper.createUserFavorites(values);

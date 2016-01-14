@@ -9,6 +9,7 @@ import org.json.JSONObject;
 
 
 
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.xmiles.android.Gmaps;
 import com.xmiles.android.NewRoutes;
 import com.xmiles.android.R;
@@ -58,8 +59,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class Feed_Fragment extends Fragment {
-
+//public class Feed_Fragment extends Fragment {
+public class Feed_Fragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+	
 	private static final String TAG = "FACEBOOK";
 	
 	private static final Integer KEY_ID         = 1;
@@ -71,6 +73,7 @@ public class Feed_Fragment extends Fragment {
 	private static final Integer KEY_URL        = 7;
 	//---------------------
 	AutoCompleteTextView buscode_search;
+	Button buscode_button;
 	//---------------------
 	ProgressDialog progressBar;
 	private ListView listView;
@@ -84,9 +87,8 @@ public class Feed_Fragment extends Fragment {
 	//-----------------------
     // GPSTracker class
 	GPSTracker gps;
-    // Score Algorithm class
-	Score_Algorithm sca;
-	
+	//----------------------
+	private Handler mHandler;
 
 	
 	public Feed_Fragment(){}
@@ -95,9 +97,12 @@ public class Feed_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
  
+		getActivity().registerReceiver(FeedFragmentReceiver, new IntentFilter("feedfragmentupdater"));
+		
 		rootView = inflater.inflate(R.layout.fgmt_background, container, false);
 
-		searchBus = inflater.inflate(R.layout.search_buscode_autocomplete_textview, container, false);
+		//searchBus = inflater.inflate(R.layout.search_buscode_autocomplete_textview, container, false);
+		searchBus = inflater.inflate(R.layout.search_buscode_button, container, false);
 		
 		View custom = inflater.inflate(R.layout.feed_fgmt, null); 
 
@@ -124,56 +129,33 @@ public class Feed_Fragment extends Fragment {
 		//--------------
 		
 		Feed_Query fq = new Feed_Query();
-		
-		//---------------
-		buscode_search = (AutoCompleteTextView) searchBus.findViewById(R.id.search);
-		//----------------------		
-    	//HANDLE EVENT - TYPE BUSCODE
-		buscode_search.setOnKeyListener(new View.OnKeyListener() {
-		    @Override
-		    public boolean onKey(View v, int keyCode, KeyEvent event) {
+		///*
+		buscode_button = (Button) searchBus.findViewById(R.id.search);
+	    buscode_button.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
 				
-		    	String searchContent = buscode_search.getText().toString();
 				
-		    	if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
-					(keyCode == KeyEvent.KEYCODE_ENTER)) {
-		    		
-                	//Hide keyboard                	
-                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
-                            Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(buscode_search.getWindowToken(), 0);
-                    
-                    //Hide searchBus AutoCompleteTextView
-                    ((ViewGroup) rootView).removeView(searchBus);
-                    
-		    		
-                    //Check Service Location            		
-            		gps.getLocation(0);
+                //Hide searchBus Button
+                //((ViewGroup) rootView).removeView(searchBus);
 
-                    if(!gps.canGetGPSLocation()){	
-            			gps.showSettingsAlert();
-            		} else {
-            			
-            	        Bundle args = new Bundle();
-            	        args.putString("buscode", searchContent);
-            			
-                        Intent intent = new Intent(getActivity(), Gmaps.class);
-                        
-                        intent.putExtras(args);
-                        
-                        startActivity(intent);
+				
+                Intent intent = new Intent(getActivity(), Gmaps.class);                        
+                
+                startActivity(intent);
 
-            			
-            		}
-
-		    		
-				}
-				return false;
-		    }	
-		});    
+			}	
+		});
+		//*/
+  
 		//---------------		
 		((ViewGroup) rootView).addView(searchBus);		
 		((ViewGroup) rootView).addView(custom);
+		
+		/** Creating a loader for populating city TextView from sqlite database */
+		//getLoaderManager().initLoader(0, null, this);
 		
 		
 		return rootView;
@@ -185,6 +167,11 @@ public class Feed_Fragment extends Fragment {
 	        super.onDestroyView();
 	        
 	        Log.d(TAG, "onDestroy Feed_fgmt");
+	        
+	        //-------------
+	        getActivity().unregisterReceiver(FeedFragmentReceiver);
+	        //-------------
+
 	    }
 	 //*
 	 public class Feed_Query {
@@ -261,25 +248,39 @@ public class Feed_Fragment extends Fragment {
 			Log.w(TAG, "newsfeed.getCount(): " + newsfeed.getCount());
 			
 			for (int i = 0; i < newsfeed.getCount(); i++) {
+				
 
-				data_newsfeed.moveToPosition(i);
+				//data_newsfeed.moveToPosition(i);
+				newsfeed.moveToPosition(i);
 				
 				FeedItem item = new FeedItem();
-				item.setId(data_newsfeed.getInt(KEY_ID));
-				item.setName(data_newsfeed.getString(KEY_NAME));
+				
+				//item.setId(data_newsfeed.getInt(KEY_ID));
+				//item.setName(data_newsfeed.getString(KEY_NAME));
+				item.setId(newsfeed.getInt(KEY_ID));
+				item.setName(newsfeed.getString(KEY_NAME));
 
 				// Image might be null sometimes
-				String image = data_newsfeed.isNull(KEY_IMAGE) ? null : data_newsfeed
-						.getString(KEY_IMAGE);  
+				//String image = data_newsfeed.isNull(KEY_IMAGE) ? null : data_newsfeed
+				//		.getString(KEY_IMAGE);
+				String image = newsfeed.isNull(KEY_IMAGE) ? null : newsfeed
+						.getString(KEY_IMAGE);
+				
 				item.setImge(image);
 
-				item.setStatus(data_newsfeed.getString(KEY_STATUS));
-				item.setProfilePic(data_newsfeed.getString(KEY_PICURL));				
-				item.setTimeStamp(data_newsfeed.getString(KEY_TIME_STAMP));				
-
+				//item.setStatus(data_newsfeed.getString(KEY_STATUS));
+				//item.setProfilePic(data_newsfeed.getString(KEY_PICURL));				
+				//item.setTimeStamp(data_newsfeed.getString(KEY_TIME_STAMP));				
+				item.setStatus(newsfeed.getString(KEY_STATUS));
+				item.setProfilePic(newsfeed.getString(KEY_PICURL));				
+				item.setTimeStamp(newsfeed.getString(KEY_TIME_STAMP));				
+				
 				// url might be null sometimes
-				String feedUrl = data_newsfeed.isNull(KEY_URL) ? null : data_newsfeed
+				//String feedUrl = data_newsfeed.isNull(KEY_URL) ? null : data_newsfeed
+				//		.getString(KEY_URL);
+				String feedUrl = newsfeed.isNull(KEY_URL) ? null : newsfeed
 						.getString(KEY_URL);
+				
 				item.setUrl(feedUrl);
 
 				feedItems.add(item);
@@ -287,6 +288,47 @@ public class Feed_Fragment extends Fragment {
 
 			// notify data changes to list adapater
 			listAdapter.notifyDataSetChanged();
+		}
+
+		private final BroadcastReceiver FeedFragmentReceiver = new BroadcastReceiver() {
+
+
+			@Override
+			public void onReceive(Context arg0, Intent arg1) {
+				// TODO Auto-generated method stub
+				getLoaderManager().restartLoader(0, null, Feed_Fragment.this);
+			}};
+
+
+		@Override
+		public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
+			// TODO Auto-generated method stub
+			
+			Uri uri = SqliteProvider.CONTENT_URI_NEWSFEED;
+			return new CursorLoader(getActivity(), uri, null, null, null, null);
+			//return null;
+		}
+
+		@Override
+		public void onLoadFinished(Loader<Cursor> arg0, Cursor arg1) {
+			// TODO Auto-generated method stub
+			
+			Log.d(TAG, "Feed_Fgmnt onLoadFinished");			
+			
+			listView.setAdapter(null);
+			//---------------
+			feedItems = new ArrayList<FeedItem>();
+			listAdapter = new FeedListAdapter(getActivity(), feedItems);
+			listView.setAdapter(listAdapter);
+			//---------------
+			
+			parseJsonFeed(arg1);
+		}
+
+		@Override
+		public void onLoaderReset(Loader<Cursor> arg0) {
+			// TODO Auto-generated method stub
+			
 		}
 
 

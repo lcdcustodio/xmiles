@@ -105,7 +105,7 @@ public class FeedListAdapter extends BaseAdapter {
 			url.setVisibility(View.VISIBLE);
 		} else {
 			
-			Log.e(TAG, "item.getName(): " + item.getName());
+			
 			
 			if (item.getName().equals("xMiles")){
 
