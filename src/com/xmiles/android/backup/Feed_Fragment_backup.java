@@ -122,7 +122,7 @@ public class Feed_Fragment_backup extends Fragment {
 		    		    	//------------			        	
 		    		    	UserFunctions userFunc = new UserFunctions();
 		    		    	//------------------		    		    	
-		                    json = userFunc.getNewsfeed();
+		                    json = userFunc.getNewsfeed("lala");
 
 				    		        	
 					    } catch (Exception e) {

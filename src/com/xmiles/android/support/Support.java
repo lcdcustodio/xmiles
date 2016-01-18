@@ -6,9 +6,13 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import android.text.format.DateUtils;
 import android.util.Log;
 
 public class Support {
+	
+	//TAG
+	private static String TAG = "FACEBOOK";  
 
 	// constructors
 	public Support() {
@@ -24,9 +28,17 @@ public class Support {
 		return dateFormat.format(date);
 	}
 	
+	
+	public String getHour() {
+		SimpleDateFormat dateFormat = new SimpleDateFormat(
+				"HH:mm:ss", Locale.getDefault());
+		Date date = new Date();
+		return dateFormat.format(date);
+	}
+	
 	public String DiffTime(String time1, String time2){
 		
-		
+		//String lala = Locale.getDefault();
 
 		SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
 		Date date1 = null;
@@ -44,6 +56,34 @@ public class Support {
 		
 		return Long.toString(difference);
 	}
+	
+	public String getDateTime_long(String time1){
+		
+		SimpleDateFormat dateFormat = new SimpleDateFormat(
+				"yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+
+		Date d;
+		long milliseconds = 0;
+		
+		try {
+			d = dateFormat.parse(time1);
+			milliseconds = d.getTime();
+			
+			//Log.e(TAG,"getDateTime(): " + getDateTime());
+			//Log.d(TAG,"milliseconds: " + milliseconds);
+			
+
+
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
+		return Long.toString(milliseconds);
+		//return milliseconds;
+	}
+	
+	
 	
 	public String fixDateTime(String timeStamp) {
 		

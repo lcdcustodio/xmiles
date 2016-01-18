@@ -93,6 +93,8 @@ public class Gmaps extends FragmentActivity {
 	private static final Integer KEY_ID = 0;
 	private static final Integer KEY_NAME = 1;
 	private static final Integer KEY_PICTURE = 2;
+	
+	private static final Integer KEY_BUSCODE = 1;
 
 	protected static JSONArray jsonArray;
 	protected static JSONObject json;
@@ -130,8 +132,6 @@ public class Gmaps extends FragmentActivity {
     	//-------------------------------
 		sca = new Score_Algorithm(getApplicationContext());
 
-		//String url = "http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/onibus/";
-		//JSONObject json = sca.getBusPosition(url, buscode);
 	    
     	//-------------------------------
         //Check Service Location
@@ -306,6 +306,11 @@ public class Gmaps extends FragmentActivity {
 	            Uri uri_1 = SqliteProvider.CONTENT_URI_USER_PROFILE;
 	            Cursor data_profile = getApplicationContext().getContentResolver().query(uri_1, null, null, null, null);
 	            data_profile.moveToFirst();
+	            
+	            Uri uri_2 = SqliteProvider.CONTENT_URI_BUS_GPS_URL;
+				Cursor bus_gps_url = getApplicationContext().getContentResolver().query(uri_2, null, null, null, null);
+				bus_gps_url.moveToLast();
+
 
 	            Support support = new Support();
 				
@@ -313,10 +318,9 @@ public class Gmaps extends FragmentActivity {
 				
 				contentValues.put(DatabaseHelper.KEY_ID, "1");
 				contentValues.put(DatabaseHelper.KEY_NAME, data_profile.getString(KEY_NAME));
-				contentValues.put(DatabaseHelper.KEY_STATUS, "lalalalala lalala lalala");
-				contentValues.put(DatabaseHelper.KEY_CREATED_AT, support.getDateTime());
+				contentValues.put(DatabaseHelper.KEY_STATUS, "Conectado ao ônibus " + bus_gps_url.getString(KEY_BUSCODE));
 				contentValues.put(DatabaseHelper.KEY_PICURL, data_profile.getString(KEY_PICTURE));
-				contentValues.put(DatabaseHelper.KEY_TIME_STAMP, "1403375851930");
+				contentValues.put(DatabaseHelper.KEY_TIME_STAMP, support.getDateTime());
 				
 				getApplicationContext().getContentResolver().insert(SqliteProvider.CONTENT_URI_NEWSFEED_insert, contentValues);
 

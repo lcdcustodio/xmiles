@@ -117,6 +117,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String KEY_IMAGE 	  = "image";
 	public static final String KEY_STATUS 	  = "status";
 	public static final String KEY_TIME_STAMP = "time_stamp";
+	public static final String KEY_CUSTOM_TIME_STAMP = "custom_time_stamp";
 	
 	// Table Create Statements
 	private static final String CREATE_TABLE_USER_PROFILE = "CREATE TABLE "
@@ -244,9 +245,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			KEY_IMAGE		+ " TEXT," +
 			KEY_STATUS		+ " TEXT," +			
 			KEY_PICURL 		+ " TEXT," +
-			KEY_TIME_STAMP 	+ " TEXT," +
-			KEY_URL     	+ " TEXT," +			
-			KEY_CREATED_AT	+ " DATETIME" + ")";
+			//KEY_TIME_STAMP 	+ " TEXT," +
+			KEY_TIME_STAMP 	+ " DATETIME," + 
+			KEY_CUSTOM_TIME_STAMP 	+ " DATETIME," +
+			KEY_URL     	+ " TEXT" + ")";			
+			//KEY_CREATED_AT	+ " DATETIME" + ")";
 	
 	
     /** An instance variable for SQLiteDatabase */
@@ -613,7 +616,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public Cursor get_Newsfeed(){
 
 		//return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL}, null, null, null, null, null);
-		return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL}, null, null, null, null, KEY_ROW_ID + " DESC");
+		return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL, KEY_CUSTOM_TIME_STAMP}, null, null, null, null, KEY_ROW_ID + " DESC");
 	}
 	
 	/** Returns all the contacts in the table */

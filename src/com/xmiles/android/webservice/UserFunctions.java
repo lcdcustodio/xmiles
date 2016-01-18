@@ -102,9 +102,10 @@ public class UserFunctions {
         return json;
     }
     
-    public JSONObject getNewsfeed(){
+    public JSONObject getNewsfeed(String id){
         // Building Parameters
         List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("fb_id", id));
         params.add(new BasicNameValuePair("tag", news_feed_tag));
         JSONObject json = jsonParser.getJSONFromUrl(news_feedURL, params);
         // return json        

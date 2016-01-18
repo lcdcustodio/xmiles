@@ -4,6 +4,7 @@ import com.xmiles.android.listviewfeed.FeedImageView;
 import com.xmiles.android.R;
 import com.xmiles.android.listviewfeed.AppController;
 import com.xmiles.android.listviewfeed.FeedItem;
+import com.xmiles.android.support.Support;
 
 import java.util.List;
 
@@ -79,12 +80,23 @@ public class FeedListAdapter extends BaseAdapter {
 		FeedItem item = feedItems.get(position);
 
 		name.setText(item.getName());
-
+		
+		Support support = new Support();
+		
 		// Converting timestamp into x ago format
+		//*
 		CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(
-				Long.parseLong(item.getTimeStamp()),
+				//Long.parseLong(item.getTimeStamp()),
+				Long.parseLong(support.getDateTime_long(item.getTimeStamp())),
 				System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
 		timestamp.setText(timeAgo);
+		//*/
+		/*
+		CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(
+				1452444283000L,
+				System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
+		timestamp.setText(timeAgo);
+		*/
 
 		// Chcek for empty status message
 		if (!TextUtils.isEmpty(item.getStatus())) {

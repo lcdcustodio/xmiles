@@ -21,6 +21,7 @@ import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
 import com.xmiles.android.support.GPSTracker;
 import com.xmiles.android.support.Score_Algorithm;
+import com.xmiles.android.support.Support;
 import com.xmiles.android.support.imageloader.RankingLazyAdapter;
 import com.xmiles.android.webservice.UserFunctions;
 
@@ -71,6 +72,7 @@ public class Feed_Fragment extends Fragment implements LoaderManager.LoaderCallb
 	private static final Integer KEY_PICURL     = 5;
 	private static final Integer KEY_TIME_STAMP = 6;
 	private static final Integer KEY_URL        = 7;
+	private static final Integer KEY_CUSTOM_TIME_STAMP = 8;
 	//---------------------
 	AutoCompleteTextView buscode_search;
 	Button buscode_button;
@@ -153,9 +155,6 @@ public class Feed_Fragment extends Fragment implements LoaderManager.LoaderCallb
 		//---------------		
 		((ViewGroup) rootView).addView(searchBus);		
 		((ViewGroup) rootView).addView(custom);
-		
-		/** Creating a loader for populating city TextView from sqlite database */
-		//getLoaderManager().initLoader(0, null, this);
 		
 		
 		return rootView;
@@ -272,8 +271,18 @@ public class Feed_Fragment extends Fragment implements LoaderManager.LoaderCallb
 				//item.setProfilePic(data_newsfeed.getString(KEY_PICURL));				
 				//item.setTimeStamp(data_newsfeed.getString(KEY_TIME_STAMP));				
 				item.setStatus(newsfeed.getString(KEY_STATUS));
-				item.setProfilePic(newsfeed.getString(KEY_PICURL));				
-				item.setTimeStamp(newsfeed.getString(KEY_TIME_STAMP));				
+				item.setProfilePic(newsfeed.getString(KEY_PICURL));
+				
+				Log.i(TAG, "newsfeed.isNull(KEY_CUSTOM_TIME_STAMP): " + newsfeed.isNull(KEY_CUSTOM_TIME_STAMP));
+				Log.e(TAG, "newsfeed.isNull(KEY_IMAGE): " + newsfeed.isNull(KEY_IMAGE));
+				
+				if (newsfeed.isNull(KEY_CUSTOM_TIME_STAMP)) {
+					item.setTimeStamp(newsfeed.getString(KEY_TIME_STAMP));
+				} else {
+					item.setTimeStamp(newsfeed.getString(KEY_CUSTOM_TIME_STAMP));
+				}
+				
+				//item.setTimeStamp(newsfeed.getString(KEY_TIME_STAMP));				
 				
 				// url might be null sometimes
 				//String feedUrl = data_newsfeed.isNull(KEY_URL) ? null : data_newsfeed

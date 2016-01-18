@@ -369,7 +369,8 @@ public class Splash_Fragment extends Fragment {
     	JSONArray jsonArray;
     	//-----------
 		UserFunctions userFunc = new UserFunctions();
-		JSONObject json = userFunc.getNewsfeed();
+		//JSONObject json = userFunc.getNewsfeed();
+		JSONObject json = userFunc.getNewsfeed(user_id);
     	
         try {
 
@@ -400,6 +401,12 @@ public class Splash_Fragment extends Fragment {
 							values.put(DatabaseHelper.KEY_STATUS, jsonObject.getString("status"));
 							values.put(DatabaseHelper.KEY_PICURL, jsonObject.getString("profilepic"));
 							values.put(DatabaseHelper.KEY_TIME_STAMP, jsonObject.getString("time_stamp"));
+
+							// custom_time_stamp might be null sometimes							
+							String custom_time_stamp = jsonObject.isNull("custom_time_stamp") ? null : jsonObject
+									.getString("custom_time_stamp");							
+							values.put(DatabaseHelper.KEY_CUSTOM_TIME_STAMP, custom_time_stamp);
+							
 							
 							// url might be null sometimes
 							String feedUrl = jsonObject.isNull("url") ? null : jsonObject
