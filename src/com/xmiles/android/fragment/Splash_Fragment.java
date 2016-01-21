@@ -15,9 +15,7 @@ import com.xmiles.android.R;
 import com.xmiles.android.facebook_api_support.GetFacebookProfile;
 import com.xmiles.android.facebook_api_support.Utility;
 
-import com.xmiles.android.scheduler.FbPlaces_Download;
-import com.xmiles.android.scheduler.Getting_GpsBusData;
-import com.xmiles.android.scheduler.Getting_UserLocation;
+
 
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
@@ -30,6 +28,7 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,7 +42,7 @@ public class Splash_Fragment extends Fragment {
 
 	JSONObject facebook_profile;
 
-	FbPlaces_Download FbPlaces;
+	
 	
     // GPSTracker class
 	GPSTracker gps;
@@ -51,6 +50,7 @@ public class Splash_Fragment extends Fragment {
 	float Lat;
 	float Long;
 
+	private Handler mHandler;
 
 	public Splash_Fragment() {
 	}
@@ -109,8 +109,6 @@ public class Splash_Fragment extends Fragment {
 				//-------------
             	//REWARDS
             	xMiles_getRewards();				
-            	//RANKING
-            	xMiles_getRanking();				
             	
 				//-------------				
 				JSONObject json_login = xMiles_Login(facebook_profile.getString("name"),
@@ -118,48 +116,22 @@ public class Splash_Fragment extends Fragment {
 							 			facebook_profile.getString("gender"),
 							 			facebook_profile.optJSONObject("picture").optJSONObject("data").getString("url"),
 							 			new GetDeviceName().getDeviceName());
-				//-------------
-				Log.e(TAG,"getDeviceName(): " + new GetDeviceName().getDeviceName());
-				//-------------
 				
 				contentValues.put(DatabaseHelper.KEY_SCORE, new JSONObject(json_login.getString("user")).getString("score"));
 				contentValues.put(DatabaseHelper.KEY_RANK, new JSONObject(json_login.getString("user")).getString("rnk"));
 				//-------------				
 				/*
 				 * If Login success = 1 then GET Blabla and later
-				 * [new] TABLE_USER_ROUTES
 				 */
                 if(Integer.parseInt(json_login.getString("success")) == 1){
                 	
                 	//NEWSFEED
                 	xMiles_getNewsfeed(facebook_profile.getString("id"));				
-                	
-                	/*
-    				JSONObject json_favoritesRoutes = xMiles_favoritesRoutes(facebook_profile.getString("name"),
-    																		 facebook_profile.getString("id"));
+
+                	//RANKING
+                	xMiles_getRanking();				
 
 
-			        try {
-
-			        	if (json_favoritesRoutes.getString("success") != null) {
-
-						    String res = json_favoritesRoutes.getString("success");
-						    if(Integer.parseInt(res) == 1){
-
-						    	JSONArray jsonArray = new JSONArray(json_favoritesRoutes.getString("user"));
-						    	//Log.w(TAG, "json_favoritesRoutes.lenght()" + jsonArray.length());
-
-						    	//xMiles_userRoutes(facebook_profile.getString("id"),
-						    	//				  jsonArray.length());
-						    }
-
-			        	}
-
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					*/
                 }
 
 
@@ -208,6 +180,13 @@ public class Splash_Fragment extends Fragment {
                 String res = json.getString("success");
                 if(Integer.parseInt(res) != 1){
                 	userFunction.registerUser(name, id, gender, picURL);
+                	
+                	
+			         //NEWSFEED
+			         xMiles_getNewsfeed(id);				
+			
+			         //RANKING
+			         xMiles_getRanking();				
 
                 }
             }

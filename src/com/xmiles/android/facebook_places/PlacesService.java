@@ -18,7 +18,7 @@ import android.util.Log;
 public class PlacesService {
 	 
 	 private String Access_Token;
-	 private final String TAG = "Facebook_Places";
+	 private final String TAG = "FACEBOOK";
 	 
 	 public PlacesService(String a_token) {
 		  this.Access_Token = a_token;

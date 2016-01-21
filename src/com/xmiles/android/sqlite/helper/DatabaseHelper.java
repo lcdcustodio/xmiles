@@ -34,6 +34,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String TABLE_RANKING = "ranking";
 	//-----------------
 	public static final String TABLE_NEWSFEED = "newsfeed";
+	//-----------------
+	public static final String TABLE_BUSCODE = "buscode";
 	
 	// Common column names
 	public static final String KEY_ROW_ID = "_id";
@@ -104,7 +106,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String KEY_DIRECTION = "direction";
 	public static final String KEY_URL = "url";
 	public static final String KEY_SCORE = "score";
+	
+	// GPS BUS_GPS_URL Table - column manes
+	public static final String KEY_BUSLINE_DESCRIPTION   = "busline_description";
+	public static final String KEY_BUSLINE_COMPANY       = "busline_company";
 
+	
 	// REWARDS Table - column names	
 	public static final String KEY_REWARD   	= "reward";
 	public static final String KEY_REWARD_TYPE  = "reward_type";
@@ -219,8 +226,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ TABLE_BUS_GPS_URL + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
 			KEY_BUSCODE + " TEXT," +
 			KEY_URL + " TEXT," +
+			//KEY_BUSLINE + " TEXT," +
+			//KEY_BUSLINE_DESCRIPTION + " TEXT," +
+			//KEY_BUSLINE_COMPANY + " TEXT," +
 			KEY_FLAG + " integer" + ")";
 
+	private static final String CREATE_TABLE_BUSCODE = "CREATE TABLE "
+			+ TABLE_BUSCODE + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
+			KEY_BUSCODE + " TEXT," +
+			KEY_BUSLINE + " TEXT," +
+			KEY_BUSLINE_DESCRIPTION + " TEXT," +
+			KEY_BUSLINE_COMPANY + " TEXT" + ")";
+
+	
 	private static final String CREATE_TABLE_REWARDS = "CREATE TABLE "
 			+ TABLE_REWARDS + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
 			KEY_REWARD 		+ " TEXT," +
@@ -293,6 +311,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(CREATE_TABLE_RANKING);
 		//---------------------
 		db.execSQL(CREATE_TABLE_NEWSFEED);		
+		
+		db.execSQL(CREATE_TABLE_BUSCODE);		
 	}
 
 	@Override
@@ -316,7 +336,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_BUS_GPS_URL);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_REWARDS);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_RANKING);
-		db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEWSFEED);		
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEWSFEED);
+		//--------------------
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_BUSCODE);
+		//--------------------		
 		// create new tables
 		onCreate(db);
 	}
@@ -430,6 +453,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	}
 	
+	public long insertBuscode(ContentValues contentValues) {
+
+		//-----------
+		long rowID = mDB.insert(TABLE_BUSCODE, null, contentValues);
+		return rowID;
+
+	}
+	
+	
 	public long insertRewards(ContentValues contentValues) {
 
 		//-----------
@@ -523,6 +555,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		mDB.execSQL(CREATE_TABLE_BUS_GPS_URL);
 		//-----------
 	}
+	
+	public void resetBuscode() {
+		//-----------
+		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_BUSCODE);
+		mDB.execSQL(CREATE_TABLE_BUSCODE);
+		//-----------
+	}	
 
 	public void resetRewards() {
 		//-----------
@@ -601,7 +640,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public Cursor get_BusGpsUrl(){
 
 		return mDB.query(TABLE_BUS_GPS_URL, new String[] {KEY_ROW_ID, KEY_BUSCODE, KEY_URL, KEY_FLAG}, null, null, null, null, null);
+		//return mDB.query(TABLE_BUS_GPS_URL, new String[] {KEY_ROW_ID, KEY_BUSCODE, KEY_URL, KEY_FLAG, KEY_BUSLINE, KEY_BUSLINE_DESCRIPTION, KEY_BUSLINE_COMPANY}, null, null, null, null, null);
 	}
+	
+	public Cursor get_Buscode(){
+
+		return mDB.query(TABLE_BUSCODE, new String[] {KEY_ROW_ID, KEY_BUSCODE, KEY_BUSLINE, KEY_BUSLINE_DESCRIPTION, KEY_BUSLINE_COMPANY}, null, null, null, null, null);
+	}
+
 	
 	public Cursor get_Rewards(){
 

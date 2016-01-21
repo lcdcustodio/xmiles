@@ -146,9 +146,19 @@ public class SlidingMenuLazyAdapter extends BaseAdapter {
 		        
 		        // Setting all values in listview
 		        title.setText(users_info.getString(KEY_NAME));
-		        //artist.setText("Pontuação: " + users_info.getString(KEY_SCORE));
-		        artist.setText(users_info.getString(KEY_SCORE) + " pontos");
-		        rank.setText(users_info.getString(KEY_RANK) + "° no ranking");
+		        
+		        if (users_info.isNull(KEY_SCORE)) {
+		        	artist.setText("0 pontos");
+		        } else {
+		        	artist.setText(users_info.getString(KEY_SCORE) + " pontos");
+		        }
+		        
+		        if (users_info.isNull(KEY_RANK)){
+		        	rank.setText("");
+		        } else {
+		        	rank.setText(users_info.getString(KEY_RANK) + "° no ranking");	
+		        }
+		        
 		        
 				Drawable drawable = null;
 				try {

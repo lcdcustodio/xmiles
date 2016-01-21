@@ -9,8 +9,6 @@ import org.json.JSONObject;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
-import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -25,8 +23,8 @@ import com.xmiles.android.support.GetDistance;
 import com.xmiles.android.support.Score_Algorithm;
 import com.xmiles.android.support.Support;
 import com.xmiles.android.webservice.UserFunctions;
+import com.xmiles.android.scheduler.FbPlaces_Download;
 
-import com.xmiles.android.scheduler.Favorites_Upload;
 import com.xmiles.android.scheduler.Getting_GpsBusData;
 
 import android.app.ActionBar;
@@ -43,6 +41,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.text.Html;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -75,7 +74,7 @@ public class Gmaps extends FragmentActivity {
 	private static final Integer index_LATITUDE  = 3;
 	private static final Integer index_LONGITUDE = 4;
 	
-
+	FbPlaces_Download FbPlaces;
 	
 	AutoCompleteTextView buscode_search;
 	
@@ -94,10 +93,17 @@ public class Gmaps extends FragmentActivity {
 	private static final Integer KEY_NAME = 1;
 	private static final Integer KEY_PICTURE = 2;
 	
+	private static final Integer KEY_NEARBY = 1;
+	private static final Integer KEY_NEARBY_PICURL = 6;
+	
+	
 	private static final Integer KEY_BUSCODE = 1;
+	private static final Integer KEY_BUSLINE = 2;
+	private static final Integer KEY_BUSLINE_DESCRIPTION = 3;
+	private static final Integer KEY_BUSLINE_COMPANY = 4;
 
-	protected static JSONArray jsonArray;
-	protected static JSONObject json;
+	//protected static JSONArray jsonArray;
+	protected static JSONObject json_buscode;
 	
     // GPSTracker class
 	GPSTracker gps;
@@ -131,7 +137,6 @@ public class Gmaps extends FragmentActivity {
 
     	//-------------------------------
 		sca = new Score_Algorithm(getApplicationContext());
-
 	    
     	//-------------------------------
         //Check Service Location
@@ -162,12 +167,18 @@ public class Gmaps extends FragmentActivity {
             		
             		//Clean TextView MSG
             		cleanUp_Textview();
-            		
+            		            		
                 	//Hide keyboard                	
                     InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(
                             Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(buscode_search.getWindowToken(), 0);
                 	
+            		// start FbPlaces service
+            		runFbPlaces_thread();
+
+            		// get Buscode Details
+            		runBuscodeDetails_thread(searchContent);
+                    
                     //Check Service Location            		
             		gps.getLocation(0);
 
@@ -179,7 +190,11 @@ public class Gmaps extends FragmentActivity {
             			//"C41383"            			
             			String url = "http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/onibus/";
             			JSONObject json = sca.getBusPosition(url, searchContent);
+            			
+            			
             			try {
+            				
+
             				//-----------------------
             				progressBar.dismiss();  
             				mMap.clear();
@@ -200,7 +215,8 @@ public class Gmaps extends FragmentActivity {
       							cV.put(DatabaseHelper.KEY_URL, url);
       							//----------------------------
       							cV.put(DatabaseHelper.KEY_FLAG, 0);
-      							//----------------------------								
+      							//----------------------------		
+
       							getApplicationContext().getContentResolver().insert(SqliteProvider.CONTENT_URI_BUS_GPS_URL_insert, cV);
       							//----------------------
 
@@ -311,14 +327,59 @@ public class Gmaps extends FragmentActivity {
 				Cursor bus_gps_url = getApplicationContext().getContentResolver().query(uri_2, null, null, null, null);
 				bus_gps_url.moveToLast();
 
+ 				
+	            Uri uri_3 = SqliteProvider.CONTENT_URI_USER_PLACES;
+				Cursor fb_places = getApplicationContext().getContentResolver().query(uri_3, null, null, null, null);
+				fb_places.moveToFirst();
 
+	            Uri uri_4 = SqliteProvider.CONTENT_URI_BUSCODE;
+				Cursor buscode_info = getApplicationContext().getContentResolver().query(uri_4, null, null, null, null);
+				buscode_info.moveToFirst();
+
+				
 	            Support support = new Support();
 				
 				ContentValues contentValues = new ContentValues();
 				
 				contentValues.put(DatabaseHelper.KEY_ID, "1");
 				contentValues.put(DatabaseHelper.KEY_NAME, data_profile.getString(KEY_NAME));
-				contentValues.put(DatabaseHelper.KEY_STATUS, "Conectado ao ônibus " + bus_gps_url.getString(KEY_BUSCODE));
+				//---------------				
+				//*
+				String status_buscode = "Conectado ao ônibus " + bus_gps_url.getString(KEY_BUSCODE);
+				String status_nearby = "";
+				String status_buscode_details = "";
+				//----------------
+				//status_buscode = "Conectado ao ônibus " + bus_gps_url.getString(KEY_BUSCODE);
+				//----------------				
+				if (fb_places.getCount() > 0){
+					status_nearby = " próximo ao " + fb_places.getString(KEY_NEARBY);
+				}
+				if (buscode_info.getCount() > 0){
+					
+					status_buscode_details = " (linha: " + buscode_info.getString(KEY_BUSLINE) + ")";
+				}				
+
+				String status = status_buscode + status_buscode_details + status_nearby;
+				//String lala = status.split(",")[0];
+				
+				contentValues.put(DatabaseHelper.KEY_STATUS, status);
+				
+				/*
+
+				if (fb_places.getCount() == 0){
+					contentValues.put(DatabaseHelper.KEY_STATUS, "Conectado ao ônibus " + bus_gps_url.getString(KEY_BUSCODE));
+				} else {
+					contentValues.put(DatabaseHelper.KEY_STATUS, "Conectado ao ônibus " + bus_gps_url.getString(KEY_BUSCODE) + " próximo ao " + fb_places.getString(KEY_NEARBY));
+				}
+				*/
+				/*
+				Log.i(TAG, "fb_places.getString(KEY_NEARBY_PICURL):" + fb_places.getString(KEY_NEARBY_PICURL));
+				
+				if (!fb_places.isNull(KEY_NEARBY_PICURL)){
+					contentValues.put(DatabaseHelper.KEY_IMAGE, fb_places.getString(KEY_NEARBY_PICURL));
+				}
+				*/
+				
 				contentValues.put(DatabaseHelper.KEY_PICURL, data_profile.getString(KEY_PICTURE));
 				contentValues.put(DatabaseHelper.KEY_TIME_STAMP, support.getDateTime());
 				
@@ -339,7 +400,104 @@ public class Gmaps extends FragmentActivity {
 
 
 	}
-	//*
+	
+	public void runBuscodeDetails_thread(final String buscode){
+	
+		 Thread thread_1 = new Thread(new Runnable(){
+			    @Override
+			    public void run() {
+			        try {
+
+				    	//Your code goes here
+				    	//------------
+	                	DatabaseHelper mDatabaseHelper;
+	                	mDatabaseHelper = new DatabaseHelper(getApplicationContext());
+	                	mDatabaseHelper.resetBuscode();
+
+			        	
+            			UserFunctions userFunc = new UserFunctions();           
+            			Log.i(TAG, "buscode.toUpperCase(): " + buscode.toUpperCase());
+            			json_buscode = userFunc.getBuscode(buscode.toUpperCase());
+				    	
+				    } catch (Exception e) {
+				            e.printStackTrace();
+				    }
+				}
+		});
+
+		 thread_1.start();
+		
+		try {
+			thread_1.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//----------
+		 Thread thread_2 = new Thread(new Runnable(){
+			    @Override
+			    public void run() {
+			        try {
+
+				    	//Your code goes here
+				    	//------------
+						
+						if(Integer.parseInt(json_buscode.getString("success")) == 1){
+								
+  							ContentValues cV = new ContentValues();
+	
+							JSONArray jsonArray = new JSONArray(json_buscode.getString("buscode"));
+							JSONObject jsonObject = jsonArray.getJSONObject(0);
+							
+							cV.put(DatabaseHelper.KEY_BUSCODE, jsonObject.getString("buscode"));
+							cV.put(DatabaseHelper.KEY_BUSLINE, jsonObject.getString("busline"));
+  							cV.put(DatabaseHelper.KEY_BUSLINE_DESCRIPTION, jsonObject.getString("busline_description"));
+  							cV.put(DatabaseHelper.KEY_BUSLINE_COMPANY, jsonObject.getString("company"));
+  							
+  							getApplicationContext().getContentResolver().insert(SqliteProvider.CONTENT_URI_BUSCODE_insert, cV);
+
+						 }
+										        	
+			        	
+				    	
+				    } catch (Exception e) {
+				            e.printStackTrace();
+				    }
+				}
+		});
+
+		 thread_2.start();
+
+		
+	}
+	
+	public void runFbPlaces_thread(){
+		
+		 Thread thread = new Thread(new Runnable(){
+			    @Override
+			    public void run() {
+			        try {
+
+				    	//Your code goes here
+				    	//------------
+	                	DatabaseHelper mDatabaseHelper;
+	                	mDatabaseHelper = new DatabaseHelper(getApplicationContext());
+	                	mDatabaseHelper.resetUserPlaces();
+			        	
+				    	FbPlaces = new FbPlaces_Download();
+				    	FbPlaces.setAlarm(getApplicationContext());
+			    		
+				    	//Thread.sleep(200);
+				    	
+				    } catch (Exception e) {
+				            e.printStackTrace();
+				    }
+				}
+		});
+
+		thread.start();
+		
+	}
 	public void cleanUp_Textview(){
 		
 		tv_busline.setText("");				

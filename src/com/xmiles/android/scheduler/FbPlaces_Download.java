@@ -63,7 +63,7 @@ public class FbPlaces_Download extends WakefulBroadcastReceiver implements Locat
     private static final long MIN_DISTANCE_CHANGE_FOR_UPDATES = 10; // 10 meters
  
     // The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 1; // 1 minute
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 60 * 10; // 10 minutes
  
     // Declaring a Location Manager
     protected LocationManager lm;
@@ -77,8 +77,8 @@ public class FbPlaces_Download extends WakefulBroadcastReceiver implements Locat
     int MAX_DISTANCE = 5000;
     
     //Facebook place distance require
-    int MAX_N_PLACES = 30;
-    //int MAX_N_PLACES = 5;
+    //int MAX_N_PLACES = 30;
+    int MAX_N_PLACES = 3;
 
     
     @Override
@@ -112,15 +112,12 @@ public class FbPlaces_Download extends WakefulBroadcastReceiver implements Locat
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        // Set the alarm's trigger time to 8:30 a.m.
-        calendar.set(Calendar.HOUR_OF_DAY, 8);
-        calendar.set(Calendar.MINUTE, 30);
-  
+   
         // Set the alarm to fire at approximately 8:30 a.m., according to the device's
         // clock, and to repeat once a day.
         //-----
         alarmMgr.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 15 * MIN_TIME_BW_UPDATES, alarmIntent);
-        //alarmMgr.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), 10*5000, alarmIntent);
+
     }
     // END_INCLUDE(set_alarm)
 
@@ -131,11 +128,7 @@ public class FbPlaces_Download extends WakefulBroadcastReceiver implements Locat
     // BEGIN_INCLUDE(cancel_alarm)
     public void cancelAlarm(Context context) {
         // If the alarm has been set, cancel it.
-        /*
-    	if (alarmMgr!= null) {
-            alarmMgr.cancel(alarmIntent);
-        }
-        */
+
         
     	Log.d(TAG, "FbPlaces cancelAlarm");
     	
@@ -168,124 +161,108 @@ public class FbPlaces_Download extends WakefulBroadcastReceiver implements Locat
             @Override
             public void run() {
   	  
-		    	    JSONArray findPlaces;
-		            JSONObject placeDetail;
-		            JSONObject jsonObject_location;
-		            JSONArray jsonArray_category;
-		            		            
-		            JSONObject picURL_Places;
-		            
-	  	    	    //Converting float to Double
-	  	    	    Double lat_double = new Double(Lat);
-	  	    	    Double long_double  = new Double(Long);
-	  	    	    
-	  	    	    Support support = new Support();
+                JSONArray findPlaces = null;
+                JSONObject placeDetail;
+                JSONObject jsonObject_location;
+                JSONArray jsonArray_category;
+                  		            
+                JSONObject picURL_Places = null;
+                  
+                //Converting float to Double
+                Double lat_double = new Double(Lat);
+                Double long_double  = new Double(Long);
+                
+                Support support = new Support();
+                
+              	// call FACEBOOK PLACES		   
+            	try {
+					
+            		findPlaces = new Facebook_Places(Utility.mFacebook.getAccessToken(),Lat,Long,MIN_DISTANCE).execute().get();
+					
+            		try {
+            			
+            			if (findPlaces.length() > 0) {
+            				
+            				int n_places;
+            				
+            	      		if (MAX_N_PLACES > findPlaces.length()){
+            	      			n_places = findPlaces.length();
+            	      		} else {
+            	            	n_places = MAX_N_PLACES;
+            	      		}
+            	      		valueList = new ContentValues[n_places];
+            	      		
+            	      		for (int i = 0; i < n_places; i++) {
+        	                    
+            	      			ContentValues values = new ContentValues();
+            	      			
+        		            	try {
 
-		            try {
-		            	       	
-		            	// call FACEBOOK PLACES
-		            	findPlaces = new Facebook_Places(Utility.mFacebook.getAccessToken(),Lat,Long,MIN_DISTANCE).execute().get();
-		            	//Log.d(DEBUG_TAG, "findPlaces.length(): " + findPlaces.length());
-		            	if (findPlaces.length()== 0) {
-		            		findPlaces = new Facebook_Places(Utility.mFacebook.getAccessToken(),Lat,Long,MAX_DISTANCE).execute().get();		            		
-		            	}
-		            	
-		            	if (findPlaces.length() > 0) {
-		            		
-		            		int n_places;
-		            		
-		            		if (MAX_N_PLACES > findPlaces.length()){
-		            			n_places = findPlaces.length();
-		            		} else {
-			            		n_places = MAX_N_PLACES;
-		            		}
-		            		
-	    	  	    	    //ContentValues[] up to 30 positions for places
-		            		valueList = new ContentValues[n_places];
-		            		
-			            	for (int i = 0; i < n_places; i++) {
-				            	try {
-				                    ContentValues values = new ContentValues();
-				            		
-					            	placeDetail = findPlaces.getJSONObject(i);
-					            	
-					            	// PicURL_Places
-					            	picURL_Places = new Facebook_picURL_Places(Utility.mFacebook.getAccessToken(),placeDetail.getString("id")).execute().get();
+        		            		placeDetail = findPlaces.getJSONObject(i);
+									
+	        		            	// PicURL_Places
+	        		    			picURL_Places = new Facebook_picURL_Places(Utility.mFacebook.getAccessToken(),placeDetail.getString("id")).execute().get();
+	        		    			
+	        		    			jsonObject_location = findPlaces.getJSONObject(i).getJSONObject("location");
+	        		    			jsonArray_category = findPlaces.getJSONObject(i).getJSONArray("category_list");
 
-					            	Log.d("Facebook_Places", "picURL_Places.getJSONObject(picture).getJSONObject(data).getString(url): " + picURL_Places.getJSONObject("picture").getJSONObject("data").getString("url"));
-					            	
+	        		  	    	    GetDistance dist_calc = new GetDistance();
+	        		  	    	    String get_distance = String.format("%.2f",dist_calc.calculo(jsonObject_location.getDouble("latitude"), Lat, jsonObject_location.getDouble("longitude"), Long));
 
-			
-					            	jsonObject_location = findPlaces.getJSONObject(i).getJSONObject("location");	    			
-					    			
-					    			jsonArray_category = findPlaces.getJSONObject(i).getJSONArray("category_list");
-			
-					  	    	    GetDistance dist_calc = new GetDistance();
-					  	    	    String get_distance = String.format("%.2f",dist_calc.calculo(jsonObject_location.getDouble("latitude"), Lat, jsonObject_location.getDouble("longitude"), Long));
-					  	    	    
-					  	    	    /** Setting up values to insert into UserPlaces table */
-				                    values.put(DatabaseHelper.KEY_PLACE_ID, placeDetail.getString("id"));
-				                    values.put(DatabaseHelper.KEY_NEARBY, placeDetail.getString("name"));
-				                    values.put(DatabaseHelper.KEY_PICURL, picURL_Places.getJSONObject("picture").getJSONObject("data").getString("url"));
-				                    values.put(DatabaseHelper.KEY_CITY, jsonObject_location.getString("city"));
-				                    //new
-				                    values.put(DatabaseHelper.KEY_UF, jsonObject_location.getString("state"));
-				                    values.put(DatabaseHelper.KEY_CATEGORY, jsonArray_category.getJSONObject(0).getString("name"));
-				                    values.put(DatabaseHelper.KEY_DISTANCE, get_distance);
-				                    values.put(DatabaseHelper.KEY_U_LATITUDE, lat_double);
-				                    values.put(DatabaseHelper.KEY_U_LONGITUDE, long_double);
-				                    values.put(DatabaseHelper.KEY_P_LATITUDE, jsonObject_location.getDouble("latitude"));
-				                    values.put(DatabaseHelper.KEY_P_LONGITUDE, jsonObject_location.getDouble("longitude"));
-				                    values.put(DatabaseHelper.KEY_CREATED_AT, support.getDateTime());
-				                    
-				                    valueList[i] = values;
-		
+	        		  	    	    /** Setting up values to insert into UserPlaces table */
+	        	                    values.put(DatabaseHelper.KEY_PLACE_ID, placeDetail.getString("id"));
+	        	                    values.put(DatabaseHelper.KEY_NEARBY, placeDetail.getString("name"));
+	        	                    values.put(DatabaseHelper.KEY_PICURL, picURL_Places.getJSONObject("picture").getJSONObject("data").getString("url"));
+	        	                    values.put(DatabaseHelper.KEY_CITY, jsonObject_location.getString("city"));
+	        	                    //new
+	        	                    values.put(DatabaseHelper.KEY_UF, jsonObject_location.getString("state"));
+	        	                    values.put(DatabaseHelper.KEY_CATEGORY, jsonArray_category.getJSONObject(0).getString("name"));
+	        	                    values.put(DatabaseHelper.KEY_DISTANCE, get_distance);
+	        	                    values.put(DatabaseHelper.KEY_U_LATITUDE, lat_double);
+	        	                    values.put(DatabaseHelper.KEY_U_LONGITUDE, long_double);
+	        	                    values.put(DatabaseHelper.KEY_P_LATITUDE, jsonObject_location.getDouble("latitude"));
+	        	                    values.put(DatabaseHelper.KEY_P_LONGITUDE, jsonObject_location.getDouble("longitude"));
+	        	                    values.put(DatabaseHelper.KEY_CREATED_AT, support.getDateTime());
+	        	                    
+	        	                    valueList[i] = values;
+
+
+	        		    			
 								} catch (JSONException e) {
 									// TODO Auto-generated catch block
 									e.printStackTrace();
-									
-									
-								}
-			            	}
-			            	//getApplicationContext().getContentResolver().bulkInsert(SqliteProvider.CONTENT_URI_USER_PLACES, valueList);
-			            	c.getContentResolver().bulkInsert(SqliteProvider.CONTENT_URI_USER_PLACES, valueList);
-			            	
-			            	
-							/** Restarting the ProfileFragment's loader to refresh the city TextView */
-			            	Intent intent=new Intent("profilefragmentupdater");
-			            	c.sendBroadcast(intent);
-
-			            	//stop FbPlaces service
-			            	cancelAlarm(c);
-
-			            	
-		            	}else {
-
-		            		/** Setting up values to insert into UserProfile table */
-		        			ContentValues contentValues = new ContentValues();
-
-		        			contentValues.put(DatabaseHelper.KEY_U_LATITUDE, lat_double);
-		        			contentValues.put(DatabaseHelper.KEY_U_LONGITUDE, long_double);
-		        			contentValues.put(DatabaseHelper.KEY_P_LATITUDE, 0.0);
-		        			contentValues.put(DatabaseHelper.KEY_P_LONGITUDE, 0.0);
-		        			contentValues.put(DatabaseHelper.KEY_CREATED_AT, support.getDateTime());
-			    			
-		        			/** Invokes content provider's insert operation */
-			            	c.getContentResolver().insert(SqliteProvider.CONTENT_URI_USER_PLACES, contentValues);
-		            	}
-		            	
-		    			
-					} catch (InterruptedException e) {
+								}            	      			
+        		            		    			
+            	      		}
+            	      		
+    		            	c.getContentResolver().bulkInsert(SqliteProvider.CONTENT_URI_USER_PLACES, valueList);
+    		            	//stop FbPlaces service
+    		            	cancelAlarm(c);
+            	      		
+            			}
+            			
+            		} catch (NullPointerException e1) {
 						// TODO Auto-generated catch block
-						e.printStackTrace();
-					} catch (ExecutionException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						e1.printStackTrace();
+						Log.e(TAG, "findPlaces = null");
+						
+		            	//stop FbPlaces service
+		            	cancelAlarm(c);
+
 					}
-		            
+
+					
+					
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ExecutionException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+                
             }
-
-
         });
 
     	

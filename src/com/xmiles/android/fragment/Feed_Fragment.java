@@ -247,46 +247,31 @@ public class Feed_Fragment extends Fragment implements LoaderManager.LoaderCallb
 			Log.w(TAG, "newsfeed.getCount(): " + newsfeed.getCount());
 			
 			for (int i = 0; i < newsfeed.getCount(); i++) {
-				
 
-				//data_newsfeed.moveToPosition(i);
 				newsfeed.moveToPosition(i);
 				
 				FeedItem item = new FeedItem();
 				
-				//item.setId(data_newsfeed.getInt(KEY_ID));
-				//item.setName(data_newsfeed.getString(KEY_NAME));
 				item.setId(newsfeed.getInt(KEY_ID));
 				item.setName(newsfeed.getString(KEY_NAME));
 
 				// Image might be null sometimes
-				//String image = data_newsfeed.isNull(KEY_IMAGE) ? null : data_newsfeed
-				//		.getString(KEY_IMAGE);
 				String image = newsfeed.isNull(KEY_IMAGE) ? null : newsfeed
 						.getString(KEY_IMAGE);
 				
 				item.setImge(image);
 
-				//item.setStatus(data_newsfeed.getString(KEY_STATUS));
-				//item.setProfilePic(data_newsfeed.getString(KEY_PICURL));				
-				//item.setTimeStamp(data_newsfeed.getString(KEY_TIME_STAMP));				
 				item.setStatus(newsfeed.getString(KEY_STATUS));
 				item.setProfilePic(newsfeed.getString(KEY_PICURL));
 				
-				Log.i(TAG, "newsfeed.isNull(KEY_CUSTOM_TIME_STAMP): " + newsfeed.isNull(KEY_CUSTOM_TIME_STAMP));
-				Log.e(TAG, "newsfeed.isNull(KEY_IMAGE): " + newsfeed.isNull(KEY_IMAGE));
-				
+			
 				if (newsfeed.isNull(KEY_CUSTOM_TIME_STAMP)) {
 					item.setTimeStamp(newsfeed.getString(KEY_TIME_STAMP));
 				} else {
 					item.setTimeStamp(newsfeed.getString(KEY_CUSTOM_TIME_STAMP));
 				}
 				
-				//item.setTimeStamp(newsfeed.getString(KEY_TIME_STAMP));				
-				
 				// url might be null sometimes
-				//String feedUrl = data_newsfeed.isNull(KEY_URL) ? null : data_newsfeed
-				//		.getString(KEY_URL);
 				String feedUrl = newsfeed.isNull(KEY_URL) ? null : newsfeed
 						.getString(KEY_URL);
 				

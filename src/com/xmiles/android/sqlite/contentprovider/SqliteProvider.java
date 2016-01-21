@@ -40,6 +40,10 @@ public class SqliteProvider extends ContentProvider{
 	public static final Uri CONTENT_URI_BUS_GPS_DATA = Uri.parse("content://" + PROVIDER_NAME + "/BusGpsData");
 	public static final Uri CONTENT_URI_BUS_GPS_URL_insert = Uri.parse("content://" + PROVIDER_NAME + "/BusGpsUrl_insert");
 	public static final Uri CONTENT_URI_BUS_GPS_URL = Uri.parse("content://" + PROVIDER_NAME + "/BusGpsUrl");
+	//---------------------
+	public static final Uri CONTENT_URI_BUSCODE_insert = Uri.parse("content://" + PROVIDER_NAME + "/Buscode_insert");
+	public static final Uri CONTENT_URI_BUSCODE = Uri.parse("content://" + PROVIDER_NAME + "/Buscode");
+	//---------------------
 	public static final Uri CONTENT_URI_REWARDS_create = Uri.parse("content://" + PROVIDER_NAME + "/Rewards_create");
 	public static final Uri CONTENT_URI_REWARDS = Uri.parse("content://" + PROVIDER_NAME + "/Rewards");
 	public static final Uri CONTENT_URI_RANKING_create = Uri.parse("content://" + PROVIDER_NAME + "/Ranking_create");
@@ -77,6 +81,8 @@ public class SqliteProvider extends ContentProvider{
 	private static final int NEWSFEED_create = 26;
 	private static final int NEWSFEED = 27;
 	private static final int NEWSFEED_insert = 28;
+	private static final int BUSCODE = 29;
+	private static final int BUSCODE_insert = 30;
 
 	private static final UriMatcher uriMatcher ;
 	static {
@@ -109,7 +115,8 @@ public class SqliteProvider extends ContentProvider{
 		uriMatcher.addURI(PROVIDER_NAME, "Newsfeed_create", NEWSFEED_create);
 		uriMatcher.addURI(PROVIDER_NAME, "Newsfeed", NEWSFEED);
 		uriMatcher.addURI(PROVIDER_NAME, "Newsfeed_insert", NEWSFEED_insert);		
-		
+		uriMatcher.addURI(PROVIDER_NAME, "Buscode", BUSCODE);
+		uriMatcher.addURI(PROVIDER_NAME, "Buscode_insert", BUSCODE_insert);		
 
 	}
 
@@ -289,6 +296,21 @@ public class SqliteProvider extends ContentProvider{
 					}
 				}
 			break;
+			
+		    case BUSCODE_insert:
+		    	long rowID_7a = mDatabaseHelper.insertBuscode(values);
+
+				if(rowID_7a>0){
+					_uri = ContentUris.withAppendedId(CONTENT_URI_BUSCODE_insert, rowID_7a);
+				}else {
+					try {
+						throw new SQLException("Failed to insert at TABLE_BUSCODE: " + uri);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			break;
+
 			
 		    case USER_LOCATION_create:
 		    	long rowID_5b = mDatabaseHelper.createUserLocation(values);
@@ -551,6 +573,10 @@ public class SqliteProvider extends ContentProvider{
 
 		}else if (uriMatcher.match(uri)==BUS_GPS_URL){
 			return mDatabaseHelper.get_BusGpsUrl();
+		
+		}else if (uriMatcher.match(uri)==BUSCODE){
+			return mDatabaseHelper.get_Buscode();
+	
 			
 		}else if (uriMatcher.match(uri)==REWARDS){
 			return mDatabaseHelper.get_Rewards();			

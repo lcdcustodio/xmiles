@@ -33,6 +33,7 @@ public class UserFunctions {
     private static String gps_notfoundURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String user_rankingURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String news_feedURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
+    private static String buscodeURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     //------------------------------------    
     private static String login_tag 		= "login";
     private static String register_tag 		= "register";
@@ -47,6 +48,7 @@ public class UserFunctions {
     private static String gps_notfound_tag  = "gps_notfound";
     private static String user_ranking_tag  = "ranking";
     private static String news_feed_tag  = "newsfeed";
+    private static String buscode_tag  = "buscode";
     //------------------------------------     
     // constructor
     public UserFunctions(){
@@ -113,6 +115,17 @@ public class UserFunctions {
         return json;
     }
 
+    public JSONObject getBuscode(String buscode){
+        // Building Parameters
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("buscode", buscode));
+        params.add(new BasicNameValuePair("tag", buscode_tag));
+        JSONObject json = jsonParser.getJSONFromUrl(buscodeURL, params);
+        // return json        
+        Log.w(TAG, "getBuscode Test" + json.toString());
+        return json;
+    }    
+    
     
     public JSONObject getRewards(){
         // Building Parameters
