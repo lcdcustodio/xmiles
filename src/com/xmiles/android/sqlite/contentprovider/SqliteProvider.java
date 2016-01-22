@@ -50,7 +50,11 @@ public class SqliteProvider extends ContentProvider{
 	public static final Uri CONTENT_URI_RANKING = Uri.parse("content://" + PROVIDER_NAME + "/Ranking");
 	public static final Uri CONTENT_URI_NEWSFEED_create = Uri.parse("content://" + PROVIDER_NAME + "/Newsfeed_create");
 	public static final Uri CONTENT_URI_NEWSFEED = Uri.parse("content://" + PROVIDER_NAME + "/Newsfeed");
-	public static final Uri CONTENT_URI_NEWSFEED_insert = Uri.parse("content://" + PROVIDER_NAME + "/Newsfeed_insert");	
+	public static final Uri CONTENT_URI_NEWSFEED_insert = Uri.parse("content://" + PROVIDER_NAME + "/Newsfeed_insert");
+	public static final Uri CONTENT_URI_NEWSFEED_UPLOAD = Uri.parse("content://" + PROVIDER_NAME + "/Newsfeed_upload");
+	public static final Uri CONTENT_URI_NEWSFEED_UPLOAD_insert = Uri.parse("content://" + PROVIDER_NAME + "/Newsfeed_upload_insert");	
+
+	
 
 	/** Constants to identify the requested operation */
 	private static final int USER_PROFILE = 1;
@@ -83,6 +87,9 @@ public class SqliteProvider extends ContentProvider{
 	private static final int NEWSFEED_insert = 28;
 	private static final int BUSCODE = 29;
 	private static final int BUSCODE_insert = 30;
+	private static final int NEWSFEED_UPLOAD = 31;
+	private static final int NEWSFEED_UPLOAD_insert = 32;
+	
 
 	private static final UriMatcher uriMatcher ;
 	static {
@@ -117,6 +124,8 @@ public class SqliteProvider extends ContentProvider{
 		uriMatcher.addURI(PROVIDER_NAME, "Newsfeed_insert", NEWSFEED_insert);		
 		uriMatcher.addURI(PROVIDER_NAME, "Buscode", BUSCODE);
 		uriMatcher.addURI(PROVIDER_NAME, "Buscode_insert", BUSCODE_insert);		
+		uriMatcher.addURI(PROVIDER_NAME, "Newsfeed_upload", NEWSFEED_UPLOAD);
+		uriMatcher.addURI(PROVIDER_NAME, "Newsfeed_upload_insert", NEWSFEED_UPLOAD_insert);		
 
 	}
 
@@ -135,14 +144,6 @@ public class SqliteProvider extends ContentProvider{
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
 		// TODO Auto-generated method stub
 		return 0;
-		/*
-		int cnt = 0;
-		if(uriMatcher.match(uri)==CONTACT_ID){
-			String contactID = uri.getPathSegments().get(1);
-			cnt = mDatabaseHelper.del(contactID);
-		}
-		return cnt;
-		*/
 	}
 
 	@Override
@@ -240,6 +241,21 @@ public class SqliteProvider extends ContentProvider{
 					}
 				}
 			break;			
+			
+		    case NEWSFEED_UPLOAD_insert:
+		    	long rowID_4e = mDatabaseHelper.insertNewsfeed_upload(values);
+
+				if(rowID_4e>0){
+					_uri = ContentUris.withAppendedId(CONTENT_URI_NEWSFEED_UPLOAD_insert, rowID_4e);
+				}else {
+					try {
+						throw new SQLException("Failed to insert at TABLE_NEWSFEED_UPLOAD: " + uri);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			break;			
+			
 
 		    case USER_FAVORITES_create:
 		    	long rowID_4b = mDatabaseHelper.createUserFavorites(values);
@@ -586,6 +602,10 @@ public class SqliteProvider extends ContentProvider{
 			
 		}else if (uriMatcher.match(uri)==NEWSFEED){
 			return mDatabaseHelper.get_Newsfeed();			
+			
+		}else if (uriMatcher.match(uri)==NEWSFEED_UPLOAD){
+			return mDatabaseHelper.get_Newsfeed();			
+			
 			
 		}else{
 			return null;

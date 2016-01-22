@@ -34,6 +34,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String TABLE_RANKING = "ranking";
 	//-----------------
 	public static final String TABLE_NEWSFEED = "newsfeed";
+	public static final String TABLE_NEWSFEED_UPLOAD = "newsfeed_upload";
 	//-----------------
 	public static final String TABLE_BUSCODE = "buscode";
 	
@@ -263,11 +264,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			KEY_IMAGE		+ " TEXT," +
 			KEY_STATUS		+ " TEXT," +			
 			KEY_PICURL 		+ " TEXT," +
-			//KEY_TIME_STAMP 	+ " TEXT," +
 			KEY_TIME_STAMP 	+ " DATETIME," + 
 			KEY_CUSTOM_TIME_STAMP 	+ " DATETIME," +
 			KEY_URL     	+ " TEXT" + ")";			
-			//KEY_CREATED_AT	+ " DATETIME" + ")";
+
+	private static final String CREATE_TABLE_NEWSFEED_UPLOAD = "CREATE TABLE "
+			+ TABLE_NEWSFEED_UPLOAD + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
+			KEY_ID			+ " TEXT," +
+			KEY_NAME		+ " TEXT," +
+			KEY_IMAGE		+ " TEXT," +
+			KEY_STATUS		+ " TEXT," +			
+			KEY_PICURL 		+ " TEXT," +
+			KEY_TIME_STAMP 	+ " DATETIME," + 
+			KEY_CUSTOM_TIME_STAMP 	+ " DATETIME," +
+			KEY_URL     	+ " TEXT" + ")";			
 	
 	
     /** An instance variable for SQLiteDatabase */
@@ -311,6 +321,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(CREATE_TABLE_RANKING);
 		//---------------------
 		db.execSQL(CREATE_TABLE_NEWSFEED);		
+		//---------------------
+		db.execSQL(CREATE_TABLE_NEWSFEED_UPLOAD);		
 		
 		db.execSQL(CREATE_TABLE_BUSCODE);		
 	}
@@ -337,6 +349,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_REWARDS);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_RANKING);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEWSFEED);
+		//--------------------
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEWSFEED_UPLOAD);		
 		//--------------------
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_BUSCODE);
 		//--------------------		
@@ -486,6 +500,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	}
 	
+	public long insertNewsfeed_upload(ContentValues contentValues) {
+
+		//-----------
+		long rowID = mDB.insert(TABLE_NEWSFEED_UPLOAD, null, contentValues);
+		return rowID;
+
+	}
 	
 	public void resetUserFriends() {
 		//-----------
@@ -583,6 +604,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		mDB.execSQL(CREATE_TABLE_NEWSFEED);
 		//-----------
 	}	
+
+	public void resetNewsfeed_Upload() {
+		//-----------
+		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_NEWSFEED_UPLOAD);
+		mDB.execSQL(CREATE_TABLE_NEWSFEED_UPLOAD);
+		//-----------
+	}	
 	
 	
 	/** Returns all the contacts in the table */
@@ -664,6 +692,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		//return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL}, null, null, null, null, null);
 		return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL, KEY_CUSTOM_TIME_STAMP}, null, null, null, null, KEY_ROW_ID + " DESC");
 	}
+	
+	public Cursor get_Newsfeed_upload(){
+
+		//return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL}, null, null, null, null, null);
+		return mDB.query(TABLE_NEWSFEED_UPLOAD, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL, KEY_CUSTOM_TIME_STAMP}, null, null, null, null, null);
+	}
+
 	
 	/** Returns all the contacts in the table */
 	public Cursor get_FriendList(){

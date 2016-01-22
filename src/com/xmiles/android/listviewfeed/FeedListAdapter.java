@@ -92,7 +92,16 @@ public class FeedListAdapter extends BaseAdapter {
 
 		// Chcek for empty status message
 		if (!TextUtils.isEmpty(item.getStatus())) {
-			statusMsg.setText(item.getStatus());
+			
+			if (item.getStatus().indexOf("<bold>") != -1){
+				statusMsg.setText(Html.fromHtml(item.getStatus().split("<bold>")[0] +
+						                       "<b>" + item.getStatus().split("<bold>")[1] + "</b>" +
+						                       item.getStatus().split("<bold>")[2]));
+			} else {
+				statusMsg.setText(item.getStatus());
+			}
+			
+			//statusMsg.setText(item.getStatus());
 			statusMsg.setVisibility(View.VISIBLE);
 		} else {
 			// status is empty, remove from view

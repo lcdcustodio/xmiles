@@ -345,18 +345,19 @@ public class Gmaps extends FragmentActivity {
 				contentValues.put(DatabaseHelper.KEY_NAME, data_profile.getString(KEY_NAME));
 				//---------------				
 				//*
-				String status_buscode = "Conectado ao ônibus " + bus_gps_url.getString(KEY_BUSCODE);
+				//String status_buscode = "Conectado ao ônibus " + bus_gps_url.getString(KEY_BUSCODE);
+				String status_buscode = "Conectado ao ônibus <bold>" + bus_gps_url.getString(KEY_BUSCODE) + "<bold>";
 				String status_nearby = "";
 				String status_buscode_details = "";
 				//----------------
-				//status_buscode = "Conectado ao ônibus " + bus_gps_url.getString(KEY_BUSCODE);
+
 				//----------------				
 				if (fb_places.getCount() > 0){
 					status_nearby = " próximo ao " + fb_places.getString(KEY_NEARBY);
 				}
 				if (buscode_info.getCount() > 0){
-					
-					status_buscode_details = " (linha: " + buscode_info.getString(KEY_BUSLINE) + ")";
+					status_buscode = "Conectado ao ônibus <bold>" + bus_gps_url.getString(KEY_BUSCODE);
+					status_buscode_details = " da linha " + buscode_info.getString(KEY_BUSLINE) + "<bold>";
 				}				
 
 				String status = status_buscode + status_buscode_details + status_nearby;
@@ -364,21 +365,6 @@ public class Gmaps extends FragmentActivity {
 				
 				contentValues.put(DatabaseHelper.KEY_STATUS, status);
 				
-				/*
-
-				if (fb_places.getCount() == 0){
-					contentValues.put(DatabaseHelper.KEY_STATUS, "Conectado ao ônibus " + bus_gps_url.getString(KEY_BUSCODE));
-				} else {
-					contentValues.put(DatabaseHelper.KEY_STATUS, "Conectado ao ônibus " + bus_gps_url.getString(KEY_BUSCODE) + " próximo ao " + fb_places.getString(KEY_NEARBY));
-				}
-				*/
-				/*
-				Log.i(TAG, "fb_places.getString(KEY_NEARBY_PICURL):" + fb_places.getString(KEY_NEARBY_PICURL));
-				
-				if (!fb_places.isNull(KEY_NEARBY_PICURL)){
-					contentValues.put(DatabaseHelper.KEY_IMAGE, fb_places.getString(KEY_NEARBY_PICURL));
-				}
-				*/
 				
 				contentValues.put(DatabaseHelper.KEY_PICURL, data_profile.getString(KEY_PICTURE));
 				contentValues.put(DatabaseHelper.KEY_TIME_STAMP, support.getDateTime());
