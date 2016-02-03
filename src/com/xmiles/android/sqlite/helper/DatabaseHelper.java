@@ -121,11 +121,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	// REWARDS Table - column names	
 	public static final String KEY_RANK   	= "rank";
 	
-	// NEWSFEDD Table - column names
+	// NEWSFEED Table - column names
 	public static final String KEY_IMAGE 	  = "image";
 	public static final String KEY_STATUS 	  = "status";
 	public static final String KEY_TIME_STAMP = "time_stamp";
 	public static final String KEY_CUSTOM_TIME_STAMP = "custom_time_stamp";
+	//-------
+	public static final String KEY_LIKE_STATS = "like_stats";
+	public static final String KEY_COMMENT_STATS = "comment_stats";
+	public static final String KEY_FEED_TYPE = "feed_type";
+	public static final String KEY_FLAG_ACTION = "flag_action";  //NewsFeed Upload 
 	
 	// Table Create Statements
 	private static final String CREATE_TABLE_USER_PROFILE = "CREATE TABLE "
@@ -264,17 +269,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			KEY_IMAGE		+ " TEXT," +
 			KEY_STATUS		+ " TEXT," +			
 			KEY_PICURL 		+ " TEXT," +
+			//-------
+			KEY_LIKE_STATS 	+ " TEXT," +
+			KEY_COMMENT_STATS + " TEXT," +
+			//-------			
 			KEY_TIME_STAMP 	+ " DATETIME," + 
 			KEY_CUSTOM_TIME_STAMP 	+ " DATETIME," +
 			KEY_URL     	+ " TEXT" + ")";			
 
 	private static final String CREATE_TABLE_NEWSFEED_UPLOAD = "CREATE TABLE "
 			+ TABLE_NEWSFEED_UPLOAD + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
-			KEY_ID			+ " TEXT," +
+			KEY_ID			+ " TEXT," + // = feed_id
 			KEY_NAME		+ " TEXT," +
 			KEY_IMAGE		+ " TEXT," +
 			KEY_STATUS		+ " TEXT," +			
 			KEY_PICURL 		+ " TEXT," +
+			//-------
+			KEY_LIKE_STATS 	+ " TEXT," +
+			KEY_COMMENT_STATS + " TEXT," +
+			KEY_FEED_TYPE 	+ " TEXT," +
+			KEY_FLAG_ACTION + " TEXT," +
+			//-------			
 			KEY_TIME_STAMP 	+ " DATETIME," + 
 			KEY_CUSTOM_TIME_STAMP 	+ " DATETIME," +
 			KEY_URL     	+ " TEXT" + ")";			
@@ -690,13 +705,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public Cursor get_Newsfeed(){
 
 		//return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL}, null, null, null, null, null);
-		return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL, KEY_CUSTOM_TIME_STAMP}, null, null, null, null, KEY_ROW_ID + " DESC");
+		//return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL, KEY_CUSTOM_TIME_STAMP}, null, null, null, null, KEY_ROW_ID + " DESC");
+		return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL, KEY_CUSTOM_TIME_STAMP, KEY_LIKE_STATS, KEY_COMMENT_STATS}, null, null, null, null, KEY_ROW_ID + " DESC");
 	}
 	
 	public Cursor get_Newsfeed_upload(){
 
 		//return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL}, null, null, null, null, null);
-		return mDB.query(TABLE_NEWSFEED_UPLOAD, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL, KEY_CUSTOM_TIME_STAMP}, null, null, null, null, null);
+		return mDB.query(TABLE_NEWSFEED_UPLOAD, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL, KEY_CUSTOM_TIME_STAMP, KEY_LIKE_STATS, KEY_COMMENT_STATS, KEY_FEED_TYPE, KEY_FLAG_ACTION}, null, null, null, null, null);
 	}
 
 	

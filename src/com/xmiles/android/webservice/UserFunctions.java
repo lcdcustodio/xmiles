@@ -34,6 +34,7 @@ public class UserFunctions {
     private static String user_rankingURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String news_feedURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String buscodeURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
+    private static String newsfeed_inboxURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     //------------------------------------    
     private static String login_tag 		= "login";
     private static String register_tag 		= "register";
@@ -49,6 +50,7 @@ public class UserFunctions {
     private static String user_ranking_tag  = "ranking";
     private static String news_feed_tag  = "newsfeed";
     private static String buscode_tag  = "buscode";
+    private static String newsfeed_inbox_tag = "newsfeed_inbox";
     //------------------------------------     
     // constructor
     public UserFunctions(){
@@ -144,8 +146,48 @@ public class UserFunctions {
         //params.add(new BasicNameValuePair("email", email));
         params.add(new BasicNameValuePair("fb_id", id));
         JSONObject json = jsonParser.getJSONFromUrl(favoritesURL, params);
+
         // return json        
         Log.e(TAG, "favorites_Routes " + json.toString());
+        return json;
+    }
+    
+    public JSONObject newsFeed_inbox(String feed_id,
+    						         String name,
+    						         String image,
+    						         String status,
+    						         String profilepic,
+    						         String url,
+    						         String sender,
+    						         String destination,
+    						         String feed_type,
+    						         String like_stats,
+    						         String comment_stats,
+    						         String flag_action,
+    						         String time_stamp){
+
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("tag", newsfeed_inbox_tag));
+
+        params.add(new BasicNameValuePair("feed_id", feed_id));
+        //----------
+        params.add(new BasicNameValuePair("name", name));
+        params.add(new BasicNameValuePair("image", image));
+        params.add(new BasicNameValuePair("status", status));
+        params.add(new BasicNameValuePair("profilepic", profilepic));
+        params.add(new BasicNameValuePair("url", url));
+        params.add(new BasicNameValuePair("sender", sender));
+        params.add(new BasicNameValuePair("destination", destination));
+        params.add(new BasicNameValuePair("feed_type", feed_type));
+        params.add(new BasicNameValuePair("like_stats", like_stats));
+        params.add(new BasicNameValuePair("comment_stats", comment_stats));
+        params.add(new BasicNameValuePair("flag_action", flag_action));
+        params.add(new BasicNameValuePair("time_stamp", time_stamp));
+        //----------                
+        JSONObject json = jsonParser.getJSONFromUrl(newsfeed_inboxURL, params);
+
+        // return json        
+        Log.e(TAG, "newsfeed_inbox " + json.toString());
         return json;
     }
     

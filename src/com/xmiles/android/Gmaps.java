@@ -24,6 +24,7 @@ import com.xmiles.android.support.Score_Algorithm;
 import com.xmiles.android.support.Support;
 import com.xmiles.android.webservice.UserFunctions;
 import com.xmiles.android.scheduler.FbPlaces_Download;
+import com.xmiles.android.scheduler.NewsFeed_Inbox_Upload;
 
 import com.xmiles.android.scheduler.Getting_GpsBusData;
 
@@ -365,11 +366,18 @@ public class Gmaps extends FragmentActivity {
 				
 				contentValues.put(DatabaseHelper.KEY_STATUS, status);
 				
-				
 				contentValues.put(DatabaseHelper.KEY_PICURL, data_profile.getString(KEY_PICTURE));
 				contentValues.put(DatabaseHelper.KEY_TIME_STAMP, support.getDateTime());
-				
+				//----------------------------
+				//News Feed Upload
+				//----------------------------				
+				//contentValues.put(DatabaseHelper.KEY_FLAG_ACTION, "ADD");
+				//contentValues.put(DatabaseHelper.KEY_FEED_TYPE, "User gets into the bus");
+				//contentValues.put(DatabaseHelper.KEY_LIKE_STATS, "0");
+				//contentValues.put(DatabaseHelper.KEY_COMMENT_STATS, "0");
+				//----------------------------
 				getApplicationContext().getContentResolver().insert(SqliteProvider.CONTENT_URI_NEWSFEED_insert, contentValues);
+				getApplicationContext().getContentResolver().insert(SqliteProvider.CONTENT_URI_NEWSFEED_UPLOAD_insert, contentValues);				
 
 				//---------------------------------------
 				//-----------------------------
@@ -377,6 +385,10 @@ public class Gmaps extends FragmentActivity {
 		    	getApplicationContext().sendBroadcast(intent);
 				//-----------------------------
 				//---------------------------------------
+				NewsFeed_Inbox_Upload nfi = new NewsFeed_Inbox_Upload();
+				nfi.setAlarm(getApplicationContext());		    	
+				//---------------------------------------
+				//---------------------------------------		    	
 				finish();
 				//---------------------------------------
 				//---------------------------------------
