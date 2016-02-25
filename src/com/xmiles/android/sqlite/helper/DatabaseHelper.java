@@ -708,7 +708,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		//return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL, KEY_CUSTOM_TIME_STAMP}, null, null, null, null, KEY_ROW_ID + " DESC");
 		return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL, KEY_CUSTOM_TIME_STAMP, KEY_LIKE_STATS, KEY_COMMENT_STATS}, null, null, null, null, KEY_ROW_ID + " DESC");
 	}
-	
+	/*
+	public Cursor get_Newsfeed_RelStats(){
+
+		return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL, KEY_CUSTOM_TIME_STAMP, KEY_LIKE_STATS, KEY_COMMENT_STATS}, null, null, null, null, KEY_ROW_ID + " DESC");
+	}	
+	*/
 	public Cursor get_Newsfeed_upload(){
 
 		//return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL}, null, null, null, null, null);

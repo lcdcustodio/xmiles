@@ -35,6 +35,7 @@ public class UserFunctions {
     private static String news_feedURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String buscodeURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String newsfeed_inboxURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
+    private static String post_actionsURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";    
     //------------------------------------    
     private static String login_tag 		= "login";
     private static String register_tag 		= "register";
@@ -51,6 +52,7 @@ public class UserFunctions {
     private static String news_feed_tag  = "newsfeed";
     private static String buscode_tag  = "buscode";
     private static String newsfeed_inbox_tag = "newsfeed_inbox";
+    private static String post_actions_tag = "newsfeed_actions";
     //------------------------------------     
     // constructor
     public UserFunctions(){
@@ -116,6 +118,17 @@ public class UserFunctions {
         Log.w(TAG, "getNewsfeed " + json.toString());
         return json;
     }
+    
+    public JSONObject getPost_actions(String feed_id){
+        // Building Parameters
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("feed_id", feed_id));
+        params.add(new BasicNameValuePair("tag", post_actions_tag));
+        JSONObject json = jsonParser.getJSONFromUrl(post_actionsURL, params);
+        // return json        
+        Log.w(TAG, "getPost_actions " + json.toString());
+        return json;
+    }    
 
     public JSONObject getBuscode(String buscode){
         // Building Parameters

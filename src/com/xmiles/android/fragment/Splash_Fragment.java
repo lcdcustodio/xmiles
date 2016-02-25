@@ -393,6 +393,9 @@ public class Splash_Fragment extends Fragment {
 							
 							values.put(DatabaseHelper.KEY_URL, feedUrl);
 							
+							// like, comments stats
+							values.put(DatabaseHelper.KEY_LIKE_STATS, jsonObject.getString("like_stats"));
+							values.put(DatabaseHelper.KEY_COMMENT_STATS, jsonObject.getString("comment_stats"));
 							
 							valueList[position] = values;
 

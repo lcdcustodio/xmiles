@@ -47,7 +47,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class Users_Fragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>  {
+public class Like_Fragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>  {
 
 	
 	private static final String TAG = "FACEBOOK";
@@ -72,7 +72,7 @@ public class Users_Fragment extends Fragment implements LoaderManager.LoaderCall
 	//-----------------------	
 	private Handler mHandler;
 	
-	public Users_Fragment(){}
+	public Like_Fragment(){}
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -154,7 +154,7 @@ public class Users_Fragment extends Fragment implements LoaderManager.LoaderCall
 		@Override
 		public void onReceive(Context arg0, Intent arg1) {
 			// TODO Auto-generated method stub
-			getLoaderManager().restartLoader(0, null, Users_Fragment.this);
+			getLoaderManager().restartLoader(0, null, Like_Fragment.this);
 		}};
 
 	
@@ -163,7 +163,7 @@ public class Users_Fragment extends Fragment implements LoaderManager.LoaderCall
 	    public void onDestroyView() {
 	        super.onDestroyView();
 	        
-	        Log.d(TAG, "onDestroy Favorites_fgmt");
+	        Log.d(TAG, "onDestroy Like_fgmt");
 	        //-------------
 	        getActivity().unregisterReceiver(UsersFragmentReceiver);
 	        //-------------

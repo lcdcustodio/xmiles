@@ -74,6 +74,9 @@ public class Feed_Fragment extends Fragment implements LoaderManager.LoaderCallb
 	private static final Integer KEY_URL        = 7;
 	private static final Integer KEY_CUSTOM_TIME_STAMP = 8;
 	//---------------------
+	private static final Integer KEY_LIKE_STATS = 9;
+	private static final Integer KEY_COMMENT_STATS = 10;	
+	//---------------------
 	AutoCompleteTextView buscode_search;
 	Button buscode_button;
 	//---------------------
@@ -263,6 +266,10 @@ public class Feed_Fragment extends Fragment implements LoaderManager.LoaderCallb
 
 				item.setStatus(newsfeed.getString(KEY_STATUS));
 				item.setProfilePic(newsfeed.getString(KEY_PICURL));
+
+				// like, comments stats
+				item.setLike_stats(newsfeed.getString(KEY_LIKE_STATS));
+				item.setComment_stats(newsfeed.getString(KEY_COMMENT_STATS));
 				
 			
 				if (newsfeed.isNull(KEY_CUSTOM_TIME_STAMP)) {

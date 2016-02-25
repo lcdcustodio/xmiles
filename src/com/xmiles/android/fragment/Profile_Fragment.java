@@ -23,7 +23,7 @@ import com.xmiles.android.sqlite.helper.DatabaseHelper;
 
 import com.xmiles.android.NewRoutes;
 import com.xmiles.android.R;
-import com.xmiles.android.Users;
+import com.xmiles.android.Relationship;
 import com.xmiles.android.Welcome;
 import com.xmiles.android.R.id;
 import com.xmiles.android.R.layout;
@@ -492,7 +492,7 @@ public class Profile_Fragment extends Fragment implements LoaderManager.LoaderCa
 
 		} else if(arg0.getSnippet().equals(getActivity().getString(R.string.busmsg2))) {
 			
-	        Intent intent = new Intent(getActivity(), Users.class);
+	        Intent intent = new Intent(getActivity(), Relationship.class);
 	        startActivity(intent);
 	        //--------------------
 	        Toast.makeText(getActivity(), "Em construção", Toast.LENGTH_LONG).show();

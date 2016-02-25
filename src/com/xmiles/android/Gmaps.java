@@ -362,12 +362,29 @@ public class Gmaps extends FragmentActivity {
 				}				
 
 				String status = status_buscode + status_buscode_details + status_nearby;
-				//String lala = status.split(",")[0];
+
 				
 				contentValues.put(DatabaseHelper.KEY_STATUS, status);
 				
 				contentValues.put(DatabaseHelper.KEY_PICURL, data_profile.getString(KEY_PICTURE));
 				contentValues.put(DatabaseHelper.KEY_TIME_STAMP, support.getDateTime());
+				//----------------------------
+				gps.getLocation(2);
+			        
+					GeoPoint curGeoPoint = new GeoPoint(
+			                (int) (gps.getLatitude()  * 1E6),
+			                (int) (gps.getLongitude() * 1E6));
+				
+					
+				float Lat    = (float) (curGeoPoint.getLatitudeE6() / 1E6);
+				float Long   = (float) (curGeoPoint.getLongitudeE6() / 1E6);
+	
+				String checkin = "http://maps.googleapis.com/maps/api/staticmap?zoom=16&size=560x240&markers=size:mid|color:red|"
+						         + Lat + "," + Long + "&sensor=false";
+				
+				contentValues.put(DatabaseHelper.KEY_IMAGE, checkin);
+				
+				//Log.i(TAG, "checkin: " + checkin);
 				//----------------------------
 				//News Feed Upload
 				//----------------------------				
@@ -376,6 +393,10 @@ public class Gmaps extends FragmentActivity {
 				//contentValues.put(DatabaseHelper.KEY_LIKE_STATS, "0");
 				//contentValues.put(DatabaseHelper.KEY_COMMENT_STATS, "0");
 				//----------------------------
+				// like, comments stats  							
+				contentValues.put(DatabaseHelper.KEY_LIKE_STATS, "0");
+				contentValues.put(DatabaseHelper.KEY_COMMENT_STATS, "0");  							
+				
 				getApplicationContext().getContentResolver().insert(SqliteProvider.CONTENT_URI_NEWSFEED_insert, contentValues);
 				getApplicationContext().getContentResolver().insert(SqliteProvider.CONTENT_URI_NEWSFEED_UPLOAD_insert, contentValues);				
 
@@ -451,6 +472,7 @@ public class Gmaps extends FragmentActivity {
 							cV.put(DatabaseHelper.KEY_BUSLINE, jsonObject.getString("busline"));
   							cV.put(DatabaseHelper.KEY_BUSLINE_DESCRIPTION, jsonObject.getString("busline_description"));
   							cV.put(DatabaseHelper.KEY_BUSLINE_COMPANY, jsonObject.getString("company"));
+
   							
   							getApplicationContext().getContentResolver().insert(SqliteProvider.CONTENT_URI_BUSCODE_insert, cV);
 

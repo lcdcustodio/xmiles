@@ -121,6 +121,8 @@ public class SlidingMenuLazyAdapter extends BaseAdapter {
         
         View vi3=convertView;
         
+        //Log.e(TAG, "position: " + position);
+        
         if(convertView==null)
         	
         	vi1 = inflater.inflate(R.layout.sliding_menu_profile, null);

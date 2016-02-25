@@ -109,14 +109,17 @@ public class NewsFeed_Inbox_Upload extends WakefulBroadcastReceiver {
 						//contentValues.put(DatabaseHelper.KEY_FEED_TYPE, "User gets into the bus");
 						//contentValues.put(DatabaseHelper.KEY_LIKE_STATS, "0");
 						//contentValues.put(DatabaseHelper.KEY_COMMENT_STATS, "0");
-			    		
+			        	//------------------
+
+			        	
 			        	//Your code goes here	        			
 			        	json = userFunc.newsFeed_inbox(data_NewsFeed.getString(KEY_ID), 
 			        								   data_NewsFeed.getString(KEY_NAME), 
+			        								   //null,
 			        								   data_NewsFeed.getString(KEY_IMAGE),
 			        								   data_NewsFeed.getString(KEY_STATUS),
 			        								   data_NewsFeed.getString(KEY_PICURL), 
-			        								   null, 
+			        								   null, 					 //data_NewsFeed.getString(KEY_URL)	
 			        								   data_profile.getString(KEY_ID_PROFILE), 
 			        								   "ALL", 
 			        								   "User gets into the bus", //data_NewsFeed.getString(KEY_FEED_TYPE), 

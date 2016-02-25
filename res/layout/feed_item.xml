@@ -4,6 +4,8 @@
     android:layout_height="match_parent"
     android:background="@color/feed_bg"
     android:orientation="vertical" >
+    <!-- android:layout_height="match_parent"
+         android:layout_height="wrap_content" -->
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -77,29 +79,52 @@
             android:id="@+id/feedImage1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            
+
+            android:layout_marginLeft="@dimen/feed_item_status_pad_left_right"
+            android:layout_marginRight="@dimen/feed_item_status_pad_left_right"
+            
             android:background="@color/white"
             android:scaleType="fitXY"
             android:visibility="visible" />
+        	<!--android:paddingLeft="10dp"       	    
+            android:paddingRight="10dp"
+            android:paddingLeft="@dimen/feed_item_status_pad_left_right"
+            android:paddingRight="@dimen/feed_item_status_pad_left_right"
+		   									 -->    
+        
         
         <TextView
-           android:id="@+id/eng_status"
+           android:id="@+id/rel_stats"
            android:layout_width="fill_parent"
            android:layout_height="wrap_content"
            android:textColor="@color/timestamp"
-           android:text="100 curtidas 20 comentários"
+           
+           android:onClick="onClick"
+           android:clickable="true"
            android:paddingBottom="8dp"
            android:paddingTop="10dp"
-           android:paddingLeft="10dp"
+           
+           android:paddingLeft="@dimen/feed_item_status_pad_left_right"
+           android:paddingRight="@dimen/feed_item_status_pad_left_right"
+           
            android:textSize="@dimen/feed_item_timestamp" />
-                
+		   <!--android:paddingLeft="10dp" 
+		       android:text="100 curtidas 20 comentários"
+		       									 -->                
         
-        <View 
+        <View
+            android:id="@+id/View01" 
             android:layout_width="wrap_content"
             android:layout_height="1dp"
-            android:layout_marginLeft="6dp"
-            android:layout_marginRight="6dp"
+            android:layout_marginLeft="@dimen/feed_item_status_pad_left_right"
+            android:layout_marginRight="@dimen/feed_item_status_pad_left_right"
             android:background="@color/silver"
             />
+            <!-- 
+                android:layout_marginLeft="6dp"
+                android:layout_marginRight="6dp"
+            			 -->
 
 		<LinearLayout 
 		    android:id="@+id/LinearLayout02" 
@@ -110,32 +135,46 @@
 		    <!--android:layout_alignParentBottom="true"-->
 		
         <Button
-            android:id="@+id/Button_test1"
+            android:id="@+id/Button_like"
             android:text="Curtir"
+            android:drawableLeft="@drawable/like_light_grey_l"
+            
             android:layout_weight="1"
             android:textColor="@color/timestamp"
             android:textSize="@dimen/feed_item_timestamp" 
             android:layout_width="fill_parent"
             android:layout_height="38dp"
-            android:paddingLeft="@dimen/feed_item_status_pad_left_right"
-            android:paddingRight="@dimen/feed_item_status_pad_left_right"
+			
+			android:paddingLeft="30dp"
+			android:paddingRight="55dp"
+
             android:background="@drawable/bg_curtir_button"
             android:paddingTop="@dimen/feed_item_status_pad_top" />
-            <!-- android:layout_height="wrap_content" -->
+            <!-- android:layout_height="wrap_content"
+                android:paddingLeft="@dimen/feed_item_status_pad_left_right"
+            	android:paddingRight="@dimen/feed_item_status_pad_left_right"
+             
+                 android:drawableLeft="@drawable/like_dark_grey_l"-->
 
         <Button
-            android:id="@+id/Button_test2"
+            android:id="@+id/Button_comment"
             android:text="Comentar"
-            android:drawableLeft="@drawable/ic_action_chat"
+            android:drawableLeft="@drawable/comment_light_grey_l"
             android:layout_weight="1"
             android:textColor="@color/timestamp"
             android:textSize="@dimen/feed_item_timestamp" 
             android:layout_width="fill_parent"
             android:layout_height="38dp"
-            android:paddingLeft="@dimen/feed_item_status_pad_left_right"
-            android:paddingRight="@dimen/feed_item_status_pad_left_right"            
+			
+			android:paddingLeft="20dp"
+			android:paddingRight="45dp"
+                      
             android:background="@drawable/bg_curtir_button"
             android:paddingTop="@dimen/feed_item_status_pad_top" />
+        	<!-- android:drawableLeft="@drawable/ic_action_chat" 
+            android:paddingLeft="@dimen/feed_item_status_pad_left_right"
+            android:paddingRight="@dimen/feed_item_status_pad_left_right"          												
+        														-->
          </LinearLayout>
 
         
