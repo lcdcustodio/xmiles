@@ -15,6 +15,7 @@
     <string name="buscode">Digite o código do ônibus (ex: C41383)</string>
     <string name="buscode_button">Encontre seu ônibus</string>
     <string name="search_hint">Digite o código do ônibus (ex: C41383)</string>
+    <string name="add_comment_hint">Adicionar comentário &#8230;</string>
     <string name="busmsg1">Clique aqui e conecte-se ao ônibus</string>
     <string name="busmsg2">Você está conectado ao ônibus</string>
     <string name="busmsg3">Clique aqui e veja quem mais está conectado!</string>

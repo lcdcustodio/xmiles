@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+   
+    android:orientation="vertical" >
+
+    <ListView
+        android:id="@+id/list_items"
+        android:layout_width="fill_parent"        
+        android:layout_height="fill_parent"
+        android:layout_above="@+id/rel_add_comment"
+        android:divider="@null" />
+    	 
+    	<!--android:layout_height="fill_parent"  - Funcionou! ocupou toda a tela
+    		android:layout_height="450dp"
+    		android:layout_above="@id/add_comment"
+    		android:layout_height="wrap_content" foi 1° - quebrava na metade o listview
+    		android:layout_height="match_parent"
+    		android:layout_alignParentTop="true" 
+    		 -->
+
+ 	 <RelativeLayout
+ 	     android:id="@+id/rel_add_comment" 
+ 	     android:layout_width="match_parent"
+		 android:layout_height="wrap_content"
+		 android:background="@color/feed_bg"
+		 android:paddingLeft="2dp"
+    	 android:paddingTop="2dp"
+    	 android:paddingRight="2dp"
+    	 android:layout_alignParentBottom="true"
+    	 android:paddingBottom="2dp">    	
+ 	     	
+	   	 <AutoCompleteTextView
+	        android:id="@+id/add_comment"        
+	        style="@style/add_comment"
+	        android:layout_width="match_parent"
+	        android:layout_height="48dp"        
+	        android:textSize="14dp"	        
+	        android:hint="@string/add_comment_hint" />
+	   	 		 
+     </RelativeLayout>
+</RelativeLayout>
+<!-- </LinearLayout> -->

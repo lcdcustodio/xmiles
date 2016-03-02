@@ -15,8 +15,10 @@ import com.xmiles.android.NewRoutes;
 import com.xmiles.android.R;
 import com.xmiles.android.R.id;
 import com.xmiles.android.R.layout;
+import com.xmiles.android.listviewfeed.CommentItem;
 import com.xmiles.android.listviewfeed.FeedItem;
 import com.xmiles.android.listviewfeed.FeedListAdapter;
+import com.xmiles.android.listviewfeed.LikeItem;
 import com.xmiles.android.listviewfeed.RelListAdapter;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
@@ -55,6 +57,7 @@ import android.view.ViewGroup;
 import android.widget.AutoCompleteTextView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -83,15 +86,17 @@ public class Rel_Fragment extends Fragment {
 	//---------------------
 	ProgressDialog progressBar;
 	private ListView listView;
-	//private FeedListAdapter listAdapter;
 	private RelListAdapter listAdapter;
 	private List<FeedItem> feedItems;
+	private List<LikeItem> likeItems;
+	
+	private List<CommentItem> commentItems;
+	
 	private JSONObject json;
 	private JSONArray jsonArray;
 	private Cursor data_newsfeed;
 	//-----------------------	
 	private View rootView;
-	private View searchBus;
 	//-----------------------
     // GPSTracker class
 	GPSTracker gps;
@@ -99,6 +104,7 @@ public class Rel_Fragment extends Fragment {
 	private Handler mHandler;
 	//----------------------
 	private int position;
+	private String feed_id;
 
 	
 	public Rel_Fragment(){}
@@ -111,16 +117,20 @@ public class Rel_Fragment extends Fragment {
 		rootView = inflater.inflate(R.layout.fgmt_background, container, false);
 
 		
-		View custom = inflater.inflate(R.layout.likes_fgmt, null);
-		listView 	= (ListView) custom.findViewById(R.id.list_likes);
-		//View custom = inflater.inflate(R.layout.feed_fgmt, null); 
-		//listView 	= (ListView) custom.findViewById(R.id.list);
-
+		View custom_1 = inflater.inflate(R.layout.rel_fgmt, container, false);
+		listView 	= (ListView) custom_1.findViewById(R.id.list_items);
+		//EditText et = (EditText) custom_1.findViewById(R.id.add_comment); 
 		
 		position = getArguments().getInt("position");
+		feed_id = getArguments().getString("feed_id");
 		//---------------
 		feedItems = new ArrayList<FeedItem>();
-		listAdapter = new RelListAdapter(getActivity(), feedItems);
+		likeItems = new ArrayList<LikeItem>();
+		commentItems = new ArrayList<CommentItem>();
+		//listAdapter = new RelListAdapter(getActivity(), feedItems);
+		//listAdapter = new RelListAdapter(getActivity(), feedItems, likeItems);
+		listAdapter = new RelListAdapter(getActivity(), feedItems, likeItems, commentItems);
+		
 		//listView.setAdapter(listAdapter);
 		//---------------
         progressBar = new ProgressDialog(getActivity());
@@ -135,8 +145,7 @@ public class Rel_Fragment extends Fragment {
 		///*
   
 		//---------------		
-	
-		((ViewGroup) rootView).addView(custom);
+		((ViewGroup) rootView).addView(custom_1);
 		
 		
 		return rootView;
@@ -169,9 +178,8 @@ public class Rel_Fragment extends Fragment {
 				            //------------
 				            UserFunctions userFunc = new UserFunctions();
 				            
-				            json = userFunc.getPost_actions("1");
-				            jsonArray = new JSONArray(json.getString("likes"));
-				            Log.i(TAG,"jsonArray: " + jsonArray);
+				            json = userFunc.getPost_actions(feed_id);
+
 				    		        	
 					    } catch (Exception e) {
 					            e.printStackTrace();
@@ -205,7 +213,18 @@ public class Rel_Fragment extends Fragment {
 	                                public void run() {
 	                                	
 	                    		    	//Your code goes here            	
-	                    		    	parseJsonFeed(data_newsfeed);
+	                    		    	//parseJsonFeed(data_newsfeed);
+	                                	
+	                    		    	try {
+	                    		    			                    		    		
+											parseJsonFeed(data_newsfeed, 
+													      new JSONArray(json.getString("likes")),
+													      new JSONArray(json.getString("comments")));
+											
+										} catch (JSONException e) {
+											// TODO Auto-generated catch block
+											e.printStackTrace();
+										}
 
 	                                }
 	                            });
@@ -226,52 +245,100 @@ public class Rel_Fragment extends Fragment {
 		/**
 		 * Parsing json reponse and passing the data to feed view list adapter
 		 * */
-		private void parseJsonFeed(Cursor newsfeed) {
+		//private void parseJsonFeed(Cursor newsfeed) {
+		//private void parseJsonFeed(Cursor newsfeed, JSONArray likes) {
+	    private void parseJsonFeed(Cursor newsfeed, JSONArray likes, JSONArray comments) {	
 			
 			Log.w(TAG, "parseJsonFeed: " + newsfeed.getCount());
 			
-			//for (int i = 0; i < newsfeed.getCount(); i++) {
-
-				//newsfeed.moveToPosition(i);
-				newsfeed.moveToPosition(position);
 			
-				FeedItem item = new FeedItem();
+			newsfeed.moveToPosition(position);
+			
+			FeedItem item = new FeedItem();
 				
-				item.setId(newsfeed.getInt(KEY_ID));
-				item.setName(newsfeed.getString(KEY_NAME));
+			item.setId(newsfeed.getInt(KEY_ID));
+			item.setName(newsfeed.getString(KEY_NAME));
 
-				// Image might be null sometimes
-				String image = newsfeed.isNull(KEY_IMAGE) ? null : newsfeed
+			// Image might be null sometimes
+			String image = newsfeed.isNull(KEY_IMAGE) ? null : newsfeed
 						.getString(KEY_IMAGE);
 				
-				item.setImge(image);
+			item.setImge(image);
 
-				item.setStatus(newsfeed.getString(KEY_STATUS));
-				item.setProfilePic(newsfeed.getString(KEY_PICURL));
+			item.setStatus(newsfeed.getString(KEY_STATUS));
+			item.setProfilePic(newsfeed.getString(KEY_PICURL));
 
-				// like, comments stats
-				item.setLike_stats(newsfeed.getString(KEY_LIKE_STATS));
-				item.setComment_stats(newsfeed.getString(KEY_COMMENT_STATS));
+			// like, comments stats
+			item.setLike_stats(newsfeed.getString(KEY_LIKE_STATS));
+			item.setComment_stats(newsfeed.getString(KEY_COMMENT_STATS));
 				
 			
-				if (newsfeed.isNull(KEY_CUSTOM_TIME_STAMP)) {
-					item.setTimeStamp(newsfeed.getString(KEY_TIME_STAMP));
-				} else {
-					item.setTimeStamp(newsfeed.getString(KEY_CUSTOM_TIME_STAMP));
-				}
+			if (newsfeed.isNull(KEY_CUSTOM_TIME_STAMP)) {
+				item.setTimeStamp(newsfeed.getString(KEY_TIME_STAMP));
+			} else {
+				item.setTimeStamp(newsfeed.getString(KEY_CUSTOM_TIME_STAMP));
+			}
 				
-				// url might be null sometimes
-				String feedUrl = newsfeed.isNull(KEY_URL) ? null : newsfeed
+			// url might be null sometimes
+			String feedUrl = newsfeed.isNull(KEY_URL) ? null : newsfeed
 						.getString(KEY_URL);
 				
-				item.setUrl(feedUrl);
+			item.setUrl(feedUrl);
 
-				feedItems.add(item);
-			//}
+			feedItems.add(item);
+			
+	        try {
+	        	
+	        	//Your code goes here
+	        	
+	        	for (int i = 0; i < likes.length(); i++) {
+					
+	        		JSONObject likeObj = (JSONObject) likes.get(i);	        		
+	        		
+	        		LikeItem like_item = new LikeItem();
+	        		
+	        		like_item.setName(likeObj.getString("name"));
+	        		
+	        		//Log.e(TAG, "likeObj.getString(picurl): " + likeObj.getString("picurl"));
+	        		
+	        		like_item.setProfilePic(likeObj.getString("picurl"));
+	        		like_item.setTimeStamp(likeObj.getString("time_stamp"));
+	        		
+	        		likeItems.add(like_item);
+	        		
+	        	}
+    		        	
+			    } catch (Exception e) {
+			            e.printStackTrace();
+			    }
+	        
+	        try {
+	        	
+	        	//Your code goes here
+	        	
+	        	for (int i = 0; i < comments.length(); i++) {
+					
+	        		JSONObject commentObj = (JSONObject) comments.get(i);	        		
+	        		
+	        		CommentItem comment_item = new CommentItem();	        		
+	        		comment_item.setName(commentObj.getString("name"));
+	        		
+	        		comment_item.setProfilePic(commentObj.getString("picurl"));
+	        		comment_item.setTimeStamp(commentObj.getString("time_stamp"));
+	        		comment_item.setStatus(commentObj.getString("status"));
+	        		
+	        		commentItems.add(comment_item);
+	        		
+	        	}
+    		        	
+			    } catch (Exception e) {
+			            e.printStackTrace();
+			    }
+	        
 
 			// notify data changes to list adapater
 			listView.setAdapter(listAdapter);	
-			//listAdapter.notifyDataSetChanged();
+			
 		}
 
 

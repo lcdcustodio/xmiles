@@ -149,6 +149,21 @@
         <item name="android:layout_alignParentLeft">true</item>
     </style>
     
+    
+    <style name="add_comment">
+        <item name="android:background">@drawable/rounded_corners_white</item>
+
+        <item name="android:layout_margin">10dp</item>
+
+        <item name="android:maxLines">1</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:drawableRight">@drawable/comment_light_grey_l</item>
+        <item name="android:paddingRight">20dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:layout_alignParentLeft">true</item>
+    </style>
+    
+    
     <style name="search_buscode_button">
         
         <item name="android:layout_alignParentTop">true</item>

@@ -123,6 +123,7 @@ public class FeedListAdapter extends BaseAdapter {
 				    
 				     args.putInt("position", position);
 				    
+				     args.putString("feed_id", data_newsfeed.getString(KEY_ID));
 				     args.putString("name", data_newsfeed.getString(KEY_NAME));
 				     args.putString("image", data_newsfeed.getString(KEY_IMAGE));				    	 
 				     args.putString("status", data_newsfeed.getString(KEY_STATUS));
@@ -197,7 +198,8 @@ public class FeedListAdapter extends BaseAdapter {
 		}
 
 		// Checking for null feed url
-		if (item.getUrl() != null) {
+		//if (item.getUrl() != null) {
+		if (item.getUrl() != null && !item.getUrl().equals("")) {	
 			url.setText(Html.fromHtml("<a href=\"" + item.getUrl() + "\">"
 					+ item.getUrl() + "</a> "));
 
