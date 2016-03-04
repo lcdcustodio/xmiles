@@ -36,9 +36,10 @@ public class RelListAdapter extends BaseAdapter {
 	private Activity activity;
 	private LayoutInflater inflater;
 	private List<FeedItem> feedItems;
-	private List<LikeItem> likeItems;
 	//----------
+	private List<LikeItem> likeItems;
 	private List<CommentItem> commentItems;
+	private List<SupportRelAdapterItem> supportreladapterItems;
 	//----------	
 	ImageLoader imageLoader = AppController.getInstance().getImageLoader();
 	
@@ -54,14 +55,15 @@ public class RelListAdapter extends BaseAdapter {
 
 	//public RelListAdapter(Activity activity, List<FeedItem> feedItems) {
 	//public RelListAdapter(Activity activity, List<FeedItem> feedItems, List<LikeItem> likeItems) {
-	public RelListAdapter(Activity activity, List<FeedItem> feedItems, List<LikeItem> likeItems, List<CommentItem> commentItems) {	
+	//public RelListAdapter(Activity activity, List<FeedItem> feedItems, List<SupportRelAdapterItem> supportreladapterItems) {	
+	public RelListAdapter(Activity activity, List<FeedItem> feedItems, List<LikeItem> likeItems, List<CommentItem> commentItems, List<SupportRelAdapterItem> supportreladapterItems) {	
 		this.activity = activity;
 		this.feedItems = feedItems;
 		//---------------
-		this.likeItems = likeItems;
-		//---------------
-		this.commentItems = commentItems;
-		
+		this.likeItems = likeItems;		
+		this.commentItems = commentItems;		
+		this.supportreladapterItems = supportreladapterItems;
+		//---------------		
 	}
 
 	@Override
@@ -73,7 +75,8 @@ public class RelListAdapter extends BaseAdapter {
 		//return 1 + likeItems.size();
 		//return 2;
 		//return 3;
-		return 3 + commentItems.size();
+		//return 3 + commentItems.size();
+		return supportreladapterItems.size();
 	}
 
 	@Override
@@ -86,20 +89,23 @@ public class RelListAdapter extends BaseAdapter {
 	
 	@Override
 	public int getItemViewType(int position) {
-
-	    switch(position){
-	       case 0:
-	    	   return TYPE1; 
-	       case 1:
-	    	   return TYPE2;
-	       case 2:
-	    	   return TYPE3;
-	    	   
-	       default:
-	            break;
-	        	   
-	    }
-		return TYPE4;
+		
+		SupportRelAdapterItem supportreladapter_item = supportreladapterItems.get(position);
+		
+		//Log.e(TAG, "supportreladapter_item.getType_action(): " + supportreladapter_item.getType_action());
+		
+		if (supportreladapter_item.getType_action().equals("newsfeed")){
+			return TYPE1;
+		} else if (supportreladapter_item.getType_action().equals("likes")){
+			return TYPE2;
+		} else if (supportreladapter_item.getType_action().equals("header_comments")){
+			return TYPE3;
+		} else if (supportreladapter_item.getType_action().equals("comments")){
+			return TYPE4;
+		} else {		
+		  return TYPE3;
+		}
+	
 	}	
 
 	@Override
@@ -110,7 +116,6 @@ public class RelListAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 
-		//Log.e(TAG, "position: " + position);
 		
 		if (inflater == null)
 			inflater = (LayoutInflater) activity
@@ -164,7 +169,6 @@ public class RelListAdapter extends BaseAdapter {
 		NetworkImageView vi2_profilePic_4 = (NetworkImageView) vi2.findViewById(R.id.profilePic_4);
 
 		//vi4 gadgets
-		//TextView vi4_header = (TextView) vi4.findViewById(R.id.likes_header);
 		TextView vi4_name = (TextView) vi4.findViewById(R.id.name);
 		TextView vi4_timestamp = (TextView) vi4.findViewById(R.id.timestamp);
 		TextView vi4_statusMsg = (TextView) vi4.findViewById(R.id.txtStatusMsg);	
@@ -180,8 +184,6 @@ public class RelListAdapter extends BaseAdapter {
 	    switch(viewType){
 	       case 1:
 	    	   	
-	    	   	//Log.i(TAG, "feedItems.get(position): " + position);
-	    	   	//Log.v(TAG, "feedItems.size(): " + feedItems.size());
 				FeedItem feed_item = feedItems.get(position);
 				
 				vi1_name.setText(feed_item.getName());		 
@@ -267,9 +269,16 @@ public class RelListAdapter extends BaseAdapter {
 
 	       case 2:
 	    	   
+	    	   vi2.setOnClickListener(new View.OnClickListener() {
 
-	    	    //LikeItem like_item = likeItems.get(position - 1);
-				//likeItems.size()
+					@Override
+					public void onClick(View v) {
+						
+			    	    Log.e(TAG,"vi2.setOnClickListener");
+
+					}
+	    	   });	
+
 				for (int i = 0; i < likeItems.size(); i++) {
 					
 					LikeItem like_item = likeItems.get(i);
@@ -297,7 +306,32 @@ public class RelListAdapter extends BaseAdapter {
 		        
 	       case 4:
 	    	    
-	    	    CommentItem comment_item = commentItems.get(position - 3);
+	    	    int index;
+	    	    index = 1;
+	    	    
+	    	    if (likeItems.size() > 0 && commentItems.size() > 1 ) {
+	    	    	//index = 3;
+	    	    	index = 3; 
+	    	    } else if (likeItems.size() > 0 && commentItems.size() > 0 ) {
+		    	    //index = 2;
+		    	    index = 3;
+	    	    } else if (feedItems.size() > 0 && commentItems.size() > 1 ) {
+	    	    	index = 2;
+	    	    	
+	    	    } else if (feedItems.size() > 0 && commentItems.size() > 0 ) {
+	    	    	//index = 1;
+	    	    	index = 2;
+	    	    }
+	
+	    	    Log.e(TAG,"likeItems.size(): " + likeItems.size());
+	    	    Log.v(TAG,"feedItems.size(): " + feedItems.size());
+	    	    Log.i(TAG,"commentItems.size(): " + commentItems.size());
+	    	    Log.d(TAG,"index: " + index);
+	    	    
+	    	    //index = likeItems.size() + feedItems.size();	
+
+    	    	CommentItem comment_item = commentItems.get(position - index);	    	    
+	    	    //CommentItem comment_item = commentItems.get(position - 3);
 	    	    
 				vi4_name.setText(comment_item.getName());		 
 
@@ -320,7 +354,6 @@ public class RelListAdapter extends BaseAdapter {
 				//*/
 				// user profile pic
 				vi4_profilePic.setImageUrl(comment_item.getProfilePic(), imageLoader);
-
 	    	    
 		        return vi4;	    	   
      

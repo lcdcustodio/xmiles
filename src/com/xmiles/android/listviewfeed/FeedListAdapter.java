@@ -107,17 +107,16 @@ public class FeedListAdapter extends BaseAdapter {
 
 					 Uri uri = SqliteProvider.CONTENT_URI_NEWSFEED;
 					 Cursor data_newsfeed = activity.getContentResolver().query(uri, null, null, null, null);
-					 
-					 //data_newsfeed.moveToPosition(data_newsfeed.getCount() - position - 1);
+					
 					 
 					 data_newsfeed.moveToPosition(position);
 
 				     //TextView child = (TextView)((ViewGroup) parentView).getChildAt(1);
 				     //-------------------------------------------
 				     //Log.d(TAG, "child " + child.getText().toString());
-					 Log.d(TAG, "data_newsfeed.getString(KEY_STATUS) " + data_newsfeed.getString(KEY_STATUS));
+					 //Log.d(TAG, "data_newsfeed.getString(KEY_STATUS) " + data_newsfeed.getString(KEY_STATUS));
 				     //-------------------------------------------
-				     Log.i(TAG, "Position " + position);
+				     //Log.i(TAG, "Position " + position);
 				     
 				     Bundle args = new Bundle();
 				    

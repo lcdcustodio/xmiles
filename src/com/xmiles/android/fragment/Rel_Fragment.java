@@ -18,6 +18,7 @@ import com.xmiles.android.R.layout;
 import com.xmiles.android.listviewfeed.CommentItem;
 import com.xmiles.android.listviewfeed.FeedItem;
 import com.xmiles.android.listviewfeed.FeedListAdapter;
+import com.xmiles.android.listviewfeed.SupportRelAdapterItem;
 import com.xmiles.android.listviewfeed.LikeItem;
 import com.xmiles.android.listviewfeed.RelListAdapter;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
@@ -69,6 +70,9 @@ public class Rel_Fragment extends Fragment {
 	
 	private static final String TAG = "FACEBOOK";
 	
+	private static final Integer KEY_NAME_PROFILE = 1;
+	private static final Integer KEY_PICURL_PROFILE = 2;
+	//----------------------
 	private static final Integer KEY_ID         = 1;
 	private static final Integer KEY_NAME       = 2;
 	private static final Integer KEY_IMAGE      = 3;
@@ -81,17 +85,18 @@ public class Rel_Fragment extends Fragment {
 	private static final Integer KEY_LIKE_STATS = 9;
 	private static final Integer KEY_COMMENT_STATS = 10;	
 	//---------------------
-	AutoCompleteTextView buscode_search;
-	Button buscode_button;
+	AutoCompleteTextView add_cmts;
+	
 	//---------------------
 	ProgressDialog progressBar;
 	private ListView listView;
 	private RelListAdapter listAdapter;
 	private List<FeedItem> feedItems;
-	private List<LikeItem> likeItems;
-	
+	//----------------
+	private List<LikeItem> likeItems;	
 	private List<CommentItem> commentItems;
-	
+	private List<SupportRelAdapterItem> supportreladapterItems;
+	//----------------
 	private JSONObject json;
 	private JSONArray jsonArray;
 	private Cursor data_newsfeed;
@@ -100,8 +105,6 @@ public class Rel_Fragment extends Fragment {
 	//-----------------------
     // GPSTracker class
 	GPSTracker gps;
-	//----------------------
-	private Handler mHandler;
 	//----------------------
 	private int position;
 	private String feed_id;
@@ -112,14 +115,12 @@ public class Rel_Fragment extends Fragment {
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-
 		
 		rootView = inflater.inflate(R.layout.fgmt_background, container, false);
-
 		
 		View custom_1 = inflater.inflate(R.layout.rel_fgmt, container, false);
 		listView 	= (ListView) custom_1.findViewById(R.id.list_items);
-		//EditText et = (EditText) custom_1.findViewById(R.id.add_comment); 
+		add_cmts = (AutoCompleteTextView) custom_1.findViewById(R.id.add_comment);
 		
 		position = getArguments().getInt("position");
 		feed_id = getArguments().getString("feed_id");
@@ -127,11 +128,14 @@ public class Rel_Fragment extends Fragment {
 		feedItems = new ArrayList<FeedItem>();
 		likeItems = new ArrayList<LikeItem>();
 		commentItems = new ArrayList<CommentItem>();
+		supportreladapterItems = new ArrayList<SupportRelAdapterItem>();
+		
 		//listAdapter = new RelListAdapter(getActivity(), feedItems);
 		//listAdapter = new RelListAdapter(getActivity(), feedItems, likeItems);
-		listAdapter = new RelListAdapter(getActivity(), feedItems, likeItems, commentItems);
+		//listAdapter = new RelListAdapter(getActivity(), feedItems, likeItems, commentItems);
+		listAdapter = new RelListAdapter(getActivity(), feedItems, likeItems, commentItems, supportreladapterItems);
 		
-		//listView.setAdapter(listAdapter);
+
 		//---------------
         progressBar = new ProgressDialog(getActivity());
 		//*
@@ -140,7 +144,80 @@ public class Rel_Fragment extends Fragment {
 		progressBar.show();
 		//*/
 		//--------------
+      	//HANDLE EVENT - TYPE COMMENTS
+		add_cmts.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+                String searchContent = add_cmts.getText().toString();
+                if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
+                        (keyCode == KeyEvent.KEYCODE_ENTER)) {
+            		            		
+                	//Hide keyboard                	
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
+                            Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(add_cmts.getWindowToken(), 0);
+                	
+                    Log.e(TAG, "searchContent: " + searchContent);
+                    
+            		listAdapter = new RelListAdapter(getActivity(), feedItems, likeItems, commentItems, supportreladapterItems);
+	        		
+            		
+	        		CommentItem comment_item = new CommentItem();
+	        		
+    		    	//Your code goes here
+    		    	//------------			        	
+		            Uri uri = SqliteProvider.CONTENT_URI_USER_PROFILE;
+		            Cursor data_profile = getActivity().getContentResolver().query(uri, null, null, null, null);
+		            
+		            data_profile.moveToLast();
+
+		            Support support = new Support();
+		            
+		            
+	        		comment_item.setName(data_profile.getString(KEY_NAME_PROFILE));        		
+	        		comment_item.setProfilePic(data_profile.getString(KEY_PICURL_PROFILE));
+	        		comment_item.setTimeStamp(support.getDateTime());
+	        		comment_item.setStatus(searchContent);
+	        		
+	        		commentItems.add(comment_item);
+            		//-----------------
+	        		Log.i(TAG, "supportreladapterItems.size(): " + supportreladapterItems.size());
+	        		
+	        		//header_comments
+	        		boolean header_comments = false;
+	        		
+	        		for (int j = 0; j < supportreladapterItems.size(); j++) {
+	        			if (supportreladapterItems.get(j).getType_action().equals("header_comments")){
+	        				header_comments = true;
+	        				break;
+	        			}
+	        		}
+	        		
+	        		if (!header_comments){
+	        			
+	        			SupportRelAdapterItem supportreladapter_hc_item = new SupportRelAdapterItem();
+	        			supportreladapter_hc_item.setType_action("header_comments");
+	        			supportreladapterItems.add(supportreladapter_hc_item);
+	        			
+	        		}
+            		//-----------------	        		
+            		SupportRelAdapterItem supportreladapter_comments_item = new SupportRelAdapterItem();	        		
+	        		supportreladapter_comments_item.setType_action("comments");
+	        		supportreladapterItems.add(supportreladapter_comments_item);
+	        		
+	        		
+                    
+        			
+        			listAdapter.notifyDataSetChanged();
+	        		
+	        		
+                }
+                return false;
+            }
+
+        });    
 		
+		//--------------
 		Feed_Query fq = new Feed_Query();
 		///*
   
@@ -251,7 +328,7 @@ public class Rel_Fragment extends Fragment {
 			
 			Log.w(TAG, "parseJsonFeed: " + newsfeed.getCount());
 			
-			
+
 			newsfeed.moveToPosition(position);
 			
 			FeedItem item = new FeedItem();
@@ -287,10 +364,14 @@ public class Rel_Fragment extends Fragment {
 
 			feedItems.add(item);
 			
+			//------------
+			SupportRelAdapterItem supportreladapter_newsfeed_item = new SupportRelAdapterItem();
+			supportreladapter_newsfeed_item.setType_action("newsfeed");
+    		supportreladapterItems.add(supportreladapter_newsfeed_item);
+			//------------			
 	        try {
 	        	
-	        	//Your code goes here
-	        	
+	        	//Your code goes here	        	
 	        	for (int i = 0; i < likes.length(); i++) {
 					
 	        		JSONObject likeObj = (JSONObject) likes.get(i);	        		
@@ -299,10 +380,16 @@ public class Rel_Fragment extends Fragment {
 	        		
 	        		like_item.setName(likeObj.getString("name"));
 	        		
-	        		//Log.e(TAG, "likeObj.getString(picurl): " + likeObj.getString("picurl"));
-	        		
-	        		like_item.setProfilePic(likeObj.getString("picurl"));
+	        		like_item.setProfilePic(likeObj.getString("picurl"));	        		
 	        		like_item.setTimeStamp(likeObj.getString("time_stamp"));
+	        		
+	        		
+	        		if (i == 0) {
+	        			SupportRelAdapterItem supportreladapter_likes_item = new SupportRelAdapterItem();
+	        			supportreladapter_likes_item.setType_action("likes");
+	        			supportreladapterItems.add(supportreladapter_likes_item);
+	        			
+	        		}
 	        		
 	        		likeItems.add(like_item);
 	        		
@@ -314,30 +401,47 @@ public class Rel_Fragment extends Fragment {
 	        
 	        try {
 	        	
-	        	//Your code goes here
-	        	
+	        	//Your code goes here	        	
 	        	for (int i = 0; i < comments.length(); i++) {
 					
 	        		JSONObject commentObj = (JSONObject) comments.get(i);	        		
 	        		
-	        		CommentItem comment_item = new CommentItem();	        		
-	        		comment_item.setName(commentObj.getString("name"));
+	        		CommentItem comment_item = new CommentItem();
 	        		
+	        		comment_item.setName(commentObj.getString("name"));        		
 	        		comment_item.setProfilePic(commentObj.getString("picurl"));
 	        		comment_item.setTimeStamp(commentObj.getString("time_stamp"));
 	        		comment_item.setStatus(commentObj.getString("status"));
 	        		
 	        		commentItems.add(comment_item);
 	        		
+	        		//------------------
+	        		if (i == 0) {
+	        			SupportRelAdapterItem supportreladapter_hc_item = new SupportRelAdapterItem();
+	        			supportreladapter_hc_item.setType_action("header_comments");
+	        			supportreladapterItems.add(supportreladapter_hc_item);
+	        			
+	        		}
+	        		
+	        		SupportRelAdapterItem supportreladapter_comments_item = new SupportRelAdapterItem();
+	        		
+	        		supportreladapter_comments_item.setType_action("comments");
+	        		supportreladapterItems.add(supportreladapter_comments_item);
+	        		
+
+	        		//------------------
+	        		
 	        	}
     		        	
 			    } catch (Exception e) {
 			            e.printStackTrace();
 			    }
-	        
-
+	        	
 			// notify data changes to list adapater
 			listView.setAdapter(listAdapter);	
+			
+			listAdapter.notifyDataSetChanged();
+
 			
 		}
 

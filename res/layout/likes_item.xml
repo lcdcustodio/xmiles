@@ -42,8 +42,12 @@
             android:orientation="horizontal"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
+            
+            
+            
             android:paddingLeft="@dimen/feed_item_padding_left_right"
             android:paddingRight="@dimen/feed_item_padding_left_right" >
+            <!-- android:background="@drawable/bg_like_state"  -->
 
             <com.android.volley.toolbox.NetworkImageView
                 android:id="@+id/profilePic_1"
