@@ -76,12 +76,12 @@ public class Ranking_Fragment extends Fragment {
  
 		View rootView = inflater.inflate(R.layout.fgmt_background, container, false);
 
-		//View rootView2 = inflater.inflate(R.layout.user_header, container, false);
-		
-		View custom = inflater.inflate(R.layout.favorites_fragment, null); 
+		View header = inflater.inflate(R.layout.ranking_header, container, false);		
+
+		View custom = inflater.inflate(R.layout.ranking_fgmt, null); 
 		
 
-		list 		   = (ListView) custom.findViewById(R.id.list_favorites);
+		list 		   = (ListView) custom.findViewById(R.id.list);
 		//---------------		
 
 		//---------------
@@ -97,7 +97,7 @@ public class Ranking_Fragment extends Fragment {
 		
 		Ranking_Query rq = new Ranking_Query();
 		
-		//((ViewGroup) rootView).addView(rootView2);
+		((ViewGroup) rootView).addView(header);
 		((ViewGroup) rootView).addView(custom);
 		
 		

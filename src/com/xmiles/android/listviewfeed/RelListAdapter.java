@@ -26,6 +26,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -68,12 +70,7 @@ public class RelListAdapter extends BaseAdapter {
 
 	@Override
 	public int getCount() {
-		//return feedItems.size();
-		//return feedItems.size() + 1;
-		//return 2;
-		//return 10;
-		//return 1 + likeItems.size();
-		//return 2;
+
 		//return 3;
 		//return 3 + commentItems.size();
 		return supportreladapterItems.size();
@@ -167,6 +164,11 @@ public class RelListAdapter extends BaseAdapter {
 		NetworkImageView vi2_profilePic_2 = (NetworkImageView) vi2.findViewById(R.id.profilePic_2);
 		NetworkImageView vi2_profilePic_3 = (NetworkImageView) vi2.findViewById(R.id.profilePic_3);
 		NetworkImageView vi2_profilePic_4 = (NetworkImageView) vi2.findViewById(R.id.profilePic_4);
+		
+		ImageView vi2_profilePic_5 = (ImageView) vi2.findViewById(R.id.profilePic_5);
+		vi2_profilePic_5.setVisibility(View.GONE);
+		
+		LinearLayout vi2_frame_pictures   = (LinearLayout) vi2.findViewById(R.id.frame_pictures);
 
 		//vi4 gadgets
 		TextView vi4_name = (TextView) vi4.findViewById(R.id.name);
@@ -268,8 +270,8 @@ public class RelListAdapter extends BaseAdapter {
 	
 
 	       case 2:
-	    	   
-	    	   vi2.setOnClickListener(new View.OnClickListener() {
+
+	    	   vi2_frame_pictures.setOnClickListener(new View.OnClickListener() {
 
 					@Override
 					public void onClick(View v) {
@@ -279,6 +281,8 @@ public class RelListAdapter extends BaseAdapter {
 					}
 	    	   });	
 
+	    	   //Log.e(TAG,"likeItems.size(): " + likeItems.size());
+	    	   
 				for (int i = 0; i < likeItems.size(); i++) {
 					
 					LikeItem like_item = likeItems.get(i);
@@ -287,11 +291,24 @@ public class RelListAdapter extends BaseAdapter {
 				       case 0:
 				    	   
 				    	  vi2_profilePic_1.setImageUrl(like_item.getProfilePic(), imageLoader); 
-				       
+				    	  break;
 				       case 1:
 
 					      vi2_profilePic_2.setImageUrl(like_item.getProfilePic(), imageLoader);				    	   
-				    	   
+					      break;
+				       case 2:
+
+					      vi2_profilePic_3.setImageUrl(like_item.getProfilePic(), imageLoader);
+					      break;
+				       case 3:
+
+					      vi2_profilePic_4.setImageUrl(like_item.getProfilePic(), imageLoader);				    	   
+					      break;
+				       case 4:
+
+					      vi2_profilePic_5.setVisibility(View.VISIBLE);
+					      break;
+					      
 				       default:
 				            break;
 				    } 

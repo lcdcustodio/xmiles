@@ -58,13 +58,22 @@ public class RankingLazyAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         View vi=convertView;
         if(convertView==null)
-            vi = inflater.inflate(R.layout.users_custom_listview, null);
+            //vi = inflater.inflate(R.layout.users_custom_listview, null);
+            vi = inflater.inflate(R.layout.ranking_item, null);
 
         TextView title = (TextView)vi.findViewById(R.id.title); // title
         TextView artist = (TextView)vi.findViewById(R.id.artist); // artist name
         TextView duration = (TextView)vi.findViewById(R.id.duration); // duration
         ImageView thumb_image=(ImageView)vi.findViewById(R.id.list_image); // thumb image
-        //ImageView reward_image_vi3 = (ImageView) vi.findViewById(R.id.list_image);
+
+		//View
+		View vw01 = (View) vi.findViewById(R.id.View01);
+		
+		if (position == 0) {
+			vw01.setVisibility(View.GONE);
+		}
+		
+
         
         ranking_info.moveToPosition(position);
         

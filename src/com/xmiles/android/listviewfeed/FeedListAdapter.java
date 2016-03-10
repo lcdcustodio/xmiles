@@ -111,13 +111,8 @@ public class FeedListAdapter extends BaseAdapter {
 					 
 					 data_newsfeed.moveToPosition(position);
 
-				     //TextView child = (TextView)((ViewGroup) parentView).getChildAt(1);
-				     //-------------------------------------------
-				     //Log.d(TAG, "child " + child.getText().toString());
-					 //Log.d(TAG, "data_newsfeed.getString(KEY_STATUS) " + data_newsfeed.getString(KEY_STATUS));
-				     //-------------------------------------------
-				     //Log.i(TAG, "Position " + position);
-				     
+
+				     //-------------------------------------------				     
 				     Bundle args = new Bundle();
 				    
 				     args.putInt("position", position);
