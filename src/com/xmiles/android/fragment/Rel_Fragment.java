@@ -40,6 +40,7 @@ import android.support.v4.content.CursorLoader;
 
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -130,9 +131,6 @@ public class Rel_Fragment extends Fragment {
 		commentItems = new ArrayList<CommentItem>();
 		supportreladapterItems = new ArrayList<SupportRelAdapterItem>();
 		
-		//listAdapter = new RelListAdapter(getActivity(), feedItems);
-		//listAdapter = new RelListAdapter(getActivity(), feedItems, likeItems);
-		//listAdapter = new RelListAdapter(getActivity(), feedItems, likeItems, commentItems);
 		listAdapter = new RelListAdapter(getActivity(), feedItems, likeItems, commentItems, supportreladapterItems);
 		
 
@@ -156,11 +154,11 @@ public class Rel_Fragment extends Fragment {
                     InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(
                             Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(add_cmts.getWindowToken(), 0);
-                	
-                    Log.e(TAG, "searchContent: " + searchContent);
+
+                    //CleanUp text
+                    add_cmts.setText("");
                     
             		listAdapter = new RelListAdapter(getActivity(), feedItems, likeItems, commentItems, supportreladapterItems);
-	        		
             		
 	        		CommentItem comment_item = new CommentItem();
 	        		
@@ -204,13 +202,9 @@ public class Rel_Fragment extends Fragment {
             		SupportRelAdapterItem supportreladapter_comments_item = new SupportRelAdapterItem();	        		
 	        		supportreladapter_comments_item.setType_action("comments");
 	        		supportreladapterItems.add(supportreladapter_comments_item);
-	        		
-	        		
-                    
-        			
+                            			
         			listAdapter.notifyDataSetChanged();
-	        		
-	        		
+	        			        		
                 }
                 return false;
             }
@@ -371,18 +365,26 @@ public class Rel_Fragment extends Fragment {
 			//------------			
 	        try {
 	        	
-	        	//Your code goes here	        	
+	        	//Your code goes here
+	        	ContentValues[] valueList;
+	        	valueList = new ContentValues[likes.length()];
+	        	
 	        	for (int i = 0; i < likes.length(); i++) {
 					
 	        		JSONObject likeObj = (JSONObject) likes.get(i);	        		
 	        		
 	        		LikeItem like_item = new LikeItem();
+	        		ContentValues values = new ContentValues();
 	        		
 	        		like_item.setName(likeObj.getString("name"));
+	        		values.put(DatabaseHelper.KEY_NAME,likeObj.getString("name"));
 	        		
-	        		like_item.setProfilePic(likeObj.getString("picurl"));	        		
+	        		like_item.setProfilePic(likeObj.getString("picurl"));
+	        		values.put(DatabaseHelper.KEY_PICURL,likeObj.getString("picurl"));
+	        		
 	        		like_item.setTimeStamp(likeObj.getString("time_stamp"));
 	        		
+	        		values.put(DatabaseHelper.KEY_TIME_STAMP,likeObj.getString("time_stamp"));
 	        		
 	        		if (i == 0) {
 	        			SupportRelAdapterItem supportreladapter_likes_item = new SupportRelAdapterItem();
@@ -392,8 +394,10 @@ public class Rel_Fragment extends Fragment {
 	        		}
 	        		
 	        		likeItems.add(like_item);
-	        		
+	        		valueList[i] = values;
 	        	}
+	        	
+	        	getActivity().getContentResolver().bulkInsert(SqliteProvider.CONTENT_URI_LIKES_create, valueList);
     		        	
 			    } catch (Exception e) {
 			            e.printStackTrace();

@@ -19,16 +19,11 @@ public class Relationship extends FragmentActivity {
 	@Override
 	  protected void onCreate(Bundle savedInstanceState) {
 	      super.onCreate(savedInstanceState);
-	      setContentView(R.layout.activity_main);
+
+	      setContentView(R.layout.activity_extra);
 
 	      ActionBar actionBar = getActionBar();
 		  actionBar.setDisplayHomeAsUpEnabled(true);
-		  
-		  //Sliding Menu
-		  //actionBar.setDisplayHomeAsUpEnabled(true);
-		  //actionBar.sets
-	      //getSlidingMenu().setSlidingEnabled(false);
-		  
 
 		  Bundle args = getIntent().getExtras();
 		  

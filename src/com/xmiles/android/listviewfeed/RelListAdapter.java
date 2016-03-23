@@ -1,6 +1,7 @@
 package com.xmiles.android.listviewfeed;
 
 import com.xmiles.android.listviewfeed.FeedImageView;
+import com.xmiles.android.Likes;
 import com.xmiles.android.R;
 import com.xmiles.android.Relationship;
 import com.xmiles.android.listviewfeed.AppController;
@@ -276,7 +277,10 @@ public class RelListAdapter extends BaseAdapter {
 					@Override
 					public void onClick(View v) {
 						
-			    	    Log.e(TAG,"vi2.setOnClickListener");
+	    		    	//Your code goes here
+	    		    	//------------			        	
+					    Intent intent = new Intent(activity, Likes.class);
+					    activity.startActivity(intent);
 
 					}
 	    	   });	
@@ -326,29 +330,28 @@ public class RelListAdapter extends BaseAdapter {
 	    	    int index;
 	    	    index = 1;
 	    	    
-	    	    if (likeItems.size() > 0 && commentItems.size() > 1 ) {
-	    	    	//index = 3;
+	    	    if (likeItems.size() > 0 && commentItems.size() > 1 ) {	    	    	
 	    	    	index = 3; 
-	    	    } else if (likeItems.size() > 0 && commentItems.size() > 0 ) {
-		    	    //index = 2;
+	    	    	
+	    	    } else if (likeItems.size() > 0 && commentItems.size() > 0 ) {		    	  
 		    	    index = 3;
+		    	    
 	    	    } else if (feedItems.size() > 0 && commentItems.size() > 1 ) {
 	    	    	index = 2;
 	    	    	
-	    	    } else if (feedItems.size() > 0 && commentItems.size() > 0 ) {
-	    	    	//index = 1;
+	    	    } else if (feedItems.size() > 0 && commentItems.size() > 0 ) {	    	    	
 	    	    	index = 2;
+	    	    	
 	    	    }
-	
+	    	    /*
 	    	    Log.e(TAG,"likeItems.size(): " + likeItems.size());
 	    	    Log.v(TAG,"feedItems.size(): " + feedItems.size());
 	    	    Log.i(TAG,"commentItems.size(): " + commentItems.size());
 	    	    Log.d(TAG,"index: " + index);
-	    	    
+	    	    */
 	    	    //index = likeItems.size() + feedItems.size();	
 
-    	    	CommentItem comment_item = commentItems.get(position - index);	    	    
-	    	    //CommentItem comment_item = commentItems.get(position - 3);
+    	    	CommentItem comment_item = commentItems.get(position - index);
 	    	    
 				vi4_name.setText(comment_item.getName());		 
 

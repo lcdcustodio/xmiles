@@ -138,7 +138,7 @@
 		
         <Button
             android:id="@+id/Button_like"
-            android:text="Curtir"
+            android:text="@string/like_btn"
             android:drawableLeft="@drawable/like_light_grey_l"
             
             android:layout_weight="1"
@@ -160,7 +160,7 @@
 
         <Button
             android:id="@+id/Button_comment"
-            android:text="Comentar"
+            android:text="@string/comment_btn"
             android:drawableLeft="@drawable/comment_light_grey_l"
             android:layout_weight="1"
             android:textColor="@color/timestamp"

@@ -76,7 +76,7 @@ public class Ranking_Fragment extends Fragment {
  
 		View rootView = inflater.inflate(R.layout.fgmt_background, container, false);
 
-		View header = inflater.inflate(R.layout.ranking_header, container, false);		
+		//View header = inflater.inflate(R.layout.ranking_header, container, false);		
 
 		View custom = inflater.inflate(R.layout.ranking_fgmt, null); 
 		
@@ -97,7 +97,7 @@ public class Ranking_Fragment extends Fragment {
 		
 		Ranking_Query rq = new Ranking_Query();
 		
-		((ViewGroup) rootView).addView(header);
+		//((ViewGroup) rootView).addView(header);
 		((ViewGroup) rootView).addView(custom);
 		
 		

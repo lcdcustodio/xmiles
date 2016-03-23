@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/feed_bg"
+    android:orientation="vertical" >
+    <!-- android:layout_height="match_parent"
+         android:layout_height="wrap_content" -->
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/feed_item_margin"
+        android:layout_marginRight="@dimen/feed_item_margin"       
+          
+        android:background="@color/white"        
+        android:orientation="vertical">
+        
+        <View
+            android:id="@+id/View01" 
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_marginLeft="@dimen/feed_item_status_pad_left_right"
+            android:layout_marginRight="@dimen/feed_item_status_pad_left_right"
+            android:background="@color/silver"
+            />
+	
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:paddingLeft="@dimen/feed_item_padding_left_right"
+            android:paddingRight="@dimen/feed_item_padding_left_right" >
+
+			<!--  ListRow Left sied Thumbnail image -->
+			<LinearLayout android:id="@+id/thumbnail" 
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:padding="3dip"		
+		        android:layout_alignParentLeft="true"
+		        android:background="@drawable/image_bg" 
+			    android:layout_marginRight="5dip">
+		        
+				<ImageView     
+					android:id="@+id/list_image"   
+			        android:layout_width="50dip"
+			        android:layout_height="50dip"
+			        android:src="@drawable/action_people"/>
+		        
+			</LinearLayout>
+		    
+			<!-- Title Of Song-->
+		    <TextView
+		        android:id="@+id/title"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_alignTop="@+id/thumbnail"
+		        android:layout_toRightOf="@+id/thumbnail"
+		        android:text="Rihanna Love the way lie"
+		        android:textColor="#040404"
+		        android:typeface="sans" 
+		        android:textSize="15dip"
+		        android:textStyle="bold"/>
+		
+			<!-- Artist Name -->
+		    <TextView
+		        android:id="@+id/artist"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"
+		        android:layout_below="@id/title"
+		        android:textColor="#343434"
+		        android:textSize="10dip"
+		        android:layout_marginTop="1dip"
+		        android:layout_toRightOf="@+id/thumbnail"
+		        android:text="Just gona stand there and ..." />
+		
+      </RelativeLayout>
+	</LinearLayout>
+</LinearLayout>

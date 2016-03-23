@@ -247,7 +247,7 @@ public class Feed_Fragment extends Fragment implements LoaderManager.LoaderCallb
 		 * */
 		private void parseJsonFeed(Cursor newsfeed) {
 			
-			Log.w(TAG, "newsfeed.getCount(): " + newsfeed.getCount());
+			//Log.w(TAG, "newsfeed.getCount(): " + newsfeed.getCount());
 			
 			for (int i = 0; i < newsfeed.getCount(); i++) {
 

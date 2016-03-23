@@ -1,4 +1,4 @@
-package com.xmiles.android.fragment;
+package com.xmiles.android.backup;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,7 +47,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class Like_Fragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>  {
+public class Like_Fragment_backup extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>  {
 
 	
 	private static final String TAG = "FACEBOOK";
@@ -72,7 +72,7 @@ public class Like_Fragment extends Fragment implements LoaderManager.LoaderCallb
 	//-----------------------	
 	private Handler mHandler;
 	
-	public Like_Fragment(){}
+	public Like_Fragment_backup(){}
 	
 	@Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -154,7 +154,7 @@ public class Like_Fragment extends Fragment implements LoaderManager.LoaderCallb
 		@Override
 		public void onReceive(Context arg0, Intent arg1) {
 			// TODO Auto-generated method stub
-			getLoaderManager().restartLoader(0, null, Like_Fragment.this);
+			getLoaderManager().restartLoader(0, null, Like_Fragment_backup.this);
 		}};
 
 	

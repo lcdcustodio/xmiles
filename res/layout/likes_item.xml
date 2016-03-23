@@ -55,15 +55,23 @@
             android:paddingLeft="@dimen/feed_item_padding_left_right"
             android:paddingRight="@dimen/feed_item_padding_left_right" >
             <!-- android:background="@drawable/bg_like_state"  -->
+			<!--
+			<LinearLayout android:id="@+id/thumbnail" 
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:padding="3dip"		        
+		        android:background="@drawable/image_bg"> 
+			     								 -->
 
-            <com.android.volley.toolbox.NetworkImageView
-                android:id="@+id/profilePic_1"
-                android:layout_width="@dimen/feed_item_profile_pic"
-                android:layout_height="@dimen/feed_item_profile_pic"
-                android:layout_marginRight="10dp"
-                android:scaleType="fitCenter" >
-            </com.android.volley.toolbox.NetworkImageView>
-
+			    <com.android.volley.toolbox.NetworkImageView
+	                android:id="@+id/profilePic_1"
+	                android:layout_width="@dimen/feed_item_profile_pic"
+	                android:layout_height="@dimen/feed_item_profile_pic"
+	                android:layout_marginRight="10dp"
+	                android:scaleType="fitCenter" >
+	            </com.android.volley.toolbox.NetworkImageView>
+			<!--  /LinearLayout>-->
+			
             <com.android.volley.toolbox.NetworkImageView
                 android:id="@+id/profilePic_2"
                 android:layout_width="@dimen/feed_item_profile_pic"

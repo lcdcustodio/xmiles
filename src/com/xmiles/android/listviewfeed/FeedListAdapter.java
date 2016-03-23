@@ -6,11 +6,13 @@ import com.xmiles.android.Relationship;
 import com.xmiles.android.listviewfeed.AppController;
 import com.xmiles.android.listviewfeed.FeedItem;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
+import com.xmiles.android.sqlite.helper.DatabaseHelper;
 import com.xmiles.android.support.Support;
 
 import java.util.List;
 
 import android.app.Activity;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -25,6 +27,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -85,14 +89,12 @@ public class FeedListAdapter extends BaseAdapter {
 		if (imageLoader == null)
 			imageLoader = AppController.getInstance().getImageLoader();
 
-		TextView name = (TextView) convertView.findViewById(R.id.name);
-		TextView timestamp = (TextView) convertView
-				.findViewById(R.id.timestamp);
-		TextView statusMsg = (TextView) convertView
-				.findViewById(R.id.txtStatusMsg);
+		//TextView name = (TextView) convertView.findViewById(R.id.name);
+		final TextView name = (TextView) convertView.findViewById(R.id.name);
+		TextView timestamp = (TextView) convertView.findViewById(R.id.timestamp);
+		TextView statusMsg = (TextView) convertView.findViewById(R.id.txtStatusMsg);
 		//-------------------
-		TextView rel_stats = (TextView) convertView
-				.findViewById(R.id.rel_stats);		
+		TextView rel_stats = (TextView) convertView.findViewById(R.id.rel_stats);		
 
 		rel_stats.setTag(position);
 		
@@ -102,22 +104,22 @@ public class FeedListAdapter extends BaseAdapter {
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
 
-					 //View parentView = (View)v.getParent();
-					 int position=(Integer)v.getTag();
+					 int pos_rel_stats=(Integer)v.getTag();
 
 					 Uri uri = SqliteProvider.CONTENT_URI_NEWSFEED;
 					 Cursor data_newsfeed = activity.getContentResolver().query(uri, null, null, null, null);
 					
 					 
-					 data_newsfeed.moveToPosition(position);
+					 data_newsfeed.moveToPosition(pos_rel_stats);
 
 
 				     //-------------------------------------------				     
 				     Bundle args = new Bundle();
 				    
-				     args.putInt("position", position);
+				     args.putInt("position", pos_rel_stats);
 				    
 				     args.putString("feed_id", data_newsfeed.getString(KEY_ID));
+				     /*
 				     args.putString("name", data_newsfeed.getString(KEY_NAME));
 				     args.putString("image", data_newsfeed.getString(KEY_IMAGE));				    	 
 				     args.putString("status", data_newsfeed.getString(KEY_STATUS));
@@ -127,7 +129,7 @@ public class FeedListAdapter extends BaseAdapter {
 				     args.putString("comment_stats",data_newsfeed.getString(KEY_COMMENT_STATS));
 				     args.putString("time_stamp",data_newsfeed.getString(KEY_TIME_STAMP));
 				     args.putString("custom_time_stamp",data_newsfeed.getString(KEY_CUSTOM_TIME_STAMP));
-				    
+				     */
 				     Intent intent = new Intent(activity, Relationship.class);				    	 
 				     intent.putExtras(args);
 				    
@@ -144,7 +146,137 @@ public class FeedListAdapter extends BaseAdapter {
 				.findViewById(R.id.profilePic);
 		FeedImageView feedImageView = (FeedImageView) convertView
 				.findViewById(R.id.feedImage1);
+		//-------------------
+		//------TEST---------
+		//-------------------		
+		Button like = (Button) convertView.findViewById(R.id.Button_like);
+		//like.setEnabled(false);
 
+		/*
+		if (position > 2){
+			like.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_light_grey_l, 0, 0, 0);
+		} else {
+			like.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_icon_active_new, 0, 0, 0);
+		}
+		*/
+		//-------------------
+		//------TEST---------
+		//-------------------	
+		like.setTag(position);		
+		like.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+				int pos_btn_like = (Integer)v.getTag();
+				//Log.e(TAG,"pos_btn_like: " + pos_btn_like);
+				
+				Uri uri_1 = SqliteProvider.CONTENT_URI_NEWSFEED;
+				Cursor data_newsfeed = activity.getContentResolver().query(uri_1, null, null, null, null);				 
+				data_newsfeed.moveToPosition(pos_btn_like);
+				//------------------------------------------------------------
+				Uri uri_2 = SqliteProvider.CONTENT_URI_NEWSFEED_update;
+				
+				ContentValues cv = new ContentValues();
+				
+				int like_stats = Integer.parseInt(data_newsfeed.getString(KEY_LIKE_STATS));
+				
+				cv.put(DatabaseHelper.KEY_LIKE_STATS, String.valueOf(like_stats + 1));
+
+
+				activity.getContentResolver().update(uri_2, 
+						cv, 
+						DatabaseHelper.KEY_ID + " = " + data_newsfeed.getString(KEY_ID), null);
+				//------------------------------------------------------------
+				//------------------------------------------------------------
+				Button btn_like = (Button) v.findViewById(R.id.Button_like);				
+				btn_like.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_icon_active_new, 0, 0, 0);
+
+				//---------------
+				feedItems.clear();
+				//---------------------------
+				//**************************
+				//---------------------------
+				Cursor newsfeed = activity.getContentResolver().query(uri_1, null, null, null, null);
+				
+				for (int i = 0; i < newsfeed.getCount(); i++) {
+
+					newsfeed.moveToPosition(i);
+					
+					FeedItem item = new FeedItem();
+					
+					item.setId(newsfeed.getInt(KEY_ID));
+					item.setName(newsfeed.getString(KEY_NAME));
+
+					// Image might be null sometimes
+					String image = newsfeed.isNull(KEY_IMAGE) ? null : newsfeed
+							.getString(KEY_IMAGE);
+					
+					item.setImge(image);
+
+					item.setStatus(newsfeed.getString(KEY_STATUS));
+					item.setProfilePic(newsfeed.getString(KEY_PICURL));
+
+					// like, comments stats
+					item.setLike_stats(newsfeed.getString(KEY_LIKE_STATS));
+					item.setComment_stats(newsfeed.getString(KEY_COMMENT_STATS));
+					
+				
+					if (newsfeed.isNull(KEY_CUSTOM_TIME_STAMP)) {
+						item.setTimeStamp(newsfeed.getString(KEY_TIME_STAMP));
+					} else {
+						item.setTimeStamp(newsfeed.getString(KEY_CUSTOM_TIME_STAMP));
+					}
+					
+					// url might be null sometimes
+					String feedUrl = newsfeed.isNull(KEY_URL) ? null : newsfeed
+							.getString(KEY_URL);
+					
+					item.setUrl(feedUrl);
+
+					feedItems.add(item);
+				}
+				
+				//---------------------------
+				notifyDataSetChanged();
+				//---------------
+				
+			}
+		});
+		//-------------------
+		Button comment = (Button) convertView.findViewById(R.id.Button_comment);		
+
+		comment.setTag(position);		
+		comment.setOnClickListener(new View.OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+				int pos_btn_comment = (Integer)v.getTag();
+				Log.e(TAG,"pos_btn_comment: " + pos_btn_comment);
+
+				Uri uri = SqliteProvider.CONTENT_URI_NEWSFEED;
+				Cursor data_newsfeed = activity.getContentResolver().query(uri, null, null, null, null);
+				 
+				data_newsfeed.moveToPosition(pos_btn_comment);
+				
+			    Bundle args = new Bundle();				    
+			    args.putInt("position", pos_btn_comment);
+			    
+			    args.putString("feed_id", data_newsfeed.getString(KEY_ID));
+			    
+			    Intent intent = new Intent(activity, Relationship.class);				    	 
+			    intent.putExtras(args);
+			    
+			    activity.startActivity(intent);
+			    
+			}
+		});
+		
+		
+		//-------------------
 		FeedItem item = feedItems.get(position);
 
 		name.setText(item.getName());

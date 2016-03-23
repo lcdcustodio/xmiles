@@ -21,5 +21,7 @@
     <string name="busmsg3">Clique aqui e veja quem mais está conectado!</string>
     <string name="sample_string"><![CDATA[some test line 1 <br />some test line 2]]></string>
     <string name="connect_btn">Conectar</string>
+    <string name="like_btn">Curtir</string>
+    <string name="comment_btn">Comentar</string>
         
 </resources>

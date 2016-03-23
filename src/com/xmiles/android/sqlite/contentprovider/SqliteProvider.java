@@ -53,7 +53,9 @@ public class SqliteProvider extends ContentProvider{
 	public static final Uri CONTENT_URI_NEWSFEED_insert = Uri.parse("content://" + PROVIDER_NAME + "/Newsfeed_insert");
 	public static final Uri CONTENT_URI_NEWSFEED_UPLOAD = Uri.parse("content://" + PROVIDER_NAME + "/Newsfeed_upload");
 	public static final Uri CONTENT_URI_NEWSFEED_UPLOAD_insert = Uri.parse("content://" + PROVIDER_NAME + "/Newsfeed_upload_insert");	
-
+	public static final Uri CONTENT_URI_LIKES = Uri.parse("content://" + PROVIDER_NAME + "/Likes");
+	public static final Uri CONTENT_URI_LIKES_create = Uri.parse("content://" + PROVIDER_NAME + "/Likes_create");	
+	public static final Uri CONTENT_URI_NEWSFEED_update = Uri.parse("content://" + PROVIDER_NAME + "/Newsfeed_update");
 	
 
 	/** Constants to identify the requested operation */
@@ -89,6 +91,11 @@ public class SqliteProvider extends ContentProvider{
 	private static final int BUSCODE_insert = 30;
 	private static final int NEWSFEED_UPLOAD = 31;
 	private static final int NEWSFEED_UPLOAD_insert = 32;
+	private static final int LIKES = 33;
+	private static final int LIKES_create = 34;
+	//---------
+	private static final int NEWSFEED_update = 35;
+	//---------
 	
 
 	private static final UriMatcher uriMatcher ;
@@ -126,6 +133,9 @@ public class SqliteProvider extends ContentProvider{
 		uriMatcher.addURI(PROVIDER_NAME, "Buscode_insert", BUSCODE_insert);		
 		uriMatcher.addURI(PROVIDER_NAME, "Newsfeed_upload", NEWSFEED_UPLOAD);
 		uriMatcher.addURI(PROVIDER_NAME, "Newsfeed_upload_insert", NEWSFEED_UPLOAD_insert);		
+		uriMatcher.addURI(PROVIDER_NAME, "Likes", LIKES);
+		uriMatcher.addURI(PROVIDER_NAME, "Likes_create", LIKES_create);		
+		uriMatcher.addURI(PROVIDER_NAME, "Newsfeed_update", NEWSFEED_update);		
 
 	}
 
@@ -484,6 +494,26 @@ public class SqliteProvider extends ContentProvider{
 	            }
 	            break;	            
 	            
+	        case LIKES_create:
+	            try {
+	            	//----
+	            	mDatabaseHelper.resetLikes();
+	            	//----
+	            	mDatabaseHelper.getWritableDatabase().beginTransaction();
+	                for (ContentValues value : values) {
+	                	//---------
+	                	//---------
+	                    long id = mDatabaseHelper.getWritableDatabase().insert(DatabaseHelper.TABLE_LIKES, null, value);
+	                    if (id > 0)
+	                        insertCount++;
+	                }
+	                mDatabaseHelper.getWritableDatabase().setTransactionSuccessful();
+	            } catch (Exception e) {
+	                // Your error handling
+	            } finally {
+	            	mDatabaseHelper.getWritableDatabase().endTransaction();
+	            }
+	            break;	            
 	            
 	            
 	        case USER_ROUTES_create:
@@ -606,6 +636,9 @@ public class SqliteProvider extends ContentProvider{
 		}else if (uriMatcher.match(uri)==NEWSFEED_UPLOAD){
 			return mDatabaseHelper.get_Newsfeed();			
 			
+		}else if (uriMatcher.match(uri)==LIKES){
+			return mDatabaseHelper.get_Likes();			
+
 			
 		}else{
 			return null;
@@ -619,7 +652,28 @@ public class SqliteProvider extends ContentProvider{
 	@Override
 	public int update(Uri uri, ContentValues contentValues, String selection, String[] selectionArgs) {
 		// TODO Auto-generated method stub
-		return 0;
+
+		int uriType = 0;
+		int rowsUpdated = 0;
+		
+	    try {
+
+	    	uriType = uriMatcher.match(uri);
+	        switch (uriType) {
+	        case NEWSFEED_update:
+	            rowsUpdated = mDatabaseHelper.updateNewsfeed(contentValues, selection, selectionArgs);
+	        	break;	
+
+	        default:
+	            throw new IllegalArgumentException("Unknown URI: " + uri);
+	        }
+
+	    } catch (Exception e) {
+	      // Your error handling
+	    	
+	    }
+
+		return rowsUpdated;
 
 	}
 }
