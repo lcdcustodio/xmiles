@@ -147,33 +147,32 @@
             android:layout_width="fill_parent"
             android:layout_height="38dp"
 			
-			android:paddingLeft="30dp"
-			android:paddingRight="55dp"
+			android:paddingLeft="38dp"
+			android:paddingRight="60dp"
 
-            android:background="@drawable/bg_curtir_button"
+            android:background="@drawable/bg_state_pressed"
             android:paddingTop="@dimen/feed_item_status_pad_top" />
-            <!-- android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/feed_item_status_pad_left_right"
-            	android:paddingRight="@dimen/feed_item_status_pad_left_right"
-             
-                 android:drawableLeft="@drawable/like_dark_grey_l"-->
+            <!-- 
+                android:background="@drawable/bg_curtir_button"
+            													-->
 
         <Button
             android:id="@+id/Button_comment"
             android:text="@string/comment_btn"
-            android:drawableLeft="@drawable/comment_light_grey_l"
+            android:drawableLeft="@drawable/comment_light_grey_l_2"
             android:layout_weight="1"
             android:textColor="@color/timestamp"
             android:textSize="@dimen/feed_item_timestamp" 
             android:layout_width="fill_parent"
             android:layout_height="38dp"
 			
-			android:paddingLeft="20dp"
-			android:paddingRight="45dp"
+			android:paddingLeft="25dp"
+			android:paddingRight="40dp"
                       
-            android:background="@drawable/bg_curtir_button"
+            android:background="@drawable/bg_state_pressed"
             android:paddingTop="@dimen/feed_item_status_pad_top" />
-        	<!-- android:drawableLeft="@drawable/ic_action_chat" 
+        	<!-- android:background="@drawable/bg_curtir_button"        	
+        	android:drawableLeft="@drawable/ic_action_chat" 
             android:paddingLeft="@dimen/feed_item_status_pad_left_right"
             android:paddingRight="@dimen/feed_item_status_pad_left_right"          												
         														-->

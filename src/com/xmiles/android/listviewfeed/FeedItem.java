@@ -2,14 +2,13 @@ package com.xmiles.android.listviewfeed;
 
 public class FeedItem {
 	private int id;
-	private String name, status, image, profilePic, timeStamp, url, like_stats, comment_stats;
+	private String name, status, image, profilePic, timeStamp, url, like_stats, comment_stats, you_like_this;
 
 	public FeedItem() {
 	}
 
 	public FeedItem(int id, String name, String image, String status,
-			//String profilePic, String timeStamp, String url) {
-			String profilePic, String timeStamp, String url, String like_stats, String comment_stats) {
+			String profilePic, String timeStamp, String url, String like_stats, String comment_stats, String you_like_this) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -21,6 +20,8 @@ public class FeedItem {
 		//-----------
 		this.like_stats = like_stats;
 		this.comment_stats = comment_stats;
+		//-----------
+		this.you_like_this = you_like_this;
 	}
 
 	public int getId() {
@@ -93,6 +94,14 @@ public class FeedItem {
 
 	public void setComment_stats(String comment) {
 		this.comment_stats = comment;
+	}
+
+	public String getYou_like_this() {
+		return you_like_this;
+	}
+
+	public void setYou_like_this(String like_this) {
+		this.you_like_this = like_this;
 	}
 
 	

@@ -56,7 +56,8 @@ public class SqliteProvider extends ContentProvider{
 	public static final Uri CONTENT_URI_LIKES = Uri.parse("content://" + PROVIDER_NAME + "/Likes");
 	public static final Uri CONTENT_URI_LIKES_create = Uri.parse("content://" + PROVIDER_NAME + "/Likes_create");	
 	public static final Uri CONTENT_URI_NEWSFEED_update = Uri.parse("content://" + PROVIDER_NAME + "/Newsfeed_update");
-	
+	public static final Uri CONTENT_URI_LIKES_UPLOAD = Uri.parse("content://" + PROVIDER_NAME + "/Likes_upload");
+	public static final Uri CONTENT_URI_LIKES_UPLOAD_insert = Uri.parse("content://" + PROVIDER_NAME + "/Likes_upload_insert");
 
 	/** Constants to identify the requested operation */
 	private static final int USER_PROFILE = 1;
@@ -96,7 +97,8 @@ public class SqliteProvider extends ContentProvider{
 	//---------
 	private static final int NEWSFEED_update = 35;
 	//---------
-	
+	private static final int LIKES_UPLOAD = 36;
+	private static final int LIKES_UPLOAD_insert = 37;
 
 	private static final UriMatcher uriMatcher ;
 	static {
@@ -136,6 +138,8 @@ public class SqliteProvider extends ContentProvider{
 		uriMatcher.addURI(PROVIDER_NAME, "Likes", LIKES);
 		uriMatcher.addURI(PROVIDER_NAME, "Likes_create", LIKES_create);		
 		uriMatcher.addURI(PROVIDER_NAME, "Newsfeed_update", NEWSFEED_update);		
+		uriMatcher.addURI(PROVIDER_NAME, "Likes_upload", LIKES_UPLOAD);
+		uriMatcher.addURI(PROVIDER_NAME, "Likes_upload_insert", LIKES_UPLOAD_insert);		
 
 	}
 
@@ -266,6 +270,19 @@ public class SqliteProvider extends ContentProvider{
 				}
 			break;			
 			
+		    case LIKES_UPLOAD_insert:
+		    	long rowID_4f = mDatabaseHelper.insertLikes_upload(values);
+
+				if(rowID_4f>0){
+					_uri = ContentUris.withAppendedId(CONTENT_URI_LIKES_UPLOAD_insert, rowID_4f);
+				}else {
+					try {
+						throw new SQLException("Failed to insert at TABLE_LIKES_UPLOAD: " + uri);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			break;			
 
 		    case USER_FAVORITES_create:
 		    	long rowID_4b = mDatabaseHelper.createUserFavorites(values);
@@ -639,6 +656,9 @@ public class SqliteProvider extends ContentProvider{
 		}else if (uriMatcher.match(uri)==LIKES){
 			return mDatabaseHelper.get_Likes();			
 
+		}else if (uriMatcher.match(uri)==LIKES_UPLOAD){
+			return mDatabaseHelper.get_Likes_upload();			
+			
 			
 		}else{
 			return null;

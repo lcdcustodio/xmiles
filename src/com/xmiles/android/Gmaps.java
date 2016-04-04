@@ -342,12 +342,14 @@ public class Gmaps extends FragmentActivity {
 				
 				ContentValues contentValues = new ContentValues();
 				
-				contentValues.put(DatabaseHelper.KEY_ID, "1");
+				//contentValues.put(DatabaseHelper.KEY_ID, "1");
+				contentValues.put(DatabaseHelper.KEY_ID, "-1");
 				contentValues.put(DatabaseHelper.KEY_NAME, data_profile.getString(KEY_NAME));
 				//---------------				
 				//*
-				//String status_buscode = "Conectado ao ônibus " + bus_gps_url.getString(KEY_BUSCODE);
-				String status_buscode = "Conectado ao ônibus <bold>" + bus_gps_url.getString(KEY_BUSCODE) + "<bold>";
+				
+				//String status_buscode = "Conectado ao ônibus <bold>" + bus_gps_url.getString(KEY_BUSCODE) + "<bold>";
+				String status_buscode = "Conectado ao ônibus <bold> #" + bus_gps_url.getString(KEY_BUSCODE) + "<bold>";
 				String status_nearby = "";
 				String status_buscode_details = "";
 				//----------------
@@ -357,7 +359,8 @@ public class Gmaps extends FragmentActivity {
 					status_nearby = " próximo ao " + fb_places.getString(KEY_NEARBY);
 				}
 				if (buscode_info.getCount() > 0){
-					status_buscode = "Conectado ao ônibus <bold>" + bus_gps_url.getString(KEY_BUSCODE);
+					//status_buscode = "Conectado ao ônibus <bold>" + bus_gps_url.getString(KEY_BUSCODE);
+					status_buscode = "Conectado ao ônibus <bold> #" + bus_gps_url.getString(KEY_BUSCODE);
 					status_buscode_details = " da linha " + buscode_info.getString(KEY_BUSLINE) + "<bold>";
 				}				
 
@@ -395,7 +398,16 @@ public class Gmaps extends FragmentActivity {
 				//----------------------------
 				// like, comments stats  							
 				contentValues.put(DatabaseHelper.KEY_LIKE_STATS, "0");
-				contentValues.put(DatabaseHelper.KEY_COMMENT_STATS, "0");  							
+				contentValues.put(DatabaseHelper.KEY_COMMENT_STATS, "0");
+				
+				//sender
+				contentValues.put(DatabaseHelper.KEY_SENDER, data_profile.getString(KEY_ID));
+				
+				//you_like_this
+				contentValues.put(DatabaseHelper.KEY_YOU_LIKE_THIS, "NO");
+				
+				//feed_type
+				contentValues.put(DatabaseHelper.KEY_FEED_TYPE, "User gets into the bus");
 				
 				getApplicationContext().getContentResolver().insert(SqliteProvider.CONTENT_URI_NEWSFEED_insert, contentValues);
 				getApplicationContext().getContentResolver().insert(SqliteProvider.CONTENT_URI_NEWSFEED_UPLOAD_insert, contentValues);				

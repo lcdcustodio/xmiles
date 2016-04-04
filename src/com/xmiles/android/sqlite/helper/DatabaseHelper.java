@@ -35,9 +35,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	//-----------------
 	public static final String TABLE_NEWSFEED = "newsfeed";
 	public static final String TABLE_NEWSFEED_UPLOAD = "newsfeed_upload";
-	public static final String TABLE_LIKES = "likes";
 	//-----------------
 	public static final String TABLE_BUSCODE = "buscode";
+	//-----------------	
+	public static final String TABLE_LIKES = "likes";
+	public static final String TABLE_LIKES_UPLOAD = "likes_upload";	
 	
 	// Common column names
 	public static final String KEY_ROW_ID = "_id";
@@ -112,7 +114,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	// GPS BUS_GPS_URL Table - column manes
 	public static final String KEY_BUSLINE_DESCRIPTION   = "busline_description";
 	public static final String KEY_BUSLINE_COMPANY       = "busline_company";
-
 	
 	// REWARDS Table - column names	
 	public static final String KEY_REWARD   	= "reward";
@@ -122,16 +123,22 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	// REWARDS Table - column names	
 	public static final String KEY_RANK   	= "rank";
 	
-	// NEWSFEED Table - column names
+	// NEWSFEED Table - column names	
 	public static final String KEY_IMAGE 	  = "image";
 	public static final String KEY_STATUS 	  = "status";
 	public static final String KEY_TIME_STAMP = "time_stamp";
-	public static final String KEY_CUSTOM_TIME_STAMP = "custom_time_stamp";
-	//-------
+	public static final String KEY_CUSTOM_TIME_STAMP = "custom_time_stamp";	
+	//-------	
 	public static final String KEY_LIKE_STATS = "like_stats";
 	public static final String KEY_COMMENT_STATS = "comment_stats";
-	public static final String KEY_FEED_TYPE = "feed_type";
-	public static final String KEY_FLAG_ACTION = "flag_action";  //NewsFeed Upload 
+	//public static final String KEY_FEED_TYPE = "feed_type";
+	public static final String KEY_FLAG_ACTION = "flag_action";  //NewsFeed Upload
+	public static final String KEY_YOU_LIKE_THIS = "you_like_this";  //NewsFeed
+	public static final String KEY_SENDER 	     = "sender";  //NewsFeed
+	public static final String KEY_FEED_TYPE 	 = "feed_type";  //NewsFeed
+
+	// LIKE_UPLOAD Table - column names
+	public static final String KEY_U_ID = "user_id";
 	
 	// Table Create Statements
 	private static final String CREATE_TABLE_USER_PROFILE = "CREATE TABLE "
@@ -273,10 +280,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			//-------
 			KEY_LIKE_STATS 	+ " TEXT," +
 			KEY_COMMENT_STATS + " TEXT," +
+			KEY_FEED_TYPE 	+ " TEXT," +
 			//-------			
 			KEY_TIME_STAMP 	+ " DATETIME," + 
 			KEY_CUSTOM_TIME_STAMP 	+ " DATETIME," +
-			KEY_URL     	+ " TEXT" + ")";			
+			KEY_URL     	  + " TEXT," +
+			KEY_SENDER     	  + " TEXT," +
+			KEY_YOU_LIKE_THIS + " TEXT" + ")";
 
 	private static final String CREATE_TABLE_NEWSFEED_UPLOAD = "CREATE TABLE "
 			+ TABLE_NEWSFEED_UPLOAD + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
@@ -293,7 +303,12 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			//-------			
 			KEY_TIME_STAMP 	+ " DATETIME," + 
 			KEY_CUSTOM_TIME_STAMP 	+ " DATETIME," +
-			KEY_URL     	+ " TEXT" + ")";			
+			//KEY_URL     	+ " TEXT" + ")";
+			//----------------------------
+			KEY_URL     	  + " TEXT," +
+			KEY_SENDER     	  + " TEXT," +
+			KEY_YOU_LIKE_THIS + " TEXT" + ")";
+
 	
 	private static final String CREATE_TABLE_LIKES = "CREATE TABLE "
 			+ TABLE_LIKES + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
@@ -302,6 +317,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			KEY_PICURL 		+ " TEXT," +
 			KEY_TIME_STAMP	+ " DATETIME" + ")";
 
+	private static final String CREATE_TABLE_LIKES_UPLOAD = "CREATE TABLE "
+			+ TABLE_LIKES_UPLOAD + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
+			KEY_ID			+ " TEXT," + // = feed_id
+			KEY_U_ID        + " TEXT," +
+			KEY_SENDER     	+ " TEXT," +
+			KEY_STATUS		+ " TEXT," +
+			KEY_FEED_TYPE 	+ " TEXT," +
+ 			//KEY_NAME		+ " TEXT," + 
+			//KEY_PICURL 		+ " TEXT," +
+			KEY_FLAG_ACTION + " TEXT," +
+			KEY_TIME_STAMP	+ " DATETIME" + ")";
+	
 	
     /** An instance variable for SQLiteDatabase */
     private SQLiteDatabase mDB;
@@ -343,14 +370,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(CREATE_TABLE_REWARDS);
 		db.execSQL(CREATE_TABLE_RANKING);
 		//---------------------
-		db.execSQL(CREATE_TABLE_NEWSFEED);		
-		//---------------------
+		db.execSQL(CREATE_TABLE_NEWSFEED);
 		db.execSQL(CREATE_TABLE_NEWSFEED_UPLOAD);		
-		
+		//---------------------		
 		db.execSQL(CREATE_TABLE_BUSCODE);
-
+		//---------------------		
 		db.execSQL(CREATE_TABLE_LIKES);
-		
+		db.execSQL(CREATE_TABLE_LIKES_UPLOAD);
 
 	}
 
@@ -381,6 +407,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		//--------------------
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_BUSCODE);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_LIKES);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_LIKES_UPLOAD);
 		//--------------------		
 		// create new tables
 		onCreate(db);
@@ -389,19 +416,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	//Update method	
 	public int updateNewsfeed(ContentValues contentValues, String selection, String[] selectionArgs) {
 		
-
-		//String WHERE =  KEY_ID + " = " ;
 		
         int rowsUpdated = mDB.update(TABLE_NEWSFEED, 
-        		contentValues,//null,null);
+        		contentValues,
                 selection,
                 selectionArgs);
 
         return rowsUpdated;
 	}
 	
-	// ------------------------ "UserProfiles" table methods ----------------//
-
 	/*
 	 * Creating a UserProfile
 	 */
@@ -553,7 +576,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public long insertLikes_upload(ContentValues contentValues) {
 
 		//-----------
-		long rowID = mDB.insert(TABLE_LIKES, null, contentValues);
+		long rowID = mDB.insert(TABLE_LIKES_UPLOAD, null, contentValues);
 		return rowID;
 
 	}
@@ -669,6 +692,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		//-----------
 	}	
 	
+	public void resetLikes_upload() {
+		//-----------
+		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_LIKES_UPLOAD);
+		mDB.execSQL(CREATE_TABLE_LIKES_UPLOAD);
+		//-----------
+	}	
+	
 	/** Returns all the contacts in the table */
 	public Cursor get_UserPlaces(){
 		//return mDB.query(TABLE_USER_PLACES, new String[] {KEY_ROW_ID, KEY_NEARBY,KEY_CITY,KEY_UF}, null, null, null, null, KEY_CREATED_AT + " desc ");
@@ -745,16 +775,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	public Cursor get_Newsfeed(){
 
-		//return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL}, null, null, null, null, null);
-		//return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL, KEY_CUSTOM_TIME_STAMP}, null, null, null, null, KEY_ROW_ID + " DESC");
-		return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL, KEY_CUSTOM_TIME_STAMP, KEY_LIKE_STATS, KEY_COMMENT_STATS}, null, null, null, null, KEY_ROW_ID + " DESC");
+		//return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL, KEY_CUSTOM_TIME_STAMP, KEY_LIKE_STATS, KEY_COMMENT_STATS}, null, null, null, null, KEY_ROW_ID + " DESC");
+		//return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL, KEY_CUSTOM_TIME_STAMP, KEY_LIKE_STATS, KEY_COMMENT_STATS, KEY_YOU_LIKE_THIS, KEY_SENDER}, null, null, null, null, KEY_ROW_ID + " DESC");
+		return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL, KEY_CUSTOM_TIME_STAMP, KEY_LIKE_STATS, KEY_COMMENT_STATS, KEY_YOU_LIKE_THIS, KEY_SENDER, KEY_FEED_TYPE}, null, null, null, null, KEY_ROW_ID + " DESC");
 	}
-	/*
-	public Cursor get_Newsfeed_RelStats(){
 
-		return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL, KEY_CUSTOM_TIME_STAMP, KEY_LIKE_STATS, KEY_COMMENT_STATS}, null, null, null, null, KEY_ROW_ID + " DESC");
-	}	
-	*/
 	public Cursor get_Newsfeed_upload(){
 
 		//return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL}, null, null, null, null, null);
@@ -764,6 +789,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public Cursor get_Likes(){
 
 		return mDB.query(TABLE_LIKES, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_PICURL, KEY_TIME_STAMP}, null, null, null, null, null);
+	}
+
+	public Cursor get_Likes_upload(){
+
+		//return mDB.query(TABLE_LIKES_UPLOAD, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_PICURL, KEY_TIME_STAMP, KEY_FLAG_ACTION}, null, null, null, null, null);
+		//return mDB.query(TABLE_LIKES_UPLOAD, new String[] {KEY_ROW_ID, KEY_ID, KEY_U_ID, KEY_TIME_STAMP, KEY_FLAG_ACTION, KEY_SENDER}, null, null, null, null, null);
+		return mDB.query(TABLE_LIKES_UPLOAD, new String[] {KEY_ROW_ID, KEY_ID, KEY_U_ID, KEY_TIME_STAMP, KEY_FLAG_ACTION, KEY_SENDER, KEY_STATUS, KEY_FEED_TYPE}, null, null, null, null, null);
 	}
 
 	

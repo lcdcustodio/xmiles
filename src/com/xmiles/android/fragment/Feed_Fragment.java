@@ -76,10 +76,10 @@ public class Feed_Fragment extends Fragment implements LoaderManager.LoaderCallb
 	//---------------------
 	private static final Integer KEY_LIKE_STATS = 9;
 	private static final Integer KEY_COMMENT_STATS = 10;	
+	private static final Integer KEY_YOU_LIKE_THIS = 11;
 	//---------------------
-	AutoCompleteTextView buscode_search;
 	Button buscode_button;
-	//---------------------
+	
 	ProgressDialog progressBar;
 	private ListView listView;
 	private FeedListAdapter listAdapter;
@@ -93,7 +93,7 @@ public class Feed_Fragment extends Fragment implements LoaderManager.LoaderCallb
     // GPSTracker class
 	GPSTracker gps;
 	//----------------------
-	private Handler mHandler;
+	//private Handler mHandler;
 
 	
 	public Feed_Fragment(){}
@@ -106,7 +106,6 @@ public class Feed_Fragment extends Fragment implements LoaderManager.LoaderCallb
 		
 		rootView = inflater.inflate(R.layout.fgmt_background, container, false);
 
-		//searchBus = inflater.inflate(R.layout.search_buscode_autocomplete_textview, container, false);
 		searchBus = inflater.inflate(R.layout.search_buscode_button, container, false);
 		
 		View custom = inflater.inflate(R.layout.feed_fgmt, null); 
@@ -270,6 +269,9 @@ public class Feed_Fragment extends Fragment implements LoaderManager.LoaderCallb
 				// like, comments stats
 				item.setLike_stats(newsfeed.getString(KEY_LIKE_STATS));
 				item.setComment_stats(newsfeed.getString(KEY_COMMENT_STATS));
+		
+				//you_like_this
+				item.setYou_like_this(newsfeed.getString(KEY_YOU_LIKE_THIS));
 				
 			
 				if (newsfeed.isNull(KEY_CUSTOM_TIME_STAMP)) {

@@ -82,7 +82,7 @@
             android:layout_toRightOf="@id/busline"           
             android:layout_marginTop="2dp"
             android:layout_marginLeft="5dp"
-            android:textColor="@color/orange"/>
+            android:textColor="@color/orange_2"/>
 
 
         <TextView

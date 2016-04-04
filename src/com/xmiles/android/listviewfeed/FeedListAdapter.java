@@ -5,6 +5,8 @@ import com.xmiles.android.R;
 import com.xmiles.android.Relationship;
 import com.xmiles.android.listviewfeed.AppController;
 import com.xmiles.android.listviewfeed.FeedItem;
+import com.xmiles.android.scheduler.Likes_Inbox_Upload;
+import com.xmiles.android.scheduler.NewsFeed_Inbox_Upload;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
 import com.xmiles.android.support.Support;
@@ -23,6 +25,7 @@ import android.text.TextUtils;
 import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +46,8 @@ public class FeedListAdapter extends BaseAdapter {
 	
 	//TAG
 	private static final String TAG = "FACEBOOK";
-	
+
+	private static final Integer KEY_ID_PROFILE  = 0;
 	private static final Integer KEY_ID         = 1;
 	private static final Integer KEY_NAME       = 2;
 	private static final Integer KEY_IMAGE      = 3;
@@ -55,7 +59,11 @@ public class FeedListAdapter extends BaseAdapter {
 	//---------------------
 	private static final Integer KEY_LIKE_STATS = 9;
 	private static final Integer KEY_COMMENT_STATS = 10;	
-
+	//---------------------
+	private static final Integer KEY_YOU_LIKE_THIS = 11;
+	private static final Integer KEY_SENDER = 12;
+	private static final Integer KEY_FEED_TYPE = 13;
+	
 
 	public FeedListAdapter(Activity activity, List<FeedItem> feedItems) {
 		this.activity = activity;
@@ -89,8 +97,8 @@ public class FeedListAdapter extends BaseAdapter {
 		if (imageLoader == null)
 			imageLoader = AppController.getInstance().getImageLoader();
 
-		//TextView name = (TextView) convertView.findViewById(R.id.name);
-		final TextView name = (TextView) convertView.findViewById(R.id.name);
+		TextView name = (TextView) convertView.findViewById(R.id.name);
+		//final TextView name = (TextView) convertView.findViewById(R.id.name);
 		TextView timestamp = (TextView) convertView.findViewById(R.id.timestamp);
 		TextView statusMsg = (TextView) convertView.findViewById(R.id.txtStatusMsg);
 		//-------------------
@@ -146,22 +154,9 @@ public class FeedListAdapter extends BaseAdapter {
 				.findViewById(R.id.profilePic);
 		FeedImageView feedImageView = (FeedImageView) convertView
 				.findViewById(R.id.feedImage1);
-		//-------------------
-		//------TEST---------
-		//-------------------		
-		Button like = (Button) convertView.findViewById(R.id.Button_like);
-		//like.setEnabled(false);
 
-		/*
-		if (position > 2){
-			like.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_light_grey_l, 0, 0, 0);
-		} else {
-			like.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_icon_active_new, 0, 0, 0);
-		}
-		*/
-		//-------------------
-		//------TEST---------
-		//-------------------	
+		Button like = (Button) convertView.findViewById(R.id.Button_like);
+
 		like.setTag(position);		
 		like.setOnClickListener(new View.OnClickListener() {
 
@@ -170,33 +165,78 @@ public class FeedListAdapter extends BaseAdapter {
 				// TODO Auto-generated method stub
 				
 				int pos_btn_like = (Integer)v.getTag();
-				//Log.e(TAG,"pos_btn_like: " + pos_btn_like);
 				
 				Uri uri_1 = SqliteProvider.CONTENT_URI_NEWSFEED;
 				Cursor data_newsfeed = activity.getContentResolver().query(uri_1, null, null, null, null);				 
 				data_newsfeed.moveToPosition(pos_btn_like);
 				//------------------------------------------------------------
+				//------------------------------------------------------------
 				Uri uri_2 = SqliteProvider.CONTENT_URI_NEWSFEED_update;
 				
-				ContentValues cv = new ContentValues();
+				ContentValues cv_1 = new ContentValues();
 				
 				int like_stats = Integer.parseInt(data_newsfeed.getString(KEY_LIKE_STATS));
 				
-				cv.put(DatabaseHelper.KEY_LIKE_STATS, String.valueOf(like_stats + 1));
-
-
+				cv_1.put(DatabaseHelper.KEY_LIKE_STATS, String.valueOf(like_stats + 1));
+				//------
+				cv_1.put(DatabaseHelper.KEY_YOU_LIKE_THIS, "YES");
+				//-----
 				activity.getContentResolver().update(uri_2, 
-						cv, 
+						cv_1, 
 						DatabaseHelper.KEY_ID + " = " + data_newsfeed.getString(KEY_ID), null);
 				//------------------------------------------------------------
 				//------------------------------------------------------------
-				Button btn_like = (Button) v.findViewById(R.id.Button_like);				
-				btn_like.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_icon_active_new, 0, 0, 0);
+				Uri uri_3 = SqliteProvider.CONTENT_URI_USER_PROFILE;
+				Cursor data_profile = activity.getContentResolver().query(uri_3, null, null, null, null);				 
+				data_profile.moveToFirst();
+				
+				Uri uri_4 = SqliteProvider.CONTENT_URI_LIKES_UPLOAD;
+				Cursor data_likes = activity.getContentResolver().query(uri_4, null, null, null, null);
+				
+				ContentValues cv_2 = new ContentValues();
+				
+				//feed_id
+				cv_2.put(DatabaseHelper.KEY_ID, data_newsfeed.getString(KEY_ID));				
+				//user_id
+				cv_2.put(DatabaseHelper.KEY_U_ID, data_profile.getString(KEY_ID_PROFILE));
+				// flag_action
+				cv_2.put(DatabaseHelper.KEY_FLAG_ACTION, "ADD");
+				// time_stamp
+				Support support = new Support();
+				cv_2.put(DatabaseHelper.KEY_TIME_STAMP, support.getDateTime());
+				//sender
+				cv_2.put(DatabaseHelper.KEY_SENDER, data_newsfeed.getString(KEY_SENDER));
+				//status
+				cv_2.put(DatabaseHelper.KEY_STATUS, data_newsfeed.getString(KEY_STATUS));
+				//feed_type
+				cv_2.put(DatabaseHelper.KEY_FEED_TYPE, data_newsfeed.getString(KEY_FEED_TYPE));
+
+				
+				//if (data_likes.getCount() == 0) {
+					//cv_2.put(DatabaseHelper.KEY_FLAG_ACTION, "ADD");
+					Log.e(TAG,"KEY_FLAG_ACTION: " + "ADD");
+					//-------
+					Uri uri_5 = SqliteProvider.CONTENT_URI_LIKES_UPLOAD_insert;
+					activity.getContentResolver().insert(uri_5, cv_2);
+					
+					//-------
+					Likes_Inbox_Upload liu = new Likes_Inbox_Upload();
+					liu.setAlarm(activity);					
+					//-------
+				//} else {
+					//cv_2.put(DatabaseHelper.KEY_FLAG_ACTION, "WAIT");
+					//Log.i(TAG,"KEY_FLAG_ACTION: " + "WAIT");
+                	//DatabaseHelper mDatabaseHelper;
+                	//mDatabaseHelper = new DatabaseHelper(activity);
+                	//mDatabaseHelper.resetLikes_upload();
+				//}
+				
+
+				//------------------------------------------------------------
+				//------------------------------------------------------------
 
 				//---------------
 				feedItems.clear();
-				//---------------------------
-				//**************************
 				//---------------------------
 				Cursor newsfeed = activity.getContentResolver().query(uri_1, null, null, null, null);
 				
@@ -221,6 +261,9 @@ public class FeedListAdapter extends BaseAdapter {
 					// like, comments stats
 					item.setLike_stats(newsfeed.getString(KEY_LIKE_STATS));
 					item.setComment_stats(newsfeed.getString(KEY_COMMENT_STATS));
+					
+					//you_like_this
+					item.setYou_like_this(newsfeed.getString(KEY_YOU_LIKE_THIS));
 					
 				
 					if (newsfeed.isNull(KEY_CUSTOM_TIME_STAMP)) {
@@ -281,7 +324,7 @@ public class FeedListAdapter extends BaseAdapter {
 
 		name.setText(item.getName());
 		
-		// Chcek for empty like, comments stats
+		// Check for empty like, comments stats
 	     int like_stats = Integer.parseInt(item.getLike_stats());
 	     int comm_stats = Integer.parseInt(item.getComment_stats());
 	     
@@ -295,6 +338,34 @@ public class FeedListAdapter extends BaseAdapter {
 	 		rel_stats.setText(item.getLike_stats() + " curtida(s) " +  item.getComment_stats() + " comentário(s)");
 	    	 
 	     }
+	     
+	     //Like Button
+	     if (item.getYou_like_this().equals("YES")){
+	    	 
+	    	 like.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_icon_active_new_green, 0, 0, 0);	    	 
+	    	 like.setTextColor(activity.getResources().getColor(R.color.green_dark));
+	    	 like.setText("Curtiu");
+	    	 like.setTextSize(TypedValue.COMPLEX_UNIT_DIP,14);
+	    	 like.setEnabled(false);
+	    	 
+	     } else {
+
+	    	 like.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_light_grey_l, 0, 0, 0);
+	    	 like.setTextColor(activity.getResources().getColor(R.color.timestamp));
+	    	 like.setText("Curtir");
+	    	 like.setTextSize(TypedValue.COMPLEX_UNIT_DIP,13);
+	    	 //like.setEnabled(true);
+	    	 
+	    	 if (item.getId() > -1){
+	    		 like.setEnabled(true);
+	    		 comment.setEnabled(true);
+	    	 } else {
+	    		 like.setEnabled(false);	
+	    		 comment.setEnabled(false);
+	    	 }
+	     }
+	     
+	     
 		
 		Support support = new Support();
 		
@@ -333,8 +404,6 @@ public class FeedListAdapter extends BaseAdapter {
 			url.setMovementMethod(LinkMovementMethod.getInstance());
 			url.setVisibility(View.VISIBLE);
 		} else {
-			
-			
 			
 			if (item.getName().equals("xMiles")){
 
