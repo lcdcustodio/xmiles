@@ -127,6 +127,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	// NEWSFEED Table - column names	
 	public static final String KEY_IMAGE 	  = "image";
 	public static final String KEY_STATUS 	  = "status";
+	public static final String KEY_HASHTAG 	  = "hashtag";
 	public static final String KEY_TIME_STAMP = "time_stamp";
 	public static final String KEY_CUSTOM_TIME_STAMP = "custom_time_stamp";	
 	//-------	
@@ -285,6 +286,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			KEY_LIKE_STATS 	+ " TEXT," +
 			KEY_COMMENT_STATS + " TEXT," +
 			KEY_FEED_TYPE 	+ " TEXT," +
+			//-------
+			KEY_HASHTAG		+ " TEXT," +
 			//-------			
 			KEY_TIME_STAMP 	+ " DATETIME," + 
 			KEY_CUSTOM_TIME_STAMP 	+ " DATETIME," +
@@ -807,7 +810,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 		//return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL, KEY_CUSTOM_TIME_STAMP, KEY_LIKE_STATS, KEY_COMMENT_STATS}, null, null, null, null, KEY_ROW_ID + " DESC");
 		//return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL, KEY_CUSTOM_TIME_STAMP, KEY_LIKE_STATS, KEY_COMMENT_STATS, KEY_YOU_LIKE_THIS, KEY_SENDER}, null, null, null, null, KEY_ROW_ID + " DESC");
-		return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL, KEY_CUSTOM_TIME_STAMP, KEY_LIKE_STATS, KEY_COMMENT_STATS, KEY_YOU_LIKE_THIS, KEY_SENDER, KEY_FEED_TYPE}, null, null, null, null, KEY_ROW_ID + " DESC");
+		//return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL, KEY_CUSTOM_TIME_STAMP, KEY_LIKE_STATS, KEY_COMMENT_STATS, KEY_YOU_LIKE_THIS, KEY_SENDER, KEY_FEED_TYPE}, null, null, null, null, KEY_ROW_ID + " DESC");
+		return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL, KEY_CUSTOM_TIME_STAMP, KEY_LIKE_STATS, KEY_COMMENT_STATS, KEY_YOU_LIKE_THIS, KEY_SENDER, KEY_FEED_TYPE, KEY_HASHTAG}, null, null, null, null, KEY_ROW_ID + " DESC");
 	}
 
 	public Cursor get_Newsfeed_upload(){

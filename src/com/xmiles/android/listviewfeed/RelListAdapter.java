@@ -143,6 +143,8 @@ public class RelListAdapter extends BaseAdapter {
 		TextView vi1_rel_stats = (TextView) vi1
 				.findViewById(R.id.rel_stats);		
 		//-------------------
+		TextView vi1_hashtag_1 = (TextView) vi1.findViewById(R.id.hashtag_1);
+		//-------------------
 		TextView vi1_url = (TextView) vi1.findViewById(R.id.txtUrl);
 		NetworkImageView vi1_profilePic = (NetworkImageView) vi1
 				.findViewById(R.id.profilePic);
@@ -222,7 +224,8 @@ public class RelListAdapter extends BaseAdapter {
 				}
 		
 				// Checking for null feed url
-				if (feed_item.getUrl() != null) {
+				//if (feed_item.getUrl() != null) {
+				if (feed_item.getUrl() != null && !feed_item.getUrl().equals("")) {	
 					vi1_url.setText(Html.fromHtml("<a href=\"" + feed_item.getUrl() + "\">"
 							+ feed_item.getUrl() + "</a> "));
 		
@@ -246,6 +249,21 @@ public class RelListAdapter extends BaseAdapter {
 					}	
 				}
 		
+				
+				// Checking for null hashtag
+				if (feed_item.getHashtag_1() != null && !feed_item.getHashtag_1().equals("")) {	
+					
+					//hashtag_1.setText(item.getHashtag_1());
+					vi1_hashtag_1.setText(feed_item.getHashtag_1().split(",")[0]);
+					vi1_hashtag_1.setVisibility(View.VISIBLE);
+					
+				} else {
+					
+					// hashtag is null, remove from the view
+					vi1_hashtag_1.setVisibility(View.GONE);
+						
+				}				
+				
 				// user profile pic
 				vi1_profilePic.setImageUrl(feed_item.getProfilePic(), imageLoader);
 		

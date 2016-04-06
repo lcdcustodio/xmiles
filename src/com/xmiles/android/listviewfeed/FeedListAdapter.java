@@ -63,6 +63,8 @@ public class FeedListAdapter extends BaseAdapter {
 	private static final Integer KEY_YOU_LIKE_THIS = 11;
 	private static final Integer KEY_SENDER = 12;
 	private static final Integer KEY_FEED_TYPE = 13;
+	//---------------------
+	private static final Integer KEY_HASHTAG = 14;
 	
 
 	public FeedListAdapter(Activity activity, List<FeedItem> feedItems) {
@@ -101,6 +103,8 @@ public class FeedListAdapter extends BaseAdapter {
 		//final TextView name = (TextView) convertView.findViewById(R.id.name);
 		TextView timestamp = (TextView) convertView.findViewById(R.id.timestamp);
 		TextView statusMsg = (TextView) convertView.findViewById(R.id.txtStatusMsg);
+		//-------------------
+		TextView hashtag_1 = (TextView) convertView.findViewById(R.id.hashtag_1);
 		//-------------------
 		TextView rel_stats = (TextView) convertView.findViewById(R.id.rel_stats);		
 
@@ -275,8 +279,14 @@ public class FeedListAdapter extends BaseAdapter {
 					// url might be null sometimes
 					String feedUrl = newsfeed.isNull(KEY_URL) ? null : newsfeed
 							.getString(KEY_URL);
-					
+
 					item.setUrl(feedUrl);
+					
+					// hashtag might be null sometimes
+					String hashtag = newsfeed.isNull(KEY_HASHTAG) ? null : newsfeed
+							.getString(KEY_HASHTAG);
+					
+					item.setHashtag_1(hashtag);						
 
 					feedItems.add(item);
 				}
@@ -422,6 +432,24 @@ public class FeedListAdapter extends BaseAdapter {
 			}	
 		}
 
+		// Checking for null hashtag
+		if (item.getHashtag_1() != null && !item.getHashtag_1().equals("")) {	
+		//if (item.getHashtag_1().split(",")[0] != null 
+		//		&& !item.getHashtag_1().split(",")[0].equals("")) {
+			
+			//hashtag_1.setText(item.getHashtag_1());
+			hashtag_1.setText(item.getHashtag_1().split(",")[0]);
+			hashtag_1.setVisibility(View.VISIBLE);
+			
+		} else {
+			
+			// hashtag is null, remove from the view
+			hashtag_1.setVisibility(View.GONE);
+				
+		}
+		
+		
+		
 		// user profile pic
 		profilePic.setImageUrl(item.getProfilePic(), imageLoader);
 

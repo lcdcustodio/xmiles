@@ -92,6 +92,8 @@ public class Rel_Fragment extends Fragment {
 	private static final Integer KEY_COMMENT_STATS = 10;	
 	private static final Integer KEY_SENDER = 12;
 	private static final Integer KEY_FEED_TYPE = 13;
+	//---------------------
+	private static final Integer KEY_HASHTAG = 14;
 	
 	//---------------------
 	AutoCompleteTextView add_cmts;
@@ -414,6 +416,13 @@ public class Rel_Fragment extends Fragment {
 				
 			item.setUrl(feedUrl);
 
+			// hashtag might be null sometimes
+			String hashtag = newsfeed.isNull(KEY_HASHTAG) ? null : newsfeed
+					.getString(KEY_HASHTAG);
+			
+			item.setHashtag_1(hashtag);				
+			
+			
 			feedItems.add(item);
 			
 			//------------

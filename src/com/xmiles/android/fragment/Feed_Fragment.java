@@ -78,6 +78,8 @@ public class Feed_Fragment extends Fragment implements LoaderManager.LoaderCallb
 	private static final Integer KEY_COMMENT_STATS = 10;	
 	private static final Integer KEY_YOU_LIKE_THIS = 11;
 	//---------------------
+	private static final Integer KEY_HASHTAG = 14;
+	//---------------------
 	Button buscode_button;
 	
 	ProgressDialog progressBar;
@@ -287,6 +289,12 @@ public class Feed_Fragment extends Fragment implements LoaderManager.LoaderCallb
 						.getString(KEY_URL);
 				
 				item.setUrl(feedUrl);
+				
+				// hashtag might be null sometimes
+				String hashtag = newsfeed.isNull(KEY_HASHTAG) ? null : newsfeed
+						.getString(KEY_HASHTAG);
+				
+				item.setHashtag_1(hashtag);				
 
 				feedItems.add(item);
 			}

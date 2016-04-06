@@ -393,6 +393,12 @@ public class Splash_Fragment extends Fragment {
 							
 							values.put(DatabaseHelper.KEY_URL, feedUrl);
 							
+							// hashtag might be null sometimes
+							String hashtag = jsonObject.isNull("hashtag") ? null : jsonObject
+									.getString("hashtag");							
+							
+							values.put(DatabaseHelper.KEY_HASHTAG, hashtag);							
+							
 							// like, comments stats
 							values.put(DatabaseHelper.KEY_LIKE_STATS, jsonObject.getString("like_stats"));
 							values.put(DatabaseHelper.KEY_COMMENT_STATS, jsonObject.getString("comment_stats"));
