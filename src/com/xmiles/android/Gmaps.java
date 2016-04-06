@@ -348,8 +348,8 @@ public class Gmaps extends FragmentActivity {
 				//---------------				
 				//*
 				
-				//String status_buscode = "Conectado ao ônibus <bold>" + bus_gps_url.getString(KEY_BUSCODE) + "<bold>";
-				String status_buscode = "Conectado ao ônibus <bold> #" + bus_gps_url.getString(KEY_BUSCODE) + "<bold>";
+				String status_buscode = "Conectado ao ônibus <bold>" + bus_gps_url.getString(KEY_BUSCODE) + "<bold>";
+				//String status_buscode = "Conectado ao ônibus <bold> #" + bus_gps_url.getString(KEY_BUSCODE) + "<bold>";
 				String status_nearby = "";
 				String status_buscode_details = "";
 				//----------------

@@ -46,8 +46,6 @@ public class MainActivity extends FragmentActivity {
 		//Action TAB
 		
 		//*******
-	    Fragment fgmt_inicio 	= new Profile_Fragment();
-	    //Fragment fgmt_newsfeed 	= new Favorites_Fragment();
 	    Fragment fgmt_newsfeed 	= new Feed_Fragment();
 	    Fragment fgmt_ranking 	= new Ranking_Fragment();
 	    //*******

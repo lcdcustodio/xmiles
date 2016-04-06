@@ -2,18 +2,18 @@ package com.xmiles.android.listviewfeed;
 
 public class CommentItem {
 	private int id;
-	private String name, status, profilePic, timeStamp;
+	private String name, comment, profilePic, timeStamp;
 
 	public CommentItem() {
 	}
 
-	public CommentItem(int id, String name, String status,
+	public CommentItem(int id, String name, String comment,
 			String profilePic, String timeStamp) {
 		super();
 		this.id = id;
 		this.name = name;
 
-		this.status = status;
+		this.comment = comment;
 		this.profilePic = profilePic;
 		this.timeStamp = timeStamp;
 	}
@@ -34,12 +34,12 @@ public class CommentItem {
 		this.name = name;
 	}
 
-	public String getStatus() {
-		return status;
+	public String getComment() {
+		return comment;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 
 	public String getProfilePic() {

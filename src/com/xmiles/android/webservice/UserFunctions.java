@@ -37,6 +37,7 @@ public class UserFunctions {
     private static String newsfeed_inboxURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String post_actionsURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";  
     private static String likes_inboxURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
+    private static String comments_inboxURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     //------------------------------------    
     private static String login_tag 		= "login";
     private static String register_tag 		= "register";
@@ -55,6 +56,7 @@ public class UserFunctions {
     private static String newsfeed_inbox_tag = "newsfeed_inbox";
     private static String post_actions_tag = "newsfeed_actions";
     private static String likes_inbox_tag = "likes_inbox";
+    private static String comments_inbox_tag = "comments_inbox";
     //------------------------------------     
     // constructor
     public UserFunctions(){
@@ -167,6 +169,37 @@ public class UserFunctions {
         return json;
     }
 
+    public JSONObject comments_inbox(String feed_id,
+    								 String sender,
+								     String user_id,     					          
+						             String flag_action,
+						             String time_stamp,
+						             String status,
+						             String feed_type,
+						             String comment){
+
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		params.add(new BasicNameValuePair("tag", comments_inbox_tag));
+		
+		params.add(new BasicNameValuePair("feed_id", feed_id));
+		//----------
+		params.add(new BasicNameValuePair("sender", sender));
+		params.add(new BasicNameValuePair("user_id", user_id));
+		params.add(new BasicNameValuePair("flag_action", flag_action));
+		params.add(new BasicNameValuePair("time_stamp", time_stamp));
+		//----------
+		params.add(new BasicNameValuePair("status", status));
+		params.add(new BasicNameValuePair("feed_type", feed_type));
+		params.add(new BasicNameValuePair("comment", comment));
+		//----------                
+		JSONObject json = jsonParser.getJSONFromUrl(comments_inboxURL, params);
+		
+		// return json        
+		Log.e(TAG, "comments_inbox " + json.toString());
+		return json;
+	}    
+    
+    
     public JSONObject likes_inbox(String feed_id,
     							  String sender,
     							  String user_id,     					          

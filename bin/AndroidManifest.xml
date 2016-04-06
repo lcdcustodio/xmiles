@@ -184,7 +184,8 @@
         <receiver android:name="com.xmiles.android.scheduler.Getting_GpsBusData"></receiver> 
         <receiver android:name="com.xmiles.android.scheduler.GpsBusData_Upload"></receiver>
         <receiver android:name="com.xmiles.android.scheduler.NewsFeed_Inbox_Upload"></receiver>  
-        <receiver android:name="com.xmiles.android.scheduler.Likes_Inbox_Upload"></receiver>     
+        <receiver android:name="com.xmiles.android.scheduler.Likes_Inbox_Upload"></receiver>
+        <receiver android:name="com.xmiles.android.scheduler.Comments_Inbox_Upload"></receiver>     
         
         <receiver android:name="com.xmiles.android.scheduler.BootReceiver"
                 android:enabled="true">

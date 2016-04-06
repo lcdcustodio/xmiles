@@ -343,13 +343,6 @@ public class RelListAdapter extends BaseAdapter {
 	    	    	index = 2;
 	    	    	
 	    	    }
-	    	    /*
-	    	    Log.e(TAG,"likeItems.size(): " + likeItems.size());
-	    	    Log.v(TAG,"feedItems.size(): " + feedItems.size());
-	    	    Log.i(TAG,"commentItems.size(): " + commentItems.size());
-	    	    Log.d(TAG,"index: " + index);
-	    	    */
-	    	    //index = likeItems.size() + feedItems.size();	
 
     	    	CommentItem comment_item = commentItems.get(position - index);
 	    	    
@@ -363,9 +356,9 @@ public class RelListAdapter extends BaseAdapter {
 				
 				//*
 				// Chcek for empty status message
-				if (!TextUtils.isEmpty(comment_item.getStatus())) {
+				if (!TextUtils.isEmpty(comment_item.getComment())) {
 					
-					vi4_statusMsg.setText(comment_item.getStatus());
+					vi4_statusMsg.setText(comment_item.getComment());
 					vi4_statusMsg.setVisibility(View.VISIBLE);
 				} else {
 					// status is empty, remove from view

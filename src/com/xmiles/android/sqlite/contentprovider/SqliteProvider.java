@@ -58,6 +58,8 @@ public class SqliteProvider extends ContentProvider{
 	public static final Uri CONTENT_URI_NEWSFEED_update = Uri.parse("content://" + PROVIDER_NAME + "/Newsfeed_update");
 	public static final Uri CONTENT_URI_LIKES_UPLOAD = Uri.parse("content://" + PROVIDER_NAME + "/Likes_upload");
 	public static final Uri CONTENT_URI_LIKES_UPLOAD_insert = Uri.parse("content://" + PROVIDER_NAME + "/Likes_upload_insert");
+	public static final Uri CONTENT_URI_COMMENTS_UPLOAD = Uri.parse("content://" + PROVIDER_NAME + "/Comments_upload");
+	public static final Uri CONTENT_URI_COMMENTS_UPLOAD_insert = Uri.parse("content://" + PROVIDER_NAME + "/Comments_upload_insert");
 
 	/** Constants to identify the requested operation */
 	private static final int USER_PROFILE = 1;
@@ -99,6 +101,9 @@ public class SqliteProvider extends ContentProvider{
 	//---------
 	private static final int LIKES_UPLOAD = 36;
 	private static final int LIKES_UPLOAD_insert = 37;
+	private static final int COMMENTS_UPLOAD = 38;
+	private static final int COMMENTS_UPLOAD_insert = 39;
+
 
 	private static final UriMatcher uriMatcher ;
 	static {
@@ -140,6 +145,8 @@ public class SqliteProvider extends ContentProvider{
 		uriMatcher.addURI(PROVIDER_NAME, "Newsfeed_update", NEWSFEED_update);		
 		uriMatcher.addURI(PROVIDER_NAME, "Likes_upload", LIKES_UPLOAD);
 		uriMatcher.addURI(PROVIDER_NAME, "Likes_upload_insert", LIKES_UPLOAD_insert);		
+		uriMatcher.addURI(PROVIDER_NAME, "Comments_upload", COMMENTS_UPLOAD);
+		uriMatcher.addURI(PROVIDER_NAME, "Comments_upload_insert", COMMENTS_UPLOAD_insert);		
 
 	}
 
@@ -284,6 +291,20 @@ public class SqliteProvider extends ContentProvider{
 				}
 			break;			
 
+		    case COMMENTS_UPLOAD_insert:
+		    	long rowID_4g = mDatabaseHelper.insertComments_upload(values);
+
+				if(rowID_4g>0){
+					_uri = ContentUris.withAppendedId(CONTENT_URI_COMMENTS_UPLOAD_insert, rowID_4g);
+				}else {
+					try {
+						throw new SQLException("Failed to insert at TABLE_COMMENTS_UPLOAD: " + uri);
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+			break;
+			
 		    case USER_FAVORITES_create:
 		    	long rowID_4b = mDatabaseHelper.createUserFavorites(values);
 				//Uri _uri=null;
@@ -658,6 +679,9 @@ public class SqliteProvider extends ContentProvider{
 
 		}else if (uriMatcher.match(uri)==LIKES_UPLOAD){
 			return mDatabaseHelper.get_Likes_upload();			
+
+		}else if (uriMatcher.match(uri)==COMMENTS_UPLOAD){
+			return mDatabaseHelper.get_Comments_upload();			
 			
 			
 		}else{

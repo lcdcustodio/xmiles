@@ -39,7 +39,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String TABLE_BUSCODE = "buscode";
 	//-----------------	
 	public static final String TABLE_LIKES = "likes";
-	public static final String TABLE_LIKES_UPLOAD = "likes_upload";	
+	public static final String TABLE_LIKES_UPLOAD = "likes_upload";
+	public static final String TABLE_COMMENTS_UPLOAD = "comments_upload";	
 	
 	// Common column names
 	public static final String KEY_ROW_ID = "_id";
@@ -139,6 +140,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	// LIKE_UPLOAD Table - column names
 	public static final String KEY_U_ID = "user_id";
+
+	// COMMENT_UPLOAD Table - column names
+	public static final String KEY_COMMENT = "comment";
 	
 	// Table Create Statements
 	private static final String CREATE_TABLE_USER_PROFILE = "CREATE TABLE "
@@ -328,7 +332,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			//KEY_PICURL 		+ " TEXT," +
 			KEY_FLAG_ACTION + " TEXT," +
 			KEY_TIME_STAMP	+ " DATETIME" + ")";
-	
+
+	private static final String CREATE_TABLE_COMMENTS_UPLOAD = "CREATE TABLE "
+			+ TABLE_COMMENTS_UPLOAD + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
+			KEY_ID			+ " TEXT," + // = feed_id
+			KEY_U_ID        + " TEXT," +
+			KEY_SENDER     	+ " TEXT," +
+			KEY_STATUS		+ " TEXT," +
+			KEY_FEED_TYPE 	+ " TEXT," + 
+			KEY_COMMENT 	+ " TEXT," +
+			KEY_FLAG_ACTION + " TEXT," +
+			KEY_TIME_STAMP	+ " DATETIME" + ")";
 	
     /** An instance variable for SQLiteDatabase */
     private SQLiteDatabase mDB;
@@ -377,7 +391,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		//---------------------		
 		db.execSQL(CREATE_TABLE_LIKES);
 		db.execSQL(CREATE_TABLE_LIKES_UPLOAD);
-
+		db.execSQL(CREATE_TABLE_COMMENTS_UPLOAD);
 	}
 
 	@Override
@@ -408,6 +422,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_BUSCODE);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_LIKES);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_LIKES_UPLOAD);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMMENTS_UPLOAD);
 		//--------------------		
 		// create new tables
 		onCreate(db);
@@ -581,6 +596,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	}
 	
+	public long insertComments_upload(ContentValues contentValues) {
+
+		//-----------
+		long rowID = mDB.insert(TABLE_COMMENTS_UPLOAD, null, contentValues);
+		return rowID;
+
+	}
+	
 	public void resetUserFriends() {
 		//-----------
 		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_FRIENDS);
@@ -699,6 +722,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		//-----------
 	}	
 	
+	public void resetComments_upload() {
+		//-----------
+		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_COMMENTS_UPLOAD);
+		mDB.execSQL(CREATE_TABLE_COMMENTS_UPLOAD);
+		//-----------
+	}	
+	
 	/** Returns all the contacts in the table */
 	public Cursor get_UserPlaces(){
 		//return mDB.query(TABLE_USER_PLACES, new String[] {KEY_ROW_ID, KEY_NEARBY,KEY_CITY,KEY_UF}, null, null, null, null, KEY_CREATED_AT + " desc ");
@@ -798,6 +828,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return mDB.query(TABLE_LIKES_UPLOAD, new String[] {KEY_ROW_ID, KEY_ID, KEY_U_ID, KEY_TIME_STAMP, KEY_FLAG_ACTION, KEY_SENDER, KEY_STATUS, KEY_FEED_TYPE}, null, null, null, null, null);
 	}
 
+	public Cursor get_Comments_upload(){
+
+		return mDB.query(TABLE_COMMENTS_UPLOAD, new String[] {KEY_ROW_ID, KEY_ID, KEY_U_ID, KEY_TIME_STAMP, KEY_FLAG_ACTION, KEY_SENDER, KEY_STATUS, KEY_FEED_TYPE, KEY_COMMENT}, null, null, null, null, null);
+	}
 	
 	/** Returns all the contacts in the table */
 	public Cursor get_FriendList(){

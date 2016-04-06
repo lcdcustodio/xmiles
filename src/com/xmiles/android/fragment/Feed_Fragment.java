@@ -102,6 +102,8 @@ public class Feed_Fragment extends Fragment implements LoaderManager.LoaderCallb
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
  
+		Log.i(TAG, "onCreateView Feed_fgmt");
+		
 		getActivity().registerReceiver(FeedFragmentReceiver, new IntentFilter("feedfragmentupdater"));
 		
 		rootView = inflater.inflate(R.layout.fgmt_background, container, false);

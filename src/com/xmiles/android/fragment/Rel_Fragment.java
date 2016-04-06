@@ -11,8 +11,10 @@ import org.json.JSONObject;
 
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.xmiles.android.Gmaps;
+import com.xmiles.android.MainActivity;
 import com.xmiles.android.NewRoutes;
 import com.xmiles.android.R;
+import com.xmiles.android.Relationship;
 import com.xmiles.android.R.id;
 import com.xmiles.android.R.layout;
 import com.xmiles.android.listviewfeed.CommentItem;
@@ -21,6 +23,8 @@ import com.xmiles.android.listviewfeed.FeedListAdapter;
 import com.xmiles.android.listviewfeed.SupportRelAdapterItem;
 import com.xmiles.android.listviewfeed.LikeItem;
 import com.xmiles.android.listviewfeed.RelListAdapter;
+import com.xmiles.android.scheduler.Comments_Inbox_Upload;
+import com.xmiles.android.scheduler.Likes_Inbox_Upload;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
 import com.xmiles.android.support.GPSTracker;
@@ -74,6 +78,7 @@ public class Rel_Fragment extends Fragment {
 	private static final Integer KEY_NAME_PROFILE = 1;
 	private static final Integer KEY_PICURL_PROFILE = 2;
 	//----------------------
+	private static final Integer KEY_ID_PROFILE  = 0;
 	private static final Integer KEY_ID         = 1;
 	private static final Integer KEY_NAME       = 2;
 	private static final Integer KEY_IMAGE      = 3;
@@ -85,6 +90,9 @@ public class Rel_Fragment extends Fragment {
 	//---------------------
 	private static final Integer KEY_LIKE_STATS = 9;
 	private static final Integer KEY_COMMENT_STATS = 10;	
+	private static final Integer KEY_SENDER = 12;
+	private static final Integer KEY_FEED_TYPE = 13;
+	
 	//---------------------
 	AutoCompleteTextView add_cmts;
 	
@@ -170,12 +178,11 @@ public class Rel_Fragment extends Fragment {
 		            data_profile.moveToLast();
 
 		            Support support = new Support();
-		            
-		            
+		            		            
 	        		comment_item.setName(data_profile.getString(KEY_NAME_PROFILE));        		
 	        		comment_item.setProfilePic(data_profile.getString(KEY_PICURL_PROFILE));
 	        		comment_item.setTimeStamp(support.getDateTime());
-	        		comment_item.setStatus(searchContent);
+	        		comment_item.setComment(searchContent);
 	        		
 	        		commentItems.add(comment_item);
             		//-----------------
@@ -204,7 +211,51 @@ public class Rel_Fragment extends Fragment {
 	        		supportreladapterItems.add(supportreladapter_comments_item);
                             			
         			listAdapter.notifyDataSetChanged();
-	        			        		
+            		//-----------------	 
+            		//-----------------
+        			Log.i(TAG, "feed_id " + feed_id);
+        			Log.d(TAG, "data_newsfeed.getString(KEY_ID): " + data_newsfeed.getString(KEY_ID));
+
+    				Uri uri_2 = SqliteProvider.CONTENT_URI_NEWSFEED_update;
+    				
+    				ContentValues cv_1 = new ContentValues();
+    				
+    				int comments_stats = Integer.parseInt(data_newsfeed.getString(KEY_COMMENT_STATS));    				
+    				cv_1.put(DatabaseHelper.KEY_COMMENT_STATS, String.valueOf(comments_stats + 1));
+    				//-----
+    				getActivity().getContentResolver().update(uri_2, 
+    						cv_1,
+    						DatabaseHelper.KEY_ID + " = " + feed_id, null);
+            		//-----------------	 
+            		//-----------------    								 
+    				data_profile.moveToFirst();
+
+    				ContentValues cv_2 = new ContentValues();
+    				
+    				//feed_id
+    				cv_2.put(DatabaseHelper.KEY_ID, data_newsfeed.getString(KEY_ID));				
+    				//user_id
+    				cv_2.put(DatabaseHelper.KEY_U_ID, data_profile.getString(KEY_ID_PROFILE));
+    				// flag_action
+    				cv_2.put(DatabaseHelper.KEY_FLAG_ACTION, "ADD");
+    				// time_stamp    				
+    				cv_2.put(DatabaseHelper.KEY_TIME_STAMP, support.getDateTime());
+    				//sender
+    				cv_2.put(DatabaseHelper.KEY_SENDER, data_newsfeed.getString(KEY_SENDER));
+    				//status
+    				cv_2.put(DatabaseHelper.KEY_STATUS, data_newsfeed.getString(KEY_STATUS));
+    				//feed_type
+    				cv_2.put(DatabaseHelper.KEY_FEED_TYPE, data_newsfeed.getString(KEY_FEED_TYPE));
+    				//comment
+    				cv_2.put(DatabaseHelper.KEY_COMMENT, searchContent);
+    				
+					Uri uri_5 = SqliteProvider.CONTENT_URI_COMMENTS_UPLOAD_insert;
+					getActivity().getContentResolver().insert(uri_5, cv_2);
+					//---------------------
+					Comments_Inbox_Upload ciu = new Comments_Inbox_Upload();
+					ciu.setAlarm(getActivity());	
+    				
+    				
                 }
                 return false;
             }
@@ -227,8 +278,15 @@ public class Rel_Fragment extends Fragment {
 	    public void onDestroyView() {
 	        super.onDestroyView();
 	        
-	        Log.d(TAG, "onDestroy Feed_fgmt");
+	        Log.d(TAG, "onDestroy Rel_Fragment");
 	        
+		    //-------------
+	        /*
+	        Intent intent = new Intent(getActivity(), MainActivity.class);		    
+		    getActivity().startActivity(intent);
+		    getActivity().finish();
+		    */
+		    //-------------
 
 	    }
 	 //*
@@ -415,7 +473,8 @@ public class Rel_Fragment extends Fragment {
 	        		comment_item.setName(commentObj.getString("name"));        		
 	        		comment_item.setProfilePic(commentObj.getString("picurl"));
 	        		comment_item.setTimeStamp(commentObj.getString("time_stamp"));
-	        		comment_item.setStatus(commentObj.getString("status"));
+	        		//comment_item.setStatus(commentObj.getString("status"));
+	        		comment_item.setComment(commentObj.getString("comment"));
 	        		
 	        		commentItems.add(comment_item);
 	        		

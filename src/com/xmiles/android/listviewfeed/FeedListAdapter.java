@@ -314,7 +314,9 @@ public class FeedListAdapter extends BaseAdapter {
 			    intent.putExtras(args);
 			    
 			    activity.startActivity(intent);
-			    
+			    //-------------
+			    //activity.finish();
+			    //-------------
 			}
 		});
 		
