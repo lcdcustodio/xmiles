@@ -133,7 +133,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	//-------	
 	public static final String KEY_LIKE_STATS = "like_stats";
 	public static final String KEY_COMMENT_STATS = "comment_stats";
-	//public static final String KEY_FEED_TYPE = "feed_type";
+
 	public static final String KEY_FLAG_ACTION = "flag_action";  //NewsFeed Upload
 	public static final String KEY_YOU_LIKE_THIS = "you_like_this";  //NewsFeed
 	public static final String KEY_SENDER 	     = "sender";  //NewsFeed
@@ -254,6 +254,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ TABLE_BUSCODE + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
 			KEY_BUSCODE + " TEXT," +
 			KEY_BUSLINE + " TEXT," +
+			KEY_HASHTAG + " TEXT," +
 			KEY_BUSLINE_DESCRIPTION + " TEXT," +
 			KEY_BUSLINE_COMPANY + " TEXT" + ")";
 
@@ -306,6 +307,10 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			KEY_LIKE_STATS 	+ " TEXT," +
 			KEY_COMMENT_STATS + " TEXT," +
 			KEY_FEED_TYPE 	+ " TEXT," +
+			//-------
+			KEY_HASHTAG		+ " TEXT," +
+			//-------			
+			
 			KEY_FLAG_ACTION + " TEXT," +
 			//-------			
 			KEY_TIME_STAMP 	+ " DATETIME," + 
@@ -792,7 +797,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	
 	public Cursor get_Buscode(){
 
-		return mDB.query(TABLE_BUSCODE, new String[] {KEY_ROW_ID, KEY_BUSCODE, KEY_BUSLINE, KEY_BUSLINE_DESCRIPTION, KEY_BUSLINE_COMPANY}, null, null, null, null, null);
+		return mDB.query(TABLE_BUSCODE, new String[] {KEY_ROW_ID, KEY_BUSCODE, KEY_BUSLINE, KEY_BUSLINE_DESCRIPTION, KEY_BUSLINE_COMPANY, KEY_HASHTAG}, null, null, null, null, null);
 	}
 
 	
@@ -817,7 +822,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public Cursor get_Newsfeed_upload(){
 
 		//return mDB.query(TABLE_NEWSFEED, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL}, null, null, null, null, null);
-		return mDB.query(TABLE_NEWSFEED_UPLOAD, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL, KEY_CUSTOM_TIME_STAMP, KEY_LIKE_STATS, KEY_COMMENT_STATS, KEY_FEED_TYPE, KEY_FLAG_ACTION}, null, null, null, null, null);
+		//return mDB.query(TABLE_NEWSFEED_UPLOAD, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL, KEY_CUSTOM_TIME_STAMP, KEY_LIKE_STATS, KEY_COMMENT_STATS, KEY_FEED_TYPE, KEY_FLAG_ACTION}, null, null, null, null, null);
+		return mDB.query(TABLE_NEWSFEED_UPLOAD, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL, KEY_CUSTOM_TIME_STAMP, KEY_LIKE_STATS, KEY_COMMENT_STATS, KEY_FEED_TYPE, KEY_FLAG_ACTION, KEY_HASHTAG}, null, null, null, null, null);
+		
 	}
 
 	public Cursor get_Likes(){

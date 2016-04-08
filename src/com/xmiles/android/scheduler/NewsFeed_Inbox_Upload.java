@@ -48,6 +48,7 @@ public class NewsFeed_Inbox_Upload extends WakefulBroadcastReceiver {
 		private static final Integer KEY_COMMENT_STATS = 10;
 		private static final Integer KEY_FEED_TYPE   = 11;
 		private static final Integer KEY_FLAG_ACTION = 12;
+		private static final Integer KEY_HASHTAG = 13;
 		
 		
 	   public void onReceive(Context context, Intent intent) {   
@@ -125,7 +126,8 @@ public class NewsFeed_Inbox_Upload extends WakefulBroadcastReceiver {
 			        								   "User gets into the bus", //data_NewsFeed.getString(KEY_FEED_TYPE), 
 			        								   "0",						 //data_NewsFeed.getString(KEY_LIKE_STATS), 
 			        								   "0",						 //data_NewsFeed.getString(KEY_COMMENT_STATS), 
-			        								   "ADD", 					 //data_NewsFeed.getString(KEY_FLAG_ACTION), 
+			        								   "ADD", 					 //data_NewsFeed.getString(KEY_FLAG_ACTION),
+			        								   data_NewsFeed.getString(KEY_HASHTAG), 
 			        								   data_NewsFeed.getString(KEY_TIME_STAMP));
 			        	
 			    		        	

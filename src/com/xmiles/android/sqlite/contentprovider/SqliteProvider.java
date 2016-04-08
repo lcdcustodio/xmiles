@@ -672,7 +672,8 @@ public class SqliteProvider extends ContentProvider{
 			return mDatabaseHelper.get_Newsfeed();			
 			
 		}else if (uriMatcher.match(uri)==NEWSFEED_UPLOAD){
-			return mDatabaseHelper.get_Newsfeed();			
+			//return mDatabaseHelper.get_Newsfeed();
+			return mDatabaseHelper.get_Newsfeed_upload();	
 			
 		}else if (uriMatcher.match(uri)==LIKES){
 			return mDatabaseHelper.get_Likes();			

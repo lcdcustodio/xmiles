@@ -240,6 +240,7 @@ public class UserFunctions {
     						         String like_stats,
     						         String comment_stats,
     						         String flag_action,
+    						         String hashtag,
     						         String time_stamp){
 
         List<NameValuePair> params = new ArrayList<NameValuePair>();
@@ -258,6 +259,7 @@ public class UserFunctions {
         params.add(new BasicNameValuePair("like_stats", like_stats));
         params.add(new BasicNameValuePair("comment_stats", comment_stats));
         params.add(new BasicNameValuePair("flag_action", flag_action));
+        params.add(new BasicNameValuePair("hashtag", hashtag));
         params.add(new BasicNameValuePair("time_stamp", time_stamp));
         //----------                
         JSONObject json = jsonParser.getJSONFromUrl(newsfeed_inboxURL, params);

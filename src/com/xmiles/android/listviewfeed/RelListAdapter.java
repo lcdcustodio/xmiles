@@ -144,6 +144,7 @@ public class RelListAdapter extends BaseAdapter {
 				.findViewById(R.id.rel_stats);		
 		//-------------------
 		TextView vi1_hashtag_1 = (TextView) vi1.findViewById(R.id.hashtag_1);
+		TextView vi1_hashtag_2 = (TextView) vi1.findViewById(R.id.hashtag_2);
 		//-------------------
 		TextView vi1_url = (TextView) vi1.findViewById(R.id.txtUrl);
 		NetworkImageView vi1_profilePic = (NetworkImageView) vi1
@@ -257,11 +258,22 @@ public class RelListAdapter extends BaseAdapter {
 					vi1_hashtag_1.setText(feed_item.getHashtag_1().split(",")[0]);
 					vi1_hashtag_1.setVisibility(View.VISIBLE);
 					
+					if (feed_item.getHashtag_1().split(",").length > 1) {
+
+						//Log.e(TAG,"item.getHashtag_1().split(,)[1]: " + feed_item.getHashtag_1().split(",")[1]);
+						
+						vi1_hashtag_2.setText(feed_item.getHashtag_1().split(",")[1]);
+						vi1_hashtag_2.setVisibility(View.VISIBLE);
+					} else {
+						vi1_hashtag_2.setVisibility(View.GONE);
+					}
+
+					
 				} else {
 					
 					// hashtag is null, remove from the view
 					vi1_hashtag_1.setVisibility(View.GONE);
-						
+					vi1_hashtag_2.setVisibility(View.GONE);	
 				}				
 				
 				// user profile pic

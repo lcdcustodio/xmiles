@@ -71,12 +71,28 @@
             android:layout_height="wrap_content"
             android:onClick="onClick"            
             android:textStyle="bold"
-            android:paddingBottom="5dp"
+            android:paddingBottom="1dp"
             android:paddingLeft="@dimen/feed_item_status_pad_left_right"
             android:paddingRight="@dimen/feed_item_status_pad_left_right"
-            android:paddingTop="@dimen/feed_item_status_pad_top" />
-        <!--android:text="#ranking"  -->
-
+            android:paddingTop="1dp" />
+        	<!-- android:paddingBottom="5dp" 
+        		 android:paddingTop="@dimen/feed_item_status_pad_top"		
+					        										-->
+        
+        <TextView
+            android:id="@+id/hashtag_2"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:onClick="onClick"            
+            android:textStyle="bold"            
+            android:paddingBottom="13dp"
+            android:paddingLeft="@dimen/feed_item_status_pad_left_right"
+            android:paddingRight="@dimen/feed_item_status_pad_left_right"/>             
+        	<!-- android:paddingBottom="5dp" 
+        	     android:paddingTop="1dp"
+        		 android:paddingTop="@dimen/feed_item_status_pad_top"		
+					        										-->
+        
         <TextView
             android:id="@+id/txtUrl"
             android:layout_width="fill_parent"

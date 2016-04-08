@@ -105,6 +105,7 @@ public class FeedListAdapter extends BaseAdapter {
 		TextView statusMsg = (TextView) convertView.findViewById(R.id.txtStatusMsg);
 		//-------------------
 		TextView hashtag_1 = (TextView) convertView.findViewById(R.id.hashtag_1);
+		TextView hashtag_2 = (TextView) convertView.findViewById(R.id.hashtag_2);
 		//-------------------
 		TextView rel_stats = (TextView) convertView.findViewById(R.id.rel_stats);		
 
@@ -440,12 +441,22 @@ public class FeedListAdapter extends BaseAdapter {
 			//hashtag_1.setText(item.getHashtag_1());
 			hashtag_1.setText(item.getHashtag_1().split(",")[0]);
 			hashtag_1.setVisibility(View.VISIBLE);
-			
+
+			if (item.getHashtag_1().split(",").length > 1) {
+
+				//Log.e(TAG,"item.getHashtag_1().split(,)[1]: " + item.getHashtag_1().split(",")[1]);
+				
+				hashtag_2.setText(item.getHashtag_1().split(",")[1]);
+				hashtag_2.setVisibility(View.VISIBLE);
+			} else {
+				hashtag_2.setVisibility(View.GONE);
+			}
+
 		} else {
 			
 			// hashtag is null, remove from the view
 			hashtag_1.setVisibility(View.GONE);
-				
+			hashtag_2.setVisibility(View.GONE);				
 		}
 		
 		

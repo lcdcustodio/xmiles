@@ -102,6 +102,7 @@ public class Gmaps extends FragmentActivity {
 	private static final Integer KEY_BUSLINE = 2;
 	private static final Integer KEY_BUSLINE_DESCRIPTION = 3;
 	private static final Integer KEY_BUSLINE_COMPANY = 4;
+	private static final Integer KEY_HASHTAG = 5;
 
 	//protected static JSONArray jsonArray;
 	protected static JSONObject json_buscode;
@@ -359,14 +360,21 @@ public class Gmaps extends FragmentActivity {
 					status_nearby = " próximo ao " + fb_places.getString(KEY_NEARBY);
 				}
 				if (buscode_info.getCount() > 0){
-					//status_buscode = "Conectado ao ônibus <bold>" + bus_gps_url.getString(KEY_BUSCODE);
-					status_buscode = "Conectado ao ônibus <bold> #" + bus_gps_url.getString(KEY_BUSCODE);
+					status_buscode = "Conectado ao ônibus <bold>" + bus_gps_url.getString(KEY_BUSCODE);
+					//status_buscode = "Conectado ao ônibus <bold> #" + bus_gps_url.getString(KEY_BUSCODE);
 					status_buscode_details = " da linha " + buscode_info.getString(KEY_BUSLINE) + "<bold>";
 				}				
 
 				String status = status_buscode + status_buscode_details + status_nearby;
 
-				
+				if (status_buscode_details.equals("")){
+					//contentValues.put(DatabaseHelper.KEY_HASHTAG, "#" + bus_gps_url.getString(KEY_BUSCODE));
+					contentValues.put(DatabaseHelper.KEY_HASHTAG, "#" + bus_gps_url.getString(KEY_BUSCODE).toLowerCase());
+				} else {
+					//contentValues.put(DatabaseHelper.KEY_HASHTAG, "#" + bus_gps_url.getString(KEY_BUSCODE) +
+					contentValues.put(DatabaseHelper.KEY_HASHTAG, "#" + bus_gps_url.getString(KEY_BUSCODE).toLowerCase() + 		
+							"," + buscode_info.getString(KEY_HASHTAG));
+				}
 				contentValues.put(DatabaseHelper.KEY_STATUS, status);
 				
 				contentValues.put(DatabaseHelper.KEY_PICURL, data_profile.getString(KEY_PICTURE));
@@ -484,8 +492,9 @@ public class Gmaps extends FragmentActivity {
 							cV.put(DatabaseHelper.KEY_BUSLINE, jsonObject.getString("busline"));
   							cV.put(DatabaseHelper.KEY_BUSLINE_DESCRIPTION, jsonObject.getString("busline_description"));
   							cV.put(DatabaseHelper.KEY_BUSLINE_COMPANY, jsonObject.getString("company"));
-
-  							
+  							//-------------
+  							cV.put(DatabaseHelper.KEY_HASHTAG, jsonObject.getString("hashtag"));
+  							//-------------  							
   							getApplicationContext().getContentResolver().insert(SqliteProvider.CONTENT_URI_BUSCODE_insert, cV);
 
 						 }
