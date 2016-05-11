@@ -13,12 +13,20 @@ import com.xmiles.android.facebook_api_support.SessionStore;
 import com.xmiles.android.facebook_api_support.SessionEvents.AuthListener;
 import com.xmiles.android.scheduler.Getting_UserLocation;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class FbLogin_Fragment extends Fragment {
@@ -28,9 +36,11 @@ public class FbLogin_Fragment extends Fragment {
 	public String[] permissions = { "read_stream", "publish_actions", "user_photos", "user_location", "user_friends" };
 	//TAG
 	private static final String TAG = "FACEBOOK";
-
 	
+	ProgressDialog progressBar;
+	//WebView webview;
 	Button Fb_login;
+	TextView txtHelp;
 	
 	public FbLogin_Fragment() {
 	}
@@ -38,6 +48,7 @@ public class FbLogin_Fragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		
 		View rootView = inflater.inflate(R.layout.fblogin_fragment, container,		
 				false);
 		
@@ -52,6 +63,18 @@ public class FbLogin_Fragment extends Fragment {
 		    }
 		});
 		
+
+		txtHelp = (TextView) rootView.findViewById(R.id.txtHelp);
+		
+		txtHelp.setText(Html.fromHtml("<a href=\"" + "https://www.youtube.com/embed/OvgtMaMftZw" + "\">"
+				+ "Veja como funciona" + "</a> "));
+
+		// Making url clickable
+		txtHelp.setMovementMethod(LinkMovementMethod.getInstance());
+
+		//--------
+		//((ViewGroup) rootView).addView(custom);
+		//--------		
 		return rootView;
 	}
 	

@@ -20,6 +20,7 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.content.CursorLoader;
+import android.support.v7.widget.RecyclerView;
 
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -29,6 +30,7 @@ import android.content.IntentFilter;
 import android.database.Cursor;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -36,6 +38,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.webkit.WebSettings.RenderPriority;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -65,7 +72,7 @@ public class Ranking_Fragment extends Fragment {
 	//-----------------------
 	RankingLazyAdapter adapter;
 	ListView list;
-	
+	RecyclerView mRecyclerView;
 	//-----------------------	
 	
 	public Ranking_Fragment(){}
@@ -76,32 +83,26 @@ public class Ranking_Fragment extends Fragment {
  
 		View rootView = inflater.inflate(R.layout.fgmt_background, container, false);
 
-		//View header = inflater.inflate(R.layout.ranking_header, container, false);		
-
 		View custom = inflater.inflate(R.layout.ranking_fgmt, null); 
-		
 
+		//mRecyclerView = (RecyclerView) custom.findViewById(R.id.my_recycler_view);
 		list 		   = (ListView) custom.findViewById(R.id.list);
-		//---------------		
-
 		//---------------
 		
         progressBar = new ProgressDialog(getActivity());
-		//*
+
         progressBar.setCancelable(true);
 		progressBar.setMessage(getActivity().getString(R.string.please_wait));
 		progressBar.show();
-		//*/
-		//--------------
 
-		
+
 		Ranking_Query rq = new Ranking_Query();
 		
-		//((ViewGroup) rootView).addView(header);
-		((ViewGroup) rootView).addView(custom);
+
+		//((ViewGroup) rootView).addView(custom);
 		
-		
-		return rootView;
+		return custom;
+		//return rootView;
     }
 		
 	
@@ -161,6 +162,7 @@ public class Ranking_Fragment extends Fragment {
 	                                	
 	                                    adapter=new RankingLazyAdapter(getActivity(), data_Ranking);        
 	                                    list.setAdapter(adapter);
+	                                    //mRecyclerView.setAdapter(adapter);
 
 	                                }
 	                            });

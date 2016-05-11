@@ -13,7 +13,7 @@
         android:icon="@drawable/ic_directions_bus_black_24dp"
         android:showAsAction="ifRoom|withText" />
  
-    <!--<item
+    <item
         android:id="@+id/gamepad"
         android:title="@string/gamepad"
         android:icon="@drawable/gamepad"
@@ -36,5 +36,5 @@
         android:title="@string/email"
         android:icon="@drawable/email"
         android:showAsAction="ifRoom|withText" />
-   	  -->
+   	 <!-- -->
 </menu>

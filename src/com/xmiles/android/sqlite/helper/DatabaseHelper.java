@@ -41,6 +41,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String TABLE_LIKES = "likes";
 	public static final String TABLE_LIKES_UPLOAD = "likes_upload";
 	public static final String TABLE_COMMENTS_UPLOAD = "comments_upload";	
+	//-----------------
+	public static final String TABLE_NEWSFEED_BY_HASHTAG = "newsfeed_by_hashtag";
 	
 	// Common column names
 	public static final String KEY_ROW_ID = "_id";
@@ -351,6 +353,28 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			KEY_COMMENT 	+ " TEXT," +
 			KEY_FLAG_ACTION + " TEXT," +
 			KEY_TIME_STAMP	+ " DATETIME" + ")";
+
+	private static final String CREATE_TABLE_NEWSFEED_BY_HASHTAG = "CREATE TABLE "
+			+ TABLE_NEWSFEED_BY_HASHTAG + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
+			KEY_ID			+ " TEXT," +
+			KEY_NAME		+ " TEXT," +
+			KEY_IMAGE		+ " TEXT," +
+			KEY_STATUS		+ " TEXT," +			
+			KEY_PICURL 		+ " TEXT," +
+			//-------
+			KEY_LIKE_STATS 	+ " TEXT," +
+			KEY_COMMENT_STATS + " TEXT," +
+			KEY_FEED_TYPE 	+ " TEXT," +
+			//-------
+			KEY_HASHTAG		+ " TEXT," +
+			//-------			
+			KEY_TIME_STAMP 	+ " DATETIME," + 
+			KEY_CUSTOM_TIME_STAMP 	+ " DATETIME," +
+			KEY_URL     	  + " TEXT," +
+			KEY_SENDER     	  + " TEXT," +
+			KEY_YOU_LIKE_THIS + " TEXT" + ")";
+
+	
 	
     /** An instance variable for SQLiteDatabase */
     private SQLiteDatabase mDB;
@@ -400,6 +424,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(CREATE_TABLE_LIKES);
 		db.execSQL(CREATE_TABLE_LIKES_UPLOAD);
 		db.execSQL(CREATE_TABLE_COMMENTS_UPLOAD);
+		db.execSQL(CREATE_TABLE_NEWSFEED_BY_HASHTAG);
 	}
 
 	@Override
@@ -431,6 +456,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_LIKES);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_LIKES_UPLOAD);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMMENTS_UPLOAD);
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEWSFEED_BY_HASHTAG);
 		//--------------------		
 		// create new tables
 		onCreate(db);
@@ -447,6 +473,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
         return rowsUpdated;
 	}
+
+	public int updateNewsfeed_by_Hashtag(ContentValues contentValues, String selection, String[] selectionArgs) {
+		
+		
+        int rowsUpdated = mDB.update(TABLE_NEWSFEED_BY_HASHTAG, 
+        		contentValues,
+                selection,
+                selectionArgs);
+
+        return rowsUpdated;
+	}
+	
 	
 	/*
 	 * Creating a UserProfile
@@ -612,6 +650,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	}
 	
+	public long insertNewsfeed_by_Hashtag(ContentValues contentValues) {
+
+		//-----------
+		long rowID = mDB.insert(TABLE_NEWSFEED_BY_HASHTAG, null, contentValues);
+		return rowID;
+
+	}
+
+	
 	public void resetUserFriends() {
 		//-----------
 		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_FRIENDS);
@@ -737,6 +784,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		//-----------
 	}	
 	
+	public void resetNewsfeed_by_Hashtag() {
+		//-----------
+		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_NEWSFEED_BY_HASHTAG);
+		mDB.execSQL(CREATE_TABLE_NEWSFEED_BY_HASHTAG);
+		//-----------
+	}	
+	
 	/** Returns all the contacts in the table */
 	public Cursor get_UserPlaces(){
 		//return mDB.query(TABLE_USER_PLACES, new String[] {KEY_ROW_ID, KEY_NEARBY,KEY_CITY,KEY_UF}, null, null, null, null, KEY_CREATED_AT + " desc ");
@@ -842,6 +896,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public Cursor get_Comments_upload(){
 
 		return mDB.query(TABLE_COMMENTS_UPLOAD, new String[] {KEY_ROW_ID, KEY_ID, KEY_U_ID, KEY_TIME_STAMP, KEY_FLAG_ACTION, KEY_SENDER, KEY_STATUS, KEY_FEED_TYPE, KEY_COMMENT}, null, null, null, null, null);
+	}
+	
+	public Cursor get_Newsfeed_by_Hashtag(){
+
+		return mDB.query(TABLE_NEWSFEED_BY_HASHTAG, new String[] {KEY_ROW_ID, KEY_ID, KEY_NAME, KEY_IMAGE, KEY_STATUS, KEY_PICURL, KEY_TIME_STAMP, KEY_URL, KEY_CUSTOM_TIME_STAMP, KEY_LIKE_STATS, KEY_COMMENT_STATS, KEY_YOU_LIKE_THIS, KEY_SENDER, KEY_FEED_TYPE, KEY_HASHTAG}, null, null, null, null, null);
 	}
 	
 	/** Returns all the contacts in the table */

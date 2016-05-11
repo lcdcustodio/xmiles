@@ -31,10 +31,12 @@ public class Welcome extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		//setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_extra);
 
         //----hide action bar---
-        getActionBar().hide();
+		//<!--Toolbar Hive example -->
+        //getActionBar().hide();
 
   	    // Create the Facebook Object using the app id.
   	    Utility.mFacebook = new Facebook(APP_ID);

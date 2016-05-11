@@ -1,19 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true"
+        android:fitsSystemWindows="true"
+        android:layout_gravity="fill_vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+<!--
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:orientation="vertical" >
-
- 
-    
-    <ListView
+-->
+ 	<LinearLayout
+	    android:layout_width="fill_parent"
+    	android:layout_height="wrap_content"
+    	android:orientation="vertical">
+ 		<!--  
+        <TextView
+          android:id="@+id/rnk_header_item"
+           android:layout_width="fill_parent"
+           android:layout_height="wrap_content"           
+           android:text="TOP 20"
+           android:paddingBottom="4dp"
+           android:paddingTop="10dp"           
+           android:layout_marginLeft="@dimen/feed_item_status_pad_left_right"
+           android:textStyle="bold"
+           android:textSize="@dimen/feed_item_timestamp" />
+ 	        />
+ 			-->
+	<!--    
+	<android.support.v7.widget.RecyclerView
+	    android:id="@+id/my_recycler_view"
+	    android:scrollbars="vertical"
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"/>    
+	  -->
+	<ListView
         android:id="@+id/list"
         android:layout_width="fill_parent"
         
         android:layout_height="match_parent"
-        android:divider="@null" />
+        android:divider="@null" /> 
     	<!--android:layout_height="wrap_content"
     		android:layout_height="wrap_content" 
-    		 -->
-
+    	 -->
 </LinearLayout>
+
+<!--</LinearLayout>
+</LinearLayout>
+    </RelativeLayout>  -->
+
+</android.support.v4.widget.NestedScrollView>

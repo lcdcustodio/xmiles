@@ -4,7 +4,7 @@
     android:layout_height="fill_parent"
     android:background="@color/standard_gray_e2e2e0"    
     android:orientation="horizontal" >
-    
+    <!-- android:background="@color/feed_bg" -->
     
 	         
                
@@ -16,7 +16,7 @@
 		    	android:layout_width="match_parent"
 		    	android:background="@color/standard_gray_e2e2e0"
 		        android:layout_height="wrap_content">
-		
+				<!-- android:background="@color/feed_bg" -->
 			    <ImageView
 			        android:layout_width="wrap_content"
 			        android:layout_height="wrap_content"
@@ -26,7 +26,8 @@
 			        android:src="@drawable/xmiles_logo_rev04_transparente" />
 		        
 			</RelativeLayout>      
-			
+	
+ 				
         		
         	<Button        	    
         	    android:layout_below="@id/frame_logo"
@@ -40,6 +41,18 @@
         		<!-- android:layout_centerHorizontal="true"
                 	 android:layout_centerVertical="true"		                
         		 -->
-        			
-        
+       		<TextView
+        	    android:layout_below="@id/fblogin"
+	            android:id="@+id/txtHelp"
+	            
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:linksClickable="true"	            
+	            android:layout_centerHorizontal="true"
+	            android:layout_marginTop="5dp"
+	            android:gravity="center"	         
+	            android:background="@drawable/bg_state_pressed"  
+	            android:textColorLink="@color/link" />	        
+        		<!-- android:textColorLink="@color/greenlink" 
+        			 android:text="Facebook Login"	  -->
  </RelativeLayout>

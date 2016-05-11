@@ -60,7 +60,11 @@ public class SqliteProvider extends ContentProvider{
 	public static final Uri CONTENT_URI_LIKES_UPLOAD_insert = Uri.parse("content://" + PROVIDER_NAME + "/Likes_upload_insert");
 	public static final Uri CONTENT_URI_COMMENTS_UPLOAD = Uri.parse("content://" + PROVIDER_NAME + "/Comments_upload");
 	public static final Uri CONTENT_URI_COMMENTS_UPLOAD_insert = Uri.parse("content://" + PROVIDER_NAME + "/Comments_upload_insert");
+	public static final Uri CONTENT_URI_NEWSFEED_BY_HASHTAG = Uri.parse("content://" + PROVIDER_NAME + "/Newsfeed_by_Hashtag");
+	public static final Uri CONTENT_URI_NEWSFEED_BY_HASHTAG_create = Uri.parse("content://" + PROVIDER_NAME + "/Newsfeed_by_Hashtag_create");
+	public static final Uri CONTENT_URI_NEWSFEED_BY_HASHTAG_update = Uri.parse("content://" + PROVIDER_NAME + "/Newsfeed_by_Hashtag_update");
 
+	
 	/** Constants to identify the requested operation */
 	private static final int USER_PROFILE = 1;
 	private static final int USER_PLACES = 2;
@@ -103,7 +107,10 @@ public class SqliteProvider extends ContentProvider{
 	private static final int LIKES_UPLOAD_insert = 37;
 	private static final int COMMENTS_UPLOAD = 38;
 	private static final int COMMENTS_UPLOAD_insert = 39;
-
+	//---------
+	private static final int NEWSFEED_BY_HASHTAG = 40;
+	private static final int NEWSFEED_BY_HASHTAG_create = 41;
+	private static final int NEWSFEED_BY_HASHTAG_update = 42;
 
 	private static final UriMatcher uriMatcher ;
 	static {
@@ -147,6 +154,11 @@ public class SqliteProvider extends ContentProvider{
 		uriMatcher.addURI(PROVIDER_NAME, "Likes_upload_insert", LIKES_UPLOAD_insert);		
 		uriMatcher.addURI(PROVIDER_NAME, "Comments_upload", COMMENTS_UPLOAD);
 		uriMatcher.addURI(PROVIDER_NAME, "Comments_upload_insert", COMMENTS_UPLOAD_insert);		
+		uriMatcher.addURI(PROVIDER_NAME, "Newsfeed_by_Hashtag", NEWSFEED_BY_HASHTAG);
+		uriMatcher.addURI(PROVIDER_NAME, "Newsfeed_by_Hashtag_create", NEWSFEED_BY_HASHTAG_create);
+		//----------------
+		uriMatcher.addURI(PROVIDER_NAME, "Newsfeed_by_Hashtag_update", NEWSFEED_BY_HASHTAG_update);
+
 
 	}
 
@@ -532,6 +544,29 @@ public class SqliteProvider extends ContentProvider{
 	            }
 	            break;	            
 	            
+	            
+	        case NEWSFEED_BY_HASHTAG_create:
+	            try {
+	            	//----
+	            	mDatabaseHelper.resetNewsfeed_by_Hashtag();
+	            	//----
+	            	mDatabaseHelper.getWritableDatabase().beginTransaction();
+	                for (ContentValues value : values) {
+	                	//---------
+	                	//---------
+	                    long id = mDatabaseHelper.getWritableDatabase().insert(DatabaseHelper.TABLE_NEWSFEED_BY_HASHTAG, null, value);
+	                    if (id > 0)
+	                        insertCount++;
+	                }
+	                mDatabaseHelper.getWritableDatabase().setTransactionSuccessful();
+	            } catch (Exception e) {
+	                // Your error handling
+	            } finally {
+	            	mDatabaseHelper.getWritableDatabase().endTransaction();
+	            }
+	            break;	            
+    
+	            
 	        case LIKES_create:
 	            try {
 	            	//----
@@ -684,6 +719,9 @@ public class SqliteProvider extends ContentProvider{
 		}else if (uriMatcher.match(uri)==COMMENTS_UPLOAD){
 			return mDatabaseHelper.get_Comments_upload();			
 			
+		}else if (uriMatcher.match(uri)==NEWSFEED_BY_HASHTAG){
+			return mDatabaseHelper.get_Newsfeed_by_Hashtag();			
+
 			
 		}else{
 			return null;
@@ -707,6 +745,9 @@ public class SqliteProvider extends ContentProvider{
 	        switch (uriType) {
 	        case NEWSFEED_update:
 	            rowsUpdated = mDatabaseHelper.updateNewsfeed(contentValues, selection, selectionArgs);
+	        	break;	
+	        case NEWSFEED_BY_HASHTAG_update:
+	            rowsUpdated = mDatabaseHelper.updateNewsfeed_by_Hashtag(contentValues, selection, selectionArgs);
 	        	break;	
 
 	        default:

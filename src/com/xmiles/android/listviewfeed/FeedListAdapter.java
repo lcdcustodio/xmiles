@@ -1,6 +1,7 @@
 package com.xmiles.android.listviewfeed;
 
 import com.xmiles.android.listviewfeed.FeedImageView;
+import com.xmiles.android.Hashtag;
 import com.xmiles.android.R;
 import com.xmiles.android.Relationship;
 import com.xmiles.android.listviewfeed.AppController;
@@ -104,8 +105,47 @@ public class FeedListAdapter extends BaseAdapter {
 		TextView timestamp = (TextView) convertView.findViewById(R.id.timestamp);
 		TextView statusMsg = (TextView) convertView.findViewById(R.id.txtStatusMsg);
 		//-------------------
-		TextView hashtag_1 = (TextView) convertView.findViewById(R.id.hashtag_1);
-		TextView hashtag_2 = (TextView) convertView.findViewById(R.id.hashtag_2);
+		final TextView hashtag_1 = (TextView) convertView.findViewById(R.id.hashtag_1);
+		
+		hashtag_1.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+				Log.e(TAG,"hashtag_1: " + hashtag_1.getText().toString());
+				
+			    Intent intent = new Intent(activity, Hashtag.class);
+			     
+			    Bundle args = new Bundle();				    
+			    args.putString("hashtag", hashtag_1.getText().toString());			    
+			    intent.putExtras(args);
+			    
+			    activity.startActivity(intent);
+
+			}			
+		});	
+		
+		//-------------------
+		final TextView hashtag_2 = (TextView) convertView.findViewById(R.id.hashtag_2);
+		
+		hashtag_2.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+				Log.e(TAG,"hashtag_2: " + hashtag_2.getText().toString());
+				
+			    Intent intent = new Intent(activity, Hashtag.class);
+			     
+			    Bundle args = new Bundle();				    
+			    args.putString("hashtag", hashtag_2.getText().toString());			    
+			    intent.putExtras(args);
+			    
+			    activity.startActivity(intent);
+				
+				
+			}			
+		});	
 		//-------------------
 		TextView rel_stats = (TextView) convertView.findViewById(R.id.rel_stats);		
 
@@ -132,6 +172,7 @@ public class FeedListAdapter extends BaseAdapter {
 				     args.putInt("position", pos_rel_stats);
 				    
 				     args.putString("feed_id", data_newsfeed.getString(KEY_ID));
+				     args.putString("adapter", "feed");
 				     /*
 				     args.putString("name", data_newsfeed.getString(KEY_NAME));
 				     args.putString("image", data_newsfeed.getString(KEY_IMAGE));				    	 
@@ -320,6 +361,7 @@ public class FeedListAdapter extends BaseAdapter {
 			    args.putInt("position", pos_btn_comment);
 			    
 			    args.putString("feed_id", data_newsfeed.getString(KEY_ID));
+			    args.putString("adapter", "feed");
 			    
 			    Intent intent = new Intent(activity, Relationship.class);				    	 
 			    intent.putExtras(args);
@@ -420,8 +462,12 @@ public class FeedListAdapter extends BaseAdapter {
 			
 			if (item.getName().equals("xMiles")){
 
-				url.setText(Html.fromHtml("<a href=\"" + "http://ec2-54-209-160-58.compute-1.amazonaws.com/pictures/xmiles_logo_rev05_transparente.png" + "\">"
-						+ "www.xmiles.com.br" + "</a> "));
+				//url.setText(Html.fromHtml("<a href=\"" + "http://ec2-54-209-160-58.compute-1.amazonaws.com/pictures/xmiles_logo_rev05_transparente.png" + "\">"
+				//		+ "www.xmiles.com.br" + "</a> "));
+
+				url.setText(Html.fromHtml("<a href=\"" + "https://www.youtube.com/embed/OvgtMaMftZw" + "\">"
+						+ "Veja como funciona" + "</a> "));
+
 
 				// Making url clickable
 				url.setMovementMethod(LinkMovementMethod.getInstance());

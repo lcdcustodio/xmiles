@@ -119,6 +119,7 @@ public class Rel_Fragment extends Fragment {
 	//----------------------
 	private int position;
 	private String feed_id;
+	private String adapter;
 
 	
 	public Rel_Fragment(){}
@@ -135,6 +136,7 @@ public class Rel_Fragment extends Fragment {
 		
 		position = getArguments().getInt("position");
 		feed_id = getArguments().getString("feed_id");
+		adapter = getArguments().getString("adapter");
 		//---------------
 		feedItems = new ArrayList<FeedItem>();
 		likeItems = new ArrayList<LikeItem>();
@@ -303,8 +305,15 @@ public class Rel_Fragment extends Fragment {
 
 
 		    		    	//Your code goes here
-		    		    	//------------			        	
-				            Uri uri = SqliteProvider.CONTENT_URI_NEWSFEED;
+		    		    	//------------
+				        	Uri uri = SqliteProvider.CONTENT_URI_NEWSFEED;
+				        	
+				        	if (adapter.equals("feed")){
+				        		uri = SqliteProvider.CONTENT_URI_NEWSFEED;
+				        	} else {
+				        		uri = SqliteProvider.CONTENT_URI_NEWSFEED_BY_HASHTAG;
+				        	}
+				            //Uri uri = SqliteProvider.CONTENT_URI_NEWSFEED;
 				            data_newsfeed = getActivity().getContentResolver().query(uri, null, null, null, null);
 				            //------------
 				            UserFunctions userFunc = new UserFunctions();
