@@ -1,7 +1,5 @@
 package com.xmiles.android;
 
-
-
 import com.xmiles.android.fragment.EmConstrucao_Fragment;
 import com.xmiles.android.fragment.Favorites_Fragment;
 import com.xmiles.android.fragment.Feed_Fragment;
@@ -11,6 +9,7 @@ import com.xmiles.android.slidingmenu.adapter.SlidingMenuLazyAdapter;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.app.ActionBar.Tab;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -22,6 +21,7 @@ import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,185 +30,252 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
-import android.os.Bundle;
-import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
- 
-import java.util.ArrayList;
-import java.util.List;
- 
- 
-public class MainActivity extends AppCompatActivity {
-	 
-    private Toolbar toolbar;
-    private TabLayout tabLayout;
-    private ViewPager viewPager;
-    
-    CollapsingToolbarLayout collapsingToolbarLayout;
-    
-    private int[] tabIcons = {
-            R.drawable.nav_news_feed,
-            R.drawable.computer,
-            R.drawable.phone
-    };
- 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        //-----------
-		setupToolbar();
-		//setupTablayout();
-		setupCollapsingToolbarLayout();        
-        //-----------
-		//*
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
- 		//*/
-		//*
-        viewPager = (ViewPager) findViewById(R.id.viewpager);
-        setupViewPager(viewPager);
- 
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
-        //------
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-        //------
-        tabLayout.setupWithViewPager(viewPager);
-        //*/
-        //--------------
-        //setupTabIcons();
-        //--------------        
-    }
-    
-    //*
+public class MainActivity extends FragmentActivity {
+
+	//-----------------------------
+	SlidingMenuLazyAdapter adapter;
+	ListView mDrawerList;
+	DrawerLayout mDrawerLayout;
+	ActionBarDrawerToggle mDrawerToggle;
+	//-----------------------------
+	
+	
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+
+		//Action TAB
+		
+		//*******
+	    Fragment fgmt_newsfeed 	= new Feed_Fragment();
+	    Fragment fgmt_ranking 	= new Ranking_Fragment();
+	    //*******
+	    
+	    ActionBar actionBar = getActionBar();
+	    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+	    
+	    // set Color
+	    //actionBar.setBackgroundDrawable(new ColorDrawable(R.color.facebook));
+	    
+	    // set Title
+	    actionBar.setDisplayShowTitleEnabled(true);
+	    actionBar.setTitle(Html.fromHtml("<b><font color='#ffffff'> &nbsp xMiles</font></b>"));
+
+	    
+	    // Enable Action Bar
+	    actionBar.show();
+	    /*
+	    Tab tab1 = actionBar
+	          .newTab()
+	          .setText("MAPA")
+	          //.setIcon(R.drawable.android_logo)
+
+	          .setTabListener(new MyTabsListener(fgmt_inicio));
+
+	      actionBar.addTab(tab1);
+	      actionBar.selectTab(tab1);
+		*/
+	    Tab tab2 = actionBar
+	    	   .newTab()
+	    	   .setText("FEED")
+	    	   //.setIcon(R.drawable.nav_news_feed)	
+	    	   .setTabListener(new MyTabsListener(fgmt_newsfeed));
+	    	  
+	      actionBar.addTab(tab2);
+	      actionBar.selectTab(tab2);
+	      
+	    Tab tab3 = actionBar
+	              .newTab()
+	              .setText("RANKING")
+	              //.setIcon(R.drawable.computer)
+	              .setTabListener(new MyTabsListener(fgmt_ranking));
+	          
+	          actionBar.addTab(tab3);
+	          
+	          
+	    //Sliding Menu
+	  	actionBar.setDisplayHomeAsUpEnabled(true);
+	  	actionBar.setHomeButtonEnabled(true);
+	  	//actionBar.setTitle("");
+	  	
+	    
+	          
+	    mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+	    mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
+	    
+	    runThread();
+        //adapter=new SlidingMenuLazyAdapter(getApplicationContext());        
+        //mDrawerList.setAdapter(adapter);
+	    mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
+	    
+	    
+		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
+				//R.drawable.ic_drawer_rev03, //nav menu toggle icon
+				R.drawable.ic_menu, //nav menu toggle icon
+				R.string.app_name, // nav drawer open - description for accessibility
+				R.string.app_name// nav drawer close - description for accessibility
+		) {
+			public void onDrawerClosed(View view) {
+				//getActionBar().setTitle(mTitle);
+				// calling onPrepareOptionsMenu() to show action bar icons
+				invalidateOptionsMenu();
+			}
+
+			public void onDrawerOpened(View drawerView) {
+				//getActionBar().setTitle(mDrawerTitle);
+				// calling onPrepareOptionsMenu() to hide action bar icons
+				invalidateOptionsMenu();
+			}
+		};//*/
+		mDrawerLayout.setDrawerListener(mDrawerToggle);
+
+
+
+	}
+	
+	 private void runThread(){
+	     runOnUiThread (new Thread(new Runnable() {
+		 //new Thread() {
+	         public void run() {
+
+	        	 adapter=new SlidingMenuLazyAdapter(getApplicationContext());        
+	             mDrawerList.setAdapter(adapter);
+	             
+	             try {
+					Thread.sleep(50);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	         }
+	     }));
+		 //}.start();
+	}
+	
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main_frame, menu);
-
+		getMenuInflater().inflate(R.menu.main, menu);
+		/*
+		getMenuInflater().inflate(R.menu.options_menu, menu);	
 		
+		 // Associate searchable configuration with the SearchView
+	    SearchManager searchManager =
+	           (SearchManager) getSystemService(getApplicationContext().SEARCH_SERVICE);
+	    SearchView searchView =
+	            (SearchView) menu.findItem(R.id.search).getActionView();
+	    searchView.setSearchableInfo(
+	            searchManager.getSearchableInfo(getComponentName()));
+		
+	    // Do not iconify the widget;expand it by default
+	    searchView.setIconifiedByDefault(true);	    
+	    */
 		return true;
 	}
-	//*/
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		
-		// Handle action bar actions click
-		switch (item.getItemId()) {
-		case R.id.about_it:
-			
-			Toast.makeText(getApplicationContext(), "Em construção", Toast.LENGTH_LONG).show();
-			
-			return true;
-			
-		case R.id.how_works:
-			
-			Uri uri = Uri.parse("https://www.youtube.com/embed/OvgtMaMftZw");
-			Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-			startActivity(intent);
-			
-			return true;
 
-		case R.id.policies:
-			
-			Toast.makeText(getApplicationContext(), "Em construção", Toast.LENGTH_LONG).show();
-			
-			return true;
-			
-		case R.id.buscode_search:
-			
-			Toast.makeText(getApplicationContext(), "Em construção", Toast.LENGTH_LONG).show();
-			
-			return true;
-			
-		default:
-			return super.onOptionsItemSelected(item);
-		}
-	}
-
-	//*
-    private void setupTabIcons() {
-        tabLayout.getTabAt(0).setIcon(tabIcons[0]);
-        tabLayout.getTabAt(1).setIcon(tabIcons[1]);
-        tabLayout.getTabAt(2).setIcon(tabIcons[2]);
-    }
-    //*/
 	
-	private void setupToolbar(){
-		toolbar = (Toolbar) findViewById(R.id.toolbar);
-		if(toolbar != null)
-			setSupportActionBar(toolbar);
+	  protected class MyTabsListener implements ActionBar.TabListener{
+		    private Fragment fragment;
 
-		// Show menu icon
-        final android.support.v7.app.ActionBar ab = getSupportActionBar();
-        ab.setHomeAsUpIndicator(R.drawable.ic_menu);
-        ab.setDisplayHomeAsUpEnabled(true);
-        //-------------------------
-        //ab.hide();
-        //-------------------------        
+		    public MyTabsListener(Fragment fragment2){
+		        this.fragment = fragment2;
+		    }
+		    public void onTabSelected(Tab tab, FragmentTransaction ft){
 
-	}
-	//*
-	private void setupCollapsingToolbarLayout(){
-		
-		collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-		
-		//if(collapsingToolbarLayout != null){
-			//collapsingToolbarLayout.setTitle(toolbar.getTitle());
-			//collapsingToolbarLayout.setCollapsedTitleTextColor(0xED1C24);	
-			//collapsingToolbarLayout.setExpandedTitleColor(0xED1C24);
-		//}
-	}
-	//*/
+		    	  android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+		          android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();        
+		          fragmentTransaction.replace(R.id.frame_container, fragment);
+		          fragmentTransaction.commit();
 
- 
-    private void setupViewPager(ViewPager viewPager) {
-        ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFrag(new Feed_Fragment(), "FEED");
-        adapter.addFrag(new Ranking_Fragment(), "RANKING");
-        
-        //adapter.addFrag(new EmConstrucao_Fragment(), "FEED");
-        //adapter.addFrag(new EmConstrucao_Fragment(), "RANKING");
-        
-        adapter.addFrag(new EmConstrucao_Fragment(), "HASHTAG");
+		    }
+		    public void onTabReselected(Tab tab, FragmentTransaction ft) {
+		    }
+		    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
+		        //ft.remove(fragment);
+		    }
+		}
+	  
+		@Override
+		public boolean onOptionsItemSelected(MenuItem item) {
+			// toggle nav drawer on selecting action bar app icon/title
+			
+			if (mDrawerToggle.onOptionsItemSelected(item)) {
+				return true;
+			}
+			
+			// Handle action bar actions click
+			switch (item.getItemId()) {
+			case R.id.about_it:
+				
+				Toast.makeText(getApplicationContext(), "Em construção", Toast.LENGTH_LONG).show();
+				
+				return true;
+				
+			case R.id.how_works:
+				
+				//Toast.makeText(getApplicationContext(), "Em construção", Toast.LENGTH_LONG).show();
+				
+				//Uri uri = Uri.parse("http://www.google.com"); // missing 'http://' will cause crashed
+				Uri uri = Uri.parse("https://www.youtube.com/embed/OvgtMaMftZw");
+				Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+				startActivity(intent);
+				
+				return true;
 
-        viewPager.setAdapter(adapter);
-    }
- 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
-        private final List<Fragment> mFragmentList = new ArrayList<Fragment>();
-        private final List<String> mFragmentTitleList = new ArrayList<String>();
- 
-        public ViewPagerAdapter(FragmentManager manager) {
-            super(manager);
-        }
- 
-        @Override
-        public Fragment getItem(int position) {
-            return mFragmentList.get(position);
-        }
- 
-        @Override
-        public int getCount() {
-            return mFragmentList.size();
-        }
- 
-        public void addFrag(Fragment fragment, String title) {
-            mFragmentList.add(fragment);
-            mFragmentTitleList.add(title);
-        }
- 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            return mFragmentTitleList.get(position);
-            //return null;
-        }
-    }
+			case R.id.policies:
+				
+				Toast.makeText(getApplicationContext(), "Em construção", Toast.LENGTH_LONG).show();
+				
+				return true;
+				
+				
+			default:
+				return super.onOptionsItemSelected(item);
+			}
+		}
+
+		/* *
+		 * Called when invalidateOptionsMenu() is triggered
+		 */
+		@Override
+		public boolean onPrepareOptionsMenu(Menu menu) {
+			// if nav drawer is opened, hide the action items
+			boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+			menu.findItem(R.id.about_it).setVisible(!drawerOpen);
+			return super.onPrepareOptionsMenu(menu);
+		}
+
+		@Override
+		protected void onPostCreate(Bundle savedInstanceState) {
+			super.onPostCreate(savedInstanceState);
+			// Sync the toggle state after onRestoreInstanceState has occurred.
+			mDrawerToggle.syncState();
+		}
+
+		@Override
+		public void onConfigurationChanged(Configuration newConfig) {
+			super.onConfigurationChanged(newConfig);
+			// Pass any configuration change to the drawer toggls
+			mDrawerToggle.onConfigurationChanged(newConfig);
+		}
+
+		/**
+		 * Slide menu item click listener
+		 * */
+		private class SlideMenuClickListener implements
+				ListView.OnItemClickListener {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position,
+					long id) {
+				// display view for selected nav drawer item
+				//displayView(position);
+				if (position > 1){
+					Toast.makeText(getApplicationContext(), "Necessário atingir pontuação mínima da recompensa", Toast.LENGTH_SHORT).show();
+				}
+			}
+		}
+
 }

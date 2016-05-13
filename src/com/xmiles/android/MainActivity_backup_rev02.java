@@ -1,3 +1,4 @@
+/*
 package com.xmiles.android;
 
 import com.xmiles.android.fragment.EmConstrucao_Fragment;
@@ -102,3 +103,4 @@ public class MainActivity_backup_rev02 extends AppCompatActivity {
         }
     }
 }
+*/

@@ -2,7 +2,8 @@
 <shape android:shape="rectangle"
   xmlns:android="http://schemas.android.com/apk/res/android">
     <size android:height="@dimen/abs__action_bar_default_height" />
-    <solid android:color="@color/orange_2" />    
-    <!--solid android:color="@color/foursquare_blue" />  -->
+    <solid android:color="@color/colorPrimary" />    
+    <!--<solid android:color="@color/orange_2" />
+    	solid android:color="@color/foursquare_blue" />  -->
     
 </shape>

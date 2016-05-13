@@ -35,8 +35,7 @@ public class Welcome extends FragmentActivity {
 		setContentView(R.layout.activity_extra);
 
         //----hide action bar---
-		//<!--Toolbar Hive example -->
-        //getActionBar().hide();
+        getActionBar().hide();
 
   	    // Create the Facebook Object using the app id.
   	    Utility.mFacebook = new Facebook(APP_ID);

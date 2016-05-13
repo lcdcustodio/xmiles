@@ -18,11 +18,12 @@
 				  android:title="Termo de uso"/>
 		 </menu>         				  
  	</item>
- 	
+ 	<!-- 
 	<item
         android:id="@+id/buscode_search"
         android:title="@string/phone"
         android:icon="@drawable/ic_search_white"
         app:showAsAction="ifRoom">
- 	</item>	
+ 	</item>
+ 	 -->	
 </menu>

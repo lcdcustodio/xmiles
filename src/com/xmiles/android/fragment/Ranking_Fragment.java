@@ -20,7 +20,7 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.content.CursorLoader;
-import android.support.v7.widget.RecyclerView;
+
 
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
@@ -72,7 +72,7 @@ public class Ranking_Fragment extends Fragment {
 	//-----------------------
 	RankingLazyAdapter adapter;
 	ListView list;
-	RecyclerView mRecyclerView;
+	
 	//-----------------------	
 	
 	public Ranking_Fragment(){}
@@ -85,7 +85,7 @@ public class Ranking_Fragment extends Fragment {
 
 		View custom = inflater.inflate(R.layout.ranking_fgmt, null); 
 
-		//mRecyclerView = (RecyclerView) custom.findViewById(R.id.my_recycler_view);
+
 		list 		   = (ListView) custom.findViewById(R.id.list);
 		//---------------
 		
@@ -99,10 +99,9 @@ public class Ranking_Fragment extends Fragment {
 		Ranking_Query rq = new Ranking_Query();
 		
 
-		//((ViewGroup) rootView).addView(custom);
+		((ViewGroup) rootView).addView(custom);
 		
-		return custom;
-		//return rootView;
+		return rootView;
     }
 		
 	

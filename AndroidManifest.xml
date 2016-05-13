@@ -17,7 +17,8 @@
         android:icon="@drawable/xmiles_logo_rev05_transparente"
         android:label="@string/app_name"      
         android:theme="@style/MyMaterialTheme">          
-        <!-- android:theme="@style/Theme.Example" > -->        
+        <!-- android:theme="@style/MyMaterialTheme">
+        	 android:theme="@style/Theme.Example" > -->        
         
         <uses-library android:name="com.google.android.maps" />
         

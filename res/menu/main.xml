@@ -1,11 +1,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:xMiles="http://schemas.android.com/apk/res-auto" >
  
+    <item
+        android:id="@+id/buscode_search"
+        android:title="@string/phone"
+        android:icon="@drawable/ic_search_white"
+        android:showAsAction="ifRoom">
+ 	</item>
+    
+    
     <!--item
         android:id="@+id/rotas"
         android:title="@string/rotas"
         android:icon="@drawable/phone"        
-        android:showAsAction="ifRoom|withText" />  -->
+        android:showAsAction="ifRoom|withText" /> 
  
     <item
         android:id="@+id/new_route"
@@ -35,6 +43,6 @@
         android:id="@+id/email"
         android:title="@string/email"
         android:icon="@drawable/email"
-        android:showAsAction="ifRoom|withText" />
+        android:showAsAction="ifRoom|withText" />  -->
    	 <!-- -->
 </menu>

@@ -160,10 +160,10 @@ public class Feed_Fragment extends Fragment implements LoaderManager.LoaderCallb
   
 		//---------------		
 		//((ViewGroup) rootView).addView(searchBus);		
-		//((ViewGroup) rootView).addView(custom);
+		((ViewGroup) rootView).addView(custom);
 		
-		return custom;
-		//return rootView;
+		
+		return rootView;
     }
 		
 	
