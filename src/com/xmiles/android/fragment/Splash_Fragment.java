@@ -93,7 +93,7 @@ public class Splash_Fragment extends Fragment {
 
 			// facebook profile
 			facebook_profile = new GetFacebookProfile().GetResult(Utility.mFacebook.getAccessToken());
-			//Log.i(TAG, "facebook_profile: " + facebook_profile);
+			Log.i(TAG, "facebook_profile: " + facebook_profile);
 
 			//------------------
             Support support = new Support();

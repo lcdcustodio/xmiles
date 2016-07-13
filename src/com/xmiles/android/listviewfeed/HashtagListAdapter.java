@@ -343,6 +343,7 @@ public class HashtagListAdapter extends BaseAdapter {
 			    args.putInt("position", pos_btn_comment);
 			    
 			    args.putString("feed_id", data_newsfeed.getString(KEY_ID));
+			    args.putString("adapter", "hashtag");
 			    
 			    Intent intent = new Intent(activity, Relationship.class);				    	 
 			    intent.putExtras(args);

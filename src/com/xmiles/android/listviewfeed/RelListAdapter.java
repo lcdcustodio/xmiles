@@ -8,7 +8,9 @@ import com.xmiles.android.listviewfeed.AppController;
 import com.xmiles.android.listviewfeed.FeedItem;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.support.Support;
-
+//-----
+//import com.xmiles.android.support.imageloader.*;
+//-----
 import java.util.List;
 
 import android.app.Activity;
@@ -45,6 +47,7 @@ public class RelListAdapter extends BaseAdapter {
 	private List<SupportRelAdapterItem> supportreladapterItems;
 	//----------	
 	ImageLoader imageLoader = AppController.getInstance().getImageLoader();
+	//private static ImageLoader imgLoader;
 	
 	//TAG
 	private static final String TAG = "FACEBOOK";
@@ -67,6 +70,7 @@ public class RelListAdapter extends BaseAdapter {
 		this.commentItems = commentItems;		
 		this.supportreladapterItems = supportreladapterItems;
 		//---------------		
+		//imgLoader=new ImageLoader(activity.getApplicationContext());
 	}
 
 	@Override
@@ -315,16 +319,21 @@ public class RelListAdapter extends BaseAdapter {
 					}
 	    	   });	
 
-	    	   //Log.e(TAG,"likeItems.size(): " + likeItems.size());
+	    	   
 	    	   
 				for (int i = 0; i < likeItems.size(); i++) {
 					
 					LikeItem like_item = likeItems.get(i);
-					
+					//-------
+					Log.e(TAG,"like_item.getName(): " + like_item.getName());
+					Log.e(TAG,"like_item.getProfilePic(): " + like_item.getProfilePic());
+					//-------					
 				    switch(i){
 				       case 0:
-				    	   
-				    	  vi2_profilePic_1.setImageUrl(like_item.getProfilePic(), imageLoader); 
+				    	    
+				    	  vi2_profilePic_1.setImageUrl(like_item.getProfilePic(), imageLoader);
+				    	  //String lala = "https://fbcdn-profile-a.akamaihd.net/hprofile-ak-ash2/v/t1.0-1/c170.50.621.621/s50x50/581112_142269442578251_461870301_n.jpg?oh=5714be4f31d258143d42628755f496b9&oe=57D72315&__gda__=1473270343_e4c5c633409e3f96ce5791349c6fa8f7";
+				    	  //vi2_profilePic_1.setImageUrl(lala, imageLoader);
 				    	  break;
 				       case 1:
 

@@ -25,7 +25,8 @@ public class RankingLazyAdapter extends BaseAdapter {
     private ArrayList<HashMap<String, String>> data;
     
     private static LayoutInflater inflater=null;
-    public ImageLoader imageLoader; 
+    //public ImageLoader imageLoader; 
+    private static ImageLoader imageLoader;
     
     private static final Integer KEY_ID = 0;
 	private static final Integer KEY_NAME = 1;
@@ -35,6 +36,10 @@ public class RankingLazyAdapter extends BaseAdapter {
 	private static final Integer TYPE1   = 1;
 	private static final Integer TYPE2   = 2;	
 	//-----
+	
+	//TAG
+	private static final String TAG = "FACEBOOK";
+
 	
 	private Cursor ranking_info;
     
@@ -116,9 +121,10 @@ public class RankingLazyAdapter extends BaseAdapter {
 	        //duration.setText(position + 1 + " ° lugar");
 	        duration.setText(position + " ° lugar");
 	        imageLoader.DisplayImage(ranking_info.getString(KEY_PICURL), thumb_image);
-	        
-
-	        
+	        //----------
+	        Log.e(TAG, "ranking_info.getString(KEY_NAME): " + ranking_info.getString(KEY_NAME));
+	        Log.w(TAG, "ranking_info.getString(KEY_PICURL): " + ranking_info.getString(KEY_PICURL));
+	        //----------
 	        return vi;
 	        
 	       default:

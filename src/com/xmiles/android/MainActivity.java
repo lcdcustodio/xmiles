@@ -157,7 +157,7 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.main_frame, menu);
+		//getMenuInflater().inflate(R.menu.main_frame, menu);
 		getMenuInflater().inflate(R.menu.main, menu);
 		/*
 		getMenuInflater().inflate(R.menu.options_menu, menu);	
@@ -207,7 +207,9 @@ public class MainActivity extends FragmentActivity {
 			}
 			
 			// Handle action bar actions click
+			//*
 			switch (item.getItemId()) {
+			/*
 			case R.id.about_it:
 				
 				Toast.makeText(getApplicationContext(), "Em construção", Toast.LENGTH_LONG).show();
@@ -230,7 +232,12 @@ public class MainActivity extends FragmentActivity {
 				Toast.makeText(getApplicationContext(), "Em construção", Toast.LENGTH_LONG).show();
 				
 				return true;
+			*/
+			case R.id.buscode_search:
 				
+				Toast.makeText(getApplicationContext(), "Em construção", Toast.LENGTH_LONG).show();
+				
+				return true;	
 				
 			default:
 				return super.onOptionsItemSelected(item);
@@ -244,7 +251,7 @@ public class MainActivity extends FragmentActivity {
 		public boolean onPrepareOptionsMenu(Menu menu) {
 			// if nav drawer is opened, hide the action items
 			boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-			menu.findItem(R.id.about_it).setVisible(!drawerOpen);
+			//menu.findItem(R.id.about_it).setVisible(!drawerOpen);
 			return super.onPrepareOptionsMenu(menu);
 		}
 
