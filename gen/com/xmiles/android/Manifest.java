@@ -9,6 +9,13 @@ package com.xmiles.android;
 
 public final class Manifest {
     public static final class permission {
+        /**  Creates a custom permission so only this app can receive its messages. 
+         */
+        public static final String C2D_MESSAGE="com.xmiles.android.permission.C2D_MESSAGE";
+        /**  *********************************************************** 
+ END TEST - PUSH NOTIFICATION By GCM (androidhive example) 
+ *********************************************************** 
+         */
         public static final String MAPS_RECEIVE="com.xmiles.android.permission.MAPS_RECEIVE";
     }
 }
