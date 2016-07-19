@@ -4,7 +4,10 @@ import com.xmiles.android.fragment.Feed_Fragment;
 
 import com.xmiles.android.fragment.Ranking_Fragment;
 
+import com.xmiles.android.pushnotifications.ServerUtilities;
+import com.xmiles.android.pushnotifications.WakeLocker;
 import com.xmiles.android.slidingmenu.adapter.SlidingMenuLazyAdapter;
+import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
@@ -15,6 +18,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -37,10 +41,10 @@ import android.widget.Toast;
 //-------------
 //BEGIN TEST - PUSH NOTIFICATION By GCM (androidhive example)
 
-import static com.xmiles.android.CommonUtilities.DISPLAY_MESSAGE_ACTION;
-import static com.xmiles.android.CommonUtilities.EXTRA_MESSAGE;
-import static com.xmiles.android.CommonUtilities.SENDER_ID;
-import static com.xmiles.android.CommonUtilities.SERVER_URL;
+import static com.xmiles.android.pushnotifications.CommonUtilities.DISPLAY_MESSAGE_ACTION;
+import static com.xmiles.android.pushnotifications.CommonUtilities.EXTRA_MESSAGE;
+import static com.xmiles.android.pushnotifications.CommonUtilities.SENDER_ID;
+import static com.xmiles.android.pushnotifications.CommonUtilities.SERVER_URL;
 
 import com.google.android.gcm.GCMRegistrar;
 
@@ -55,6 +59,9 @@ public class MainActivity extends FragmentActivity {
 	private static final String TAG = "FACEBOOK";
 	//-------------
 	//BEGIN TEST - PUSH NOTIFICATION By GCM (androidhive example)
+
+	private static final Integer KEY_NAME = 1;
+	private static final Integer KEY_U_ID = 0;
 
 	// Asyntask
 	AsyncTask<Void, Void, Void> mRegisterTask;
@@ -85,7 +92,9 @@ public class MainActivity extends FragmentActivity {
 	    
 	    // set Title
 	    actionBar.setDisplayShowTitleEnabled(true);
-	    actionBar.setTitle(Html.fromHtml("<b><font color='#ffffff'> &nbsp xMiles</font></b>"));
+	    
+	    // Comment line below is due to BUG at LG OPTIMUS F5 device
+	    //actionBar.setTitle(Html.fromHtml("<b><font color='#ffffff'> &nbsp xMiles</font></b>"));
 
 	    
 	    // Enable Action Bar
@@ -176,10 +185,7 @@ public class MainActivity extends FragmentActivity {
  			// GCM sernder id / server url is missing
  			Toast.makeText(getApplicationContext(), "Please set your Server URL and GCM Sender ID", 
  					Toast.LENGTH_LONG).show();
- 			//alert.showAlertDialog(RegisterActivity.this, "Configuration Error!",
- 			//		"Please set your Server URL and GCM Sender ID", false);
- 			// stop executing code by return
- 			 //return;
+
  		}
 
  		// Make sure the device has the proper dependencies.
@@ -205,13 +211,13 @@ public class MainActivity extends FragmentActivity {
  			// Device is already registered on GCM
  			if (GCMRegistrar.isRegisteredOnServer(getApplicationContext())) {
  				// Skips registration.				
- 				Toast.makeText(getApplicationContext(), "Already registered with GCM", Toast.LENGTH_LONG).show();
+ 				//Toast.makeText(getApplicationContext(), "Already registered with GCM", Toast.LENGTH_LONG).show();
+ 				Log.e(TAG, "Already registered with GCM");
  			} else {
  				// Try to register again, but not in the UI thread.
  				// It's also necessary to cancel the thread onDestroy(),
  				// hence the use of AsyncTask instead of a raw thread.
 
- 				//ServerUtilities.register(getApplicationContext(), "bill clinton", "bill@gmail.com", regId);
 				final Context context = this;
 				mRegisterTask = new AsyncTask<Void, Void, Void>() {
 
@@ -220,7 +226,12 @@ public class MainActivity extends FragmentActivity {
 						// Register on our server
 						// On server creates a new user
 						//ServerUtilities.register(context, name, email, regId);
-						ServerUtilities.register(context, "bill clinton", "bill@gmail.com", regId);
+						
+				        Uri uri_1 = SqliteProvider.CONTENT_URI_USER_PROFILE;        
+				        Cursor users_info = context.getContentResolver().query(uri_1, null, null, null, null);
+				        users_info.moveToLast();
+						
+						ServerUtilities.register(context,  users_info.getString(KEY_NAME), users_info.getString(KEY_U_ID), regId);
 						return null;
 					}
 
@@ -322,7 +333,12 @@ public class MainActivity extends FragmentActivity {
 			*/
 			case R.id.buscode_search:
 				
-				Toast.makeText(getApplicationContext(), "Em construção", Toast.LENGTH_LONG).show();
+				Toast.makeText(getApplicationContext(), "Buscando ônibus", Toast.LENGTH_LONG).show();
+				
+                Intent intent = new Intent(getApplicationContext(), Gmaps.class);                        
+                
+                startActivity(intent);
+
 				
 				return true;	
 				
@@ -389,7 +405,7 @@ public class MainActivity extends FragmentActivity {
 		  			
 		  		// Showing received message
 		  		//lblMessage.append(newMessage + "\n");			
-		  		Toast.makeText(getApplicationContext(), "New Message: " + newMessage, Toast.LENGTH_LONG).show();
+		  		//Toast.makeText(getApplicationContext(), "New Message: " + newMessage, Toast.LENGTH_LONG).show();
 		  			
 		  		// Releasing wake lock
 		  		WakeLocker.release();

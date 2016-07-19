@@ -1,20 +1,29 @@
 package com.xmiles.android;
 
-import static com.xmiles.android.CommonUtilities.SENDER_ID;
-import static com.xmiles.android.CommonUtilities.displayMessage;
+import static com.xmiles.android.pushnotifications.CommonUtilities.SENDER_ID;
+import static com.xmiles.android.pushnotifications.CommonUtilities.displayMessage;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.util.Log;
 
 import com.google.android.gcm.GCMBaseIntentService;
 import com.xmiles.android.R;
+import com.xmiles.android.R.drawable;
+import com.xmiles.android.R.string;
+import com.xmiles.android.pushnotifications.ServerUtilities;
+import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 
 public class GCMIntentService extends GCMBaseIntentService {
 
 	private static final String TAG = "FACEBOOK";
+	private static final Integer KEY_NAME = 1;
+	private static final Integer KEY_U_ID = 0;
+	private Cursor users_info;
 
     public GCMIntentService() {
         super(SENDER_ID);
@@ -28,9 +37,16 @@ public class GCMIntentService extends GCMBaseIntentService {
         Log.i(TAG, "Device registered: regId = " + registrationId);
         displayMessage(context, "Your device registred with GCM");
         //Log.d("NAME", MainActivity.name);
-        Log.d("NAME", "lala");
+                
+        Uri uri_1 = SqliteProvider.CONTENT_URI_USER_PROFILE;        
+        users_info = context.getContentResolver().query(uri_1, null, null, null, null);
+        users_info.moveToLast();
+        
+        Log.d(TAG, users_info.getString(KEY_NAME));
+        
         //ServerUtilities.register(context, MainActivity.name, MainActivity.email, registrationId);
-        ServerUtilities.register(context, "Renato Gaucho", "renato@gmail.com", registrationId);
+
+        ServerUtilities.register(context, users_info.getString(KEY_NAME), users_info.getString(KEY_U_ID), registrationId);
     }
 
     /**
@@ -92,22 +108,38 @@ public class GCMIntentService extends GCMBaseIntentService {
      * Issues a notification to inform the user that server has sent a message.
      */
     private static void generateNotification(Context context, String message) {
-        int icon = R.drawable.ic_launcher;
+        int icon = R.drawable.xmiles_logo_rev05_transparente;
         long when = System.currentTimeMillis();
         NotificationManager notificationManager = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
-        Notification notification = new Notification(icon, message, when);
+        
+        String msg = message.split(";")[1];
+        String feed_id = message.split(";")[0];
+        //String push_type = message.split(";")[0];
+        
+        //Log.i(TAG,"push_type: " + push_type);
+        Log.v(TAG,"feed_id: " + feed_id);
+        
+        // Local to add picture from sender too
+        Notification notification = new Notification(icon, msg, when);
         
         String title = context.getString(R.string.app_name);
         
-        //Intent notificationIntent = new Intent(context, MainActivity.class);
-        Intent notificationIntent = new Intent(context, MainActivity.class);
+
+        Intent notificationIntent = new Intent(context, Push.class);
+        
+        notificationIntent.putExtra("feed_id", feed_id);
+        
         // set intent so it does not start a new activity
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |
                 Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        //PendingIntent intent =
+        //        PendingIntent.getActivity(context, 0, notificationIntent, 0);
         PendingIntent intent =
-                PendingIntent.getActivity(context, 0, notificationIntent, 0);
-        notification.setLatestEventInfo(context, title, message, intent);
+                PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        
+        notification.setLatestEventInfo(context, title, msg, intent);
         notification.flags |= Notification.FLAG_AUTO_CANCEL;
         
         // Play default notification sound
