@@ -38,8 +38,11 @@ public class Hashtag extends FragmentActivity {
 	      actionBar.setDisplayHomeAsUpEnabled(true);
 	      actionBar.setDisplayShowHomeEnabled(false);
 	      actionBar.setDisplayShowTitleEnabled(true);
-	      //actionBar.setTitle(Html.fromHtml("<i><b><font color='#ffffff'>    " +  args.getString("hashtag") + "</font></b></i>"));
-	      actionBar.setTitle(Html.fromHtml("<b><font color='#ffffff'>      " +  args.getString("hashtag") + "</font></b>"));
+	      /*
+	       * Line below is commented due to crash on LG-P875h device
+	       */
+	      //actionBar.setTitle(Html.fromHtml("<b><font color='#ffffff'>      " +  args.getString("hashtag") + "</font></b>"));
+	      actionBar.setTitle(args.getString("hashtag"));
 	      actionBar.setDisplayUseLogoEnabled(false);
 	      
 

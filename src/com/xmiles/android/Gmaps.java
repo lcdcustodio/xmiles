@@ -368,11 +368,11 @@ public class Gmaps extends FragmentActivity {
 				String status = status_buscode + status_buscode_details + status_nearby;
 
 				if (status_buscode_details.equals("")){
-					//contentValues.put(DatabaseHelper.KEY_HASHTAG, "#" + bus_gps_url.getString(KEY_BUSCODE));
-					contentValues.put(DatabaseHelper.KEY_HASHTAG, "#" + bus_gps_url.getString(KEY_BUSCODE).toLowerCase());
+					contentValues.put(DatabaseHelper.KEY_HASHTAG, "#" + bus_gps_url.getString(KEY_BUSCODE));
+					//contentValues.put(DatabaseHelper.KEY_HASHTAG, "#" + bus_gps_url.getString(KEY_BUSCODE).toLowerCase());
 				} else {
-					//contentValues.put(DatabaseHelper.KEY_HASHTAG, "#" + bus_gps_url.getString(KEY_BUSCODE) +
-					contentValues.put(DatabaseHelper.KEY_HASHTAG, "#" + bus_gps_url.getString(KEY_BUSCODE).toLowerCase() + 		
+					contentValues.put(DatabaseHelper.KEY_HASHTAG, "#" + bus_gps_url.getString(KEY_BUSCODE) +
+					//contentValues.put(DatabaseHelper.KEY_HASHTAG, "#" + bus_gps_url.getString(KEY_BUSCODE).toLowerCase() + 		
 							"," + buscode_info.getString(KEY_HASHTAG));
 				}
 				contentValues.put(DatabaseHelper.KEY_STATUS, status);

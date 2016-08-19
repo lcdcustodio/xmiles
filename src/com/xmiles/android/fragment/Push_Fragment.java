@@ -137,7 +137,7 @@ public class Push_Fragment extends Fragment {
 		//position = getArguments().getInt("position");
 		feed_id = getArguments().getString("feed_id");
 		Log.i(TAG,"feed_id: " + feed_id);
-		Toast.makeText(getActivity(), "feed_id: " + feed_id, Toast.LENGTH_LONG).show();
+		//Toast.makeText(getActivity(), "feed_id: " + feed_id, Toast.LENGTH_LONG).show();
 		
 		//adapter = getArguments().getString("adapter");
 		//---------------
@@ -220,47 +220,48 @@ public class Push_Fragment extends Fragment {
         			listAdapter.notifyDataSetChanged();
             		//-----------------	 
             		//-----------------
-        			Log.i(TAG, "feed_id " + feed_id);
-        			Log.d(TAG, "data_newsfeed.getString(KEY_ID): " + data_newsfeed.getString(KEY_ID));
+        		    try {
 
-    				Uri uri_2 = SqliteProvider.CONTENT_URI_NEWSFEED_update;
-    				
-    				ContentValues cv_1 = new ContentValues();
-    				
-    				int comments_stats = Integer.parseInt(data_newsfeed.getString(KEY_COMMENT_STATS));    				
-    				cv_1.put(DatabaseHelper.KEY_COMMENT_STATS, String.valueOf(comments_stats + 1));
-    				//-----
-    				getActivity().getContentResolver().update(uri_2, 
-    						cv_1,
-    						DatabaseHelper.KEY_ID + " = " + feed_id, null);
-            		//-----------------	 
-            		//-----------------    								 
-    				data_profile.moveToFirst();
+            			//Log.i(TAG, "feed_id " + feed_id);
+            			//Log.v(TAG, "json.getString(feed) " + json.getString("feed"));
+            			JSONArray newsfeed = new JSONArray(json.getString("feed"));
+            			JSONObject nfObj = (JSONObject) newsfeed.get(0);
+            			//Log.d(TAG, "newsfeed.get(0) " + newsfeed.get(0));
+            			
+        				data_profile.moveToFirst();
 
-    				ContentValues cv_2 = new ContentValues();
-    				
-    				//feed_id
-    				cv_2.put(DatabaseHelper.KEY_ID, data_newsfeed.getString(KEY_ID));				
-    				//user_id
-    				cv_2.put(DatabaseHelper.KEY_U_ID, data_profile.getString(KEY_ID_PROFILE));
-    				// flag_action
-    				cv_2.put(DatabaseHelper.KEY_FLAG_ACTION, "ADD");
-    				// time_stamp    				
-    				cv_2.put(DatabaseHelper.KEY_TIME_STAMP, support.getDateTime());
-    				//sender
-    				cv_2.put(DatabaseHelper.KEY_SENDER, data_newsfeed.getString(KEY_SENDER));
-    				//status
-    				cv_2.put(DatabaseHelper.KEY_STATUS, data_newsfeed.getString(KEY_STATUS));
-    				//feed_type
-    				cv_2.put(DatabaseHelper.KEY_FEED_TYPE, data_newsfeed.getString(KEY_FEED_TYPE));
-    				//comment
-    				cv_2.put(DatabaseHelper.KEY_COMMENT, searchContent);
-    				
-					Uri uri_5 = SqliteProvider.CONTENT_URI_COMMENTS_UPLOAD_insert;
-					getActivity().getContentResolver().insert(uri_5, cv_2);
-					//---------------------
-					Comments_Inbox_Upload ciu = new Comments_Inbox_Upload();
-					ciu.setAlarm(getActivity());	
+        				ContentValues cv_2 = new ContentValues();
+        				
+        				//feed_id
+        				cv_2.put(DatabaseHelper.KEY_ID, nfObj.getInt("id"));				
+        				//user_id
+        				cv_2.put(DatabaseHelper.KEY_U_ID, data_profile.getString(KEY_ID_PROFILE));
+        				// flag_action
+        				cv_2.put(DatabaseHelper.KEY_FLAG_ACTION, "ADD");
+        				// time_stamp    				
+        				cv_2.put(DatabaseHelper.KEY_TIME_STAMP, support.getDateTime());
+        				//sender
+        				cv_2.put(DatabaseHelper.KEY_SENDER, nfObj.getString("sender"));
+        				//status
+        				cv_2.put(DatabaseHelper.KEY_STATUS, nfObj.getString("status"));
+        				//feed_type
+        				cv_2.put(DatabaseHelper.KEY_FEED_TYPE, nfObj.getString("feed_type"));
+        				//comment
+        				cv_2.put(DatabaseHelper.KEY_COMMENT, searchContent);
+        				
+    					Uri uri_5 = SqliteProvider.CONTENT_URI_COMMENTS_UPLOAD_insert;
+    					getActivity().getContentResolver().insert(uri_5, cv_2);
+    					//---------------------
+    					Comments_Inbox_Upload ciu = new Comments_Inbox_Upload();
+    					ciu.setAlarm(getActivity());	
+
+            			
+			    		        	
+				    } catch (Exception e) {
+				            e.printStackTrace();
+				    }
+        			
+        			
     				
     				
                 }

@@ -435,9 +435,21 @@ public class FeedListAdapter extends BaseAdapter {
 		if (!TextUtils.isEmpty(item.getStatus())) {
 			
 			if (item.getStatus().indexOf("<bold>") != -1){
-				statusMsg.setText(Html.fromHtml(item.getStatus().split("<bold>")[0] +
-						                       "<b>" + item.getStatus().split("<bold>")[1] + "</b>" +
-						                       item.getStatus().split("<bold>")[2]));
+				
+				
+				String args[]  = item.getStatus().split("<bold>");
+				
+				if (args.length == 2){
+
+					statusMsg.setText(Html.fromHtml(item.getStatus().split("<bold>")[0] +
+		                       "<b>" + item.getStatus().split("<bold>")[1] + "</b>"));
+										
+				} else {
+				
+					statusMsg.setText(Html.fromHtml(item.getStatus().split("<bold>")[0] +
+							                       "<b>" + item.getStatus().split("<bold>")[1] + "</b>" +
+							                       item.getStatus().split("<bold>")[2]));
+				}
 			} else {
 				statusMsg.setText(item.getStatus());
 			}
@@ -459,7 +471,7 @@ public class FeedListAdapter extends BaseAdapter {
 			url.setMovementMethod(LinkMovementMethod.getInstance());
 			url.setVisibility(View.VISIBLE);
 		} else {
-			
+			/*
 			if (item.getName().equals("xMiles")){
 
 				//url.setText(Html.fromHtml("<a href=\"" + "http://ec2-54-209-160-58.compute-1.amazonaws.com/pictures/xmiles_logo_rev05_transparente.png" + "\">"
@@ -473,11 +485,11 @@ public class FeedListAdapter extends BaseAdapter {
 				url.setMovementMethod(LinkMovementMethod.getInstance());
 				url.setVisibility(View.VISIBLE);
 				
-			} else {
+			} else { */
 				// url is null, remove from the view
 				url.setVisibility(View.GONE);
-			}	
-		}
+			//}	
+		} 
 
 		// Checking for null hashtag
 		if (item.getHashtag_1() != null && !item.getHashtag_1().equals("")) {	

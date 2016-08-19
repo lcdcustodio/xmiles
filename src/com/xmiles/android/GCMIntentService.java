@@ -109,16 +109,16 @@ public class GCMIntentService extends GCMBaseIntentService {
      */
     private static void generateNotification(Context context, String message) {
         int icon = R.drawable.xmiles_logo_rev05_transparente;
+
         long when = System.currentTimeMillis();
         NotificationManager notificationManager = (NotificationManager)
                 context.getSystemService(Context.NOTIFICATION_SERVICE);
         
         String msg = message.split(";")[1];
         String feed_id = message.split(";")[0];
-        //String push_type = message.split(";")[0];
-        
-        //Log.i(TAG,"push_type: " + push_type);
-        Log.v(TAG,"feed_id: " + feed_id);
+
+
+        //Log.v(TAG,"feed_id: " + feed_id);
         
         // Local to add picture from sender too
         Notification notification = new Notification(icon, msg, when);

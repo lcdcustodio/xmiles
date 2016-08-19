@@ -417,9 +417,27 @@ public class HashtagListAdapter extends BaseAdapter {
 		if (!TextUtils.isEmpty(item.getStatus())) {
 			
 			if (item.getStatus().indexOf("<bold>") != -1){
+				/*
 				statusMsg.setText(Html.fromHtml(item.getStatus().split("<bold>")[0] +
 						                       "<b>" + item.getStatus().split("<bold>")[1] + "</b>" +
 						                       item.getStatus().split("<bold>")[2]));
+				*/
+				String args[]  = item.getStatus().split("<bold>");
+				
+				if (args.length == 2){
+
+					statusMsg.setText(Html.fromHtml(item.getStatus().split("<bold>")[0] +
+		                       "<b>" + item.getStatus().split("<bold>")[1] + "</b>"));
+										
+				} else {
+				
+					statusMsg.setText(Html.fromHtml(item.getStatus().split("<bold>")[0] +
+							                       "<b>" + item.getStatus().split("<bold>")[1] + "</b>" +
+							                       item.getStatus().split("<bold>")[2]));
+				}
+				
+				
+						                       
 			} else {
 				statusMsg.setText(item.getStatus());
 			}

@@ -33,14 +33,16 @@ public final class ServerUtilities {
      * Register this account/device pair within the server.
      *
      */
-    public static void register(final Context context, String name, String email, final String regId) {
+    //public static void register(final Context context, String name, String email, final String regId) {
+    public static void register(final Context context, String name, String user_id, final String regId) {	
 	
         Log.i(TAG, "registering device (regId = " + regId + ")");
         String serverUrl = SERVER_URL;
         Map<String, String> params = new HashMap<String, String>();
         params.put("regId", regId);
         params.put("name", name);
-        params.put("email", email);
+        //params.put("email", email);
+        params.put("user_id", user_id);
         
         long backoff = BACKOFF_MILLI_SECONDS + random.nextInt(1000);
         // Once GCM returns a registration id, we need to register on our server

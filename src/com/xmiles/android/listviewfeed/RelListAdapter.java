@@ -215,9 +215,28 @@ public class RelListAdapter extends BaseAdapter {
 				if (!TextUtils.isEmpty(feed_item.getStatus())) {
 					
 					if (feed_item.getStatus().indexOf("<bold>") != -1){
+						/*
 						vi1_statusMsg.setText(Html.fromHtml(feed_item.getStatus().split("<bold>")[0] +
 								                       "<b>" + feed_item.getStatus().split("<bold>")[1] + "</b>" +
 								                       feed_item.getStatus().split("<bold>")[2]));
+						*/
+						String args[]  = feed_item.getStatus().split("<bold>");
+						
+						if (args.length == 2){
+
+							vi1_statusMsg.setText(Html.fromHtml(feed_item.getStatus().split("<bold>")[0] +
+				                       "<b>" + feed_item.getStatus().split("<bold>")[1] + "</b>"));
+						
+						} else {
+							
+							vi1_statusMsg.setText(Html.fromHtml(feed_item.getStatus().split("<bold>")[0] +
+				                       "<b>" + feed_item.getStatus().split("<bold>")[1] + "</b>" +
+				                       feed_item.getStatus().split("<bold>")[2]));
+						
+						
+						}
+						
+								                       
 					} else {
 						vi1_statusMsg.setText(feed_item.getStatus());
 					}

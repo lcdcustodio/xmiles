@@ -92,8 +92,10 @@ public class MainActivity extends FragmentActivity {
 	    
 	    // set Title
 	    actionBar.setDisplayShowTitleEnabled(true);
-	    
-	    // Comment line below is due to BUG at LG OPTIMUS F5 device
+
+	    /*
+	     * Line below is commented due to crash on LG-P875h device
+	    */	    
 	    //actionBar.setTitle(Html.fromHtml("<b><font color='#ffffff'> &nbsp xMiles</font></b>"));
 
 	    
@@ -334,11 +336,25 @@ public class MainActivity extends FragmentActivity {
 			case R.id.buscode_search:
 				
 				Toast.makeText(getApplicationContext(), "Buscando ônibus", Toast.LENGTH_LONG).show();
-				
+				//*
                 Intent intent = new Intent(getApplicationContext(), Gmaps.class);                        
                 
                 startActivity(intent);
+				//*/
+				/*
+				String appLinkUrl, previewImageUrl;
 
+				appLinkUrl = "https://www.mydomain.com/myapplink";
+				previewImageUrl = "https://www.mydomain.com/my_invite_image.jpg";
+
+				if (AppInviteDialog.canShow()) {
+				    AppInviteContent content = new AppInviteContent.Builder()
+				                .setApplinkUrl(appLinkUrl)
+				                .setPreviewImageUrl(previewImageUrl)
+				                .build();
+				    AppInviteDialog.show(this, content);
+				}				
+				*/
 				
 				return true;	
 				

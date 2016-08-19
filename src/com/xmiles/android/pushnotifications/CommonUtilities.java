@@ -6,7 +6,8 @@ import android.content.Intent;
 public final class CommonUtilities {
 	
 	// give your server registration url here     
-    public static final String SERVER_URL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/old/gcm_server_php/register.php";
+    //public static final String SERVER_URL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/old/gcm_server_php/register.php";
+    public static final String SERVER_URL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/gcm/register.php";
 
     // Google project id
     public static final String SENDER_ID = "485149707692";  // SenderID from PUSH NOTIFICATION By GCM (androidhive example)
