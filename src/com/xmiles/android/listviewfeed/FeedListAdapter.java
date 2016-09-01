@@ -1,5 +1,6 @@
 package com.xmiles.android.listviewfeed;
 
+import com.xmiles.android.facebook_api_support.Utility;
 import com.xmiles.android.listviewfeed.FeedImageView;
 import com.xmiles.android.Hashtag;
 import com.xmiles.android.R;
@@ -38,6 +39,9 @@ import android.widget.TextView;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.facebook.widget.WebDialog;
+import com.facebook.FacebookException;
+
 
 public class FeedListAdapter extends BaseAdapter {	
 	private Activity activity;
@@ -47,6 +51,9 @@ public class FeedListAdapter extends BaseAdapter {
 	
 	//TAG
 	private static final String TAG = "FACEBOOK";
+	
+	
+	private static final String INVITE = "#convite_amigos";
 
 	private static final Integer KEY_ID_PROFILE  = 0;
 	private static final Integer KEY_ID         = 1;
@@ -112,15 +119,42 @@ public class FeedListAdapter extends BaseAdapter {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				
-				Log.e(TAG,"hashtag_1: " + hashtag_1.getText().toString());
+				//Log.e(TAG,"hashtag_1: " + hashtag_1.getText().toString());
 				
-			    Intent intent = new Intent(activity, Hashtag.class);
+				if (hashtag_1.getText().toString().equals(INVITE)){
+					
+	                WebDialog.RequestsDialogBuilder builder =
+
+	                		new WebDialog.RequestsDialogBuilder(activity,Utility.mFacebook.getSession())
+	                                .setTitle(activity.getString(R.string.invite_dialog_title))
+	                                .setMessage(activity.getString(R.string.invite_dialog_message))
+	                                .setOnCompleteListener(new WebDialog.OnCompleteListener() {
+	                                    @Override
+	                                    public void onComplete(Bundle values, FacebookException error) {
+	                                        if (error != null) {
+	                                            Log.w(TAG, "Web dialog encountered an error.", error);
+	                                        } else {
+	                                            Log.i(TAG, "Web dialog complete: " + values);
+	                                        }
+	                                    }
+	                                });
+	 
+	                
+	                builder.build().show();
+
+					
+					
+				} else {				
+				
+					Intent intent = new Intent(activity, Hashtag.class);
 			     
-			    Bundle args = new Bundle();				    
-			    args.putString("hashtag", hashtag_1.getText().toString());			    
-			    intent.putExtras(args);
+					Bundle args = new Bundle();				    
+					args.putString("hashtag", hashtag_1.getText().toString());			    
+					intent.putExtras(args);
 			    
-			    activity.startActivity(intent);
+					activity.startActivity(intent);
+			    
+				}
 
 			}			
 		});	

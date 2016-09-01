@@ -1,5 +1,6 @@
 package com.xmiles.android;
 
+import com.xmiles.android.facebook_api_support.Utility;
 import com.xmiles.android.fragment.Feed_Fragment;
 
 import com.xmiles.android.fragment.Ranking_Fragment;
@@ -46,6 +47,9 @@ import static com.xmiles.android.pushnotifications.CommonUtilities.EXTRA_MESSAGE
 import static com.xmiles.android.pushnotifications.CommonUtilities.SENDER_ID;
 import static com.xmiles.android.pushnotifications.CommonUtilities.SERVER_URL;
 
+import com.facebook.FacebookException;
+import com.facebook.Session;
+import com.facebook.widget.WebDialog;
 import com.google.android.gcm.GCMRegistrar;
 
 public class MainActivity extends FragmentActivity {
@@ -341,20 +345,30 @@ public class MainActivity extends FragmentActivity {
                 
                 startActivity(intent);
 				//*/
-				/*
-				String appLinkUrl, previewImageUrl;
 
-				appLinkUrl = "https://www.mydomain.com/myapplink";
-				previewImageUrl = "https://www.mydomain.com/my_invite_image.jpg";
-
-				if (AppInviteDialog.canShow()) {
-				    AppInviteContent content = new AppInviteContent.Builder()
-				                .setApplinkUrl(appLinkUrl)
-				                .setPreviewImageUrl(previewImageUrl)
-				                .build();
-				    AppInviteDialog.show(this, content);
-				}				
-				*/
+                /*
+                WebDialog.RequestsDialogBuilder builder =
+                        //new WebDialog.RequestsDialogBuilder(MainActivity.this, Session.getActiveSession())
+                		new WebDialog.RequestsDialogBuilder(MainActivity.this,Utility.mFacebook.getSession())
+                                .setTitle(getString(R.string.invite_dialog_title))
+                                .setMessage(getString(R.string.invite_dialog_message))
+                                .setOnCompleteListener(new WebDialog.OnCompleteListener() {
+                                    @Override
+                                    public void onComplete(Bundle values, FacebookException error) {
+                                        if (error != null) {
+                                            Log.w(TAG, "Web dialog encountered an error.", error);
+                                        } else {
+                                            Log.i(TAG, "Web dialog complete: " + values);
+                                        }
+                                    }
+                                });
+ 
+                //if (friendId != null) {
+                //    builder.setTo(friendId);
+                //}
+                
+                builder.build().show();
+                */
 				
 				return true;	
 				

@@ -459,7 +459,7 @@ public class HashtagListAdapter extends BaseAdapter {
 			url.setMovementMethod(LinkMovementMethod.getInstance());
 			url.setVisibility(View.VISIBLE);
 		} else {
-			
+			/*
 			if (item.getName().equals("xMiles")){
 
 				url.setText(Html.fromHtml("<a href=\"" + "http://ec2-54-209-160-58.compute-1.amazonaws.com/pictures/xmiles_logo_rev05_transparente.png" + "\">"
@@ -469,10 +469,10 @@ public class HashtagListAdapter extends BaseAdapter {
 				url.setMovementMethod(LinkMovementMethod.getInstance());
 				url.setVisibility(View.VISIBLE);
 				
-			} else {
+			} else { */
 				// url is null, remove from the view
 				url.setVisibility(View.GONE);
-			}	
+			//}	
 		}
 
 		// Checking for null hashtag
