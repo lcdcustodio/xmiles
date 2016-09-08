@@ -43,21 +43,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-//-------------
-//BEGIN TEST - PUSH NOTIFICATION By GCM (androidhive example)
-/*
-import static com.xmiles.android.pushnotifications.CommonUtilities.SENDER_ID;
-import static com.xmiles.android.pushnotifications.CommonUtilities.SERVER_URL;
-import static com.xmiles.android.pushnotifications.CommonUtilities.DISPLAY_MESSAGE_ACTION;
-import static com.xmiles.android.pushnotifications.CommonUtilities.EXTRA_MESSAGE;
-import com.google.android.gcm.GCMRegistrar;
-import com.xmiles.android.pushnotifications.ServerUtilities;
-import com.xmiles.android.pushnotifications.WakeLocker;
-*/
-//END TEST - PUSH NOTIFICATION By GCM (androidhive example)
-//-------------
-
-
 
 public class Splash_Fragment extends Fragment {
 
@@ -157,56 +142,6 @@ public class Splash_Fragment extends Fragment {
 
 
                 }
-				//-------------
-            	//BEGIN TEST - PUSH NOTIFICATION By GCM (androidhive example)
-                /*
-        		// Check if GCM configuration is set
-        		if (SERVER_URL == null || SENDER_ID == null || SERVER_URL.length() == 0
-        				|| SENDER_ID.length() == 0) {
-        			// GCM sernder id / server url is missing
-        			Toast.makeText(getActivity(), "Please set your Server URL and GCM Sender ID", 
-        					Toast.LENGTH_LONG).show();
-        			//alert.showAlertDialog(RegisterActivity.this, "Configuration Error!",
-        			//		"Please set your Server URL and GCM Sender ID", false);
-        			// stop executing code by return
-        			 //return;
-        		}
-
-        		// Make sure the device has the proper dependencies.
-        		GCMRegistrar.checkDevice(getActivity());
-        		
-        		// Make sure the manifest was properly set - comment out this line
-        		// while developing the app, then uncomment it when it's ready.
-        		GCMRegistrar.checkManifest(getActivity());
-        		
-        		//lblMessage = (TextView) findViewById(R.id.lblMessage);
-        		
-        		getActivity().registerReceiver(mHandleMessageReceiver, new IntentFilter(
-        				DISPLAY_MESSAGE_ACTION));
-        		
-        		// Get GCM registration id
-        		final String regId = GCMRegistrar.getRegistrationId(getActivity());
-        		
-        		// Check if regid already presents
-        		if (regId.equals("")) {
-        			// Registration is not present, register now with GCM			
-        			GCMRegistrar.register(getActivity(), SENDER_ID);
-        		}  else {
-        			// Device is already registered on GCM
-        			if (GCMRegistrar.isRegisteredOnServer(getActivity())) {
-        				// Skips registration.				
-        				Toast.makeText(getActivity(), "Already registered with GCM", Toast.LENGTH_LONG).show();
-        			} else {
-        				// Try to register again, but not in the UI thread.
-        				// It's also necessary to cancel the thread onDestroy(),
-        				// hence the use of AsyncTask instead of a raw thread.
-        				ServerUtilities.register(getActivity(), facebook_profile.getString("name"), facebook_profile.getString("id"), regId);
-        			}
-        			
-        		}	
-				*/
-                //END TEST - PUSH NOTIFICATION By GCM (androidhive example)
-				//-------------
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -135,6 +135,23 @@ public class FeedListAdapter extends BaseAdapter {
 	                                            Log.w(TAG, "Web dialog encountered an error.", error);
 	                                        } else {
 	                                            Log.i(TAG, "Web dialog complete: " + values);
+	                                            /*
+	                                            Log.v(TAG, "values.size(): " + values.size());
+	                                            //values.size();
+	                                            for (int i = 0; i < values.size()-1; i++) {
+	                                            	
+	                                            	Log.i(TAG, "values.get(Integer.toString(i)): " + values.get(Integer.toString(i)));
+	                                            	Log.i(TAG, "values.get([0]): " + values.get("[0]"));
+	                                            }
+	                                            */
+	                                            String request = values.getString("request");
+	                                            Log.i(TAG, "request: " + request);
+
+	                                            for (int i = 0; values.containsKey("to[" + i + "]"); i++) {
+	                                                String toElement = values.getString("to[" + i + "]");
+	                                                Log.i(TAG, "toElement: " + toElement);
+	                                            }
+	                                            
 	                                        }
 	                                    }
 	                                });
