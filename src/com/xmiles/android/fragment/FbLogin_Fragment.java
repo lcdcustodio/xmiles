@@ -6,12 +6,12 @@ import com.facebook.android.FacebookError;
 import com.xmiles.android.R;
 import com.xmiles.android.R.id;
 import com.xmiles.android.R.layout;
+import com.xmiles.android.backup.Getting_UserLocation;
 import com.xmiles.android.backup.Scanning;
 import com.xmiles.android.facebook_api_support.Utility;
 import com.xmiles.android.facebook_api_support.SessionEvents;
 import com.xmiles.android.facebook_api_support.SessionStore;
 import com.xmiles.android.facebook_api_support.SessionEvents.AuthListener;
-import com.xmiles.android.scheduler.Getting_UserLocation;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;

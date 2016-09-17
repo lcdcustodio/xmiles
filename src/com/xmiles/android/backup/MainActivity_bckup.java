@@ -4,9 +4,6 @@ import com.xmiles.android.R;
 import com.xmiles.android.R.id;
 import com.xmiles.android.R.layout;
 import com.xmiles.android.R.menu;
-import com.xmiles.android.fragment.EmConstrucao_Fragment;
-import com.xmiles.android.fragment.Favorites_Fragment;
-import com.xmiles.android.fragment.Profile_Fragment;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;

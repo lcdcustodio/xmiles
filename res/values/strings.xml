@@ -32,7 +32,7 @@
     <string name="server_register_error">Could not register device on Demo Server after %1$d attempts.</string>
     <string name="server_unregistered">From Demo Server: successfully removed device!</string>
     <string name="server_unregister_error">Could not unregister device on Demo Server (%1$s).</string>
-    <string name="invite_dialog_title">Convite os Amigos</string>
+    <string name="invite_dialog_title">Convidar os amigos</string>
     <string name="invite_dialog_message">A cada ponto, mais pontos!</string>
         
 </resources>

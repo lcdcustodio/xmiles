@@ -1,9 +1,9 @@
 package com.xmiles.android;
 
-import com.xmiles.android.fragment.EmConstrucao_Fragment;
-import com.xmiles.android.fragment.Favorites_Fragment;
+import com.xmiles.android.backup.EmConstrucao_Fragment;
+import com.xmiles.android.backup.Favorites_Fragment;
+import com.xmiles.android.backup.Profile_Fragment;
 import com.xmiles.android.fragment.Feed_Fragment;
-import com.xmiles.android.fragment.Profile_Fragment;
 import com.xmiles.android.fragment.Ranking_Fragment;
 import com.xmiles.android.slidingmenu.adapter.SlidingMenuLazyAdapter;
 

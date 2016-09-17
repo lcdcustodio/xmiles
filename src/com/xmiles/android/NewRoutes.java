@@ -1,8 +1,8 @@
 package com.xmiles.android;
 
 
-import com.xmiles.android.fragment.Busline_Fragment;
-import com.xmiles.android.fragment.Cities_Fragment;
+import com.xmiles.android.backup.Busline_Fragment;
+import com.xmiles.android.backup.Cities_Fragment;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;

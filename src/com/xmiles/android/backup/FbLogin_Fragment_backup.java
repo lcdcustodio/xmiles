@@ -11,7 +11,6 @@ import com.xmiles.android.facebook_api_support.SessionEvents;
 import com.xmiles.android.facebook_api_support.SessionStore;
 import com.xmiles.android.facebook_api_support.SessionEvents.AuthListener;
 import com.xmiles.android.fragment.Splash_Fragment;
-import com.xmiles.android.scheduler.Getting_UserLocation;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

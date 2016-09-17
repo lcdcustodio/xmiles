@@ -13,7 +13,10 @@ import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
 import com.xmiles.android.support.Support;
 
+import com.xmiles.android.scheduler.Invite_Friends_AsyncTask;
+
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
 import android.content.ContentValues;
@@ -134,24 +137,39 @@ public class FeedListAdapter extends BaseAdapter {
 	                                        if (error != null) {
 	                                            Log.w(TAG, "Web dialog encountered an error.", error);
 	                                        } else {
-	                                            Log.i(TAG, "Web dialog complete: " + values);
-	                                            /*
-	                                            Log.v(TAG, "values.size(): " + values.size());
-	                                            //values.size();
-	                                            for (int i = 0; i < values.size()-1; i++) {
-	                                            	
-	                                            	Log.i(TAG, "values.get(Integer.toString(i)): " + values.get(Integer.toString(i)));
-	                                            	Log.i(TAG, "values.get([0]): " + values.get("[0]"));
-	                                            }
-	                                            */
-	                                            String request = values.getString("request");
-	                                            Log.i(TAG, "request: " + request);
+	                                            //Log.i(TAG, "Web dialog complete: " + values);
 
-	                                            for (int i = 0; values.containsKey("to[" + i + "]"); i++) {
-	                                                String toElement = values.getString("to[" + i + "]");
-	                                                Log.i(TAG, "toElement: " + toElement);
-	                                            }
+	                                            String request_id = values.getString("request");
+	                                            //Log.i(TAG, "request: " + request);
+
+	                                            StringBuilder friends_id = new StringBuilder();
 	                                            
+	                                            for (int i = 0; values.containsKey("to[" + i + "]"); i++) {
+	                                              
+	                                            	if (i != 0){
+	                                            		friends_id.append(";");
+	                                            	}
+	                                            	friends_id.append(values.getString("to[" + i + "]"));
+	                                                
+	                                            }
+	                                            Log.i(TAG, "friends_id: " + friends_id);
+	                                            
+	                                            //Invite_Friends
+	                                            try {
+	                                            	
+	                                            	Uri uri = SqliteProvider.CONTENT_URI_USER_PROFILE;
+	                                            	Cursor data_profile = activity.getContentResolver().query(uri, null, null, null, null);				 
+	                                            	data_profile.moveToFirst();
+	                                            	
+													new Invite_Friends_AsyncTask(data_profile.getString(KEY_ID_PROFILE),friends_id,request_id).execute().get();
+													
+												} catch (InterruptedException e) {
+													// TODO Auto-generated catch block
+													e.printStackTrace();
+												} catch (ExecutionException e) {
+													// TODO Auto-generated catch block
+													e.printStackTrace();
+												}
 	                                        }
 	                                    }
 	                                });
