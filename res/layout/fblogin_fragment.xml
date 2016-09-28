@@ -25,9 +25,28 @@
 			        android:layout_marginTop="24dp"
 			        android:src="@drawable/xmiles_logo_rev04_transparente" />
 		        
-			</RelativeLayout>      
+			</RelativeLayout>    
+			
+        	<!-- 	
+        	<com.facebook.login.widget.LoginButton -->
+        	<!--
+        	<com.facebook.widget.LoginButton   
+        	       android:layout_below="@id/frame_logo" 
+			       xmlns:fb="http://schemas.android.com/apk/res-auto"
+			        android:id="@+id/login_button"
+			        android:layout_width="249dp"
+			        android:layout_height="45dp"
+			        android:layout_above="@+id/textView1"
+			        android:layout_centerHorizontal="true"
+			        android:layout_gravity="center_horizontal"
+			        android:layout_marginBottom="30dp"
+			        android:layout_marginTop="30dp"
+			        android:contentDescription="lalacdcdffvf"
+			        android:scaleType="centerInside"
+			        fb:login_text="Facebook Login"			        
+			        fb:logout_text="" />  	  -->
 	
- 				
+ 			<!-- -->
         		
         	<Button        	    
         	    android:layout_below="@id/frame_logo"
@@ -37,8 +56,10 @@
 		        android:layout_height="wrap_content"
 		        android:text="Facebook Login"
 		        android:drawableLeft="@drawable/fb_logo"		        
-		        style="@style/button_text" />
-        		<!-- android:layout_centerHorizontal="true"
+		        style="@style/button_text" /> <!-- -->
+        		<!--android:layout_below="@id/frame_logo"
+        		    android:layout_below="@id/login_button" 
+        			android:layout_centerHorizontal="true"
                 	 android:layout_centerVertical="true"		                
         		 -->
        		<TextView

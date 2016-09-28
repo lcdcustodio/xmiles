@@ -9,6 +9,7 @@ import com.xmiles.android.pushnotifications.ServerUtilities;
 import com.xmiles.android.pushnotifications.WakeLocker;
 import com.xmiles.android.slidingmenu.adapter.SlidingMenuLazyAdapter;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
+import com.xmiles.android.support.GetGpsToken;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
@@ -30,6 +31,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.DrawerLayout;
 import android.text.Html;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -339,36 +341,22 @@ public class MainActivity extends FragmentActivity {
 			*/
 			case R.id.buscode_search:
 				
-				Toast.makeText(getApplicationContext(), "Buscando ônibus", Toast.LENGTH_LONG).show();
+				
 				//*
+				Toast.makeText(getApplicationContext(), "Buscando ônibus", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(getApplicationContext(), Gmaps.class);                        
                 
                 startActivity(intent);
 				//*/
 
-                /*
-                WebDialog.RequestsDialogBuilder builder =
-                        //new WebDialog.RequestsDialogBuilder(MainActivity.this, Session.getActiveSession())
-                		new WebDialog.RequestsDialogBuilder(MainActivity.this,Utility.mFacebook.getSession())
-                                .setTitle(getString(R.string.invite_dialog_title))
-                                .setMessage(getString(R.string.invite_dialog_message))
-                                .setOnCompleteListener(new WebDialog.OnCompleteListener() {
-                                    @Override
-                                    public void onComplete(Bundle values, FacebookException error) {
-                                        if (error != null) {
-                                            Log.w(TAG, "Web dialog encountered an error.", error);
-                                        } else {
-                                            Log.i(TAG, "Web dialog complete: " + values);
-                                        }
-                                    }
-                                });
- 
-                //if (friendId != null) {
-                //    builder.setTo(friendId);
-                //}
-                
-                builder.build().show();
-                */
+				/*
+				Log.i(TAG, "System.currentTimeMillis(): " + System.currentTimeMillis());
+
+				
+				GetGpsToken gt = new GetGpsToken();
+				String lala = gt.md5("783414521747915" + System.currentTimeMillis());
+				Log.i(TAG, "gt.md5: " + lala);
+				*/
 				
 				return true;	
 				

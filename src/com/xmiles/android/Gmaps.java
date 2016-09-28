@@ -12,6 +12,8 @@ import com.google.android.gms.maps.GoogleMap;
 
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -36,6 +38,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.net.Uri;
@@ -208,8 +211,7 @@ public class Gmaps extends FragmentActivity {
       							
       							
       							String [] dataBusArray = json.getString("DATA").substring(2, json.getString("DATA").length()-2).split(",");
-      							
-      							/** Setting up values to insert into UserProfile table */		
+      							      									
       							//----------------------
       							//----------------------
       							ContentValues cV = new ContentValues();
@@ -217,7 +219,21 @@ public class Gmaps extends FragmentActivity {
       							cV.put(DatabaseHelper.KEY_URL, url);
       							//----------------------------
       							cV.put(DatabaseHelper.KEY_FLAG, 0);
-      							//----------------------------		
+      							//----------------------------
+      							/*
+      							 * Incluir aqui o código com hash para conexão agregando o buscode
+      							 */
+      							/*
+      							Log.i(TAG, "System.currentTimeMillis(): " + System.currentTimeMillis());
+
+      							
+      							GetGpsToken gt = new GetGpsToken();
+      							String lala = gt.md5("783414521747915" + System.currentTimeMillis());
+      							Log.i(TAG, "gt.md5: " + lala);
+      							*/      							
+      							
+      							
+      							
 
       							getApplicationContext().getContentResolver().insert(SqliteProvider.CONTENT_URI_BUS_GPS_URL_insert, cV);
       							//----------------------
@@ -274,6 +290,16 @@ public class Gmaps extends FragmentActivity {
       							
       							marker.showInfoWindow();
 
+      							// Add a circle
+      							mMap.addCircle(new CircleOptions()
+      							     .center(loc)
+      							     .radius(3000)  //set radius in meters
+      							     //.strokeColor(Color.BLUE)
+      							     .strokeWidth(0)
+      							     //.fillColor(Color.TRANSPARENT));
+      								 //.fillColor(Color.argb(150, 0, 0, 0)));
+      								 .fillColor(Color.argb(50, 0, 0, 0)));
+      							
 
       						} else {
       							

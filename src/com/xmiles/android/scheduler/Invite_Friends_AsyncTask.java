@@ -8,12 +8,14 @@ import org.json.JSONObject;
 
 import com.xmiles.android.webservice.UserFunctions;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.Toast;
 
 
 
-public class Invite_Friends_AsyncTask extends AsyncTask<Void,Void,Void> {
+public class Invite_Friends_AsyncTask extends AsyncTask<Void,Void,String> {
 	 
 	  
 	  //-------------
@@ -24,16 +26,20 @@ public class Invite_Friends_AsyncTask extends AsyncTask<Void,Void,Void> {
 	  private StringBuilder friends_id;
 	  private String request_id;
 	  private String user_id;
+	  //private Context ctx;
+	  String result;
 	 
-    public Invite_Friends_AsyncTask(String user_id, StringBuilder friends_id, String request_id) {
+    //public Invite_Friends_AsyncTask(Context c, String user_id, StringBuilder friends_id, String request_id) {
+    public Invite_Friends_AsyncTask(String user_id, StringBuilder friends_id, String request_id) {	
     	
 	   this.friends_id = friends_id;
 	   this.request_id = request_id;
 	   this.user_id = user_id;
+//	   this.ctx = c;
 	  }
 	 
 	  @Override
-	  protected void onPostExecute(Void result) {
+	  protected void onPostExecute(String result) {
 	   super.onPostExecute(result);
 
 	   //----------------------------	   
@@ -49,7 +55,7 @@ public class Invite_Friends_AsyncTask extends AsyncTask<Void,Void,Void> {
 	  }
 	 
 	  @Override
-	  protected Void doInBackground(Void... arg0) {  
+	  protected String doInBackground(Void... arg0) {  
 
 		UserFunctions userFunc = new UserFunctions();
 
@@ -65,8 +71,10 @@ public class Invite_Friends_AsyncTask extends AsyncTask<Void,Void,Void> {
 
 					    String res = json.getString("success");
 					    if(Integer.parseInt(res) == 1){
-					    	Log.v(TAG, "Invite_Friends: success");
-					    	
+					    	//Log.v(TAG, "Invite_Friends: success");
+					    	result = "success";
+					    } else {					    	
+					    	result = "fail";
 					    }
 
 		        	}		
@@ -78,6 +86,6 @@ public class Invite_Friends_AsyncTask extends AsyncTask<Void,Void,Void> {
 
 		    	//return json;	     
   
-	   return null;  
+	   return result;  
 	  }
 	 }

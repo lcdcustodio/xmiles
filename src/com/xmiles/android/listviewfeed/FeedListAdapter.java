@@ -39,6 +39,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
@@ -143,16 +144,16 @@ public class FeedListAdapter extends BaseAdapter {
 	                                            //Log.i(TAG, "request: " + request);
 
 	                                            StringBuilder friends_id = new StringBuilder();
-	                                            
+	                                            int friends_count = 0;
 	                                            for (int i = 0; values.containsKey("to[" + i + "]"); i++) {
 	                                              
 	                                            	if (i != 0){
 	                                            		friends_id.append(";");
 	                                            	}
 	                                            	friends_id.append(values.getString("to[" + i + "]"));
-	                                                
+	                                            	friends_count = friends_count + 1;
 	                                            }
-	                                            Log.i(TAG, "friends_id: " + friends_id);
+	                                            Log.i(TAG, "friends_count: " + friends_count);
 	                                            
 	                                            //Invite_Friends
 	                                            try {
@@ -161,7 +162,19 @@ public class FeedListAdapter extends BaseAdapter {
 	                                            	Cursor data_profile = activity.getContentResolver().query(uri, null, null, null, null);				 
 	                                            	data_profile.moveToFirst();
 	                                            	
-													new Invite_Friends_AsyncTask(data_profile.getString(KEY_ID_PROFILE),friends_id,request_id).execute().get();
+													//String result = new Invite_Friends_AsyncTask(activity, data_profile.getString(KEY_ID_PROFILE),friends_id,request_id).execute().get();
+													String result = new Invite_Friends_AsyncTask(data_profile.getString(KEY_ID_PROFILE),friends_id,request_id).execute().get();
+													
+													if (result.equals("success")){
+												    	if (friends_count > 1 ){
+												    		Toast.makeText(activity, "Convites enviados com sucesso!", Toast.LENGTH_LONG).show();
+												    	} else {
+												    		Toast.makeText(activity, "Convite enviado com sucesso!", Toast.LENGTH_LONG).show();
+												    	}
+														
+													}else {					    	
+												    	Toast.makeText(activity, "Falha ao enviar o convite! Tente novamente mais tarde!", Toast.LENGTH_LONG).show();
+													}
 													
 												} catch (InterruptedException e) {
 													// TODO Auto-generated catch block
