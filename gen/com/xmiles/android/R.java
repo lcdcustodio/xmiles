@@ -987,9 +987,9 @@ Toolbar Hive example
         public static final int bus_stop=0x7f0a005b;
         public static final int buscode=0x7f0a0088;
         public static final int buscode_search=0x7f0a009d;
-        public static final int busline=0x7f0a006e;
+        public static final int busline=0x7f0a0070;
         public static final int button1=0x7f0a0058;
-        public static final int button_save_route=0x7f0a006f;
+        public static final int button_save_route=0x7f0a006d;
         public static final int buyButton=0x7f0a0016;
         public static final int buy_now=0x7f0a001b;
         public static final int buy_with=0x7f0a001c;
@@ -1032,7 +1032,7 @@ Toolbar Hive example
         public static final int feedImage1=0x7f0a0064;
         public static final int flag=0x7f0a0087;
         public static final int frame_bus=0x7f0a0086;
-        public static final int frame_busline=0x7f0a006d;
+        public static final int frame_busline=0x7f0a006f;
         public static final int frame_container=0x7f0a002c;
         public static final int frame_logo=0x7f0a0030;
         public static final int frame_pictures=0x7f0a0078;
@@ -1125,7 +1125,7 @@ Toolbar Hive example
         public static final int txtLabel=0x7f0a0057;
         public static final int txtStatusMsg=0x7f0a0055;
         public static final int txtUrl=0x7f0a0063;
-        public static final int txt_header=0x7f0a0070;
+        public static final int txt_header=0x7f0a006e;
         public static final int type=0x7f0a0092;
         public static final int web=0x7f0a0097;
         public static final int wide=0x7f0a0006;

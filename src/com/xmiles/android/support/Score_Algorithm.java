@@ -5,6 +5,7 @@ import org.json.JSONObject;
 
 import com.xmiles.android.R;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
+import com.xmiles.android.webservice.ApiBusGetAsyncTask;
 import com.xmiles.android.webservice.DataRioHttpGetAsyncTask;
 import com.xmiles.android.webservice.HttpGetAsyncTask;
 import com.xmiles.android.webservice.UserFunctions;
@@ -43,7 +44,21 @@ public class Score_Algorithm {
 
     	return json;
     }
-    
+
+    public JSONObject getApiBusPosition(String buscode) {
+
+    	//JSONArray jsonArray;
+    	JSONObject json;
+    	//String url = "http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/onibus/";
+    	try {
+    		
+    		json = new ApiBusGetAsyncTask().execute(buscode).get();
+	     } catch (Exception e) {
+	         throw new RuntimeException(e);
+	     }
+
+    	return json;
+    }    
     
     public JSONObject getBrtPosition(String url, String buscode) {
 

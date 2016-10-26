@@ -20,8 +20,8 @@
     	android:paddingBottom="5dp"    	
     	android:layout_width="match_parent"
     	android:background="@color/feed_bg"
-        android:layout_height="340dp">
-    
+        android:layout_height="430dp">
+    <!-- android:layout_height="34dp"> -->
      
     <fragment
         android:id="@+id/gmap_addroutes"         
@@ -43,7 +43,7 @@
 
     </RelativeLayout>
     	
-
+<!--         
 	    <RelativeLayout 
     	android:id="@+id/frame_busline"
     	android:layout_below="@id/rel01"
@@ -56,13 +56,12 @@
         android:layout_height="85dp">
 
 
-        
+
         <RelativeLayout 
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"        
         android:background="@drawable/background_with_shadow"
         android:orientation="horizontal" >
-        <!-- android:background="@color/white"--> 
         
     	<ImageView
         android:id="@+id/profile_pic"
@@ -86,15 +85,6 @@
         
         android:layout_alignWithParentIfMissing="true"
         android:gravity="center_vertical" />
-		<!-- style="@style/BusLine" -->
-        <!--  TextView
-            android:id="@+id/city"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/profile_pic"
-            android:textColor="@color/grey"
-            android:layout_below="@id/busline"                        
-             /> -->  
     
     
         <ImageView
@@ -138,17 +128,18 @@
         
     </RelativeLayout>
         
-        
+    
         
 	</RelativeLayout>		 
-
+-->     
  	    <Button
         android:background="@drawable/red_button"
         android:id="@+id/button_save_route"
-        android:layout_below="@id/frame_busline"
+        android:layout_below="@id/rel01"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="@string/connect_btn"
         style="@style/button_text" />   
+        <!-- android:layout_below="@id/frame_busline" -->
 
 </RelativeLayout>

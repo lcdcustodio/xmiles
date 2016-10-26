@@ -425,9 +425,9 @@ int id book_now 0x7f0a001a
 int id bus_stop 0x7f0a005b
 int id buscode 0x7f0a0088
 int id buscode_search 0x7f0a009d
-int id busline 0x7f0a006e
+int id busline 0x7f0a0070
 int id button1 0x7f0a0058
-int id button_save_route 0x7f0a006f
+int id button_save_route 0x7f0a006d
 int id buyButton 0x7f0a0016
 int id buy_now 0x7f0a001b
 int id buy_with 0x7f0a001c
@@ -470,7 +470,7 @@ int id fblogin 0x7f0a005e
 int id feedImage1 0x7f0a0064
 int id flag 0x7f0a0087
 int id frame_bus 0x7f0a0086
-int id frame_busline 0x7f0a006d
+int id frame_busline 0x7f0a006f
 int id frame_container 0x7f0a002c
 int id frame_logo 0x7f0a0030
 int id frame_pictures 0x7f0a0078
@@ -563,7 +563,7 @@ int id txtHelp 0x7f0a005f
 int id txtLabel 0x7f0a0057
 int id txtStatusMsg 0x7f0a0055
 int id txtUrl 0x7f0a0063
-int id txt_header 0x7f0a0070
+int id txt_header 0x7f0a006e
 int id type 0x7f0a0092
 int id web 0x7f0a0097
 int id wide 0x7f0a0006

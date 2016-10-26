@@ -1,7 +1,6 @@
 package com.xmiles.android;
 
 
-import java.math.BigInteger;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -84,13 +83,8 @@ public class Gmaps extends FragmentActivity {
 	
 	Spinner dialog_cities;
 	ProgressDialog progressBar;
-	TextView tv_busline;	
-	TextView tv_from;
-	TextView tv_to;
 
 	Button connect;
-	//----------
-	String buscode;
 	//----------
 	
 	private static final Integer KEY_ID = 0;
@@ -127,11 +121,6 @@ public class Gmaps extends FragmentActivity {
         ActionBar actionBar = getActionBar();
 	    actionBar.setDisplayHomeAsUpEnabled(true);
 	 
-	    tv_busline = (TextView) findViewById(R.id.busline);
-	    
-	    tv_from = (TextView) findViewById(R.id._de);
-	    tv_to = (TextView) findViewById(R.id.info);	    
-	    //----
 		FragmentManager fm = getSupportFragmentManager();
 		SupportMapFragment fragment = (SupportMapFragment) fm.findFragmentById(R.id.gmap_addroutes);
 
@@ -139,9 +128,6 @@ public class Gmaps extends FragmentActivity {
     	mMap.setMyLocationEnabled(true);    	
     	//mMap.setOnInfoWindowClickListener(this);
     	mMap.setOnMyLocationChangeListener(myLocationChangeListener);
-
-    	//-------------------------------
-		sca = new Score_Algorithm(getApplicationContext());
 	    
     	//-------------------------------
         //Check Service Location
@@ -169,15 +155,17 @@ public class Gmaps extends FragmentActivity {
             		progressBar.setCancelable(true);
             		progressBar.setMessage(Gmaps.this.getString(R.string.please_wait));
             		progressBar.show();
-            		
-            		//Clean TextView MSG
-            		cleanUp_Textview();
             		            		
                 	//Hide keyboard                	
                     InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(
                             Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(buscode_search.getWindowToken(), 0);
                 	
+                    //get buscode digits
+                    String buscode_digits = getBuscode_digits(searchContent);
+                    
+                    //Log.v(TAG,"buscode_digits: " + buscode_digits);
+                    
             		// start FbPlaces service
             		runFbPlaces_thread();
 
@@ -193,13 +181,15 @@ public class Gmaps extends FragmentActivity {
             			sca = new Score_Algorithm(getApplicationContext());
             			
             			//"C41383"            			
-            			String url = "http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/onibus/";
-            			JSONObject json = sca.getBusPosition(url, searchContent);
+            			//String url = "http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/onibus/";
+            			//JSONObject json = sca.getBusPosition(url, searchContent);
+            			JSONObject json = sca.getApiBusPosition(buscode_digits);
+            			           			
             			
             			
             			try {
             				
-
+            				Log.v(TAG,"sca.getApiBusPosition: " + json);	
             				//-----------------------
             				progressBar.dismiss();  
             				mMap.clear();
@@ -216,7 +206,8 @@ public class Gmaps extends FragmentActivity {
       							//----------------------
       							ContentValues cV = new ContentValues();
       							cV.put(DatabaseHelper.KEY_BUSCODE, dataBusArray[index_BUSCODE].replace("\"",""));
-      							cV.put(DatabaseHelper.KEY_URL, url);
+      							//cV.put(DatabaseHelper.KEY_URL, url);
+      							cV.put(DatabaseHelper.KEY_URL, "lala");
       							//----------------------------
       							cV.put(DatabaseHelper.KEY_FLAG, 0);
       							//----------------------------
@@ -260,17 +251,17 @@ public class Gmaps extends FragmentActivity {
       							//if (get_distance < MAX_DIST) {
       							if (get_distance < 10000000) {
           							
-      								tv_busline.setText("Conecte-se e acumule pontos");
+      								//tv_busline.setText("Conecte-se e acumule pontos");
       								connect.setVisibility(View.VISIBLE);
       							} else {
       								
-      								tv_busline.setText("Não é possível conectar ao ônibus");
+      								//tv_busline.setText("Não é possível conectar ao ônibus");
       								connect.setVisibility(View.INVISIBLE);
       							}
       							
       							
-      						    tv_from.setText("Fonte do GPS do ônbius:");
-      						    tv_to.setText("Prefeitura do Rio de Janeiro");	    
+      						    //tv_from.setText("Fonte do GPS do ônbius:");
+      						    //tv_to.setText("Prefeitura do Rio de Janeiro");	    
 
       							
       							//----------------------
@@ -311,12 +302,13 @@ public class Gmaps extends FragmentActivity {
       								
       								connect.setVisibility(View.INVISIBLE);
       								
-      								tv_busline.setText("Ônibus não encontrado no sistema");
-          						    tv_from.setText("Fonte do GPS do ônbius:");
-          						    tv_to.setText("Prefeitura do Rio de Janeiro");	    
+      								//tv_busline.setText("Ônibus não encontrado no sistema");
+          						    //tv_from.setText("Fonte do GPS do ônbius:");
+          						    //tv_to.setText("Prefeitura do Rio de Janeiro");	    
       			
       								//-----------------------
-      								sca.GpsNotFound(url, searchContent);
+      								//sca.GpsNotFound(url, searchContent);
+      								sca.GpsNotFound("lala", searchContent);      								
       								//-----------------------
       							}
 
@@ -482,7 +474,7 @@ public class Gmaps extends FragmentActivity {
 			        	
             			UserFunctions userFunc = new UserFunctions();           
             			Log.i(TAG, "buscode.toUpperCase(): " + buscode.toUpperCase());
-            			json_buscode = userFunc.getBuscode(buscode.toUpperCase());
+            			json_buscode = userFunc.getBuscode_details(buscode.toUpperCase());
 				    	
 				    } catch (Exception e) {
 				            e.printStackTrace();
@@ -565,11 +557,30 @@ public class Gmaps extends FragmentActivity {
 		thread.start();
 		
 	}
+	
+	public String getBuscode_digits(String buscode){
+		
+		String result = "";
+		char ch;
+		for (int i = 0; i < buscode.length(); i++) {
+			ch = buscode.charAt(i);
+		    
+			if (Character.isDigit(ch)){
+				
+				result = result + ch;
+			}
+			
+		}
+		
+		return result;
+		
+	}
+	
 	public void cleanUp_Textview(){
 		
-		tv_busline.setText("");				
-		tv_from.setText("");
-		tv_to.setText("");
+		//tv_busline.setText("");				
+		//tv_from.setText("");
+		//tv_to.setText("");
 		
 	}
 	
@@ -578,20 +589,7 @@ public class Gmaps extends FragmentActivity {
 	  public boolean onCreateOptionsMenu(Menu menu) {
 	      // Inflate the menu; this adds items to the action bar if it is present.
 	      getMenuInflater().inflate(R.menu.gmaps_type, menu);
-	      /*
-	      getMenuInflater().inflate(R.menu.options_menu, menu);	
-	      
-	      // Associate searchable configuration with the SearchView
-	      SearchManager searchManager =
-	           (SearchManager) getSystemService(getApplicationContext().SEARCH_SERVICE);
-	      SearchView searchView =
-	            (SearchView) menu.findItem(R.id.search).getActionView();
-	      searchView.setSearchableInfo(
-	            searchManager.getSearchableInfo(getComponentName()));
-		
-	      // Do not iconify the widget;expand it by default
-	      searchView.setIconifiedByDefault(true);	  
-	      */
+
 	      return true;
 	  }
 

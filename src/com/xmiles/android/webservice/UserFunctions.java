@@ -41,6 +41,7 @@ public class UserFunctions {
     //------------------------------------
     private static String news_feed_by_hashtagURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String inviteFriendsURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
+    private static String api_buscodeURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     //------------------------------------    
     private static String login_tag 		= "login";
     private static String register_tag 		= "register";
@@ -62,6 +63,7 @@ public class UserFunctions {
     private static String comments_inbox_tag = "comments_inbox";
     private static String news_feed_by_hashtag_tag = "newsfeed_by_hashtag";
     private static String invite_friends_tag = "invite_friends";
+    private static String api_buscode_tag = "api_buscode";
     //------------------------------------     
     // constructor
     public UserFunctions(){
@@ -151,7 +153,7 @@ public class UserFunctions {
         return json;
     }    
 
-    public JSONObject getBuscode(String buscode){
+    public JSONObject getBuscode_details(String buscode){
         // Building Parameters
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("buscode", buscode));
@@ -159,6 +161,17 @@ public class UserFunctions {
         JSONObject json = jsonParser.getJSONFromUrl(buscodeURL, params);
         // return json        
         Log.w(TAG, "getBuscode Test" + json.toString());
+        return json;
+    }    
+    
+    public JSONObject getApiBuscode(String buscode){
+        // Building Parameters
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("buscode", buscode));
+        params.add(new BasicNameValuePair("tag", api_buscode_tag));
+        JSONObject json = jsonParser.getJSONFromUrl(api_buscodeURL, params);
+        // return json        
+        Log.w(TAG, "getApiBuscode: " + json.toString());
         return json;
     }    
     
