@@ -5,19 +5,18 @@
     android:versionName="1.0.1" >
 
     <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="21" />
+        android:minSdkVersion="8"
+        android:targetSdkVersion="16" />
 
     <application
         android:name="com.xmiles.android.listviewfeed.AppController"
-        
-        android:hardwareAccelerated="true"
-        
+               
         android:allowBackup="true"
         android:icon="@drawable/xmiles_logo_rev05_transparente"
         android:label="@string/app_name"      
         android:theme="@style/MyMaterialTheme">          
         <!-- android:theme="@style/MyMaterialTheme">
+             android:hardwareAccelerated="true"
         	 android:theme="@style/Theme.Example" > -->        
         
         <uses-library android:name="com.google.android.maps" />

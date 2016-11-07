@@ -27,7 +27,6 @@ import com.xmiles.android.Relationship;
 import com.xmiles.android.Welcome;
 import com.xmiles.android.R.id;
 import com.xmiles.android.R.layout;
-import com.xmiles.android.adapter.ImageAdapter;
 import com.xmiles.android.support.GPSTracker;
 import com.xmiles.android.support.LoadImageURL;
 import com.xmiles.android.support.Score_Algorithm;

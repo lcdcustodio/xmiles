@@ -45,14 +45,16 @@ public class Score_Algorithm {
     	return json;
     }
 
-    public JSONObject getApiBusPosition(String buscode) {
+    public JSONObject getApiBusPosition(String buscode_digits, String buscode) {
 
-    	//JSONArray jsonArray;
+
     	JSONObject json;
-    	//String url = "http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/onibus/";
+
     	try {
     		
-    		json = new ApiBusGetAsyncTask().execute(buscode).get();
+    		String[] params= {buscode_digits, buscode};
+    		
+    		json = new ApiBusGetAsyncTask().execute(params).get();
 	     } catch (Exception e) {
 	         throw new RuntimeException(e);
 	     }

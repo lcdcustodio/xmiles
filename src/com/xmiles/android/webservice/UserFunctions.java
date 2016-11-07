@@ -164,10 +164,11 @@ public class UserFunctions {
         return json;
     }    
     
-    public JSONObject getApiBuscode(String buscode){
+    public JSONObject getApiBuscode(String buscode_digits, String buscode){
         // Building Parameters
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("buscode", buscode));
+        params.add(new BasicNameValuePair("buscode_digits", buscode_digits));
         params.add(new BasicNameValuePair("tag", api_buscode_tag));
         JSONObject json = jsonParser.getJSONFromUrl(api_buscodeURL, params);
         // return json        
