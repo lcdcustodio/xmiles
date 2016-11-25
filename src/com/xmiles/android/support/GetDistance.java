@@ -4,7 +4,8 @@ public class GetDistance {
 	
 	private double result;
 	
-	public double calculo(Double lat1, float lat, Double long1, float l){
+	//public double calculo(Double lat1, float lat, Double long1, float l){
+	public double calculo(Double lat1, Double lat, Double long1, Double l){	
 		
   	    //result = 6371*Math.acos(Math.cos(Math.PI*(90-jsonObject_location.getDouble("latitude"))/180)*Math.cos((90-Lat)*Math.PI/180) +
         //        	 Math.sin((90-jsonObject_location.getDouble("latitude"))*Math.PI/180)*Math.sin((90-Lat)*Math.PI/180)*Math.cos((Long-jsonObject_location.getDouble("longitude"))*Math.PI/180));

@@ -5,8 +5,10 @@
     android:versionName="1.0.1" >
 
     <uses-sdk
-        android:minSdkVersion="8"
+        android:minSdkVersion="11"
         android:targetSdkVersion="16" />
+        <!-- android:targetSdkVersion="16"  
+        	 android:minSdkVersion="8"    -->
 
     <application
         android:name="com.xmiles.android.listviewfeed.AppController"
@@ -203,7 +205,7 @@
         
         
         
-        <receiver android:name="com.xmiles.android.scheduler.FbPlaces_Download"></receiver>
+        <receiver android:name="com.xmiles.android.backup.FbPlaces_Download"></receiver>
         <receiver android:name="com.xmiles.android.scheduler.Favorites_Upload"></receiver>
         <receiver android:name="com.xmiles.android.backup.UserRoutes_Download"></receiver>
         <receiver android:name="com.xmiles.android.backup.Getting_UserLocation"></receiver>

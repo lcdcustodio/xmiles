@@ -43,20 +43,7 @@ public class PlacesService {
 	   JSONArray array = object.getJSONArray("data");
 
 	   Log.v(TAG, "array.length(): " + array.length());
-	   /*
-	   ArrayList<Place> arrayList = new ArrayList<Place>();
-	   for (int i = 0; i < array.length(); i++) {
-	    try {
-	     Place place = Place
-	       .jsonToPontoReferencia((JSONObject) array.get(i));
 
-	     Log.v(TAG, "" + place);
-	     arrayList.add(place);
-	    } catch (Exception e) {
-	    }
-	   }
-	   return arrayList;
-	   */	   
 	   return array;
 	  } catch (JSONException ex) {
 	   Logger.getLogger(PlacesService.class.getName()).log(Level.SEVERE,

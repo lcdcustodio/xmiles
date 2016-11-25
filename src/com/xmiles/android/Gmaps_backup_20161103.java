@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.maps.GeoPoint;
+import com.xmiles.android.backup.FbPlaces_Download;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
 import com.xmiles.android.support.GPSTracker;
@@ -25,7 +26,6 @@ import com.xmiles.android.support.GetDistance;
 import com.xmiles.android.support.Score_Algorithm;
 import com.xmiles.android.support.Support;
 import com.xmiles.android.webservice.UserFunctions;
-import com.xmiles.android.scheduler.FbPlaces_Download;
 import com.xmiles.android.scheduler.NewsFeed_Inbox_Upload;
 
 import com.xmiles.android.scheduler.Getting_GpsBusData;

@@ -42,19 +42,23 @@ public class GpsBusData_Upload extends WakefulBroadcastReceiver {
 		private static final Integer KEY_BUSLINE 	 = 3;
 		private static final Integer KEY_B_LATITUDE  = 4;
 		private static final Integer KEY_B_LONGITUDE = 5;
-		private static final Integer KEY_SPEED 		 = 6;
-		private static final Integer KEY_DIRECTION 	 = 7;
-		private static final Integer KEY_SCORE		 = 8;
+		//private static final Integer KEY_SPEED 		 = 6;
+		private static final Integer KEY_BUS_TYPE	 = 6;
+		//private static final Integer KEY_DIRECTION 	 = 7;
+		private static final Integer KEY_B_HASHCODE	 = 7;
+		//private static final Integer KEY_SCORE		 = 8;
 		//-----------------------------
 		private static final Integer KEY_U_ROW_ID 			 = 0;
 		private static final Integer KEY_U_LATITUDE 		 = 1;
 		private static final Integer KEY_U_LONGITUDE 		 = 2;
-		private static final Integer KEY_U_SPEED 			 = 3;
+		//private static final Integer KEY_U_SPEED 			 = 3;
+		private static final Integer KEY_U_HASHCODE 		 = 3;
 		private static final Integer KEY_U_LOCATION_PROVIDER = 4;
 		private static final Integer KEY_U_CREATED_AT 		 = 5;
 		private static final Integer KEY_U_DIFF_DISTANCE 	 = 6;
 		private static final Integer KEY_U_DIFF_TIME 		 = 7;
-		private static final Integer KEY_U_LOCATION_STATUS   = 8;
+		//private static final Integer KEY_U_LOCATION_STATUS   = 8;
+		private static final Integer KEY_U_STATUS   		 = 8;
 		private static final Integer KEY_U_ACCURACY 		 = 9;
 		//-----------------------------		
 		
@@ -120,24 +124,28 @@ public class GpsBusData_Upload extends WakefulBroadcastReceiver {
 			            StringBuilder user_id				= new StringBuilder(); 
 			            StringBuilder latitude				= new StringBuilder();
 			            StringBuilder longitude				= new StringBuilder();
-			            StringBuilder speed					= new StringBuilder();
+			            //StringBuilder speed					= new StringBuilder();
+			            StringBuilder bustype				= new StringBuilder();
 			            StringBuilder buscode			    = new StringBuilder();
 			            StringBuilder busline		    	= new StringBuilder();
-			            StringBuilder direction		    	= new StringBuilder();
+			            //StringBuilder direction		    	= new StringBuilder();
+			            StringBuilder bus_hashcode		    = new StringBuilder();
 			            StringBuilder created_at			= new StringBuilder();
 			    		//---------------------			        	
 			            StringBuilder u_locat_id			= new StringBuilder();
 			            StringBuilder u_latitude			= new StringBuilder();
 			            StringBuilder u_longitude			= new StringBuilder();
-			            StringBuilder u_speed				= new StringBuilder();			            
+			            //StringBuilder u_speed				= new StringBuilder();
+			            StringBuilder u_hashcode		    = new StringBuilder();
 			            StringBuilder u_locat_provider		= new StringBuilder();
 			            StringBuilder u_created_at			= new StringBuilder();
 			            StringBuilder u_diff_dist			= new StringBuilder();
 			            StringBuilder u_diff_time			= new StringBuilder();
-			            StringBuilder u_locat_status		= new StringBuilder();
+			            //StringBuilder u_locat_status		= new StringBuilder();
+			            StringBuilder u_status				= new StringBuilder();
 			            StringBuilder u_accuracy			= new StringBuilder();
 			    		//---------------------
-			            StringBuilder score					= new StringBuilder();
+			            //StringBuilder score					= new StringBuilder();
 
 			            
 			    		while (data_GpsBusData.moveToNext()) {
@@ -151,10 +159,12 @@ public class GpsBusData_Upload extends WakefulBroadcastReceiver {
 				    		user_id.append(data_profile.getString(KEY_ID));
 				    		latitude.append(data_GpsBusData.getString(KEY_B_LATITUDE));
 				    		longitude.append(data_GpsBusData.getString(KEY_B_LONGITUDE));
-				    		speed.append(data_GpsBusData.getString(KEY_SPEED));
+				    		//speed.append(data_GpsBusData.getString(KEY_SPEED));
+				    		bustype.append(data_GpsBusData.getString(KEY_BUS_TYPE));
 				    		buscode.append(data_GpsBusData.getString(KEY_BUSCODE));
 				    		busline.append(data_GpsBusData.getString(KEY_BUSLINE));
-				    		direction.append(data_GpsBusData.getString(KEY_DIRECTION));
+				    		//direction.append(data_GpsBusData.getString(KEY_DIRECTION));
+				    		bus_hashcode.append(data_GpsBusData.getString(KEY_B_HASHCODE));
 				    		created_at.append(data_GpsBusData.getString(KEY_CREATED_AT));
 				    		//---------------------
 	
@@ -164,17 +174,15 @@ public class GpsBusData_Upload extends WakefulBroadcastReceiver {
 					    		user_id.append(";");
 					    		latitude.append(";");
 					    		longitude.append(";");
-					    		speed.append(";");
+					    		//speed.append(";");
+					    		bustype.append(";");
 					    		buscode.append(";");
 					    		busline.append(";");
-					    		direction.append(";");
+					    		//direction.append(";");
+					    		bus_hashcode.append(";");
 					    		created_at.append(";");
-					    		score.append("0.0;");
-				    		} else if (data_GpsBusData.isLast()){
-				    			score.append(data_GpsBusData.getString(KEY_SCORE));
-				    	    	Log.w(TAG, "data_GpsBusData.getString(KEY_SCORE): " + data_GpsBusData.getString(KEY_SCORE));
+					    		//score.append("0.0;");
 				    		}
-			    			
 
 			    		}
 			    		
@@ -185,12 +193,14 @@ public class GpsBusData_Upload extends WakefulBroadcastReceiver {
 			    			u_locat_id.append(data_UserLocation.getString(KEY_U_ROW_ID)); 
 			    			u_latitude.append(data_UserLocation.getString(KEY_U_LATITUDE));
 			    			u_longitude.append(data_UserLocation.getString(KEY_U_LONGITUDE));
-			    			u_speed.append(data_UserLocation.getString(KEY_U_SPEED));
+			    			//u_speed.append(data_UserLocation.getString(KEY_U_SPEED));
+			    			u_hashcode.append(data_UserLocation.getString(KEY_U_HASHCODE));
 			    			u_locat_provider.append(data_UserLocation.getString(KEY_U_LOCATION_PROVIDER));
 			    			u_created_at.append(data_UserLocation.getString(KEY_U_CREATED_AT));
 			    			u_diff_dist.append(data_UserLocation.getString(KEY_U_DIFF_DISTANCE));
 			    			u_diff_time.append(data_UserLocation.getString(KEY_U_DIFF_TIME));
-			    			u_locat_status.append(data_UserLocation.getString(KEY_U_LOCATION_STATUS));
+			    			//u_locat_status.append(data_UserLocation.getString(KEY_U_LOCATION_STATUS));
+			    			u_status.append(data_UserLocation.getString(KEY_U_STATUS));
 			    			u_accuracy.append(data_UserLocation.getString(KEY_U_ACCURACY));
 			    			//-------------------------------------
 			    			if (!data_UserLocation.isLast()){
@@ -198,12 +208,13 @@ public class GpsBusData_Upload extends WakefulBroadcastReceiver {
 				    			u_locat_id.append(";");
 				    			u_latitude.append(";");
 				    			u_longitude.append(";");
-				    			u_speed.append(";");
+				    			//u_speed.append(";");
+				    			u_hashcode.append(";");
 				    			u_locat_provider.append(";");
 				    			u_created_at.append(";");
 				    			u_diff_dist.append(";");
 				    			u_diff_time.append(";");
-				    			u_locat_status.append(";");
+				    			u_status.append(";");
 				    			u_accuracy.append(";");
 				    			
 			    			}
@@ -211,29 +222,57 @@ public class GpsBusData_Upload extends WakefulBroadcastReceiver {
 			    			
 			    		}
 			        	
+			    		
+			    		Log.e(TAG,"gps_bus_id: " + gps_bus_id);
+			    		Log.e(TAG,"user_id: " + user_id);
+			    		Log.e(TAG,"latitude: " + latitude);
+			    		Log.e(TAG,"longitude: " + longitude);
+			    		Log.e(TAG,"bustype: " + bustype);			        								 
+			    		Log.e(TAG,"buscode: " + buscode);
+			    		Log.e(TAG,"busline: " + busline);
+			    		Log.e(TAG,"bus_hashcode: " + bus_hashcode);
+			    		Log.e(TAG,"created_at: " + created_at);
+			    		Log.e(TAG,"u_locat_id: " + u_locat_id);
+			    		Log.e(TAG,"u_latitude: " + u_latitude);
+			    		Log.e(TAG,"u_longitude: " + u_longitude);
+			    		Log.e(TAG,"u_hashcode: " + u_hashcode);
+			    		Log.e(TAG,"u_locat_provider: " + u_locat_provider);
+			    		Log.e(TAG,"u_created_at: " + u_created_at);
+			    		Log.e(TAG,"u_diff_dist: " + u_diff_dist);
+			    		Log.e(TAG,"u_diff_time: " + u_diff_time);
+			    		Log.e(TAG,"u_status: " + u_status);
+			    		Log.e(TAG,"u_accuracy: " + u_accuracy);
+			    		
+			    		
+			    		
+			    		
 			        	//Your code goes here	        			
 			        	json = userFunc.busGps(gps_bus_id,
 			        								 user_id,
 			        								 latitude,
 			        								 longitude,
-			        								 speed,
+			        								 //speed,
+			        								 bustype,			        								 
 			        								 buscode,
 			        								 busline,
-			        								 direction,
+			        								 //direction,
+			        								 bus_hashcode,
 			        								 created_at,
 			        								 //----------
 			        								 u_locat_id,
 			        								 u_latitude,
 			        								 u_longitude,
-			        								 u_speed,
+			        								 //u_speed,
+			        								 u_hashcode,
 			        								 u_locat_provider,
 			        								 u_created_at,
 			        								 u_diff_dist,
 			        								 u_diff_time,
-			        								 u_locat_status,
-			        								 u_accuracy,
+			        								 //u_locat_status,
+			        								 u_status,
+			        								 u_accuracy//,
 			        								 //----------
-			        								 score
+			        								 //score
 			        								 //----------
 			        								 );
 			        	
@@ -260,7 +299,8 @@ public class GpsBusData_Upload extends WakefulBroadcastReceiver {
 				 public void run() {
 
 					try {
-							Thread.sleep(800);
+							//Thread.sleep(800);
+							Thread.sleep(1600);
 					} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();

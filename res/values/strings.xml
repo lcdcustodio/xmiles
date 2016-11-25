@@ -17,7 +17,7 @@
     <string name="search_hint">Digite o código do ônibus (ex: C41383)</string>
     <string name="add_comment_hint">Adicionar comentário &#8230;</string>
     <string name="busmsg1">Clique aqui para conectar</string>
-    <string name="busmsg2">Você está conectado ao ônibus</string>
+    <string name="busmsg2">Você está conectado</string>
     <string name="busmsg3">Clique aqui e veja quem mais está conectado!</string>
     <string name="sample_string"><![CDATA[some test line 1 <br />some test line 2]]></string>
     <string name="connect_btn">Conectar</string>

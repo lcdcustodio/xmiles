@@ -8,17 +8,18 @@ import java.util.Locale;
 import java.util.TimeZone;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.google.android.maps.GeoPoint;
 import com.xmiles.android.R;
+import com.xmiles.android.backup.DataRioHttpGetAsyncTask;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
 import com.xmiles.android.support.GetDistance;
 import com.xmiles.android.support.GPSTracker;
 import com.xmiles.android.support.Score_Algorithm;
 import com.xmiles.android.support.Support;
-import com.xmiles.android.webservice.DataRioHttpGetAsyncTask;
 import com.xmiles.android.webservice.HttpGetAsyncTask;
 
 import android.annotation.SuppressLint;
@@ -45,22 +46,16 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
     
 	
 	// The minimum time between updates in milliseconds
-    private static final long MIN_TIME_BW_UPDATES = 1000 * 1 * 20; // 20 seconds
+    private static final long MIN_TIME_BW_UPDATES = 1000 * 3 * 60; // 3 min
 
 	private static final Integer KEY_ID = 0;
-	private static final Integer KEY_URL = 2;
+	//private static final Integer KEY_URL = 2;
 	private static final Integer KEY_FLAG = 3;
 	//private static final Integer KEY_BUSCODE = 2;
 	private static final Integer KEY_BUSCODE_URL = 1;
-	
-	
-	private static final Integer index_STIME     = 0;
-	private static final Integer index_BUSCODE   = 1;
-	private static final Integer index_LATITUDE  = 3;
-	private static final Integer index_LONGITUDE = 4;
-	private static final Integer index_SPEED 	 = 5;
-	private static final Integer index_DIRECTION = 6;
-	private static final Integer index_BUSLINE	 = 2;
+	private static final Integer KEY_HASHCODE = 4;
+	private static final Integer KEY_BUS_TYPE = 2;
+
 
 	private static final Integer KEY_B_LATITUDE  = 4;
 	private static final Integer KEY_B_LONGITUDE = 5;
@@ -69,9 +64,10 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 	private static final Integer KEY_U_DIFF_DISTANCE = 6;
 
 	
-	//private static final Integer MAX_POINTS = 720;  // 720 points / 360 = 2 HOURS
+
 	//private static final Integer MAX_POINTS = 4;
-	private static final Integer MAX_POINTS = 1;
+	//# times criteria (dist > MAX_POINTS || time > MAX_TIME_OFFSET) is not fulfil
+	private static final Integer MAX_POINTS = 1;  
 	private static final Integer MAX_DIST 	  = 3; //3km
 	private static final Integer MAX_TIME_OFFSET = 300; //300secs = 5min
 
@@ -92,7 +88,8 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 			Cursor bus_gps_url = ctx.getContentResolver().query(uri, null, null, null, null);
 			bus_gps_url.moveToLast();
 			
-			GBD_Handler(ctx, bus_gps_url.getString(KEY_URL), bus_gps_url.getString(KEY_BUSCODE_URL), bus_gps_url.getInt(KEY_FLAG));
+			//GBD_Handler(ctx, bus_gps_url.getString(KEY_BUSCODE_URL), bus_gps_url.getInt(KEY_FLAG),bus_gps_url.getString(KEY_BUS_TYPE),bus_gps_url.getString(KEY_HASHCODE));
+			GBD_Handler(ctx, bus_gps_url.getString(KEY_BUSCODE_URL), bus_gps_url.getInt(KEY_FLAG),bus_gps_url.getString(KEY_HASHCODE));
 			
 
 		}catch(Exception e){
@@ -133,53 +130,31 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 		alarmMgr.cancel(alarmIntent);
 	}
 	
-    public void GBD_Handler(final Context ctx, String url, String buscode, int flag){
+    public void GBD_Handler(final Context ctx, String buscode, int flag, String hashcode){
     	
-    	String [] dataBusArray;
+    	
+    	JSONArray jArray;
 
 		try {
 			
-			Support support = new Support();
-			Score_Algorithm sca = new Score_Algorithm(ctx);
-			JSONObject json = sca.getBusPosition(url, buscode);
 			
-			dataBusArray = json.getString("DATA").substring(2, json.getString("DATA").length()-2).split(",");
-			//--------------------
-			Uri uri_2 = SqliteProvider.CONTENT_URI_BUS_GPS_DATA;
-			Cursor bus_score = ctx.getContentResolver().query(uri_2, null, null, null, null);
-			//--------------------
-			GetDistance score = new GetDistance();
-			//--------------------
+			Score_Algorithm sca = new Score_Algorithm(ctx);
+			JSONObject json = sca.getApiBusPosition(buscode, buscode);
+			
+			jArray = new JSONArray(json.getString("api_buscode"));
+			
 			/** Setting up values to insert into UserProfile table */
 
 			ContentValues contentValues = new ContentValues();
-			contentValues.put(DatabaseHelper.KEY_CREATED_AT, support.fixDateTime(dataBusArray[index_STIME].replace("\"","")));
-			contentValues.put(DatabaseHelper.KEY_BUSCODE, dataBusArray[index_BUSCODE].replace("\"",""));
-			contentValues.put(DatabaseHelper.KEY_B_LATITUDE, dataBusArray[index_LATITUDE]);
-			contentValues.put(DatabaseHelper.KEY_B_LONGITUDE, dataBusArray[index_LONGITUDE]);
+			contentValues.put(DatabaseHelper.KEY_CREATED_AT, jArray.getJSONObject(0).getString("time_stamp"));
+			contentValues.put(DatabaseHelper.KEY_BUSCODE, jArray.getJSONObject(0).getString("buscode"));
+			contentValues.put(DatabaseHelper.KEY_B_LATITUDE, jArray.getJSONObject(0).getString("latitude"));
+			contentValues.put(DatabaseHelper.KEY_B_LONGITUDE, jArray.getJSONObject(0).getString("longitude"));
+
+			contentValues.put(DatabaseHelper.KEY_BUSLINE, jArray.getJSONObject(0).getString("busline"));
 			
-			if (bus_score.getCount()>0) {
-				bus_score.moveToLast();
-				Double get_score =  bus_score.getDouble(KEY_SCORE) +
-									score.calculo(Double.parseDouble(dataBusArray[index_LATITUDE]), 
-												 bus_score.getFloat(KEY_B_LATITUDE), 
-												 Double.parseDouble(dataBusArray[index_LONGITUDE]), 
-												 bus_score.getFloat(KEY_B_LONGITUDE));
-				
-				contentValues.put(DatabaseHelper.KEY_SCORE, get_score);
-				//------------------
-				Log.v(TAG, "bus_score.getDouble(KEY_SCORE): " + bus_score.getDouble(KEY_SCORE));
-				Log.w(TAG, "get_score: " + get_score);
-				//------------------				
-			} else {
-				contentValues.put(DatabaseHelper.KEY_SCORE, 0.0);
-			}
-
-
-			//-------------------
-			contentValues.put(DatabaseHelper.KEY_SPEED, dataBusArray[index_SPEED]);
-			contentValues.put(DatabaseHelper.KEY_DIRECTION, dataBusArray[index_DIRECTION]);
-			contentValues.put(DatabaseHelper.KEY_BUSLINE, dataBusArray[index_BUSLINE].replace("\"",""));
+			contentValues.put(DatabaseHelper.KEY_BUS_TYPE, jArray.getJSONObject(0).getString("bus_type"));
+			contentValues.put(DatabaseHelper.KEY_HASHCODE, jArray.getJSONObject(0).getString("hashcode"));
 
 			ctx.getContentResolver().insert(SqliteProvider.CONTENT_URI_BUS_GPS_DATA_insert, contentValues);
 
@@ -206,9 +181,9 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
                 (int) (gps.getLatitude()  * 1E6),
                 (int) (gps.getLongitude() * 1E6));
 
-	    float Lat    = (float) (curGeoPoint.getLatitudeE6() / 1E6);
-	    float Long   = (float) (curGeoPoint.getLongitudeE6() / 1E6);
-	    double Speed = (gps.getSpeed()*3600)/1000;		
+	    double Lat    = (double) (curGeoPoint.getLatitudeE6() / 1E6);
+	    double Long   = (double) (curGeoPoint.getLongitudeE6() / 1E6);
+	  	
 	    //--------------	    
 		//------------------
         Support support = new Support();
@@ -218,7 +193,8 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 
 		contentValues.put(DatabaseHelper.KEY_U_LATITUDE, Lat);
 		contentValues.put(DatabaseHelper.KEY_U_LONGITUDE, Long);
-		contentValues.put(DatabaseHelper.KEY_SPEED, Speed);
+		//contentValues.put(DatabaseHelper.KEY_SPEED, Speed);
+		contentValues.put(DatabaseHelper.KEY_HASHCODE, hashcode);
 		contentValues.put(DatabaseHelper.KEY_LOCATION_PROVIDER, gps.getProvider());
 		contentValues.put(DatabaseHelper.KEY_CREATED_AT, support.getDateTime());
 
@@ -228,62 +204,85 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 		
   	    GetDistance dist_calc = new GetDistance();
 
-  	    Double get_distance = dist_calc.calculo(Double.parseDouble(dataBusArray[index_LATITUDE]), Lat, Double.parseDouble(dataBusArray[index_LONGITUDE]), Long);
-  	    DecimalFormat df = new DecimalFormat("##.##");
-  	    
-  	    String get_diff_time = support.DiffTime(support.getDateTime().split(" ")[1], 
-  	    		support.fixDateTime(dataBusArray[index_STIME].replace("\"","")).split(" ")[1]);
+  	    Double get_distance = null;
+  	    String get_diff_time = null;
+
+		try {
+			get_distance = dist_calc.calculo(Double.parseDouble(jArray.getJSONObject(0).getString("latitude")), Lat, Double.parseDouble(jArray.getJSONObject(0).getString("longitude")), Long);
+			
+			get_diff_time = support.DiffTime(support.getDateTime().split(" ")[1], 
+					jArray.getJSONObject(0).getString("time_stamp").split(" ")[1]);
+
+			
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
   	    contentValues.put(DatabaseHelper.KEY_DIFF_DISTANCE, get_distance);
-  	    contentValues.put(DatabaseHelper.KEY_DIFF_TIME, Double.parseDouble(get_diff_time));
+  	    contentValues.put(DatabaseHelper.KEY_DIFF_TIME, Math.abs(Double.parseDouble(get_diff_time)));
 		contentValues.put(DatabaseHelper.KEY_ACCURACY, gps.getAccuracy());
-  	    
 		
-		ctx.getContentResolver().insert(SqliteProvider.CONTENT_URI_USER_LOCATION_insert, contentValues);
-  	    //-----------------------------------------
-  	    //-----------------------------------------
-		Uri uri = SqliteProvider.CONTENT_URI_BUS_GPS_DATA;
-		Cursor bus_gps_data = ctx.getContentResolver().query(uri, null, null, null, null);
-		bus_gps_data.moveToLast();
 		
-        Uri uri_3 = SqliteProvider.CONTENT_URI_USER_LOCATION;
-   	    Cursor data_UserLocation = ctx.getContentResolver().query(uri_3, null, null, null, null);			        	
-   	    data_UserLocation.moveToLast();
-   	    
-		//-----------------------------
-    	//Intent intent=new Intent("profilefragmentupdater");
-    	//ctx.sendBroadcast(intent);
-		//-----------------------------
-	    Log.e(TAG, "bus_gps_data.getInt(KEY_ID): " + bus_gps_data.getInt(KEY_ID));
+		
+		if (get_distance >= MAX_DIST || Math.abs(Double.parseDouble(get_diff_time)) >= MAX_TIME_OFFSET) {
 
-		if (data_UserLocation.getDouble(KEY_U_DIFF_DISTANCE) >= MAX_DIST ||
-				 data_UserLocation.getDouble(KEY_U_DIFF_TIME) >= MAX_TIME_OFFSET) {
-
-    		ContentValues cV = new ContentValues();
-    		cV.put(DatabaseHelper.KEY_BUSCODE, buscode);
-    		cV.put(DatabaseHelper.KEY_URL, url);
-    		cV.put(DatabaseHelper.KEY_FLAG, flag + 1);
-    		//----------------------------								
-    		ctx.getContentResolver().insert(SqliteProvider.CONTENT_URI_BUS_GPS_URL_insert, cV);
-
+	   		ContentValues cV = new ContentValues();
+	   		cV.put(DatabaseHelper.KEY_BUSCODE, buscode);
+	   		cV.put(DatabaseHelper.KEY_HASHCODE, hashcode);
+	   		try {
+					cV.put(DatabaseHelper.KEY_BUS_TYPE, jArray.getJSONObject(0).getString("bus_type"));
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	   		cV.put(DatabaseHelper.KEY_FLAG, flag + 1);
+	   		
+	   		Log.w(TAG,"flag: " + flag);
+	   		//----------------------------								
+	   		ctx.getContentResolver().insert(SqliteProvider.CONTENT_URI_BUS_GPS_URL_insert, cV);
 	    
-	    	//if (bus_gps_data.getInt(KEY_ID) > MAX_POINTS ) {
 			if (flag + 1 > MAX_POINTS ) {
 				Toast.makeText(ctx, "Você não está mais conectado!", Toast.LENGTH_LONG).show();
+				
+				contentValues.put(DatabaseHelper.KEY_STATUS, "STOP");
+				ctx.getContentResolver().insert(SqliteProvider.CONTENT_URI_USER_LOCATION_insert, contentValues);
+				
 	    		// cancel Getting GpsBusData
 	        	cancelAlarm(ctx);
 	
 	        	GpsBusData_Upload gbd = new GpsBusData_Upload();
-	        	gbd.setAlarm(ctx);
-	    		
-	    	}
-		}
+	        	gbd.setAlarm(ctx);	    		
+	    	} else {
+		 
+			  //need to add inside else condition in order to avoid repetition
+			  contentValues.put(DatabaseHelper.KEY_STATUS, "MEASURING");
+			  ctx.getContentResolver().insert(SqliteProvider.CONTENT_URI_USER_LOCATION_insert, contentValues);
 		
-		//-----------------------------
-    	//Intent intent=new Intent("feedfragmentupdater");
-    	//ctx.sendBroadcast(intent);
-		//-----------------------------
-
+	    	}
+		
+		} else {
+		  
+		  contentValues.put(DatabaseHelper.KEY_STATUS, "MEASURING");
+		  ctx.getContentResolver().insert(SqliteProvider.CONTENT_URI_USER_LOCATION_insert, contentValues);
+	
+			
+		}
+  	    //-----------------------------------------
+  	    //-----------------------------------------
+		//Uri uri = SqliteProvider.CONTENT_URI_BUS_GPS_DATA;
+		//Cursor bus_gps_data = ctx.getContentResolver().query(uri, null, null, null, null);
+		//bus_gps_data.moveToLast();
+		
+        //Uri uri_3 = SqliteProvider.CONTENT_URI_USER_LOCATION;
+   	    //Cursor data_UserLocation = ctx.getContentResolver().query(uri_3, null, null, null, null);			        	
+   	    //data_UserLocation.moveToLast();
+   	    
+	
+	    //Log.e(TAG, "bus_gps_data.getInt(KEY_ID): " + bus_gps_data.getInt(KEY_ID));
 
     }
     

@@ -325,24 +325,28 @@ public class UserFunctions {
 			   				 StringBuilder user_id, 
 			   				 StringBuilder latitude,
 			   				 StringBuilder longitude,
-			   				 StringBuilder speed,
+			   				 //StringBuilder speed,
+			   				 StringBuilder bustype,
 			   				 StringBuilder buscode,
 			   				 StringBuilder busline,
-			   				 StringBuilder direction,
+			   				 //StringBuilder direction,
+			   				 StringBuilder bus_hashcode,
 			   				 StringBuilder created_at,
 			   				 //-------------------------
 			   				 StringBuilder u_locat_id,
 			   				 StringBuilder u_latitude,
 			   				 StringBuilder u_longitude,
-			   				 StringBuilder u_speed,
+			   				 //StringBuilder u_speed,
+			   				 StringBuilder u_hashcode,
 			   				 StringBuilder u_locat_provider,
 			   				 StringBuilder u_created_at,
 			   				 StringBuilder u_diff_dist,
 			   				 StringBuilder u_diff_time,
-			   				 StringBuilder u_locat_status,
-			   				 StringBuilder u_accuracy,
+			   				 //StringBuilder u_locat_status,
+			   				StringBuilder u_status,
+			   				 StringBuilder u_accuracy//,
 			   				 //-------------------------
-			   				 StringBuilder score
+			   				 //StringBuilder score
 			   			     //-------------------------
 			   				 ){
 
@@ -354,24 +358,28 @@ public class UserFunctions {
 	params.add(new BasicNameValuePair("user_id", user_id.toString()));
 	params.add(new BasicNameValuePair("latitude", latitude.toString()));
 	params.add(new BasicNameValuePair("longitude", longitude.toString()));        
-	params.add(new BasicNameValuePair("speed", speed.toString()));
+	//params.add(new BasicNameValuePair("speed", speed.toString()));
+	params.add(new BasicNameValuePair("bustype", bustype.toString()));
 	params.add(new BasicNameValuePair("buscode", buscode.toString()));
 	params.add(new BasicNameValuePair("busline", busline.toString()));
-	params.add(new BasicNameValuePair("direction", direction.toString()));		   
+	//params.add(new BasicNameValuePair("direction", direction.toString()));		   
+	params.add(new BasicNameValuePair("bus_hashcode", bus_hashcode.toString()));
 	params.add(new BasicNameValuePair("created_at", created_at.toString()));
 	//-------------------------------------------------
 	params.add(new BasicNameValuePair("u_locat_id", u_locat_id.toString()));
 	params.add(new BasicNameValuePair("u_latitude", u_latitude.toString()));
 	params.add(new BasicNameValuePair("u_longitude", u_longitude.toString()));
-	params.add(new BasicNameValuePair("u_speed", u_speed.toString()));
+	//params.add(new BasicNameValuePair("u_speed", u_speed.toString())); 
+	params.add(new BasicNameValuePair("u_hashcode", u_hashcode.toString()));
 	params.add(new BasicNameValuePair("u_locat_provider", u_locat_provider.toString()));
 	params.add(new BasicNameValuePair("u_created_at", u_created_at.toString()));
 	params.add(new BasicNameValuePair("u_diff_dist", u_diff_dist.toString()));
 	params.add(new BasicNameValuePair("u_diff_time", u_diff_time.toString()));
-	params.add(new BasicNameValuePair("u_locat_status", u_locat_status.toString()));
+	//params.add(new BasicNameValuePair("u_locat_status", u_locat_status.toString()));
+	params.add(new BasicNameValuePair("u_status", u_status.toString()));
 	params.add(new BasicNameValuePair("u_accuracy", u_accuracy.toString()));
 	//-------------------------------------------------
-	params.add(new BasicNameValuePair("score", score.toString()));
+	//params.add(new BasicNameValuePair("score", score.toString()));
 	//-------------------------------------------------
 		
 	JSONObject json = jsonParser.getJSONFromUrl(bus_gpsURL, params);

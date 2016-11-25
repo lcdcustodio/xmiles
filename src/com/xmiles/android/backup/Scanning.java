@@ -107,8 +107,8 @@ public class Scanning extends WakefulBroadcastReceiver{
                 (int) (gps.getLatitude()  * 1E6),
                 (int) (gps.getLongitude() * 1E6));
 
-	    float Lat  = (float) (curGeoPoint.getLatitudeE6() / 1E6);
-	    float Long = (float) (curGeoPoint.getLongitudeE6() / 1E6);
+	    double Lat  = (double) (curGeoPoint.getLatitudeE6() / 1E6);
+	    double Long = (double) (curGeoPoint.getLongitudeE6() / 1E6);
 	    
 	    Log.w(TAG, "Scanning Lat: " + Lat);
 	    Log.w(TAG, "Scanning Long: " + Long);	    

@@ -117,6 +117,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	// GPS BUS_GPS_URL Table - column manes
 	public static final String KEY_BUSLINE_DESCRIPTION   = "busline_description";
 	public static final String KEY_BUSLINE_COMPANY       = "busline_company";
+	public static final String KEY_BUS_TYPE       		 = "bus_type";
+	public static final String KEY_HASHCODE       		 = "hash_code";
 	
 	// REWARDS Table - column names	
 	public static final String KEY_REWARD   	= "reward";
@@ -217,14 +219,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ TABLE_USER_LOCATION + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
 			KEY_U_LATITUDE + " DOUBLE," +
 			KEY_U_LONGITUDE + " DOUBLE," +
-			KEY_SPEED + " DOUBLE," +
+			//KEY_SPEED + " DOUBLE," +
+			KEY_HASHCODE + " TEXT," +
 			KEY_LOCATION_PROVIDER + " TEXT," +
 			//-------------------------------
 			//------- new columns------------
 			//-------------------------------			
 			KEY_DIFF_DISTANCE + " DOUBLE," +
 			KEY_DIFF_TIME + " DOUBLE," +
-			KEY_LOCATION_STATUS + " TEXT," +
+			//KEY_LOCATION_STATUS + " TEXT," +
+			KEY_STATUS + " TEXT," +
 			KEY_ACCURACY + " DOUBLE," +
 			//-------------------------------			
 			//------- end new columns--------
@@ -238,15 +242,19 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			KEY_BUSLINE + " TEXT," +
 			KEY_B_LATITUDE + " DOUBLE," +
 			KEY_B_LONGITUDE + " DOUBLE," +
-			KEY_SPEED + " DOUBLE," +
-			KEY_DIRECTION + " TEXT," +
-			KEY_SENSE + " TEXT," + 
-			KEY_SCORE + " DOUBLE" + ")";
+			//KEY_SPEED + " DOUBLE," +
+			//KEY_DIRECTION + " TEXT," +
+			//KEY_SENSE + " TEXT," + 
+			KEY_BUS_TYPE + " TEXT," +
+			KEY_HASHCODE + " TEXT" + ")";
+			//KEY_SCORE + " DOUBLE" + ")";
 	
 	private static final String CREATE_TABLE_BUS_GPS_URL = "CREATE TABLE "
 			+ TABLE_BUS_GPS_URL + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
 			KEY_BUSCODE + " TEXT," +
-			KEY_URL + " TEXT," +
+			//KEY_URL + " TEXT," +
+			KEY_BUS_TYPE + " TEXT," +
+			KEY_HASHCODE + " TEXT," +
 			//KEY_BUSLINE + " TEXT," +
 			//KEY_BUSLINE_DESCRIPTION + " TEXT," +
 			//KEY_BUSLINE_COMPANY + " TEXT," +
@@ -831,22 +839,23 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	public Cursor get_UserLocation(){
 
-		//return mDB.query(TABLE_USER_LOCATION, new String[] {KEY_ROW_ID, KEY_U_LATITUDE, KEY_U_LONGITUDE, KEY_SPEED, KEY_LOCATION_PROVIDER, KEY_CREATED_AT}, null, null, null, null, null);
-		return mDB.query(TABLE_USER_LOCATION, new String[] {KEY_ROW_ID, KEY_U_LATITUDE, KEY_U_LONGITUDE, KEY_SPEED, KEY_LOCATION_PROVIDER, KEY_CREATED_AT,KEY_DIFF_DISTANCE,KEY_DIFF_TIME,KEY_LOCATION_STATUS,KEY_ACCURACY}, null, null, null, null, null);
+		
+		//return mDB.query(TABLE_USER_LOCATION, new String[] {KEY_ROW_ID, KEY_U_LATITUDE, KEY_U_LONGITUDE, KEY_SPEED, KEY_LOCATION_PROVIDER, KEY_CREATED_AT,KEY_DIFF_DISTANCE,KEY_DIFF_TIME,KEY_LOCATION_STATUS,KEY_ACCURACY}, null, null, null, null, null);
+		return mDB.query(TABLE_USER_LOCATION, new String[] {KEY_ROW_ID, KEY_U_LATITUDE, KEY_U_LONGITUDE, KEY_HASHCODE, KEY_LOCATION_PROVIDER, KEY_CREATED_AT,KEY_DIFF_DISTANCE,KEY_DIFF_TIME,KEY_STATUS,KEY_ACCURACY}, null, null, null, null, null);
 																																          
 
 	}
 
 	public Cursor get_BusGpsData(){
 
-		return mDB.query(TABLE_BUS_GPS_DATA, new String[] {KEY_ROW_ID, KEY_CREATED_AT, KEY_BUSCODE, KEY_BUSLINE, KEY_B_LATITUDE, KEY_B_LONGITUDE, KEY_SPEED, KEY_DIRECTION, KEY_SCORE}, null, null, null, null, null);
-		//return mDB.query(TABLE_BUS_GPS_DATA, new String[] {KEY_ROW_ID, KEY_CREATED_AT, KEY_BUSCODE, KEY_BUSLINE, KEY_B_LATITUDE, KEY_B_LONGITUDE, KEY_SPEED, KEY_DIRECTION, KEY_URL}, null, null, null, null, null);
+		//return mDB.query(TABLE_BUS_GPS_DATA, new String[] {KEY_ROW_ID, KEY_CREATED_AT, KEY_BUSCODE, KEY_BUSLINE, KEY_B_LATITUDE, KEY_B_LONGITUDE, KEY_SPEED, KEY_DIRECTION, KEY_SCORE}, null, null, null, null, null);
+		return mDB.query(TABLE_BUS_GPS_DATA, new String[] {KEY_ROW_ID, KEY_CREATED_AT, KEY_BUSCODE, KEY_BUSLINE, KEY_B_LATITUDE, KEY_B_LONGITUDE, KEY_BUS_TYPE, KEY_HASHCODE}, null, null, null, null, null);
 	}
 
 	public Cursor get_BusGpsUrl(){
 
-		return mDB.query(TABLE_BUS_GPS_URL, new String[] {KEY_ROW_ID, KEY_BUSCODE, KEY_URL, KEY_FLAG}, null, null, null, null, null);
-		//return mDB.query(TABLE_BUS_GPS_URL, new String[] {KEY_ROW_ID, KEY_BUSCODE, KEY_URL, KEY_FLAG, KEY_BUSLINE, KEY_BUSLINE_DESCRIPTION, KEY_BUSLINE_COMPANY}, null, null, null, null, null);
+		//return mDB.query(TABLE_BUS_GPS_URL, new String[] {KEY_ROW_ID, KEY_BUSCODE, KEY_URL, KEY_FLAG}, null, null, null, null, null);
+		return mDB.query(TABLE_BUS_GPS_URL, new String[] {KEY_ROW_ID, KEY_BUSCODE, KEY_BUS_TYPE, KEY_FLAG, KEY_HASHCODE}, null, null, null, null, null);
 	}
 	
 	public Cursor get_Buscode(){

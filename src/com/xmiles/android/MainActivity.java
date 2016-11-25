@@ -1,6 +1,5 @@
 package com.xmiles.android;
 
-import com.xmiles.android.facebook_api_support.Utility;
 import com.xmiles.android.fragment.Feed_Fragment;
 
 import com.xmiles.android.fragment.Ranking_Fragment;
@@ -9,12 +8,13 @@ import com.xmiles.android.pushnotifications.ServerUtilities;
 import com.xmiles.android.pushnotifications.WakeLocker;
 import com.xmiles.android.slidingmenu.adapter.SlidingMenuLazyAdapter;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
-import com.xmiles.android.support.GetGpsToken;
+import com.xmiles.android.support.GPSTracker;
+
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
 import android.app.ActionBar.Tab;
-import android.app.SearchManager;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -75,7 +75,9 @@ public class MainActivity extends FragmentActivity {
 	//END TEST - PUSH NOTIFICATION By GCM (androidhive example)
 	//-------------
 
-	
+    // GPSTracker class
+	GPSTracker gps;
+
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -265,20 +267,7 @@ public class MainActivity extends FragmentActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		//getMenuInflater().inflate(R.menu.main_frame, menu);
 		getMenuInflater().inflate(R.menu.main, menu);
-		/*
-		getMenuInflater().inflate(R.menu.options_menu, menu);	
-		
-		 // Associate searchable configuration with the SearchView
-	    SearchManager searchManager =
-	           (SearchManager) getSystemService(getApplicationContext().SEARCH_SERVICE);
-	    SearchView searchView =
-	            (SearchView) menu.findItem(R.id.search).getActionView();
-	    searchView.setSearchableInfo(
-	            searchManager.getSearchableInfo(getComponentName()));
-		
-	    // Do not iconify the widget;expand it by default
-	    searchView.setIconifiedByDefault(true);	    
-	    */
+
 		return true;
 	}
 
@@ -315,48 +304,35 @@ public class MainActivity extends FragmentActivity {
 			// Handle action bar actions click
 			//*
 			switch (item.getItemId()) {
-			/*
-			case R.id.about_it:
-				
-				Toast.makeText(getApplicationContext(), "Em construção", Toast.LENGTH_LONG).show();
-				
-				return true;
-				
-			case R.id.how_works:
-				
-				//Toast.makeText(getApplicationContext(), "Em construção", Toast.LENGTH_LONG).show();
-				
-				//Uri uri = Uri.parse("http://www.google.com"); // missing 'http://' will cause crashed
-				Uri uri = Uri.parse("https://www.youtube.com/embed/OvgtMaMftZw");
-				Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-				startActivity(intent);
-				
-				return true;
 
-			case R.id.policies:
-				
-				Toast.makeText(getApplicationContext(), "Em construção", Toast.LENGTH_LONG).show();
-				
-				return true;
-			*/
 			case R.id.buscode_search:
 				
 				
-				//*
-				Toast.makeText(getApplicationContext(), "Buscando ônibus", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(getApplicationContext(), Gmaps.class);                        
-                
-                startActivity(intent);
-				//*/
-
-				/*
-				Log.i(TAG, "System.currentTimeMillis(): " + System.currentTimeMillis());
-
+		        //Check Service Location
+				gps = new GPSTracker(getApplicationContext());
+				gps.getLocation(0);
 				
-				GetGpsToken gt = new GetGpsToken();
-				String lala = gt.md5("783414521747915" + System.currentTimeMillis());
-				Log.i(TAG, "gt.md5: " + lala);
-				*/
+				
+	            Uri uri_1 = SqliteProvider.CONTENT_URI_USER_LOCATION;
+	        	Cursor data_UserLocation = getApplicationContext().getContentResolver().query(uri_1, null, null, null, null);			        	
+
+
+		        if(!gps.canGetGPSLocation()){	
+					//gps.showSettingsAlert();
+		        	Toast.makeText(getApplicationContext(), getString(R.string.title_notification_01), Toast.LENGTH_SHORT).show();
+				} else{
+					
+					if (data_UserLocation.getCount() == 0) {
+					
+		                Intent intent = new Intent(getApplicationContext(), Gmaps.class);                
+		                startActivity(intent);
+					} else {
+
+			        	Toast.makeText(getApplicationContext(), getString(R.string.busmsg2), Toast.LENGTH_SHORT).show();
+
+						
+					}
+				}
 				
 				return true;	
 				
