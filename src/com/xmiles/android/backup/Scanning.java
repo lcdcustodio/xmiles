@@ -135,14 +135,14 @@ public class Scanning extends WakefulBroadcastReceiver{
 					NotificationManager mNotificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
 
 				    int icon = R.drawable.xmiles_logo_rev06;
-				    CharSequence tickerText = ctx.getString(R.string.title_notification_01);
+				    CharSequence tickerText = ctx.getString(R.string.location_service);
 				    long time = System.currentTimeMillis();
 
 				    Notification notification = new Notification(icon, tickerText, time);
 				    notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
 
 				    
-				    CharSequence contentTitle = ctx.getString(R.string.title_notification_01);
+				    CharSequence contentTitle = ctx.getString(R.string.location_service);
 				    CharSequence contentText = ctx.getString(R.string.content_notification_01);
 				    
 			        PendingIntent contentIntent = PendingIntent.getActivity(ctx, 0,

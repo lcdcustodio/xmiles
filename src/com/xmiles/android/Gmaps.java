@@ -159,8 +159,9 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
         //Check Service Location
 		gps = new GPSTracker(getApplicationContext());
 		gps.getLocation(0);
-
-        if(!gps.canGetGPSLocation()){
+        
+        //if(!gps.canGetGPSLocation()){
+        if(!gps.canGetGPSLocation() || !gps.canGetNW_Location()){        	
 			gps.showSettingsAlert();
 		}
         //-------

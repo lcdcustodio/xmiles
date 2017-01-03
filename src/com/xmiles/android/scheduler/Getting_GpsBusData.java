@@ -246,7 +246,7 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 	   		ctx.getContentResolver().insert(SqliteProvider.CONTENT_URI_BUS_GPS_URL_insert, cV);
 	    
 			if (flag + 1 > MAX_POINTS ) {
-				Toast.makeText(ctx, "Você não está mais conectado!", Toast.LENGTH_LONG).show();
+				//Toast.makeText(ctx, "Você não está mais conectado!", Toast.LENGTH_LONG).show();
 				
 				contentValues.put(DatabaseHelper.KEY_STATUS, "STOP");
 				ctx.getContentResolver().insert(SqliteProvider.CONTENT_URI_USER_LOCATION_insert, contentValues);

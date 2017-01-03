@@ -10,8 +10,8 @@
     <string name="video">Video</string>
     <string name="email">EMail</string>
     <string name="new_route">Nova Rota</string>
-    <string name="title_notification_01">GPS está desabilitado</string>
-    <string name="content_notification_01">Necessário ativar o GPS para acumular pontos</string>
+    <string name="location_service">Serviço de localização está desabilitado</string>
+    <string name="content_notification_01">Ative o GPS e o Serviço de Localização do Google para acumular pontos</string>
     <string name="buscode">Digite o código do ônibus (ex: C41383)</string>
     <string name="buscode_button">Encontre seu ônibus</string>
     <string name="search_hint">Digite o código do ônibus (ex: C41383)</string>

@@ -131,7 +131,8 @@ public class Feed_Fragment extends Fragment implements LoaderManager.LoaderCallb
 		gps = new GPSTracker(getActivity());
 		gps.getLocation(0);
 
-        if(!gps.canGetGPSLocation()){	
+        //if(!gps.canGetGPSLocation()){
+        if(!gps.canGetGPSLocation() || !gps.canGetNW_Location()){	
 			gps.showSettingsAlert();
 		} 
 		//--------------

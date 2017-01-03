@@ -317,9 +317,9 @@ public class MainActivity extends FragmentActivity {
 	        	Cursor data_UserLocation = getApplicationContext().getContentResolver().query(uri_1, null, null, null, null);			        	
 
 
-		        if(!gps.canGetGPSLocation()){	
+		        if(!gps.canGetGPSLocation() || !gps.canGetNW_Location()){	
 					//gps.showSettingsAlert();
-		        	Toast.makeText(getApplicationContext(), getString(R.string.title_notification_01), Toast.LENGTH_SHORT).show();
+		        	Toast.makeText(getApplicationContext(), getString(R.string.location_service), Toast.LENGTH_SHORT).show();
 				} else{
 					
 					if (data_UserLocation.getCount() == 0) {

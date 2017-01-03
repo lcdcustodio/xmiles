@@ -740,6 +740,7 @@ int string gcm_unregistered 0x7f08005f
 int string invite_dialog_message 0x7f080068
 int string invite_dialog_title 0x7f080067
 int string like_btn 0x7f08005c
+int string location_service 0x7f080050
 int string new_route 0x7f08004f
 int string phone 0x7f080048
 int string please_wait 0x7f080047
@@ -754,7 +755,6 @@ int string server_unregister_error 0x7f080066
 int string server_unregistered 0x7f080065
 int string store_picture_message 0x7f08001b
 int string store_picture_title 0x7f08001a
-int string title_notification_01 0x7f080050
 int string video 0x7f08004d
 int string wallet_buy_button_place_holder 0x7f080045
 int style BusLine 0x7f090009

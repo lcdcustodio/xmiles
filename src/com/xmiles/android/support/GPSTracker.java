@@ -211,7 +211,7 @@ public class GPSTracker extends Service implements LocationListener, android.loc
 	public void showSettingsAlert(){
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
 
-        alertDialog.setTitle(mContext.getString(R.string.title_notification_01));
+        alertDialog.setTitle(mContext.getString(R.string.location_service));
         
 
         alertDialog.setMessage(mContext.getString(R.string.content_notification_01));
@@ -246,14 +246,14 @@ public class GPSTracker extends Service implements LocationListener, android.loc
 		NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
 	    int icon = R.drawable.xmiles_logo_rev06;
-	    CharSequence tickerText = mContext.getString(R.string.title_notification_01);
+	    CharSequence tickerText = mContext.getString(R.string.location_service);
 	    long time = System.currentTimeMillis();
 
 	    Notification notification = new Notification(icon, tickerText, time);
 	    notification.flags = Notification.DEFAULT_LIGHTS | Notification.FLAG_AUTO_CANCEL;
 
 	    
-	    CharSequence contentTitle = mContext.getString(R.string.title_notification_01);
+	    CharSequence contentTitle = mContext.getString(R.string.location_service);
 	    CharSequence contentText = mContext.getString(R.string.content_notification_01);
 	    
         PendingIntent contentIntent = PendingIntent.getActivity(mContext, 0,

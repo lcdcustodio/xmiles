@@ -22,7 +22,7 @@ import com.xmiles.android.listviewfeed.FeedItem;
 import com.xmiles.android.listviewfeed.FeedListAdapter;
 import com.xmiles.android.listviewfeed.SupportRelAdapterItem;
 import com.xmiles.android.listviewfeed.LikeItem;
-import com.xmiles.android.listviewfeed.RelListAdapter;
+import com.xmiles.android.listviewfeed.PushListAdapter;
 import com.xmiles.android.scheduler.Comments_Inbox_Upload;
 import com.xmiles.android.scheduler.Likes_Inbox_Upload;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
@@ -101,7 +101,7 @@ public class Push_Fragment extends Fragment {
 	//---------------------
 	ProgressDialog progressBar;
 	private ListView listView;
-	private RelListAdapter listAdapter;
+	private PushListAdapter listAdapter;
 	private List<FeedItem> feedItems;
 	//----------------
 	private List<LikeItem> likeItems;	
@@ -146,7 +146,7 @@ public class Push_Fragment extends Fragment {
 		commentItems = new ArrayList<CommentItem>();
 		supportreladapterItems = new ArrayList<SupportRelAdapterItem>();
 		
-		listAdapter = new RelListAdapter(getActivity(), feedItems, likeItems, commentItems, supportreladapterItems);
+		listAdapter = new PushListAdapter(getActivity(), feedItems, likeItems, commentItems, supportreladapterItems);
 		
 
 		//---------------
@@ -173,7 +173,7 @@ public class Push_Fragment extends Fragment {
                     //CleanUp text
                     add_cmts.setText("");
                     
-            		listAdapter = new RelListAdapter(getActivity(), feedItems, likeItems, commentItems, supportreladapterItems);
+            		listAdapter = new PushListAdapter(getActivity(), feedItems, likeItems, commentItems, supportreladapterItems);
             		
 	        		CommentItem comment_item = new CommentItem();
 	        		

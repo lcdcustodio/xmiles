@@ -207,6 +207,7 @@ public class RelListAdapter extends BaseAdapter {
 				// Converting timestamp into x ago format
 				CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(
 						Long.parseLong(support.getDateTime_long(feed_item.getTimeStamp())),
+						//System.currentTimeMillis() - 1 ,
 						System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
 				vi1_timestamp.setText(timeAgo);
 		
@@ -257,20 +258,8 @@ public class RelListAdapter extends BaseAdapter {
 					vi1_url.setMovementMethod(LinkMovementMethod.getInstance());
 					vi1_url.setVisibility(View.VISIBLE);
 				} else {
-					
-					if (feed_item.getName().equals("xMiles")){
-		
-						vi1_url.setText(Html.fromHtml("<a href=\"" + "http://ec2-54-209-160-58.compute-1.amazonaws.com/pictures/xmiles_logo_rev05_transparente.png" + "\">"
-								+ "www.xmiles.com.br" + "</a> "));
-		
-						// Making url clickable
-						vi1_url.setMovementMethod(LinkMovementMethod.getInstance());
-						vi1_url.setVisibility(View.VISIBLE);
-						
-					} else {
-						// url is null, remove from the view
-						vi1_url.setVisibility(View.GONE);
-					}	
+					// url is null, remove from the view
+					vi1_url.setVisibility(View.GONE);
 				}
 		
 				

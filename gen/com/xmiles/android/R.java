@@ -1402,6 +1402,7 @@ Toolbar Hive example
         public static final int invite_dialog_message=0x7f080068;
         public static final int invite_dialog_title=0x7f080067;
         public static final int like_btn=0x7f08005c;
+        public static final int location_service=0x7f080050;
         public static final int new_route=0x7f08004f;
         public static final int phone=0x7f080048;
         public static final int please_wait=0x7f080047;
@@ -1416,7 +1417,6 @@ Toolbar Hive example
         public static final int server_unregistered=0x7f080065;
         public static final int store_picture_message=0x7f08001b;
         public static final int store_picture_title=0x7f08001a;
-        public static final int title_notification_01=0x7f080050;
         public static final int video=0x7f08004d;
         /**  Text on a placeholder buy button when Google Play services is not
          available or up-to-date 
