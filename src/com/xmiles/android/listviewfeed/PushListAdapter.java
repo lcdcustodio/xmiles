@@ -1,17 +1,20 @@
 package com.xmiles.android.listviewfeed;
 
+import com.xmiles.android.facebook_api_support.Utility;
 import com.xmiles.android.listviewfeed.FeedImageView;
 import com.xmiles.android.Likes;
 import com.xmiles.android.R;
 import com.xmiles.android.Relationship;
 import com.xmiles.android.listviewfeed.AppController;
 import com.xmiles.android.listviewfeed.FeedItem;
+import com.xmiles.android.scheduler.Invite_Friends_AsyncTask;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.support.Support;
 //-----
 //import com.xmiles.android.support.imageloader.*;
 //-----
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 import android.app.Activity;
 import android.content.Context;
@@ -33,9 +36,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
+import com.facebook.FacebookException;
+import com.facebook.widget.WebDialog;
 
 public class PushListAdapter extends BaseAdapter {	
 	private Activity activity;
@@ -52,6 +58,10 @@ public class PushListAdapter extends BaseAdapter {
 	//TAG
 	private static final String TAG = "FACEBOOK";
 	
+	private static final String INVITE = "#convite_amigos";
+	
+	
+	private static final Integer KEY_ID_PROFILE  = 0;
 	//--------------------------
 	private static final Integer TYPE1   = 1;
 	private static final Integer TYPE2   = 2;	
@@ -206,8 +216,8 @@ public class PushListAdapter extends BaseAdapter {
 							
 				// Converting timestamp into x ago format
 				CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(
-						//Long.parseLong(support.getDateTime_long(feed_item.getTimeStamp())),
-						System.currentTimeMillis() - 10000 ,
+						Long.parseLong(support.getDateTime_long(feed_item.getTimeStamp())),
+						//System.currentTimeMillis() - 10000 ,
 						System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
 				vi1_timestamp.setText(timeAgo);
 				//vi1_timestamp.setText("");
@@ -270,6 +280,79 @@ public class PushListAdapter extends BaseAdapter {
 					//hashtag_1.setText(item.getHashtag_1());
 					vi1_hashtag_1.setText(feed_item.getHashtag_1().split(",")[0]);
 					vi1_hashtag_1.setVisibility(View.VISIBLE);
+					
+					
+					if (vi1_hashtag_1.getText().toString().equals(INVITE)){
+						
+						vi1_hashtag_1.setOnClickListener(new View.OnClickListener() {
+							@Override
+							public void onClick(View v) {
+							
+				                WebDialog.RequestsDialogBuilder builder =
+
+				                		new WebDialog.RequestsDialogBuilder(activity,Utility.mFacebook.getSession())
+				                                .setTitle(activity.getString(R.string.invite_dialog_title))
+				                                .setMessage(activity.getString(R.string.invite_dialog_message))
+				                                .setOnCompleteListener(new WebDialog.OnCompleteListener() {
+				                                    @Override
+				                                    public void onComplete(Bundle values, FacebookException error) {
+				                                        if (error != null) {
+				                                            Log.w(TAG, "Web dialog encountered an error.", error);
+				                                        } else {
+				                                            //Log.i(TAG, "Web dialog complete: " + values);
+
+				                                            String request_id = values.getString("request");
+				                                            //Log.i(TAG, "request: " + request);
+
+				                                            StringBuilder friends_id = new StringBuilder();
+				                                            int friends_count = 0;
+				                                            for (int i = 0; values.containsKey("to[" + i + "]"); i++) {
+				                                              
+				                                            	if (i != 0){
+				                                            		friends_id.append(";");
+				                                            	}
+				                                            	friends_id.append(values.getString("to[" + i + "]"));
+				                                            	friends_count = friends_count + 1;
+				                                            }
+				                                            Log.i(TAG, "friends_count: " + friends_count);
+				                                            
+				                                            //Invite_Friends
+				                                            try {
+				                                            	
+				                                            	Uri uri = SqliteProvider.CONTENT_URI_USER_PROFILE;
+				                                            	Cursor data_profile = activity.getContentResolver().query(uri, null, null, null, null);				 
+				                                            	data_profile.moveToFirst();
+				                                            	
+																//String result = new Invite_Friends_AsyncTask(activity, data_profile.getString(KEY_ID_PROFILE),friends_id,request_id).execute().get();
+																String result = new Invite_Friends_AsyncTask(data_profile.getString(KEY_ID_PROFILE),friends_id,request_id).execute().get();
+																
+																if (result.equals("success")){
+															    	if (friends_count > 1 ){
+															    		Toast.makeText(activity, "Convites enviados com sucesso!", Toast.LENGTH_LONG).show();
+															    	} else {
+															    		Toast.makeText(activity, "Convite enviado com sucesso!", Toast.LENGTH_LONG).show();
+															    	}
+																	
+																}else {					    	
+															    	Toast.makeText(activity, "Falha ao enviar o convite! Tente novamente mais tarde!", Toast.LENGTH_LONG).show();
+																}
+																
+															} catch (InterruptedException e) {
+																// TODO Auto-generated catch block
+																e.printStackTrace();
+															} catch (ExecutionException e) {
+																// TODO Auto-generated catch block
+																e.printStackTrace();
+															}
+				                                        }
+
+				                                    }
+				                                });
+				                builder.build().show();
+							}
+						});
+						
+					}
 					
 					if (feed_item.getHashtag_1().split(",").length > 1) {
 

@@ -278,8 +278,8 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
           							footer.setBackgroundDrawable( getResources().getDrawable(R.drawable.bg_parent_rounded_corner_botton));
           							header.setBackgroundDrawable( getResources().getDrawable(R.drawable.bg_parent_rounded_corner_top));      							
       							} else {
-          							//footer.setBackground( getResources().getDrawable(R.drawable.bg_parent_rounded_corner_botton));
-          							//header.setBackground( getResources().getDrawable(R.drawable.bg_parent_rounded_corner_top));      							
+          							footer.setBackground( getResources().getDrawable(R.drawable.bg_parent_rounded_corner_botton));
+          							header.setBackground( getResources().getDrawable(R.drawable.bg_parent_rounded_corner_top));      							
       							}
 
       						} else {
@@ -293,8 +293,8 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
           							footer.setBackgroundDrawable( getResources().getDrawable(R.drawable.bg_parent_rounded_corner_botton_red));
           							header.setBackgroundDrawable( getResources().getDrawable(R.drawable.bg_parent_rounded_corner_top_red));      							
       							} else {
-          							//footer.setBackground( getResources().getDrawable(R.drawable.bg_parent_rounded_corner_botton_red));
-          							//header.setBackground( getResources().getDrawable(R.drawable.bg_parent_rounded_corner_top_red));      							
+          							footer.setBackground( getResources().getDrawable(R.drawable.bg_parent_rounded_corner_botton_red));
+          							header.setBackground( getResources().getDrawable(R.drawable.bg_parent_rounded_corner_top_red));      							
       							}
       							
       							//sca.GpsNotFound(url, searchContent);
