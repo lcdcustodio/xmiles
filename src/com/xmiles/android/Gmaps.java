@@ -11,18 +11,22 @@ import org.json.JSONObject;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
 
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.maps.GeoPoint;
 import com.xmiles.android.backup.FbPlaces_Download;
 import com.xmiles.android.facebook_api_support.Utility;
 import com.xmiles.android.facebook_places.Facebook_Places;
+import com.xmiles.android.fragment.Push_Fragment;
 
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
@@ -49,6 +53,8 @@ import android.graphics.drawable.ColorDrawable;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.text.Html;
@@ -58,6 +64,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AutoCompleteTextView;
 
@@ -70,7 +77,7 @@ import android.widget.Toast;
 
 
 
-public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener{
+public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener, OnMapReadyCallback{
 //public class Gmaps extends FragmentActivity {
 
 
@@ -85,7 +92,7 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 	private static final Integer index_LATITUDE  = 3;
 	private static final Integer index_LONGITUDE = 4;
 
-	
+
 
 	AutoCompleteTextView buscode_search;
 
@@ -131,22 +138,47 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gmaps);
+        
 
         ActionBar actionBar = getActionBar();
 	    actionBar.setDisplayHomeAsUpEnabled(true);
-
+	    
+	    //MapFragment mapFragment = (MapFragment) getFragmentManager()
+	    //        .findFragmentById(R.id.gmap_addroutes);
+	    
 		FragmentManager fm = getSupportFragmentManager();
 		SupportMapFragment fragment = (SupportMapFragment) fm.findFragmentById(R.id.gmap_addroutes);
-
-    	mMap = fragment.getMap();
-    	mMap.setMyLocationEnabled(true);
-    	
-    	
-    	//Progress Dialog
+			
+	   	//Progress Dialog
         progressBar = new ProgressDialog(Gmaps.this);
 		progressBar.setCancelable(true);
 		progressBar.setMessage(Gmaps.this.getString(R.string.please_wait));
 		progressBar.show();
+	
+		fragment.getMapAsync(this);
+		//mapFragment.getMapAsync(this);
+	}
+	
+	@Override
+	public void onMapReady(GoogleMap gmaps) {
+	
+		//mMap = fragment.getMap();
+		mMap = gmaps;
+    	mMap.setMyLocationEnabled(true);
+    	
+    	
+	    new Handler().postDelayed(new Runnable() {
+
+	        @Override
+	        public void run() {
+	            if (!isFinishing()) {
+	            	
+	            	progressBar.dismiss();
+	            	
+	            }
+	        }
+	    }, 5000);
+		
 
     	mMap.setOnInfoWindowClickListener(this);
     	mMap.setOnMyLocationChangeListener(myLocationChangeListener);
@@ -354,7 +386,7 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 		//---------------
 		//*
 		
-		String status_buscode = "Conectado ao " + bus_gps_url.getString(KEY_BUS_TYPE) + " <bold>" + bus_gps_url.getString(KEY_BUSCODE) + "<bold>";
+		String status_buscode = "Conectado(a) ao " + bus_gps_url.getString(KEY_BUS_TYPE) + " <bold>" + bus_gps_url.getString(KEY_BUSCODE) + "<bold>";
 		//String status_buscode = "Conectado ao ônibus <bold>" + bus_gps_url.getString(KEY_BUSCODE) + "<bold>";
 		String status_nearby = "";
 		String status_buscode_details = "";
@@ -362,10 +394,11 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 
 		//----------------
 		if (fb_places.getCount() > 0){
-			status_nearby = " próximo ao " + fb_places.getString(KEY_NEARBY);
+			//status_nearby = " próximo ao " + fb_places.getString(KEY_NEARBY);
+			status_nearby = " próximo - " + fb_places.getString(KEY_NEARBY);
 		}
 		if (buscode_info.getCount() > 0){
-			status_buscode = "Conectado ao " + bus_gps_url.getString(KEY_BUS_TYPE) + " <bold>" + bus_gps_url.getString(KEY_BUSCODE);
+			status_buscode = "Conectado(a) ao " + bus_gps_url.getString(KEY_BUS_TYPE) + " <bold>" + bus_gps_url.getString(KEY_BUSCODE);
 			//status_buscode = "Conectado ao ônibus <bold>" + bus_gps_url.getString(KEY_BUSCODE);		
 			status_buscode_details = " da linha " + buscode_info.getString(KEY_BUSLINE) + "<bold>";
 		}
@@ -385,21 +418,7 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 		contentValues.put(DatabaseHelper.KEY_PICURL, data_profile.getString(KEY_PICTURE));
 		contentValues.put(DatabaseHelper.KEY_TIME_STAMP, support.getDateTime());
 		//----------------------------
-		/*
-		gps.getLocation(2);
 
-			GeoPoint curGeoPoint = new GeoPoint(
-	                (int) (gps.getLatitude()  * 1E6),
-	                (int) (gps.getLongitude() * 1E6));
-
-		
-		float Lat    = (float) (curGeoPoint.getLatitudeE6() / 1E6);
-		float Long   = (float) (curGeoPoint.getLongitudeE6() / 1E6);
-		
-		String checkin = "http://maps.googleapis.com/maps/api/staticmap?zoom=16&size=560x240&markers=size:mid|color:red|"
-				         + Lat + "," + Long + "&sensor=false";
-		*/
-		///*
 		String checkin = "http://maps.googleapis.com/maps/api/staticmap?zoom=16&size=560x240&markers=size:mid|color:red|"
 		         + mMap.getMyLocation().getLatitude() + "," + mMap.getMyLocation().getLongitude() + "&sensor=false";
 		
@@ -538,13 +557,6 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 
 	}
 
-	public void cleanUp_Textview(){
-
-		//tv_busline.setText("");
-		//tv_from.setText("");
-		//tv_to.setText("");
-
-	}
 
 
 	  @Override
@@ -570,7 +582,7 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 
 	        	mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, 14.0f));
 	        	
-	        	progressBar.dismiss();
+	        	//progressBar.dismiss();
 	        	
         		// start FbPlaces                
                 int MIN_DISTANCE = 1000;
@@ -588,6 +600,8 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+            	
+  
 
 
 	        }

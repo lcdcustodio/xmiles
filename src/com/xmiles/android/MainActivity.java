@@ -53,6 +53,9 @@ import com.facebook.FacebookException;
 import com.facebook.Session;
 import com.facebook.widget.WebDialog;
 import com.google.android.gcm.GCMRegistrar;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.maps.GeoPoint;
 
 public class MainActivity extends FragmentActivity {
 
@@ -62,6 +65,13 @@ public class MainActivity extends FragmentActivity {
 	DrawerLayout mDrawerLayout;
 	ActionBarDrawerToggle mDrawerToggle;
 	//-----------------------------
+	private LatLngBounds RIO = new LatLngBounds(
+			new LatLng(-23.079425, -43.741027 ), new LatLng(-22.7600, -43.1303));
+			//new LatLng(-30, -51), new LatLng(-29, -50));
+			//new LatLng(-23.079425, -43.741027 ), new LatLng(-22.7600, -43.1303));
+	//-----------------------------
+	
+	
 	private static final String TAG = "FACEBOOK";
 	//-------------
 	//BEGIN TEST - PUSH NOTIFICATION By GCM (androidhive example)
@@ -321,17 +331,28 @@ public class MainActivity extends FragmentActivity {
 					//gps.showSettingsAlert();
 		        	Toast.makeText(getApplicationContext(), getString(R.string.location_service), Toast.LENGTH_SHORT).show();
 				} else{
+					gps.getLocation(2);
 					
-					if (data_UserLocation.getCount() == 0) {
+					GeoPoint curGeoPoint = new GeoPoint(
+			                (int) (gps.getLatitude()  * 1E6),
+			                (int) (gps.getLongitude() * 1E6));
 					
-		                Intent intent = new Intent(getApplicationContext(), Gmaps.class);                
-		                startActivity(intent);
-					} else {
+	                if (!RIO.contains(new LatLng(curGeoPoint.getLatitudeE6() / 1E6,curGeoPoint.getLongitudeE6() / 1E6))){
 
-			        	Toast.makeText(getApplicationContext(), getString(R.string.busmsg2), Toast.LENGTH_SHORT).show();
-
+	                    Toast.makeText(getApplicationContext(), getString(R.string.city_out_of_scope), Toast.LENGTH_LONG).show();
+	                } else{					
+					
+						if (data_UserLocation.getCount() == 0) {
 						
-					}
+			                Intent intent = new Intent(getApplicationContext(), Gmaps.class);                
+			                startActivity(intent);
+						} else {
+	
+				        	Toast.makeText(getApplicationContext(), getString(R.string.busmsg2), Toast.LENGTH_SHORT).show();
+	
+							
+						}
+	                }
 				}
 				
 				return true;	

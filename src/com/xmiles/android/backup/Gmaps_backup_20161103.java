@@ -1,4 +1,4 @@
-package com.xmiles.android;
+package com.xmiles.android.backup;
 
 
 
@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
@@ -17,7 +18,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.maps.GeoPoint;
-import com.xmiles.android.backup.FbPlaces_Download;
+import com.xmiles.android.R;
+import com.xmiles.android.R.drawable;
+import com.xmiles.android.R.id;
+import com.xmiles.android.R.layout;
+import com.xmiles.android.R.menu;
+import com.xmiles.android.R.string;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
 import com.xmiles.android.support.GPSTracker;
@@ -62,8 +68,8 @@ import android.widget.Toast;
 
 
 
-//public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener{
-public class Gmaps_backup_20161010 extends FragmentActivity {
+public class Gmaps_backup_20161103 extends FragmentActivity implements OnInfoWindowClickListener{
+//public class Gmaps extends FragmentActivity {
 
 
 	private static final String TAG = "FACEBOOK";
@@ -85,8 +91,6 @@ public class Gmaps_backup_20161010 extends FragmentActivity {
 	ProgressDialog progressBar;
 
 	Button connect;
-	//----------
-	String buscode;
 	//----------
 	
 	private static final Integer KEY_ID = 0;
@@ -113,12 +117,12 @@ public class Gmaps_backup_20161010 extends FragmentActivity {
 	Score_Algorithm sca;
 
 
-	public Gmaps_backup_20161010(){}
+	public Gmaps_backup_20161103(){}
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.gmaps_fgmt);
+        setContentView(R.layout.gmaps);
 
         ActionBar actionBar = getActionBar();
 	    actionBar.setDisplayHomeAsUpEnabled(true);
@@ -128,9 +132,9 @@ public class Gmaps_backup_20161010 extends FragmentActivity {
 
     	mMap = fragment.getMap();       
     	mMap.setMyLocationEnabled(true);    	
-    	//mMap.setOnInfoWindowClickListener(this);
+    	mMap.setOnInfoWindowClickListener(this);
     	mMap.setOnMyLocationChangeListener(myLocationChangeListener);
-
+	    
     	//-------------------------------
         //Check Service Location
 		gps = new GPSTracker(getApplicationContext());
@@ -153,22 +157,25 @@ public class Gmaps_backup_20161010 extends FragmentActivity {
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {
                 	
                 	//Progress Dialog
-                    progressBar = new ProgressDialog(Gmaps_backup_20161010.this);
+                    progressBar = new ProgressDialog(Gmaps_backup_20161103.this);
             		progressBar.setCancelable(true);
-            		progressBar.setMessage(Gmaps_backup_20161010.this.getString(R.string.please_wait));
+            		progressBar.setMessage(Gmaps_backup_20161103.this.getString(R.string.please_wait));
             		progressBar.show();
-
             		            		
                 	//Hide keyboard                	
                     InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(
                             Context.INPUT_METHOD_SERVICE);
                     imm.hideSoftInputFromWindow(buscode_search.getWindowToken(), 0);
                 	
+                    //get buscode digits
+                    String buscode_digits = getBuscode_digits(searchContent);
+                    
+                   
             		// start FbPlaces service
             		runFbPlaces_thread();
 
             		// get Buscode Details
-            		getBuscode_details(searchContent);
+            		runBuscodeDetails_thread(searchContent);
                     
                     //Check Service Location            		
             		gps.getLocation(0);
@@ -178,132 +185,89 @@ public class Gmaps_backup_20161010 extends FragmentActivity {
             		} else {
             			sca = new Score_Algorithm(getApplicationContext());
             			
-            			// getBusPosition
-            			/**
-            			 *  Parei aqui.. Estou criando um método novo para comportar as chamadas das APIs.
-            			 **/
-            			getBusPosition(searchContent);
+            			String buscode_uppercase = searchContent.toUpperCase();
             			
-            			//"C41383","C50001"            			
-            			String url = "http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/onibus/";
-            			JSONObject json = sca.getBusPosition(url, searchContent);
-            			
+            			JSONObject json = sca.getApiBusPosition(buscode_digits, buscode_uppercase);
             			
             			try {
             				
-
             				//-----------------------
             				progressBar.dismiss();  
             				mMap.clear();
             				//-----------------------
 
-      						String json_header = json.getString("COLUMNS");
-      	
-      						if (!json_header.equals("[\"MENSAGEM\"]")){
-      							
-      							
-      							String [] dataBusArray = json.getString("DATA").substring(2, json.getString("DATA").length()-2).split(",");
-      							      									
-      							//----------------------
+            				/*
+            				 * If Login success = 1 then GET Blabla and later
+            				 */
+                            if(Integer.parseInt(json.getString("success")) == 1){
+                            	JSONArray jArray = new JSONArray(json.getString("api_buscode"));
+
+      					        LatLng loc = new LatLng(Double.parseDouble(jArray.getJSONObject(0).getString("latitude")), 
+			        						Double.parseDouble(jArray.getJSONObject(0).getString("longitude")));
+
+						   		// Adding a marker	 
+      					        String bus_type = jArray.getJSONObject(0).getString("bus_type");
+      					        
+      					        if (bus_type.equals("BUS")){
+      					        	bus_type = "Ônibus";
+      					        }
+      					        
+								Marker marker = mMap.addMarker(new MarkerOptions().position(loc)
+												.title(bus_type + " " + jArray.getJSONObject(0).getString("buscode") + " localizado")						
+												.snippet(getApplicationContext().getString(R.string.busmsg1))							
+												.icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_gmaps_icon_blue)));
+					
+								mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, 11.0f));
+								
+								
+								marker.showInfoWindow();
+
+								// Add a circle
+								mMap.addCircle(new CircleOptions()
+								     .center(loc)
+								     .radius(3000)  //set radius in meters								
+								     .strokeWidth(0)
+									 .fillColor(Color.argb(50, 0, 0, 0)));
+
+								//----------------------
       							//----------------------
       							ContentValues cV = new ContentValues();
-      							cV.put(DatabaseHelper.KEY_BUSCODE, dataBusArray[index_BUSCODE].replace("\"",""));
-      							cV.put(DatabaseHelper.KEY_URL, url);
+      							cV.put(DatabaseHelper.KEY_BUSCODE, jArray.getJSONObject(0).getString("buscode"));
+      							//cV.put(DatabaseHelper.KEY_URL, url);     							
+      							
+      							cV.put(DatabaseHelper.KEY_URL, "lala");
       							//----------------------------
       							cV.put(DatabaseHelper.KEY_FLAG, 0);
       							//----------------------------
-      							/*
-      							 * Incluir aqui o código com hash para conexão agregando o buscode
-      							 */
-      							/*
-      							Log.i(TAG, "System.currentTimeMillis(): " + System.currentTimeMillis());
-
-      							
+      							//hash - android side
+      							/*      							
       							GetGpsToken gt = new GetGpsToken();
       							String lala = gt.md5("783414521747915" + System.currentTimeMillis());
       							Log.i(TAG, "gt.md5: " + lala);
       							*/      							
-      							
-      							
-      							
 
       							getApplicationContext().getContentResolver().insert(SqliteProvider.CONTENT_URI_BUS_GPS_URL_insert, cV);
       							//----------------------
 
 
-      							
-      							GetDistance distance = new GetDistance();
-      							
-      					        gps.getLocation(2);
-      					        
-      							GeoPoint curGeoPoint = new GeoPoint(
-      					                (int) (gps.getLatitude()  * 1E6),
-      					                (int) (gps.getLongitude() * 1E6));
-
-      							double Lat    = (double) (curGeoPoint.getLatitudeE6() / 1E6);
-      							double Long   = (double) (curGeoPoint.getLongitudeE6() / 1E6);
-
-      							
-      							Double get_distance =  distance.calculo(Double.parseDouble(dataBusArray[index_LATITUDE]), 
-    												 				Lat, 
-    												 				Double.parseDouble(dataBusArray[index_LONGITUDE]), 
-    												 				Long);
-
-      							//if (get_distance < MAX_DIST) {
-      							if (get_distance < 10000000) {
-          							
-      								connect.setVisibility(View.VISIBLE);
-      							} else {
-      								
-      								connect.setVisibility(View.INVISIBLE);
-      							}
-      							
-      							
-      							//----------------------
-      					   		mMap.clear();
-      					   		
-      					        LatLng loc = new LatLng(Double.parseDouble(dataBusArray[index_LATITUDE]), 
-      					        						Double.parseDouble(dataBusArray[index_LONGITUDE]));
-
-      					   		// Adding a marker	   		
-      							Marker marker = mMap.addMarker(new MarkerOptions().position(loc)
-      											.title("Ônibus " + dataBusArray[index_BUSCODE].replace("\"","") + " localizado")						
-      											//.snippet(getApplicationContext().getString(R.string.busmsg1))							
-      											.icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_gmaps_icon_blue)));
-      							
-      							mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, 11.0f));
-      							
-      							
-      							marker.showInfoWindow();
-
-      							// Add a circle
-      							mMap.addCircle(new CircleOptions()
-      							     .center(loc)
-      							     .radius(3000)  //set radius in meters
-      							     //.strokeColor(Color.BLUE)
-      							     .strokeWidth(0)
-      								 .fillColor(Color.argb(50, 0, 0, 0)));
-      							
+      							//connect.setVisibility(View.VISIBLE);
+     							
+      							      							      							
 
       						} else {
       							
-      							//String url_brt = "http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/brt/";
-      							//JSONObject json_brt = sca.getBrtPosition(url_brt, searchContent.substring(1, searchContent.length()));
-      							//Log.v("FACEBOOK", "getBrtPosition: " + json_brt.getString("COLUMNS"));
+      							      								
+      							//connect.setVisibility(View.INVISIBLE);
       							
-      							if (json_header.equals("[\"MENSAGEM\"]")){
-      								
-      								connect.setVisibility(View.INVISIBLE);
-      								
-      								//tv_busline.setText("Ônibus não encontrado no sistema");
-          						    //tv_from.setText("Fonte do GPS do ônbius:");
-          						    //tv_to.setText("Prefeitura do Rio de Janeiro");	    
-      			
-      								//-----------------------
-      								sca.GpsNotFound(url, searchContent);
-      								//-----------------------
-      							}
+      				 			Toast.makeText(getApplicationContext(), "Ônibus " + searchContent + " não encontrado!", 
+      				 					Toast.LENGTH_LONG).show();
 
+      							
+      							//sca.GpsNotFound(url, searchContent);
+      							sca.GpsNotFound("lala", searchContent);      								
+      							//-----------------------
+      							
+      							
       						}
       						
       					} catch (JSONException e) {
@@ -449,25 +413,13 @@ public class Gmaps_backup_20161010 extends FragmentActivity {
 
 
 	}
-	
-	public void getBusPosition(String searchContent){
-		
-		//"C41383","C50001"            			
-		String url = "http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/onibus/";
-		JSONObject json = sca.getBusPosition(url, searchContent);
-		
-		try {
-		
-			String json_header = json.getString("COLUMNS");
-			
-		} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-		}
-
+	@Override
+	public void onInfoWindowClick(Marker marker) {
+		// TODO Auto-generated method stub
+		Toast.makeText(this, "lala", Toast.LENGTH_LONG).show();
+		//marker.hideInfoWindow();
 	}
-	
-	public void getBuscode_details(final String buscode){
+	public void runBuscodeDetails_thread(final String buscode){
 	
 		 Thread thread_1 = new Thread(new Runnable(){
 			    @Override
@@ -566,6 +518,25 @@ public class Gmaps_backup_20161010 extends FragmentActivity {
 		thread.start();
 		
 	}
+	
+	public String getBuscode_digits(String buscode){
+		
+		String result = "";
+		char ch;
+		for (int i = 0; i < buscode.length(); i++) {
+			ch = buscode.charAt(i);
+		    
+			if (Character.isDigit(ch)){
+				
+				result = result + ch;
+			}
+			
+		}
+		
+		return result;
+		
+	}
+	
 	public void cleanUp_Textview(){
 		
 		//tv_busline.setText("");				

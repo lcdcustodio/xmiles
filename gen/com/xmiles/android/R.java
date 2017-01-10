@@ -1198,20 +1198,21 @@ Toolbar Hive example
         public static final int profile_infowindow_bus_found=0x7f030035;
         public static final int profile_infowindow_score=0x7f030036;
         public static final int profile_score_button=0x7f030037;
-        public static final int ranking_fgmt=0x7f030038;
-        public static final int ranking_header_item=0x7f030039;
-        public static final int ranking_item=0x7f03003a;
-        public static final int rel_fgmt=0x7f03003b;
-        public static final int search_buscode_autocomplete_textview=0x7f03003c;
-        public static final int search_buscode_button=0x7f03003d;
-        public static final int sliding_menu_profile=0x7f03003e;
-        public static final int sliding_menu_rewards=0x7f03003f;
-        public static final int sliding_menu_rewards_header=0x7f030040;
-        public static final int splash=0x7f030041;
-        public static final int user_header=0x7f030042;
-        public static final int users_custom_listview=0x7f030043;
-        public static final int users_items=0x7f030044;
-        public static final int webview_temp=0x7f030045;
+        public static final int push_item=0x7f030038;
+        public static final int ranking_fgmt=0x7f030039;
+        public static final int ranking_header_item=0x7f03003a;
+        public static final int ranking_item=0x7f03003b;
+        public static final int rel_fgmt=0x7f03003c;
+        public static final int search_buscode_autocomplete_textview=0x7f03003d;
+        public static final int search_buscode_button=0x7f03003e;
+        public static final int sliding_menu_profile=0x7f03003f;
+        public static final int sliding_menu_rewards=0x7f030040;
+        public static final int sliding_menu_rewards_header=0x7f030041;
+        public static final int splash=0x7f030042;
+        public static final int user_header=0x7f030043;
+        public static final int users_custom_listview=0x7f030044;
+        public static final int users_items=0x7f030045;
+        public static final int webview_temp=0x7f030046;
     }
     public static final class menu {
         public static final int drawer=0x7f0c0000;
@@ -1248,6 +1249,7 @@ Toolbar Hive example
         /**  Label of a button to disconnect an active cast display connection.  [CHAR LIMIT=25] NOTE: Same text as msgid="9024230238785261495" 
          */
         public static final int cast_notification_disconnect=0x7f080026;
+        public static final int city_out_of_scope=0x7f080069;
         public static final int com_facebook_choose_friends=0x7f08000f;
         public static final int com_facebook_dialogloginactivity_ok_button=0x7f080000;
         public static final int com_facebook_internet_permission_error_message=0x7f080013;

@@ -1,7 +1,6 @@
-package com.xmiles.android;
+package com.xmiles.android.backup;
 
 
-import java.math.BigInteger;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -18,7 +17,12 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.maps.GeoPoint;
-import com.xmiles.android.backup.FbPlaces_Download;
+import com.xmiles.android.R;
+import com.xmiles.android.R.drawable;
+import com.xmiles.android.R.id;
+import com.xmiles.android.R.layout;
+import com.xmiles.android.R.menu;
+import com.xmiles.android.R.string;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
 import com.xmiles.android.support.GPSTracker;
@@ -64,7 +68,7 @@ import android.widget.Toast;
 
 
 //public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener{
-public class Gmaps_backup_20161001 extends FragmentActivity {
+public class Gmaps_backup_20161010 extends FragmentActivity {
 
 
 	private static final String TAG = "FACEBOOK";
@@ -84,9 +88,6 @@ public class Gmaps_backup_20161001 extends FragmentActivity {
 	
 	Spinner dialog_cities;
 	ProgressDialog progressBar;
-	TextView tv_busline;	
-	TextView tv_from;
-	TextView tv_to;
 
 	Button connect;
 	//----------
@@ -117,7 +118,7 @@ public class Gmaps_backup_20161001 extends FragmentActivity {
 	Score_Algorithm sca;
 
 
-	public Gmaps_backup_20161001(){}
+	public Gmaps_backup_20161010(){}
 
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -127,11 +128,6 @@ public class Gmaps_backup_20161001 extends FragmentActivity {
         ActionBar actionBar = getActionBar();
 	    actionBar.setDisplayHomeAsUpEnabled(true);
 	 
-	    tv_busline = (TextView) findViewById(R.id.busline);
-	    
-	    tv_from = (TextView) findViewById(R.id._de);
-	    tv_to = (TextView) findViewById(R.id.info);	    
-	    //----
 		FragmentManager fm = getSupportFragmentManager();
 		SupportMapFragment fragment = (SupportMapFragment) fm.findFragmentById(R.id.gmap_addroutes);
 
@@ -140,9 +136,6 @@ public class Gmaps_backup_20161001 extends FragmentActivity {
     	//mMap.setOnInfoWindowClickListener(this);
     	mMap.setOnMyLocationChangeListener(myLocationChangeListener);
 
-    	//-------------------------------
-		sca = new Score_Algorithm(getApplicationContext());
-	    
     	//-------------------------------
         //Check Service Location
 		gps = new GPSTracker(getApplicationContext());
@@ -165,13 +158,11 @@ public class Gmaps_backup_20161001 extends FragmentActivity {
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {
                 	
                 	//Progress Dialog
-                    progressBar = new ProgressDialog(Gmaps_backup_20161001.this);
+                    progressBar = new ProgressDialog(Gmaps_backup_20161010.this);
             		progressBar.setCancelable(true);
-            		progressBar.setMessage(Gmaps_backup_20161001.this.getString(R.string.please_wait));
+            		progressBar.setMessage(Gmaps_backup_20161010.this.getString(R.string.please_wait));
             		progressBar.show();
-            		
-            		//Clean TextView MSG
-            		cleanUp_Textview();
+
             		            		
                 	//Hide keyboard                	
                     InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(
@@ -182,7 +173,7 @@ public class Gmaps_backup_20161001 extends FragmentActivity {
             		runFbPlaces_thread();
 
             		// get Buscode Details
-            		runBuscodeDetails_thread(searchContent);
+            		getBuscode_details(searchContent);
                     
                     //Check Service Location            		
             		gps.getLocation(0);
@@ -192,7 +183,13 @@ public class Gmaps_backup_20161001 extends FragmentActivity {
             		} else {
             			sca = new Score_Algorithm(getApplicationContext());
             			
-            			//"C41383"            			
+            			// getBusPosition
+            			/**
+            			 *  Parei aqui.. Estou criando um método novo para comportar as chamadas das APIs.
+            			 **/
+            			getBusPosition(searchContent);
+            			
+            			//"C41383","C50001"            			
             			String url = "http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/onibus/";
             			JSONObject json = sca.getBusPosition(url, searchContent);
             			
@@ -260,18 +257,12 @@ public class Gmaps_backup_20161001 extends FragmentActivity {
       							//if (get_distance < MAX_DIST) {
       							if (get_distance < 10000000) {
           							
-      								tv_busline.setText("Conecte-se e acumule pontos");
       								connect.setVisibility(View.VISIBLE);
       							} else {
       								
-      								tv_busline.setText("Não é possível conectar ao ônibus");
       								connect.setVisibility(View.INVISIBLE);
       							}
       							
-      							
-      						    tv_from.setText("Fonte do GPS do ônbius:");
-      						    tv_to.setText("Prefeitura do Rio de Janeiro");	    
-
       							
       							//----------------------
       					   		mMap.clear();
@@ -296,8 +287,6 @@ public class Gmaps_backup_20161001 extends FragmentActivity {
       							     .radius(3000)  //set radius in meters
       							     //.strokeColor(Color.BLUE)
       							     .strokeWidth(0)
-      							     //.fillColor(Color.TRANSPARENT));
-      								 //.fillColor(Color.argb(150, 0, 0, 0)));
       								 .fillColor(Color.argb(50, 0, 0, 0)));
       							
 
@@ -311,9 +300,9 @@ public class Gmaps_backup_20161001 extends FragmentActivity {
       								
       								connect.setVisibility(View.INVISIBLE);
       								
-      								tv_busline.setText("Ônibus não encontrado no sistema");
-          						    tv_from.setText("Fonte do GPS do ônbius:");
-          						    tv_to.setText("Prefeitura do Rio de Janeiro");	    
+      								//tv_busline.setText("Ônibus não encontrado no sistema");
+          						    //tv_from.setText("Fonte do GPS do ônbius:");
+          						    //tv_to.setText("Prefeitura do Rio de Janeiro");	    
       			
       								//-----------------------
       								sca.GpsNotFound(url, searchContent);
@@ -466,7 +455,24 @@ public class Gmaps_backup_20161001 extends FragmentActivity {
 
 	}
 	
-	public void runBuscodeDetails_thread(final String buscode){
+	public void getBusPosition(String searchContent){
+		
+		//"C41383","C50001"            			
+		String url = "http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/onibus/";
+		JSONObject json = sca.getBusPosition(url, searchContent);
+		
+		try {
+		
+			String json_header = json.getString("COLUMNS");
+			
+		} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		}
+
+	}
+	
+	public void getBuscode_details(final String buscode){
 	
 		 Thread thread_1 = new Thread(new Runnable(){
 			    @Override
@@ -567,9 +573,9 @@ public class Gmaps_backup_20161001 extends FragmentActivity {
 	}
 	public void cleanUp_Textview(){
 		
-		tv_busline.setText("");				
-		tv_from.setText("");
-		tv_to.setText("");
+		//tv_busline.setText("");				
+		//tv_from.setText("");
+		//tv_to.setText("");
 		
 	}
 	
@@ -578,20 +584,7 @@ public class Gmaps_backup_20161001 extends FragmentActivity {
 	  public boolean onCreateOptionsMenu(Menu menu) {
 	      // Inflate the menu; this adds items to the action bar if it is present.
 	      getMenuInflater().inflate(R.menu.gmaps_type, menu);
-	      /*
-	      getMenuInflater().inflate(R.menu.options_menu, menu);	
-	      
-	      // Associate searchable configuration with the SearchView
-	      SearchManager searchManager =
-	           (SearchManager) getSystemService(getApplicationContext().SEARCH_SERVICE);
-	      SearchView searchView =
-	            (SearchView) menu.findItem(R.id.search).getActionView();
-	      searchView.setSearchableInfo(
-	            searchManager.getSearchableInfo(getComponentName()));
-		
-	      // Do not iconify the widget;expand it by default
-	      searchView.setIconifiedByDefault(true);	  
-	      */
+
 	      return true;
 	  }
 

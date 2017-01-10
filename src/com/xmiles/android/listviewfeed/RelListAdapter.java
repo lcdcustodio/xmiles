@@ -130,7 +130,8 @@ public class RelListAdapter extends BaseAdapter {
         View vi3=convertView;
         View vi4=convertView;
         
-        vi1 = inflater.inflate(R.layout.feed_item, null);        
+        //vi1 = inflater.inflate(R.layout.feed_item, null);        
+        vi1 = inflater.inflate(R.layout.push_item, null);
         vi2 = inflater.inflate(R.layout.likes_item, null);
         vi3 = inflater.inflate(R.layout.comment_header, null);
         vi4 = inflater.inflate(R.layout.comment_item, null);

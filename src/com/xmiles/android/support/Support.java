@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.TimeZone;
 
+import android.content.Context;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.text.format.DateUtils;
 import android.util.Log;
 
@@ -28,6 +30,38 @@ public class Support {
 		return dateFormat.format(date);
 	}
 	
+	
+	public String getAppversionName(Context c) {
+		
+		String app_ver = null;
+		try
+		{
+		    app_ver = c.getPackageManager().getPackageInfo(c.getPackageName(), 0).versionName;
+		    
+		}
+		catch (NameNotFoundException e)
+		{
+		    Log.e(TAG, e.getMessage());
+		}
+		
+		return app_ver;
+	}
+	
+	public String getAppversionCode(Context c) {
+		
+		int app_ver = 0;
+		try
+		{
+		    app_ver = c.getPackageManager().getPackageInfo(c.getPackageName(), 0).versionCode;
+		    
+		}
+		catch (NameNotFoundException e)
+		{
+		    Log.e(TAG, e.getMessage());
+		}
+		
+		return Integer.toString(app_ver);
+	}	
 	
 	public String getHour() {
 		SimpleDateFormat dateFormat = new SimpleDateFormat(

@@ -118,13 +118,17 @@ public class Splash_Fragment extends Fragment {
 				//-------------
             	//REWARDS
             	xMiles_getRewards();				
-            	
+
 				//-------------				
 				JSONObject json_login = xMiles_Login(facebook_profile.getString("name"),
 							 			facebook_profile.getString("id"),
 							 			facebook_profile.getString("gender"),
 							 			facebook_profile.optJSONObject("picture").optJSONObject("data").getString("url"),
-							 			new GetDeviceName().getDeviceName());
+							 			new GetDeviceName().getDeviceName(), //);
+							 			Integer.toString(android.os.Build.VERSION.SDK_INT),
+							 			support.getAppversionName(getActivity().getApplicationContext()),
+							 			support.getAppversionCode(getActivity().getApplicationContext()),
+							 			"login");
 				
 				contentValues.put(DatabaseHelper.KEY_SCORE, new JSONObject(json_login.getString("user")).getString("score"));
 				contentValues.put(DatabaseHelper.KEY_RANK, new JSONObject(json_login.getString("user")).getString("rnk"));
@@ -174,11 +178,14 @@ public class Splash_Fragment extends Fragment {
 	}
 
 
-    public JSONObject xMiles_Login(String name,String id, String gender, String picURL, String device) {
+    //public JSONObject xMiles_Login(String name,String id, String gender, String picURL, String device) {
+	public JSONObject xMiles_Login(String name,String id, String gender, String picURL, String device,
+			String android_api, String AppversionName, String AppversionCode, String access_type) {	
         UserFunctions userFunction = new UserFunctions();
         //---------------------------------------------
         //---------------------------------------------
-        JSONObject json = userFunction.loginUser(id, name, picURL, device);
+        //JSONObject json = userFunction.loginUser(id, name, picURL, device);
+        JSONObject json = userFunction.loginUser(id, name, picURL, device, android_api, AppversionName, AppversionCode, access_type);
         // check for login response
         try {
             if (json.getString("success") != null) {

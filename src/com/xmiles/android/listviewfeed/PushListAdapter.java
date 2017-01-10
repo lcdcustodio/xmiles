@@ -1,6 +1,13 @@
 package com.xmiles.android.listviewfeed;
 
 import com.xmiles.android.facebook_api_support.Utility;
+
+import com.facebook.android.AsyncFacebookRunner;
+import com.facebook.android.Facebook;
+import com.xmiles.android.facebook_api_support.SessionEvents;
+import com.xmiles.android.facebook_api_support.SessionStore;
+import com.xmiles.android.facebook_api_support.SessionEvents.AuthListener;
+
 import com.xmiles.android.listviewfeed.FeedImageView;
 import com.xmiles.android.Likes;
 import com.xmiles.android.R;
@@ -54,6 +61,10 @@ public class PushListAdapter extends BaseAdapter {
 	//----------	
 	ImageLoader imageLoader = AppController.getInstance().getImageLoader();
 	//private static ImageLoader imgLoader;
+	
+	// Your Facebook APP ID
+	private static final String APP_ID = "844332932270301";
+
 	
 	//TAG
 	private static final String TAG = "FACEBOOK";
@@ -140,7 +151,7 @@ public class PushListAdapter extends BaseAdapter {
         View vi3=convertView;
         View vi4=convertView;
         
-        vi1 = inflater.inflate(R.layout.feed_item, null);        
+        vi1 = inflater.inflate(R.layout.push_item, null);        
         vi2 = inflater.inflate(R.layout.likes_item, null);
         vi3 = inflater.inflate(R.layout.comment_header, null);
         vi4 = inflater.inflate(R.layout.comment_item, null);
@@ -287,6 +298,20 @@ public class PushListAdapter extends BaseAdapter {
 						vi1_hashtag_1.setOnClickListener(new View.OnClickListener() {
 							@Override
 							public void onClick(View v) {
+								
+								//****************************************************************
+								//****************************************************************
+						  	    // Create the Facebook Object using the app id.
+						  	    Utility.mFacebook = new Facebook(APP_ID);
+
+						  	    // Instantiate the asynrunner object for asynchronous api calls.
+						        Utility.mAsyncRunner = new AsyncFacebookRunner(Utility.mFacebook);
+
+						        // restore session if one exists
+						        SessionStore.restore(Utility.mFacebook, activity.getApplicationContext());
+						        //SessionEvents.addAuthListener(new FbAPIsAuthListener());
+								//****************************************************************
+								//****************************************************************
 							
 				                WebDialog.RequestsDialogBuilder builder =
 

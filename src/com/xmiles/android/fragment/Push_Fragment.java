@@ -28,6 +28,7 @@ import com.xmiles.android.scheduler.Likes_Inbox_Upload;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
 import com.xmiles.android.support.GPSTracker;
+import com.xmiles.android.support.GetDeviceName;
 import com.xmiles.android.support.Score_Algorithm;
 import com.xmiles.android.support.Support;
 import com.xmiles.android.support.imageloader.RankingLazyAdapter;
@@ -309,7 +310,27 @@ public class Push_Fragment extends Fragment {
 				            UserFunctions userFunc = new UserFunctions();
 				            
 				            json = userFunc.getPost_actions(feed_id);
+				            //------------				            
+				            //------------				            
+				            //users.ctrl_login access_type = "push"
 
+				            Uri uri_2 = SqliteProvider.CONTENT_URI_USER_PROFILE;
+						    Cursor dp = getActivity().getContentResolver().query(uri_2, null, null, null, null);
+
+						    dp.moveToLast();
+						    
+						    Support support_v2 = new Support();
+
+				            JSONObject json_login = userFunc.loginUser(dp.getString(KEY_ID_PROFILE), 
+				            							dp.getString(KEY_NAME_PROFILE), 
+				            							dp.getString(KEY_PICURL_PROFILE), 
+														new GetDeviceName().getDeviceName(), 
+														Integer.toString(android.os.Build.VERSION.SDK_INT),
+														support_v2.getAppversionName(getActivity().getApplicationContext()), 
+														support_v2.getAppversionCode(getActivity().getApplicationContext()), 
+														"push");
+				            //------------
+				            //------------
 				    		        	
 					    } catch (Exception e) {
 					            e.printStackTrace();
