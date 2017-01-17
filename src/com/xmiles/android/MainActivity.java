@@ -65,10 +65,18 @@ public class MainActivity extends FragmentActivity {
 	DrawerLayout mDrawerLayout;
 	ActionBarDrawerToggle mDrawerToggle;
 	//-----------------------------
-	private LatLngBounds RIO = new LatLngBounds(
-			new LatLng(-23.079425, -43.741027 ), new LatLng(-22.7600, -43.1303));
+	private LatLngBounds xmiles_bounds = new LatLngBounds(
+			new LatLng(-23.079425, -43.741027), new LatLng(-22.7600, -43.1303));//,
 			//new LatLng(-30, -51), new LatLng(-29, -50));
 			//new LatLng(-23.079425, -43.741027 ), new LatLng(-22.7600, -43.1303));
+	
+	private LatLngBounds SaoPaulo = new LatLngBounds(
+			new LatLng(-23.971097, -46.901589), new LatLng(-23.348461, -46.359139));
+
+	private LatLngBounds PortoAlegre = new LatLngBounds(
+			new LatLng(-30.261530, -51.306411), new LatLng(-29.960472, -51.009013));
+
+	
 	//-----------------------------
 	
 	
@@ -337,10 +345,20 @@ public class MainActivity extends FragmentActivity {
 			                (int) (gps.getLatitude()  * 1E6),
 			                (int) (gps.getLongitude() * 1E6));
 					
-	                if (!RIO.contains(new LatLng(curGeoPoint.getLatitudeE6() / 1E6,curGeoPoint.getLongitudeE6() / 1E6))){
+	                if (!xmiles_bounds.contains(new LatLng(curGeoPoint.getLatitudeE6() / 1E6,curGeoPoint.getLongitudeE6() / 1E6))){
 
 	                    Toast.makeText(getApplicationContext(), getString(R.string.city_out_of_scope), Toast.LENGTH_LONG).show();
-	                } else{					
+	                
+	                } else if (SaoPaulo.contains(new LatLng(curGeoPoint.getLatitudeE6() / 1E6,curGeoPoint.getLongitudeE6() / 1E6))){
+	                	
+	                    Toast.makeText(getApplicationContext(), getString(R.string.saopaulo_out_of_scope), Toast.LENGTH_LONG).show();
+	                    
+	                } else if (PortoAlegre.contains(new LatLng(curGeoPoint.getLatitudeE6() / 1E6,curGeoPoint.getLongitudeE6() / 1E6))){
+	                	
+	                    Toast.makeText(getApplicationContext(), getString(R.string.portoalegre_out_of_scope), Toast.LENGTH_LONG).show();
+	                    
+	                    
+	                } else if (xmiles_bounds.contains(new LatLng(curGeoPoint.getLatitudeE6() / 1E6,curGeoPoint.getLongitudeE6() / 1E6))){					
 					
 						if (data_UserLocation.getCount() == 0) {
 						

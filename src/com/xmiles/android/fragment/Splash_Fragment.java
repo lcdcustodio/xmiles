@@ -3,6 +3,8 @@ package com.xmiles.android.fragment;
 
 
 
+import java.util.concurrent.TimeUnit;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -31,10 +33,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,15 +56,18 @@ public class Splash_Fragment extends Fragment {
 
 	JSONObject facebook_profile;
 
+	private static final Integer KEY_USER_ID 	= 0;
+	private static final Integer KEY_NAME 		= 1;
+	private static final Integer KEY_PICTURE    = 2;
+	private static final Integer KEY_CREATED_AT = 5;
 	
 	
-    // GPSTracker class
-	GPSTracker gps;
-	
-	float Lat;
-	float Long;
-
-	private Handler mHandler;
+	private static String user_id;
+	private static String user_name;
+	private static String picurl;
+	private static String gender;
+	private static String time_stamp;
+	private static boolean flag_picurl;
 
 	public Splash_Fragment() {
 	}
@@ -99,39 +107,97 @@ public class Splash_Fragment extends Fragment {
 			 */
 			Log.i(TAG, "Splash_Fragment - doInBackground");
 			//------
+			Support support = new Support();
+			
+			Uri uri_1 = SqliteProvider.CONTENT_URI_USER_PROFILE;
+			Cursor data_profile = getActivity().getApplicationContext().getContentResolver().query(uri_1, null, null, null, null);
+			data_profile.moveToFirst();
+			
 
-			// facebook profile
-			facebook_profile = new GetFacebookProfile().GetResult(Utility.mFacebook.getAccessToken());
-			//Log.i(TAG, "facebook_profile: " + facebook_profile);
+			long diff = System.currentTimeMillis() -
+					Long.parseLong(support.getDateTime_long(data_profile.getString(KEY_CREATED_AT))); 
+			
+			long delta_days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+					
+				
+			Log.v(TAG, "delta_days: " + delta_days);
+			
+
+
+			if (data_profile.getCount() > 0 && delta_days < 3){
+			
+
+				Log.d(TAG, "facebook profile from SQLite");
+				
+				user_id   = data_profile.getString(KEY_USER_ID);
+				user_name = data_profile.getString(KEY_NAME);				
+				picurl 	  = data_profile.getString(KEY_PICTURE);
+				gender	  = "masc";
+				time_stamp = data_profile.getString(KEY_CREATED_AT);
+				flag_picurl = true;
+				
+			} else {
+
+				Log.d(TAG, "facebook profile Facebook SDK");
+				
+				// facebook profile
+				facebook_profile = new GetFacebookProfile().GetResult(Utility.mFacebook.getAccessToken());
+				Log.i(TAG, "facebook_profile: " + facebook_profile);
+				try {
+				
+					user_id   = facebook_profile.getString("id");
+					user_name = facebook_profile.getString("name");
+					picurl	  = facebook_profile.optJSONObject("picture").optJSONObject("data").getString("url");					
+					gender	  = facebook_profile.getString("gender");
+					time_stamp = support.getDateTime();
+					flag_picurl = false;
+				
+				} catch (JSONException e) {
+					//} catch (Exception e) {  	
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+				}
+
+					
+				
+			}
+			
 
 			//------------------
-            Support support = new Support();
+
 
 			/** Setting up values to insert into UserProfile table */
 			ContentValues contentValues = new ContentValues();
 
 			try {
-				contentValues.put(DatabaseHelper.KEY_ID, facebook_profile.getString("id"));
-				contentValues.put(DatabaseHelper.KEY_NAME, facebook_profile.getString("name"));
-				contentValues.put(DatabaseHelper.KEY_PICTURE, facebook_profile.optJSONObject("picture").optJSONObject("data").getString("url"));
-				contentValues.put(DatabaseHelper.KEY_CREATED_AT, support.getDateTime());
+				contentValues.put(DatabaseHelper.KEY_ID, user_id);
+				contentValues.put(DatabaseHelper.KEY_NAME, user_name);
+				contentValues.put(DatabaseHelper.KEY_CREATED_AT, time_stamp);
 				//-------------
             	//REWARDS
             	xMiles_getRewards();				
 
-				//-------------				
-				JSONObject json_login = xMiles_Login(facebook_profile.getString("name"),
-							 			facebook_profile.getString("id"),
-							 			facebook_profile.getString("gender"),
-							 			facebook_profile.optJSONObject("picture").optJSONObject("data").getString("url"),
+				//-------------
+            	//*
+				JSONObject json_login = xMiles_Login(user_name,
+										user_id,
+							 			gender,
+							 			picurl,
 							 			new GetDeviceName().getDeviceName(), //);
 							 			Integer.toString(android.os.Build.VERSION.SDK_INT),
 							 			support.getAppversionName(getActivity().getApplicationContext()),
 							 			support.getAppversionCode(getActivity().getApplicationContext()),
 							 			"login");
-				
+				//*/
 				contentValues.put(DatabaseHelper.KEY_SCORE, new JSONObject(json_login.getString("user")).getString("score"));
 				contentValues.put(DatabaseHelper.KEY_RANK, new JSONObject(json_login.getString("user")).getString("rnk"));
+				
+				if (flag_picurl) {
+					contentValues.put(DatabaseHelper.KEY_PICTURE, new JSONObject(json_login.getString("user")).getString("picurl"));
+				} else {
+					contentValues.put(DatabaseHelper.KEY_PICTURE, picurl);
+				}
+				
 				//-------------				
 				/*
 				 * If Login success = 1 then GET Blabla and later
@@ -139,7 +205,9 @@ public class Splash_Fragment extends Fragment {
                 if(Integer.parseInt(json_login.getString("success")) == 1){
                 	
                 	//NEWSFEED
-                	xMiles_getNewsfeed(facebook_profile.getString("id"));				
+                	xMiles_getNewsfeed(user_id);
+                	//xMiles_getNewsfeed(facebook_profile.getString("id"));
+                	//xMiles_getNewsfeed("783414521747915");
 
                 	//RANKING
                 	xMiles_getRanking();				
@@ -147,6 +215,7 @@ public class Splash_Fragment extends Fragment {
 
                 }
 			} catch (JSONException e) {
+			//} catch (Exception e) {  	
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
@@ -177,15 +246,12 @@ public class Splash_Fragment extends Fragment {
 
 	}
 
-
-    //public JSONObject xMiles_Login(String name,String id, String gender, String picURL, String device) {
-	public JSONObject xMiles_Login(String name,String id, String gender, String picURL, String device,
+	public JSONObject xMiles_Login(String name,String id, String gender, String picURL, String device,	
 			String android_api, String AppversionName, String AppversionCode, String access_type) {	
-        UserFunctions userFunction = new UserFunctions();
-        //---------------------------------------------
-        //---------------------------------------------
-        //JSONObject json = userFunction.loginUser(id, name, picURL, device);
-        JSONObject json = userFunction.loginUser(id, name, picURL, device, android_api, AppversionName, AppversionCode, access_type);
+
+		UserFunctions userFunction = new UserFunctions();        
+		//JSONObject json = userFunction.loginUser(id, name, picURL, device, android_api, AppversionName, AppversionCode, access_type);
+        JSONObject json = userFunction.loginUser(id, name, device, android_api, AppversionName, AppversionCode, access_type);
         // check for login response
         try {
             if (json.getString("success") != null) {

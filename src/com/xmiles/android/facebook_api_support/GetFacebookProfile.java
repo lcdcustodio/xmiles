@@ -46,9 +46,10 @@ public class GetFacebookProfile {
 			    "https://graph.facebook.com/me?access_token=");
 		
 		urlString.append(a_token);
-		urlString.append("&format=json&fields=name%2C+picture%2Cbirthday%2Clocation%2Cgender%2Crelationship_status");
+		//urlString.append("&format=json&fields=name%2Cpicture%2Cgender");
+		urlString.append("&format=json&fields=name%2Cpicture%2Cbirthday%2Clocation%2Cgender%2Crelationship_status");
 		
-		//Log.i(TAG, "urlString " + urlString);
+		Log.i(TAG, "urlString " + urlString);
 		
 		return urlString.toString();
 	}

@@ -746,9 +746,11 @@ int string location_service 0x7f080050
 int string new_route 0x7f08004f
 int string phone 0x7f080048
 int string please_wait 0x7f080047
+int string portoalegre_out_of_scope 0x7f08006b
 int string report_bug 0x7f08005b
 int string rotas 0x7f080049
 int string sample_string 0x7f080059
+int string saopaulo_out_of_scope 0x7f08006a
 int string search_hint 0x7f080054
 int string server_register_error 0x7f080064
 int string server_registered 0x7f080063

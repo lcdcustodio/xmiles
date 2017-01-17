@@ -166,7 +166,7 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 		mMap = gmaps;
     	mMap.setMyLocationEnabled(true);
     	
-    	
+    	/*
 	    new Handler().postDelayed(new Runnable() {
 
 	        @Override
@@ -178,7 +178,7 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 	            }
 	        }
 	    }, 5000);
-		
+		*/
 
     	mMap.setOnInfoWindowClickListener(this);
     	mMap.setOnMyLocationChangeListener(myLocationChangeListener);
@@ -225,7 +225,7 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
                     String buscode_digits = getBuscode_digits(searchContent);
 
             		// get Buscode Details
-            		runBuscodeDetails_thread(searchContent);
+            		//runBuscodeDetails_thread(searchContent);
 
                     //Check Service Location
             		gps.getLocation(0);
@@ -261,7 +261,7 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
       					        String bus_type = jArray.getJSONObject(0).getString("bus_type");
 
       					        if (bus_type.equals("BUS")){
-      					        	bus_type = "Ônibus";
+      					        	bus_type = "ônibus";
       					        }
 
 								Marker marker = mMap.addMarker(new MarkerOptions().position(loc)
@@ -371,11 +371,11 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
         Uri uri_3 = SqliteProvider.CONTENT_URI_USER_PLACES;
 		Cursor fb_places = getApplicationContext().getContentResolver().query(uri_3, null, null, null, null);
 		fb_places.moveToFirst();
-
+		/*
         Uri uri_4 = SqliteProvider.CONTENT_URI_BUSCODE;
 		Cursor buscode_info = getApplicationContext().getContentResolver().query(uri_4, null, null, null, null);
 		buscode_info.moveToFirst();
-
+		*/
 
         Support support = new Support();
 
@@ -397,22 +397,25 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 			//status_nearby = " próximo ao " + fb_places.getString(KEY_NEARBY);
 			status_nearby = " próximo - " + fb_places.getString(KEY_NEARBY);
 		}
+		/*
 		if (buscode_info.getCount() > 0){
 			status_buscode = "Conectado(a) ao " + bus_gps_url.getString(KEY_BUS_TYPE) + " <bold>" + bus_gps_url.getString(KEY_BUSCODE);
 			//status_buscode = "Conectado ao ônibus <bold>" + bus_gps_url.getString(KEY_BUSCODE);		
 			status_buscode_details = " da linha " + buscode_info.getString(KEY_BUSLINE) + "<bold>";
 		}
+		*/
 
 		String status = status_buscode + status_buscode_details + status_nearby;
 
 		if (status_buscode_details.equals("")){
 			contentValues.put(DatabaseHelper.KEY_HASHTAG, "#" + bus_gps_url.getString(KEY_BUSCODE).toUpperCase());
 			//contentValues.put(DatabaseHelper.KEY_HASHTAG, "#" + bus_gps_url.getString(KEY_BUSCODE).toLowerCase());
-		} else {
+		}/* else {
 			contentValues.put(DatabaseHelper.KEY_HASHTAG, "#" + bus_gps_url.getString(KEY_BUSCODE).toUpperCase() +
 			//contentValues.put(DatabaseHelper.KEY_HASHTAG, "#" + bus_gps_url.getString(KEY_BUSCODE).toLowerCase() +
 					"," + buscode_info.getString(KEY_HASHTAG));
 		}
+		*/
 		contentValues.put(DatabaseHelper.KEY_STATUS, status);
 
 		contentValues.put(DatabaseHelper.KEY_PICURL, data_profile.getString(KEY_PICTURE));
@@ -570,7 +573,8 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 
 	private GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
 	    @Override
-	    public void onMyLocationChange(Location location) {
+	    //public void onMyLocationChange(Location location) {
+	    public void onMyLocationChange(final Location location) {
 
 	        LatLng loc = new LatLng(location.getLatitude(), location.getLongitude());
 
@@ -582,14 +586,12 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 
 	        	mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, 14.0f));
 	        	
-	        	//progressBar.dismiss();
+	        	progressBar.dismiss();
 	        	
         		// start FbPlaces                
-                int MIN_DISTANCE = 1000;
-            	
-                //double lat_test = -22.898072;
-                //double long_test = -43.180322;
-                
+                //int MIN_DISTANCE = 1000;
+            	/*
+                 
             	try {
 					new Facebook_Places(getApplicationContext(),Utility.mFacebook.getAccessToken(),location.getLatitude(),location.getLongitude(),MIN_DISTANCE).execute().get();
 					//new Facebook_Places(getApplicationContext(),Utility.mFacebook.getAccessToken(),lat_test,long_test,MIN_DISTANCE).execute().get();
@@ -600,7 +602,32 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-            	
+            	*/
+                
+			    Thread thread_fbplaces = new Thread(new Runnable(){
+			        @Override
+			        public void run() {
+			        	
+		        		// start FbPlaces                
+		                int MIN_DISTANCE = 1000;
+
+
+					    try {
+					    	new Facebook_Places(getApplicationContext(),Utility.mFacebook.getAccessToken(),location.getLatitude(),location.getLongitude(),MIN_DISTANCE).execute().get();
+						
+					    } catch (InterruptedException e) {
+					    	// TODO Auto-generated catch block
+					    	e.printStackTrace();
+					    } catch (ExecutionException e) {
+					    	// TODO Auto-generated catch block
+					    	e.printStackTrace();
+					    }
+
+			        }
+
+			    });
+
+			    thread_fbplaces.start();			           		    	                    
   
 
 

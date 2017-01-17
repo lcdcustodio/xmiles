@@ -323,7 +323,7 @@ public class Push_Fragment extends Fragment {
 
 				            JSONObject json_login = userFunc.loginUser(dp.getString(KEY_ID_PROFILE), 
 				            							dp.getString(KEY_NAME_PROFILE), 
-				            							dp.getString(KEY_PICURL_PROFILE), 
+				            							//dp.getString(KEY_PICURL_PROFILE), 
 														new GetDeviceName().getDeviceName(), 
 														Integer.toString(android.os.Build.VERSION.SDK_INT),
 														support_v2.getAppversionName(getActivity().getApplicationContext()), 

@@ -1408,9 +1408,11 @@ Toolbar Hive example
         public static final int new_route=0x7f08004f;
         public static final int phone=0x7f080048;
         public static final int please_wait=0x7f080047;
+        public static final int portoalegre_out_of_scope=0x7f08006b;
         public static final int report_bug=0x7f08005b;
         public static final int rotas=0x7f080049;
         public static final int sample_string=0x7f080059;
+        public static final int saopaulo_out_of_scope=0x7f08006a;
         public static final int search_hint=0x7f080054;
         public static final int server_register_error=0x7f080064;
         public static final int server_registered=0x7f080063;
