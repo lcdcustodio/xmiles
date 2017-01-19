@@ -175,7 +175,7 @@ public class Splash_Fragment extends Fragment {
 				contentValues.put(DatabaseHelper.KEY_CREATED_AT, time_stamp);
 				//-------------
             	//REWARDS
-            	xMiles_getRewards();				
+            	//xMiles_getRewards();				
 
 				//-------------
             	//*

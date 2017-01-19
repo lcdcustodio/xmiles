@@ -105,10 +105,25 @@ public class HashtagListAdapter extends BaseAdapter {
 		TextView timestamp = (TextView) convertView.findViewById(R.id.timestamp);
 		TextView statusMsg = (TextView) convertView.findViewById(R.id.txtStatusMsg);
 		//-------------------
-		TextView hashtag_1 = (TextView) convertView.findViewById(R.id.hashtag_1);
+		TextView hashtag_1b = (TextView) convertView.findViewById(R.id.hashtag_1);
+		
+		hashtag_1b.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
 		//-------------------
 		TextView hashtag_2 = (TextView) convertView.findViewById(R.id.hashtag_2);
-		
+
+		hashtag_2.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				// TODO Auto-generated method stub
+				
+			}
+		});		
 
 		//-------------------
 		TextView rel_stats = (TextView) convertView.findViewById(R.id.rel_stats);		
@@ -477,16 +492,16 @@ public class HashtagListAdapter extends BaseAdapter {
 
 		// Checking for null hashtag
 		if (item.getHashtag_1() != null && !item.getHashtag_1().equals("")) {	
-		//if (item.getHashtag_1().split(",")[0] != null 
-		//		&& !item.getHashtag_1().split(",")[0].equals("")) {
+		//if (item.gethashtag_1b().split(",")[0] != null 
+		//		&& !item.gethashtag_1b().split(",")[0].equals("")) {
 			
-			//hashtag_1.setText(item.getHashtag_1());
-			hashtag_1.setText(item.getHashtag_1().split(",")[0]);
-			hashtag_1.setVisibility(View.VISIBLE);
+			//hashtag_1b.setText(item.gethashtag_1b());
+			hashtag_1b.setText(item.getHashtag_1().split(",")[0]);
+			hashtag_1b.setVisibility(View.VISIBLE);
 
 			if (item.getHashtag_1().split(",").length > 1) {
 
-				//Log.e(TAG,"item.getHashtag_1().split(,)[1]: " + item.getHashtag_1().split(",")[1]);
+				//Log.e(TAG,"item.gethashtag_1b().split(,)[1]: " + item.gethashtag_1b().split(",")[1]);
 				
 				hashtag_2.setText(item.getHashtag_1().split(",")[1]);
 				hashtag_2.setVisibility(View.VISIBLE);
@@ -497,7 +512,7 @@ public class HashtagListAdapter extends BaseAdapter {
 		} else {
 			
 			// hashtag is null, remove from the view
-			hashtag_1.setVisibility(View.GONE);
+			hashtag_1b.setVisibility(View.GONE);
 			hashtag_2.setVisibility(View.GONE);				
 		}
 		

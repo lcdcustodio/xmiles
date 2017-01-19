@@ -45,8 +45,15 @@ public class SlidingMenuLazyAdapter extends BaseAdapter {
 	private static final Integer KEY_RANK = 4;	
 	private static final Integer KEY_QUANTITY = 4;
 	
+    private static final Integer KEY_ID = 0;
+	//private static final Integer KEY_NAME = 1;
+	//private static final Integer KEY_PICURL = 2;
+	//private static final Integer KEY_SCORE = 3;
+	
+	
 	private Cursor users_info;
-	private Cursor rewards_info;
+	//private Cursor rewards_info;
+	private Cursor ranking;
 	//--------------------------
 	//--------------------------
 	private Context ctx;
@@ -71,18 +78,21 @@ public class SlidingMenuLazyAdapter extends BaseAdapter {
         inflater = (LayoutInflater)ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         
         Uri uri_1 = SqliteProvider.CONTENT_URI_USER_PROFILE;
-        Uri uri_2 = SqliteProvider.CONTENT_URI_REWARDS;
+        //Uri uri_2 = SqliteProvider.CONTENT_URI_REWARDS;
+        Uri uri_2b = SqliteProvider.CONTENT_URI_RANKING;
         
         users_info = ctx.getContentResolver().query(uri_1, null, null, null, null);        
-        rewards_info = ctx.getContentResolver().query(uri_2, null, null, null, null);
+        //rewards_info = ctx.getContentResolver().query(uri_2, null, null, null, null);
+        ranking = ctx.getContentResolver().query(uri_2b, null, null, null, null);
         
-        Log.w(TAG, "rewards_info.getCount(): " + rewards_info.getCount());
+        Log.w(TAG, "ranking.getCount(): " + ranking.getCount());
 
     }
 
     public int getCount() {
     	//return TYPE3;    	
-    	return 2 + rewards_info.getCount(); 
+    	//return 2 + rewards_info.getCount();
+    	return 2 + ranking.getCount(); 
     	
 
     }
@@ -123,7 +133,7 @@ public class SlidingMenuLazyAdapter extends BaseAdapter {
         
         //Log.e(TAG, "position: " + position);
         
-        if(convertView==null)
+        //if(convertView==null)
         	
         	vi1 = inflater.inflate(R.layout.sliding_menu_profile, null);
         	vi2 = inflater.inflate(R.layout.sliding_menu_rewards_header, null);
@@ -139,7 +149,7 @@ public class SlidingMenuLazyAdapter extends BaseAdapter {
 	        TextView type_vi3   = (TextView)vi3.findViewById(R.id.type);
 	        ImageView reward_image_vi3 = (ImageView) vi3.findViewById(R.id.reward_image);
 	        TextView score_vi3	= (TextView)vi3.findViewById(R.id.reward_score);
-	        TextView total_vi3	= (TextView)vi3.findViewById(R.id.total);
+	        //TextView total_vi3	= (TextView)vi3.findViewById(R.id.total);
 
 	    switch(viewType){
 	       case 1:
@@ -184,19 +194,23 @@ public class SlidingMenuLazyAdapter extends BaseAdapter {
 
 	       case 3:
 		        
-		        rewards_info.moveToPosition(position - 2);
+	    	    ranking.moveToPosition(position - 2);
 		        
+	    	    int pos = position - 1;
+	    	    
 		        // Setting all values in listview
-		        reward_vi3.setText(rewards_info.getString(KEY_REWARD));
-		        type_vi3.setText(rewards_info.getString(KEY_REWARD_TYPE));
+		        reward_vi3.setText(ranking.getString(KEY_NAME));
+		        type_vi3.setText(pos + " ° lugar");
 		        
-		        score_vi3.setText(rewards_info.getString(KEY_SCORE) + " pontos");
-		        total_vi3.setText(rewards_info.getString(KEY_QUANTITY));
+		        
+		        
+		        score_vi3.setText(ranking.getString(KEY_SCORE) + " pontos");
+		        //total_vi3.setText(rewards_info.getString(KEY_QUANTITY));
 
 
 				Drawable drawable_vi3 = null;
 				try {
-					drawable_vi3 = new LoadImageURL(rewards_info.getString(KEY_PICURL),ctx).execute().get();
+					drawable_vi3 = new LoadImageURL(ranking.getString(KEY_PICURL),ctx).execute().get();
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

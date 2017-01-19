@@ -107,11 +107,11 @@ public class MainActivity extends FragmentActivity {
 		
 		//*******
 	    Fragment fgmt_newsfeed 	= new Feed_Fragment();
-	    Fragment fgmt_ranking 	= new Ranking_Fragment();
+	    //Fragment fgmt_ranking 	= new Ranking_Fragment();
 	    //*******
 	    
 	    ActionBar actionBar = getActionBar();
-	    actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+	    //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 	    
 	    // set Color
 	    //actionBar.setBackgroundDrawable(new ColorDrawable(R.color.facebook));
@@ -124,7 +124,7 @@ public class MainActivity extends FragmentActivity {
 	    */	    
 	    //actionBar.setTitle(Html.fromHtml("<b><font color='#ffffff'> &nbsp xMiles</font></b>"));
 
-	    
+	    /*
 	    // Enable Action Bar
 	    actionBar.show();
 
@@ -145,7 +145,15 @@ public class MainActivity extends FragmentActivity {
 	          
 	          actionBar.addTab(tab3);
 	          
-	          
+	    */
+	    
+	    android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+	    android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();
+	    fragmentTransaction.replace(R.id.frame_container, fgmt_newsfeed);
+	    fragmentTransaction.commit();
+
+	    
+	    
 	    //Sliding Menu
 	  	actionBar.setDisplayHomeAsUpEnabled(true);
 	  	actionBar.setHomeButtonEnabled(true);
@@ -408,6 +416,7 @@ public class MainActivity extends FragmentActivity {
 		/**
 		 * Slide menu item click listener
 		 * */
+		//*
 		private class SlideMenuClickListener implements
 				ListView.OnItemClickListener {
 			@Override
@@ -416,11 +425,11 @@ public class MainActivity extends FragmentActivity {
 				// display view for selected nav drawer item
 				//displayView(position);
 				if (position > 1){
-					Toast.makeText(getApplicationContext(), "Necessário atingir pontuação mínima da recompensa", Toast.LENGTH_SHORT).show();
+					//Toast.makeText(getApplicationContext(), "Blablabla", Toast.LENGTH_SHORT).show();
 				}
 			}
 		}
-		
+		//*/
 		//-------------
 		//BEGIN TEST - PUSH NOTIFICATION By GCM (androidhive example)
 		  	

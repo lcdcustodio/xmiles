@@ -10,7 +10,7 @@
 
     <TextView
         android:id="@+id/rewards"
-        android:text="RECOMPENSAS"
+        android:text="RANKING - TOP 10"
         style="@style/reward_header"/>
     
 
