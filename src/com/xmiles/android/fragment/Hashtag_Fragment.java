@@ -92,6 +92,7 @@ public class Hashtag_Fragment extends Fragment {
 	private JSONObject json;
 	//private Cursor data_newsfeed;
 	private String hashtag;
+	private String user_id;
 	//-----------------------	
 	private View rootView;
 
@@ -112,6 +113,7 @@ public class Hashtag_Fragment extends Fragment {
 		listView 	= (ListView) custom.findViewById(R.id.list_items);
 		//---------------
 		hashtag = getArguments().getString("hashtag");
+		user_id = getArguments().getString("user_id");
 		//---------------
 		//TextView text_header = (TextView) header.findViewById(R.id.rnk_header_item);
 		//text_header.setText(hashtag);
@@ -161,14 +163,16 @@ public class Hashtag_Fragment extends Fragment {
 
 
 		    		    	//Your code goes here
-		    		    	//------------			        	
+		    		    	//------------
+				        	/*
 				            Uri uri = SqliteProvider.CONTENT_URI_USER_PROFILE;
 				            Cursor data_profile = getActivity().getContentResolver().query(uri, null, null, null, null);
 				            data_profile.moveToFirst();
-				            
+				            */
 				            UserFunctions userFunc = new UserFunctions();
 				            
-				            json = userFunc.getNewsfeed_by_hashtag(data_profile.getString(KEY_U_ID),hashtag);
+				            //json = userFunc.getNewsfeed_by_hashtag(data_profile.getString(KEY_U_ID),hashtag);
+				            json = userFunc.getNewsfeed_by_hashtag(user_id,hashtag);
 
 				    		        	
 					    } catch (Exception e) {

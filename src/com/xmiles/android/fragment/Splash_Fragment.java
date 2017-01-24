@@ -621,49 +621,6 @@ public class Splash_Fragment extends Fragment {
     	//return json;
     }
 
-  //-------------
-  //BEGIN TEST - PUSH NOTIFICATION By GCM (androidhive example)
-  	
-  	
-  	/**
-  	 * Receiving push messages
-  	 * */
-    /*
-  	private final BroadcastReceiver mHandleMessageReceiver = new BroadcastReceiver() {
-  		@Override
-  		public void onReceive(Context context, Intent intent) {
-  			String newMessage = intent.getExtras().getString(EXTRA_MESSAGE);
-  			// Waking up mobile if it is sleeping
-  			WakeLocker.acquire(getActivity());
-  			
-  			
-  			// Showing received message
-  			//lblMessage.append(newMessage + "\n");			
-  			Toast.makeText(getActivity(), "New Message: " + newMessage, Toast.LENGTH_LONG).show();
-  			
-  			// Releasing wake lock
-  			WakeLocker.release();
-  		}
-  	};
-  	
-  //----> Falta incluir o método onDestroyView para fazer o unregisterReceiver(mHandleMessageReceiver) e
-  //----> GCMRegistrar.onDestroy(this); 	
-  	
-	 @Override
-	    public void onDestroyView() {	        
-
-	        try {
-	        	getActivity().unregisterReceiver(mHandleMessageReceiver);
-				GCMRegistrar.onDestroy(getActivity());
-			} catch (Exception e) {
-				Log.e("UnRegister Receiver Error", "> " + e.getMessage());
-			}
-	        super.onDestroyView();
-	        
-	 }
-	 */  	
-  //END TEST - PUSH NOTIFICATION By GCM (androidhive example)
-  //-------------	
     
     
 }

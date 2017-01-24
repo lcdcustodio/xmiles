@@ -26,6 +26,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -33,6 +34,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -194,6 +196,7 @@ public class MainActivity extends FragmentActivity {
 
 	}
 	
+	
 	 private void runThread(){
 	     runOnUiThread (new Thread(new Runnable() {
 		 //new Thread() {
@@ -211,6 +214,8 @@ public class MainActivity extends FragmentActivity {
 	         }
 	     }));
 		 //}.start();
+	     
+	     
 	     
 			//-------------
      	//BEGIN TEST - PUSH NOTIFICATION By GCM (androidhive example)
@@ -297,7 +302,7 @@ public class MainActivity extends FragmentActivity {
 		return true;
 	}
 
-	
+	/*
 	  protected class MyTabsListener implements ActionBar.TabListener{
 		    private Fragment fragment;
 
@@ -318,6 +323,7 @@ public class MainActivity extends FragmentActivity {
 		        //ft.remove(fragment);
 		    }
 		}
+		*/
 	  
 		@Override
 		public boolean onOptionsItemSelected(MenuItem item) {
@@ -395,6 +401,7 @@ public class MainActivity extends FragmentActivity {
 		public boolean onPrepareOptionsMenu(Menu menu) {
 			// if nav drawer is opened, hide the action items
 			boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+			
 			//menu.findItem(R.id.about_it).setVisible(!drawerOpen);
 			return super.onPrepareOptionsMenu(menu);
 		}
@@ -425,7 +432,39 @@ public class MainActivity extends FragmentActivity {
 				// display view for selected nav drawer item
 				//displayView(position);
 				if (position > 1){
-					//Toast.makeText(getApplicationContext(), "Blablabla", Toast.LENGTH_SHORT).show();
+
+					
+				    new Handler().postDelayed(new Runnable() {
+
+				        @Override
+				        public void run() {
+				            if (!isFinishing()) {
+				            	
+				            	mDrawerLayout.closeDrawer(Gravity.LEFT);
+				            	
+				            }
+				        }
+				    }, 1500);
+
+					
+					Uri uri_2b = SqliteProvider.CONTENT_URI_RANKING;
+					Cursor rank = getApplicationContext().getContentResolver().query(uri_2b, null, null, null, null);
+					//rank.moveToFirst();
+					rank.moveToPosition(position - 2);
+					int KEY_ID_PROFILE = 0;
+					
+					Intent intent = new Intent(getApplicationContext(),Hashtag.class);
+
+					Bundle args = new Bundle();				    
+					args.putString("hashtag", "#histórico_pontuação");			    
+					args.putString("user_id", rank.getString(KEY_ID_PROFILE));
+					
+					intent.putExtras(args);
+			    
+					startActivity(intent);
+
+					
+					
 				}
 			}
 		}

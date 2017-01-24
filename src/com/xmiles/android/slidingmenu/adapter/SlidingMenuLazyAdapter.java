@@ -160,15 +160,19 @@ public class SlidingMenuLazyAdapter extends BaseAdapter {
 		        title.setText(users_info.getString(KEY_NAME));
 		        
 		        if (users_info.isNull(KEY_SCORE)) {
-		        	artist.setText("0 pontos");
+		        	//artist.setText("0 pontos");
+		        	artist.setText(" ");
 		        } else {
-		        	artist.setText(users_info.getString(KEY_SCORE) + " pontos");
+		        	artist.setText(users_info.getString(KEY_RANK) + "° lugar no ranking");
+		        	//rank.setText(users_info.getString(KEY_RANK) + "° no ranking");
 		        }
 		        
 		        if (users_info.isNull(KEY_RANK)){
-		        	rank.setText("");
+		        	//rank.setText("");
+		        	rank.setText("0 pontos");
 		        } else {
-		        	rank.setText(users_info.getString(KEY_RANK) + "° no ranking");	
+		        	rank.setText(users_info.getString(KEY_SCORE) + " pontos");
+		        	//artist.setText(users_info.getString(KEY_SCORE) + " pontos");
 		        }
 		        
 		        

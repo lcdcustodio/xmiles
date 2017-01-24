@@ -168,7 +168,7 @@ public class PushListAdapter extends BaseAdapter {
 		TextView vi1_rel_stats = (TextView) vi1
 				.findViewById(R.id.rel_stats);		
 		//-------------------
-		TextView vi1_hashtag_1 = (TextView) vi1.findViewById(R.id.hashtag_1);
+		final TextView vi1_hashtag_1ab = (TextView) vi1.findViewById(R.id.hashtag_1);
 		TextView vi1_hashtag_2 = (TextView) vi1.findViewById(R.id.hashtag_2);
 		//-------------------
 		TextView vi1_url = (TextView) vi1.findViewById(R.id.txtUrl);
@@ -289,17 +289,16 @@ public class PushListAdapter extends BaseAdapter {
 				if (feed_item.getHashtag_1() != null && !feed_item.getHashtag_1().equals("")) {	
 					
 					//hashtag_1.setText(item.getHashtag_1());
-					vi1_hashtag_1.setText(feed_item.getHashtag_1().split(",")[0]);
-					vi1_hashtag_1.setVisibility(View.VISIBLE);
+					vi1_hashtag_1ab.setText(feed_item.getHashtag_1().split(",")[0]);
+					vi1_hashtag_1ab.setVisibility(View.VISIBLE);
 					
-					
-					if (vi1_hashtag_1.getText().toString().equals(INVITE)){
 						
-						vi1_hashtag_1.setOnClickListener(new View.OnClickListener() {
-							@Override
-							public void onClick(View v) {
-								
-								//****************************************************************
+					vi1_hashtag_1ab.setOnClickListener(new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+						
+							if (vi1_hashtag_1ab.getText().toString().equals(INVITE)){
+
 								//****************************************************************
 						  	    // Create the Facebook Object using the app id.
 						  	    Utility.mFacebook = new Facebook(APP_ID);
@@ -311,7 +310,7 @@ public class PushListAdapter extends BaseAdapter {
 						        SessionStore.restore(Utility.mFacebook, activity.getApplicationContext());
 						        //SessionEvents.addAuthListener(new FbAPIsAuthListener());
 								//****************************************************************
-								//****************************************************************
+
 							
 				                WebDialog.RequestsDialogBuilder builder =
 
@@ -374,17 +373,27 @@ public class PushListAdapter extends BaseAdapter {
 				                                    }
 				                                });
 				                builder.build().show();
-							}
-						});
+				             }
+						}							
+							
+					});
 						
-					}
+					
 					
 					if (feed_item.getHashtag_1().split(",").length > 1) {
 
-						//Log.e(TAG,"item.getHashtag_1().split(,)[1]: " + feed_item.getHashtag_1().split(",")[1]);
 						
 						vi1_hashtag_2.setText(feed_item.getHashtag_1().split(",")[1]);
 						vi1_hashtag_2.setVisibility(View.VISIBLE);
+						
+						vi1_hashtag_2.setOnClickListener(new View.OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								// TODO Auto-generated method stub
+								
+							}
+						});		
+						
 					} else {
 						vi1_hashtag_2.setVisibility(View.GONE);
 					}
@@ -393,7 +402,7 @@ public class PushListAdapter extends BaseAdapter {
 				} else {
 					
 					// hashtag is null, remove from the view
-					vi1_hashtag_1.setVisibility(View.GONE);
+					vi1_hashtag_1ab.setVisibility(View.GONE);
 					vi1_hashtag_2.setVisibility(View.GONE);	
 				}				
 				

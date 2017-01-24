@@ -1,8 +1,14 @@
 package com.xmiles.android.scheduler;
 
+
+
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
+import com.xmiles.android.sqlite.helper.DatabaseHelper;
+import com.xmiles.android.support.Support;
+
 
 import android.content.BroadcastReceiver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -15,6 +21,13 @@ public class BootReceiver extends BroadcastReceiver {
 	//TAG
 	private static final String TAG = "FACEBOOK";
 	
+	private static final Integer KEY_BUSCODE  = 1;
+	private static final Integer KEY_BUS_TYPE = 2;
+	
+	private static final Integer KEY_ID_PROFILE  = 0;
+	private static final Integer KEY_NAME = 1;
+	private static final Integer KEY_PICURL = 2;
+
 	
 	@Override
 	public void onReceive(Context context, Intent intent) {
@@ -26,20 +39,63 @@ public class BootReceiver extends BroadcastReceiver {
 			
 			try {
 				//DO something
-				Uri uri = SqliteProvider.CONTENT_URI_USER_PROFILE;
-				Cursor user_profile = context.getContentResolver().query(uri, null, null, null, null);
-				//------------
-				Log.i(TAG, "CONTENT_URI_USER_PROFILE (count): " + user_profile.getCount());		
-				//------------		
-				if (user_profile.getCount() > 0) {
+				
+	            Uri uri_1 = SqliteProvider.CONTENT_URI_USER_PROFILE;
+	            Cursor data_profile = context.getContentResolver().query(uri_1, null, null, null, null);
+	            data_profile.moveToFirst();
+	        	//-------------			        	
+	            Uri uri_2 = SqliteProvider.CONTENT_URI_BUS_GPS_DATA;
+	        	Cursor data_GpsBusData = context.getContentResolver().query(uri_2, null, null, null, null);
+	        	data_GpsBusData.moveToFirst();
+	        	//-------------			        	
+	            Uri uri_3 = SqliteProvider.CONTENT_URI_USER_LOCATION;
+	        	Cursor data_UserLocation = context.getContentResolver().query(uri_3, null, null, null, null);
+	        	data_UserLocation.moveToFirst();
+	        	//------------
+	            Uri uri_4 = SqliteProvider.CONTENT_URI_BUS_GPS_URL;
+	    		Cursor bus_gps_url = context.getContentResolver().query(uri_4, null, null, null, null);
+	    		bus_gps_url.moveToLast();
+
+	    		//------------		
+				if (data_profile.getCount() > 0 && data_GpsBusData.getCount() > 0) {
 					
-					// start Scanning service
-					//Scanning sc = new Scanning();			
-					//sc.setAlarm(context);
+					//String status = "<bold>Atenção.<bold> Sua conexão com o " + bus_gps_url.getString(KEY_BUS_TYPE) + " " + bus_gps_url.getString(KEY_BUSCODE) + 
+					//		" foi interrompida devido à falta de energia no seu telefone. Para essa conexão a sua pontuação foi descartada";
+
+					String status = "O seu telefone foi desligado ou ficou sem bateria durante <bold>a conexão com o  " + bus_gps_url.getString(KEY_BUS_TYPE) + " " + bus_gps_url.getString(KEY_BUSCODE) + " <bold>." +
+									" Os pontos acumulados dessa rota foram descartados.";
+
 					
-					// start Getting_Location service
-					//Getting_UserLocation gl = new Getting_UserLocation();
-					//gl.setAlarm(context);
+					DatabaseHelper mDatabaseHelper;
+					mDatabaseHelper = new DatabaseHelper(context);
+					//------------------------
+					mDatabaseHelper.resetBusGpsData();			
+					mDatabaseHelper.resetUserLocation();
+					mDatabaseHelper.resetBusGpsUrl();
+					//------------------------
+					Support support = new Support();
+					
+					ContentValues contentValues = new ContentValues();
+
+					contentValues.put(DatabaseHelper.KEY_ID, "-1");
+					contentValues.put(DatabaseHelper.KEY_NAME, data_profile.getString(KEY_NAME));
+
+					contentValues.put(DatabaseHelper.KEY_STATUS, status);
+
+					contentValues.put(DatabaseHelper.KEY_PICURL, data_profile.getString(KEY_PICURL));
+					contentValues.put(DatabaseHelper.KEY_TIME_STAMP, support.getDateTime());
+
+					contentValues.put(DatabaseHelper.KEY_IMAGE, "");
+					
+					//feed_type
+					contentValues.put(DatabaseHelper.KEY_FEED_TYPE, "Users score issue - power");
+					
+					context.getContentResolver().insert(SqliteProvider.CONTENT_URI_NEWSFEED_UPLOAD_insert, contentValues);
+					//--------
+					NewsFeed_Inbox_Upload nfi = new NewsFeed_Inbox_Upload();
+					nfi.setAlarm(context);
+					//--------
+					
 				}
 
 			}catch(Exception e){

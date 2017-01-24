@@ -271,12 +271,32 @@ public class RelListAdapter extends BaseAdapter {
 					vi1_hashtag_1.setText(feed_item.getHashtag_1().split(",")[0]);
 					vi1_hashtag_1.setVisibility(View.VISIBLE);
 					
+					vi1_hashtag_1.setOnClickListener(new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							// TODO Auto-generated method stub
+							
+						}
+					});
+
+					
 					if (feed_item.getHashtag_1().split(",").length > 1) {
 
 						//Log.e(TAG,"item.getHashtag_1().split(,)[1]: " + feed_item.getHashtag_1().split(",")[1]);
 						
 						vi1_hashtag_2.setText(feed_item.getHashtag_1().split(",")[1]);
 						vi1_hashtag_2.setVisibility(View.VISIBLE);
+						
+						vi1_hashtag_2.setOnClickListener(new View.OnClickListener() {
+							@Override
+							public void onClick(View v) {
+								// TODO Auto-generated method stub
+								
+							}
+						});
+						
+						
+						
 					} else {
 						vi1_hashtag_2.setVisibility(View.GONE);
 					}

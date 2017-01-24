@@ -196,8 +196,17 @@ public class FeedListAdapter extends BaseAdapter {
 				
 					Intent intent = new Intent(activity, Hashtag.class);
 			     
+					Uri uri_3b = SqliteProvider.CONTENT_URI_USER_PROFILE;
+					Cursor d_profile = activity.getContentResolver().query(uri_3b, null, null, null, null);				 
+					d_profile.moveToFirst();
+					
+					//d_profile.getString(KEY_ID_PROFILE);
+					
+					
 					Bundle args = new Bundle();				    
 					args.putString("hashtag", hashtag_1.getText().toString());			    
+					args.putString("user_id", d_profile.getString(KEY_ID_PROFILE));
+					
 					intent.putExtras(args);
 			    
 					activity.startActivity(intent);
@@ -318,8 +327,8 @@ public class FeedListAdapter extends BaseAdapter {
 				Cursor data_profile = activity.getContentResolver().query(uri_3, null, null, null, null);				 
 				data_profile.moveToFirst();
 				
-				Uri uri_4 = SqliteProvider.CONTENT_URI_LIKES_UPLOAD;
-				Cursor data_likes = activity.getContentResolver().query(uri_4, null, null, null, null);
+				//Uri uri_4 = SqliteProvider.CONTENT_URI_LIKES_UPLOAD;
+				//Cursor data_likes = activity.getContentResolver().query(uri_4, null, null, null, null);
 				
 				ContentValues cv_2 = new ContentValues();
 				

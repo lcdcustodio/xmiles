@@ -27,6 +27,9 @@ public class NewsFeed_Inbox_Upload extends WakefulBroadcastReceiver {
 		private PendingIntent alarmIntent;    
 		
 		private static String TAG = "FACEBOOK";
+
+		private static String destination;
+		private static String sender;
 	    
 		// The minimum time between updates in milliseconds
 	    private static final long MIN_TIME_BW_UPDATES = 1000 * 1 * 3600; // 3600 seconds
@@ -112,6 +115,14 @@ public class NewsFeed_Inbox_Upload extends WakefulBroadcastReceiver {
 						//contentValues.put(DatabaseHelper.KEY_COMMENT_STATS, "0");
 			        	//------------------
 
+			        	if (data_NewsFeed.getString(KEY_FEED_TYPE).equals("User gets into the bus")){
+			        		destination = "ALL";
+			        		sender 		= data_profile.getString(KEY_ID_PROFILE);
+			        	} else{
+			        		destination = data_profile.getString(KEY_ID_PROFILE);
+			        		sender		= "x1";
+			        	}
+
 			        	
 			        	//Your code goes here	        			
 			        	json = userFunc.newsFeed_inbox(data_NewsFeed.getString(KEY_ID), 
@@ -121,9 +132,9 @@ public class NewsFeed_Inbox_Upload extends WakefulBroadcastReceiver {
 			        								   data_NewsFeed.getString(KEY_STATUS),
 			        								   data_NewsFeed.getString(KEY_PICURL), 
 			        								   null, 					 //data_NewsFeed.getString(KEY_URL)	
-			        								   data_profile.getString(KEY_ID_PROFILE), 
-			        								   "ALL", 
-			        								   "User gets into the bus", //data_NewsFeed.getString(KEY_FEED_TYPE), 
+			        								   sender, //data_profile.getString(KEY_ID_PROFILE), 
+			        								   destination, //"ALL", 
+			        								   data_NewsFeed.getString(KEY_FEED_TYPE), //"User gets into the bus", //data_NewsFeed.getString(KEY_FEED_TYPE), 
 			        								   "0",						 //data_NewsFeed.getString(KEY_LIKE_STATS), 
 			        								   "0",						 //data_NewsFeed.getString(KEY_COMMENT_STATS), 
 			        								   "ADD", 					 //data_NewsFeed.getString(KEY_FLAG_ACTION),
