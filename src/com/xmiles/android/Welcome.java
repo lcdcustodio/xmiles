@@ -1,5 +1,6 @@
 package com.xmiles.android;
 
+
 import com.facebook.android.AsyncFacebookRunner;
 import com.facebook.android.Facebook;
 import com.xmiles.android.facebook_api_support.SessionEvents;
@@ -7,7 +8,9 @@ import com.xmiles.android.facebook_api_support.SessionStore;
 import com.xmiles.android.facebook_api_support.Utility;
 import com.xmiles.android.facebook_api_support.SessionEvents.AuthListener;
 import com.xmiles.android.fragment.FbLogin_Fragment;
+import com.xmiles.android.fragment.NoInternetConnection_Fragment;
 import com.xmiles.android.fragment.Splash_Fragment;
+import com.xmiles.android.support.ConnectionDetector;
 
 
 import android.os.Bundle;
@@ -27,6 +30,9 @@ public class Welcome extends FragmentActivity {
 	// TAG
     private static final String TAG = "FACEBOOK";
 
+	// Connection detector
+	ConnectionDetector cd;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,38 +42,53 @@ public class Welcome extends FragmentActivity {
 
         //----hide action bar---
         getActionBar().hide();
-
-  	    // Create the Facebook Object using the app id.
-  	    Utility.mFacebook = new Facebook(APP_ID);
-
-  	    // Instantiate the asynrunner object for asynchronous api calls.
-        Utility.mAsyncRunner = new AsyncFacebookRunner(Utility.mFacebook);
-
-        // restore session if one exists
-        SessionStore.restore(Utility.mFacebook, this);
-        SessionEvents.addAuthListener(new FbAPIsAuthListener());
-
-
-        if (Utility.mFacebook.isSessionValid()) {
-          	//----------
-          	Log.i(TAG, "" + "FB Sessions " + Utility.mFacebook.isSessionValid());
-
-    		//requestUserData();
+        
+ 
+		cd = new ConnectionDetector(getApplicationContext());
+		
+		// Check if Internet present
+		if (!cd.isConnectingToInternet()) {
+ 
+        	
 		    android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
 		    android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();
-		    fragmentTransaction.replace(R.id.frame_container, new Splash_Fragment());
+		    fragmentTransaction.replace(R.id.frame_container, new NoInternetConnection_Fragment());
 		    fragmentTransaction.commit();
 
+        	
+        } else {
 
-    	} else {
-
-    	    android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-    	    android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();
-    	    fragmentTransaction.replace(R.id.frame_container, new FbLogin_Fragment());
-    	    fragmentTransaction.commit();
-
-
-    	}
+	  	    // Create the Facebook Object using the app id.
+	  	    Utility.mFacebook = new Facebook(APP_ID);
+	
+	  	    // Instantiate the asynrunner object for asynchronous api calls.
+	        Utility.mAsyncRunner = new AsyncFacebookRunner(Utility.mFacebook);
+	
+	        // restore session if one exists
+	        SessionStore.restore(Utility.mFacebook, this);
+	        SessionEvents.addAuthListener(new FbAPIsAuthListener());
+	
+	
+	        if (Utility.mFacebook.isSessionValid()) {
+	          	//----------
+	          	Log.i(TAG, "" + "FB Sessions " + Utility.mFacebook.isSessionValid());
+		    	
+			    android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+			    android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();
+			    fragmentTransaction.replace(R.id.frame_container, new Splash_Fragment());
+			    fragmentTransaction.commit();
+	
+	
+	    	} else {
+	
+	    	    android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+	    	    android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();
+	    	    fragmentTransaction.replace(R.id.frame_container, new FbLogin_Fragment());
+	    	    fragmentTransaction.commit();
+	
+	
+	    	}
+        }
 
 	}
 	/*

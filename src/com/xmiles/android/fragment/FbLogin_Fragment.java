@@ -6,12 +6,13 @@ import com.facebook.android.FacebookError;
 import com.xmiles.android.R;
 import com.xmiles.android.R.id;
 import com.xmiles.android.R.layout;
-import com.xmiles.android.backup.Getting_UserLocation;
+
 import com.xmiles.android.backup.Scanning;
 import com.xmiles.android.facebook_api_support.Utility;
 import com.xmiles.android.facebook_api_support.SessionEvents;
 import com.xmiles.android.facebook_api_support.SessionStore;
 import com.xmiles.android.facebook_api_support.SessionEvents.AuthListener;
+import com.xmiles.android.sqlite.helper.DatabaseHelper;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -125,16 +126,12 @@ public class FbLogin_Fragment extends Fragment {
 	
 	public void Splash(){
 		
-		// start Scanning service
-		//Scanning sc = new Scanning();			
-		//sc.setAlarm(getActivity());
 
-		// start Getting_Location service
-		//Getting_UserLocation gl = new Getting_UserLocation();
-		//gl.setAlarm(getActivity());
+		 //--------
+		 DatabaseHelper mDatabaseHelper = new DatabaseHelper(getActivity().getApplicationContext());		 
+		 mDatabaseHelper.resetUserProfile();
+		 //--------		
 		
-		
-		//requestUserData();		
 	    android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
 	    android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();        
 	    fragmentTransaction.replace(R.id.frame_container, new Splash_Fragment());

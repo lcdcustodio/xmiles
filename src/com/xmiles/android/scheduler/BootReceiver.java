@@ -59,10 +59,14 @@ public class BootReceiver extends BroadcastReceiver {
 	    		//------------		
 				if (data_profile.getCount() > 0 && data_GpsBusData.getCount() > 0) {
 					
-					//String status = "<bold>Atenção.<bold> Sua conexão com o " + bus_gps_url.getString(KEY_BUS_TYPE) + " " + bus_gps_url.getString(KEY_BUSCODE) + 
-					//		" foi interrompida devido à falta de energia no seu telefone. Para essa conexão a sua pontuação foi descartada";
+					
+					String bus_type = bus_gps_url.getString(KEY_BUS_TYPE);
 
-					String status = "O seu telefone foi desligado ou ficou sem bateria durante <bold>a conexão com o  " + bus_gps_url.getString(KEY_BUS_TYPE) + " " + bus_gps_url.getString(KEY_BUSCODE) + " <bold>." +
+				    if (bus_type.equals("BUS")){
+				    	bus_type = "ônibus";
+					}
+
+					String status = "O seu telefone foi desligado ou ficou sem bateria durante <bold>a conexão com o  " + bus_type + " " + bus_gps_url.getString(KEY_BUSCODE) + " <bold>." +
 									" Os pontos acumulados dessa rota foram descartados.";
 
 					

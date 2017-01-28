@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/feed_bg"    
+    android:orientation="horizontal" >
+               
+        		<RelativeLayout        		     
+		    	android:id="@+id/frame_logo"
+		    	android:layout_marginBottom="10dp"
+		        android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"		    	
+		    	android:layout_width="match_parent"
+		    	android:background="@color/feed_bg"
+		        android:layout_height="wrap_content">
+		
+			    <ImageView
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:layout_alignParentTop="true"
+			        android:layout_centerHorizontal="true"
+			        android:layout_marginTop="24dp"
+			        android:src="@drawable/no_connection_icon" />
+			    
+		        
+			</RelativeLayout>      
+			
+        	<TextView
+        	  android:id="@+id/connection_text"
+        	  android:layout_below="@id/frame_logo"  
+        	  android:layout_width="fill_parent"
+		      android:layout_height="wrap_content"
+		      android:textColor="@color/timestamp"
+		      android:textSize="@dimen/feed_item_timestamp" 
+		      android:textStyle="bold"
+		      android:layout_marginBottom="10dp"
+		      android:gravity="center_horizontal"			  
+			  android:text="@string/internet_connection"
+			/>
+        	
+        	<ImageView
+        	        android:layout_below="@id/connection_text"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"			        
+			        android:layout_centerHorizontal="true"
+			        
+			        android:src="@drawable/cloud_icon" />
+        	
+        			
+        
+ </RelativeLayout>

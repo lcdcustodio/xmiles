@@ -112,16 +112,26 @@ public class Splash_Fragment extends Fragment {
 			Uri uri_1 = SqliteProvider.CONTENT_URI_USER_PROFILE;
 			Cursor data_profile = getActivity().getApplicationContext().getContentResolver().query(uri_1, null, null, null, null);
 			data_profile.moveToFirst();
-			
-
-			long diff = System.currentTimeMillis() -
-					Long.parseLong(support.getDateTime_long(data_profile.getString(KEY_CREATED_AT))); 
-			
-			long delta_days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-					
+			//-----
+			long delta_days;
+			//-----			
+			try {
 				
+				long diff = System.currentTimeMillis() -
+						Long.parseLong(support.getDateTime_long(data_profile.getString(KEY_CREATED_AT))); 
+				
+				delta_days = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+
+				
+			} catch (Exception e) {  	
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				
+				delta_days = 10;
+		    }
+
+
 			Log.v(TAG, "delta_days: " + delta_days);
-			
 
 
 			if (data_profile.getCount() > 0 && delta_days < 3){

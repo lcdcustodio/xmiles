@@ -12,7 +12,7 @@ import org.json.JSONObject;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.xmiles.android.Gmaps;
 import com.xmiles.android.MainActivity;
-import com.xmiles.android.NewRoutes;
+
 import com.xmiles.android.R;
 import com.xmiles.android.Relationship;
 import com.xmiles.android.R.id;
