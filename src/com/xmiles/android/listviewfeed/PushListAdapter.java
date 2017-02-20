@@ -16,6 +16,7 @@ import com.xmiles.android.listviewfeed.AppController;
 import com.xmiles.android.listviewfeed.FeedItem;
 import com.xmiles.android.scheduler.Invite_Friends_AsyncTask;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
+import com.xmiles.android.support.ConnectionDetector;
 import com.xmiles.android.support.Support;
 //-----
 //import com.xmiles.android.support.imageloader.*;
@@ -68,6 +69,10 @@ public class PushListAdapter extends BaseAdapter {
 	
 	//TAG
 	private static final String TAG = "FACEBOOK";
+	
+	// Connection detector
+	ConnectionDetector cd;
+	
 	
 	private static final String INVITE = "#convite_amigos";
 	
@@ -296,84 +301,96 @@ public class PushListAdapter extends BaseAdapter {
 					vi1_hashtag_1ab.setOnClickListener(new View.OnClickListener() {
 						@Override
 						public void onClick(View v) {
-						
-							if (vi1_hashtag_1ab.getText().toString().equals(INVITE)){
-
-								//****************************************************************
-						  	    // Create the Facebook Object using the app id.
-						  	    Utility.mFacebook = new Facebook(APP_ID);
-
-						  	    // Instantiate the asynrunner object for asynchronous api calls.
-						        Utility.mAsyncRunner = new AsyncFacebookRunner(Utility.mFacebook);
-
-						        // restore session if one exists
-						        SessionStore.restore(Utility.mFacebook, activity.getApplicationContext());
-						        //SessionEvents.addAuthListener(new FbAPIsAuthListener());
-								//****************************************************************
-
 							
-				                WebDialog.RequestsDialogBuilder builder =
+							cd = new ConnectionDetector(activity.getApplicationContext());
+							
+							// Check if Internet present
+							if (!cd.isConnectingToInternet()) {
+					 		       	
+						        //----do something---
+								Toast.makeText(activity.getApplicationContext(), activity.getString(R.string.internet_connection), Toast.LENGTH_SHORT).show();
+					        	
+					        } else {
 
-				                		new WebDialog.RequestsDialogBuilder(activity,Utility.mFacebook.getSession())
-				                                .setTitle(activity.getString(R.string.invite_dialog_title))
-				                                .setMessage(activity.getString(R.string.invite_dialog_message))
-				                                .setOnCompleteListener(new WebDialog.OnCompleteListener() {
-				                                    @Override
-				                                    public void onComplete(Bundle values, FacebookException error) {
-				                                        if (error != null) {
-				                                            Log.w(TAG, "Web dialog encountered an error.", error);
-				                                        } else {
-				                                            //Log.i(TAG, "Web dialog complete: " + values);
-
-				                                            String request_id = values.getString("request");
-				                                            //Log.i(TAG, "request: " + request);
-
-				                                            StringBuilder friends_id = new StringBuilder();
-				                                            int friends_count = 0;
-				                                            for (int i = 0; values.containsKey("to[" + i + "]"); i++) {
-				                                              
-				                                            	if (i != 0){
-				                                            		friends_id.append(";");
-				                                            	}
-				                                            	friends_id.append(values.getString("to[" + i + "]"));
-				                                            	friends_count = friends_count + 1;
-				                                            }
-				                                            Log.i(TAG, "friends_count: " + friends_count);
-				                                            
-				                                            //Invite_Friends
-				                                            try {
-				                                            	
-				                                            	Uri uri = SqliteProvider.CONTENT_URI_USER_PROFILE;
-				                                            	Cursor data_profile = activity.getContentResolver().query(uri, null, null, null, null);				 
-				                                            	data_profile.moveToFirst();
-				                                            	
-																//String result = new Invite_Friends_AsyncTask(activity, data_profile.getString(KEY_ID_PROFILE),friends_id,request_id).execute().get();
-																String result = new Invite_Friends_AsyncTask(data_profile.getString(KEY_ID_PROFILE),friends_id,request_id).execute().get();
-																
-																if (result.equals("success")){
-															    	if (friends_count > 1 ){
-															    		Toast.makeText(activity, "Convites enviados com sucesso!", Toast.LENGTH_LONG).show();
-															    	} else {
-															    		Toast.makeText(activity, "Convite enviado com sucesso!", Toast.LENGTH_LONG).show();
-															    	}
+						
+								if (vi1_hashtag_1ab.getText().toString().equals(INVITE)){
+	
+									//****************************************************************
+							  	    // Create the Facebook Object using the app id.
+							  	    Utility.mFacebook = new Facebook(APP_ID);
+	
+							  	    // Instantiate the asynrunner object for asynchronous api calls.
+							        Utility.mAsyncRunner = new AsyncFacebookRunner(Utility.mFacebook);
+	
+							        // restore session if one exists
+							        SessionStore.restore(Utility.mFacebook, activity.getApplicationContext());
+							        //SessionEvents.addAuthListener(new FbAPIsAuthListener());
+									//****************************************************************
+	
+								
+					                WebDialog.RequestsDialogBuilder builder =
+	
+					                		new WebDialog.RequestsDialogBuilder(activity,Utility.mFacebook.getSession())
+					                                .setTitle(activity.getString(R.string.invite_dialog_title))
+					                                .setMessage(activity.getString(R.string.invite_dialog_message))
+					                                .setOnCompleteListener(new WebDialog.OnCompleteListener() {
+					                                    @Override
+					                                    public void onComplete(Bundle values, FacebookException error) {
+					                                        if (error != null) {
+					                                            Log.w(TAG, "Web dialog encountered an error.", error);
+					                                        } else {
+					                                            //Log.i(TAG, "Web dialog complete: " + values);
+	
+					                                            String request_id = values.getString("request");
+					                                            //Log.i(TAG, "request: " + request);
+	
+					                                            StringBuilder friends_id = new StringBuilder();
+					                                            int friends_count = 0;
+					                                            for (int i = 0; values.containsKey("to[" + i + "]"); i++) {
+					                                              
+					                                            	if (i != 0){
+					                                            		friends_id.append(";");
+					                                            	}
+					                                            	friends_id.append(values.getString("to[" + i + "]"));
+					                                            	friends_count = friends_count + 1;
+					                                            }
+					                                            Log.i(TAG, "friends_count: " + friends_count);
+					                                            
+					                                            //Invite_Friends
+					                                            try {
+					                                            	
+					                                            	Uri uri = SqliteProvider.CONTENT_URI_USER_PROFILE;
+					                                            	Cursor data_profile = activity.getContentResolver().query(uri, null, null, null, null);				 
+					                                            	data_profile.moveToFirst();
+					                                            	
+																	//String result = new Invite_Friends_AsyncTask(activity, data_profile.getString(KEY_ID_PROFILE),friends_id,request_id).execute().get();
+																	String result = new Invite_Friends_AsyncTask(data_profile.getString(KEY_ID_PROFILE),friends_id,request_id).execute().get();
 																	
-																}else {					    	
-															    	Toast.makeText(activity, "Falha ao enviar o convite! Tente novamente mais tarde!", Toast.LENGTH_LONG).show();
+																	if (result.equals("success")){
+																    	if (friends_count > 1 ){
+																    		Toast.makeText(activity, "Convites enviados com sucesso!", Toast.LENGTH_LONG).show();
+																    	} else {
+																    		Toast.makeText(activity, "Convite enviado com sucesso!", Toast.LENGTH_LONG).show();
+																    	}
+																		
+																	}else {					    	
+																    	Toast.makeText(activity, "Falha ao enviar o convite! Tente novamente mais tarde!", Toast.LENGTH_LONG).show();
+																	}
+																	
+																} catch (InterruptedException e) {
+																	// TODO Auto-generated catch block
+																	e.printStackTrace();
+																} catch (ExecutionException e) {
+																	// TODO Auto-generated catch block
+																	e.printStackTrace();
 																}
-																
-															} catch (InterruptedException e) {
-																// TODO Auto-generated catch block
-																e.printStackTrace();
-															} catch (ExecutionException e) {
-																// TODO Auto-generated catch block
-																e.printStackTrace();
-															}
-				                                        }
-
-				                                    }
-				                                });
-				                builder.build().show();
-				             }
+					                                        }
+	
+					                                    }
+					                                });
+					                builder.build().show();
+					             }
+					        }
 						}							
 							
 					});

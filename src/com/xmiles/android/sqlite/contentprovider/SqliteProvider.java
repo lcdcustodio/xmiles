@@ -25,7 +25,7 @@ public class SqliteProvider extends ContentProvider{
 	public static final Uri CONTENT_URI_CITY_BUSLINE = Uri.parse("content://" + PROVIDER_NAME + "/CityBusline");
 	public static final Uri CONTENT_URI_USER_FAVORITES = Uri.parse("content://" + PROVIDER_NAME + "/UserFavorites");
 	public static final Uri CONTENT_URI_USER_PROFILE_create = Uri.parse("content://" + PROVIDER_NAME + "/UserProfile_create");
-	public static final Uri CONTENT_URI_USER_FAVORITES_create = Uri.parse("content://" + PROVIDER_NAME + "/UserFavorites_create");
+	//public static final Uri CONTENT_URI_USER_FAVORITES_create = Uri.parse("content://" + PROVIDER_NAME + "/UserFavorites_create");
 	public static final Uri CONTENT_URI_USER_FAVORITES_insert = Uri.parse("content://" + PROVIDER_NAME + "/UserFavorites_insert");
 	public static final Uri CONTENT_URI_CITY_BUSLINE_create = Uri.parse("content://" + PROVIDER_NAME + "/CityBusline_create");
 	public static final Uri CONTENT_URI_USER_PLACES_create = Uri.parse("content://" + PROVIDER_NAME + "/UserPlaces_create");
@@ -72,7 +72,7 @@ public class SqliteProvider extends ContentProvider{
 	private static final int CITY_BUSLINE = 4;
 	private static final int USER_FAVORITES = 5;
 	private static final int USER_PROFILE_create = 6;
-	private static final int USER_FAVORITES_create = 7;
+	//private static final int USER_FAVORITES_create = 7;
 	private static final int USER_FAVORITES_insert = 8;
 	private static final int CITY_BUSLINE_create = 9;
 	private static final int USER_PLACES_create = 10;
@@ -121,7 +121,7 @@ public class SqliteProvider extends ContentProvider{
 		uriMatcher.addURI(PROVIDER_NAME, "CityBusline", CITY_BUSLINE);
 		uriMatcher.addURI(PROVIDER_NAME, "UserFavorites", USER_FAVORITES);
 		uriMatcher.addURI(PROVIDER_NAME, "UserProfile_create", USER_PROFILE_create);
-		uriMatcher.addURI(PROVIDER_NAME, "UserFavorites_create", USER_FAVORITES_create);
+		//uriMatcher.addURI(PROVIDER_NAME, "UserFavorites_create", USER_FAVORITES_create);
 		uriMatcher.addURI(PROVIDER_NAME, "UserFavorites_insert", USER_FAVORITES_insert);
 		uriMatcher.addURI(PROVIDER_NAME, "CityBusline_create", CITY_BUSLINE_create);
 		uriMatcher.addURI(PROVIDER_NAME, "UserPlaces_create", USER_PLACES_create);
@@ -246,7 +246,7 @@ public class SqliteProvider extends ContentProvider{
 					}
 				}
 			break;
-
+			/*
 		    case USER_FAVORITES_insert:
 		    	long rowID_4 = mDatabaseHelper.insertUserFavorites(values);
 				//Uri _uri=null;
@@ -260,7 +260,7 @@ public class SqliteProvider extends ContentProvider{
 					}
 				}
 			break;
-			
+			*/
 		    case NEWSFEED_insert:
 		    	long rowID_4d = mDatabaseHelper.insertNewsfeed(values);
 				//Uri _uri=null;
@@ -316,7 +316,7 @@ public class SqliteProvider extends ContentProvider{
 					}
 				}
 			break;
-			
+			/*
 		    case USER_FAVORITES_create:
 		    	long rowID_4b = mDatabaseHelper.createUserFavorites(values);
 				//Uri _uri=null;
@@ -330,7 +330,7 @@ public class SqliteProvider extends ContentProvider{
 					}
 				}
 			break;
-			
+			*/
 		    case USER_LOCATION_insert:
 		    	long rowID_5 = mDatabaseHelper.insertUserLocation(values);
 				//Uri _uri=null;
@@ -459,7 +459,7 @@ public class SqliteProvider extends ContentProvider{
 	            	mDatabaseHelper.getWritableDatabase().endTransaction();
 	            }
 	            break;
-
+	        /*    
 	        case USER_FAVORITES_create:
 	            try {
 	            	//----
@@ -480,7 +480,7 @@ public class SqliteProvider extends ContentProvider{
 	            	mDatabaseHelper.getWritableDatabase().endTransaction();
 	            }
 	            break;
-	            
+	        */    
 	        case REWARDS_create:
 	            try {
 	            	//----
@@ -674,10 +674,10 @@ public class SqliteProvider extends ContentProvider{
 
 		}else if (uriMatcher.match(uri)==CITY_BUSLINE){
 			return mDatabaseHelper.get_CityBusline();
-
+		/*	
 		}else if (uriMatcher.match(uri)==USER_FAVORITES){
 			return mDatabaseHelper.get_UserFavorites();
-
+		*/
 		}else if (uriMatcher.match(uri)==USER_ROUTES){
 			return mDatabaseHelper.get_UserRoutes();
 

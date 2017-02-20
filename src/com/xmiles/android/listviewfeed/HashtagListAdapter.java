@@ -7,9 +7,10 @@ import com.xmiles.android.Relationship;
 import com.xmiles.android.listviewfeed.AppController;
 import com.xmiles.android.listviewfeed.FeedItem;
 import com.xmiles.android.scheduler.Likes_Inbox_Upload;
-import com.xmiles.android.scheduler.NewsFeed_Inbox_Upload;
+
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
+import com.xmiles.android.support.ConnectionDetector;
 import com.xmiles.android.support.Support;
 
 import java.util.List;
@@ -35,6 +36,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.NetworkImageView;
@@ -47,6 +49,10 @@ public class HashtagListAdapter extends BaseAdapter {
 	
 	//TAG
 	private static final String TAG = "FACEBOOK";
+	
+	// Connection detector
+	ConnectionDetector cd;
+
 
 	private static final Integer KEY_ID_PROFILE  = 0;
 	private static final Integer KEY_ID         = 1;
@@ -135,43 +141,44 @@ public class HashtagListAdapter extends BaseAdapter {
 				@Override
 				public void onClick(View v) {
 					// TODO Auto-generated method stub
-
-					 int pos_rel_stats=(Integer)v.getTag();
-
-					 //Uri uri = SqliteProvider.CONTENT_URI_NEWSFEED;
-					 //Cursor data_newsfeed = activity.getContentResolver().query(uri, null, null, null, null);
-					 Uri uri = SqliteProvider.CONTENT_URI_NEWSFEED_BY_HASHTAG;
-					 Cursor data_newsfeed = activity.getContentResolver().query(uri, null, null, null, null);
-
-					 
-					 data_newsfeed.moveToPosition(pos_rel_stats);
-
-
-				     //-------------------------------------------				     
-				     Bundle args = new Bundle();
-				    
-				     args.putInt("position", pos_rel_stats);
-				     
-				     Log.i(TAG,"feed_id: " + data_newsfeed.getString(KEY_ID));
-				    
-				     args.putString("feed_id", data_newsfeed.getString(KEY_ID));
-				     args.putString("adapter", "hashtag");
-				     /*
-				     args.putString("name", data_newsfeed.getString(KEY_NAME));
-				     args.putString("image", data_newsfeed.getString(KEY_IMAGE));				    	 
-				     args.putString("status", data_newsfeed.getString(KEY_STATUS));
-				     args.putString("profilepic", data_newsfeed.getString(KEY_PICURL));
-				     args.putString("url",data_newsfeed.getString(KEY_URL));
-				     args.putString("like_stats",data_newsfeed.getString(KEY_LIKE_STATS)); 
-				     args.putString("comment_stats",data_newsfeed.getString(KEY_COMMENT_STATS));
-				     args.putString("time_stamp",data_newsfeed.getString(KEY_TIME_STAMP));
-				     args.putString("custom_time_stamp",data_newsfeed.getString(KEY_CUSTOM_TIME_STAMP));
-				     */
-				     Intent intent = new Intent(activity, Relationship.class);				    	 
-				     intent.putExtras(args);
-				    
-				     activity.startActivity(intent);
 					
+					cd = new ConnectionDetector(activity.getApplicationContext());
+
+					// Check if Internet present
+					if (!cd.isConnectingToInternet()) {
+			 		       	
+				        //----do something---
+						Toast.makeText(activity.getApplicationContext(), activity.getString(R.string.internet_connection), Toast.LENGTH_SHORT).show();
+			        	
+				     } else {
+
+
+						 int pos_rel_stats=(Integer)v.getTag();
+	
+						 //Uri uri = SqliteProvider.CONTENT_URI_NEWSFEED;
+						 //Cursor data_newsfeed = activity.getContentResolver().query(uri, null, null, null, null);
+						 Uri uri = SqliteProvider.CONTENT_URI_NEWSFEED_BY_HASHTAG;
+						 Cursor data_newsfeed = activity.getContentResolver().query(uri, null, null, null, null);
+	
+						 
+						 data_newsfeed.moveToPosition(pos_rel_stats);
+	
+	
+					     //-------------------------------------------				     
+					     Bundle args = new Bundle();
+					    
+					     args.putInt("position", pos_rel_stats);
+					     
+					     Log.i(TAG,"feed_id: " + data_newsfeed.getString(KEY_ID));
+					    
+					     args.putString("feed_id", data_newsfeed.getString(KEY_ID));
+					     args.putString("adapter", "hashtag");
+	
+					     Intent intent = new Intent(activity, Relationship.class);				    	 
+					     intent.putExtras(args);
+					    
+					     activity.startActivity(intent);
+				     }
 				}
 
 
@@ -193,147 +200,159 @@ public class HashtagListAdapter extends BaseAdapter {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				
-				int pos_btn_like = (Integer)v.getTag();
+				cd = new ConnectionDetector(activity.getApplicationContext());
 				
-				//Uri uri_1 = SqliteProvider.CONTENT_URI_NEWSFEED;
-				Uri uri_1 = SqliteProvider.CONTENT_URI_NEWSFEED_BY_HASHTAG;
-				Cursor data_newsfeed = activity.getContentResolver().query(uri_1, null, null, null, null);				 
-				data_newsfeed.moveToPosition(pos_btn_like);
-				//------------------------------------------------------------
-				//------------------------------------------------------------
-				//Uri uri_2 = SqliteProvider.CONTENT_URI_NEWSFEED_update;
-				Uri uri_2 = SqliteProvider.CONTENT_URI_NEWSFEED_BY_HASHTAG_update;
-				Uri uri_2_b = SqliteProvider.CONTENT_URI_NEWSFEED_update;
-				//------------------------------------------------------------				
-				ContentValues cv_1 = new ContentValues();
-				
-				int like_stats = Integer.parseInt(data_newsfeed.getString(KEY_LIKE_STATS));
-				
-				cv_1.put(DatabaseHelper.KEY_LIKE_STATS, String.valueOf(like_stats + 1));
-				//------
-				cv_1.put(DatabaseHelper.KEY_YOU_LIKE_THIS, "YES");
-				//-----
-				activity.getContentResolver().update(uri_2, 
-						cv_1, 
-						DatabaseHelper.KEY_ID + " = " + data_newsfeed.getString(KEY_ID), null);
-				//-----
-				activity.getContentResolver().update(uri_2_b, 
-						cv_1, 
-						DatabaseHelper.KEY_ID + " = " + data_newsfeed.getString(KEY_ID), null);
+				// Check if Internet present
+				if (!cd.isConnectingToInternet()) {
+		 		       	
+			        //----do something---
+					Toast.makeText(activity.getApplicationContext(), activity.getString(R.string.internet_connection), Toast.LENGTH_SHORT).show();
+		        	
+		        } else {
 
-				//------------------------------------------------------------
-				//------------------------------------------------------------
-				Uri uri_3 = SqliteProvider.CONTENT_URI_USER_PROFILE;
-				Cursor data_profile = activity.getContentResolver().query(uri_3, null, null, null, null);				 
-				data_profile.moveToFirst();
 				
-				Uri uri_4 = SqliteProvider.CONTENT_URI_LIKES_UPLOAD;
-				Cursor data_likes = activity.getContentResolver().query(uri_4, null, null, null, null);
 				
-				ContentValues cv_2 = new ContentValues();
-				
-				//feed_id
-				cv_2.put(DatabaseHelper.KEY_ID, data_newsfeed.getString(KEY_ID));				
-				//user_id
-				cv_2.put(DatabaseHelper.KEY_U_ID, data_profile.getString(KEY_ID_PROFILE));
-				// flag_action
-				cv_2.put(DatabaseHelper.KEY_FLAG_ACTION, "ADD");
-				// time_stamp
-				Support support = new Support();
-				cv_2.put(DatabaseHelper.KEY_TIME_STAMP, support.getDateTime());
-				//sender
-				cv_2.put(DatabaseHelper.KEY_SENDER, data_newsfeed.getString(KEY_SENDER));
-				//status
-				cv_2.put(DatabaseHelper.KEY_STATUS, data_newsfeed.getString(KEY_STATUS));
-				//feed_type
-				cv_2.put(DatabaseHelper.KEY_FEED_TYPE, data_newsfeed.getString(KEY_FEED_TYPE));
-
-				//---------------------------------------
-				//-----------------------------
-		    	Intent intent=new Intent("feedfragmentupdater");
-		    	activity.sendBroadcast(intent);
-				//-----------------------------
-				//---------------------------------------
-				
-				//if (data_likes.getCount() == 0) {
-					//cv_2.put(DatabaseHelper.KEY_FLAG_ACTION, "ADD");
-					Log.e(TAG,"KEY_FLAG_ACTION: " + "ADD");
-					//-------
-					Uri uri_5 = SqliteProvider.CONTENT_URI_LIKES_UPLOAD_insert;
-					activity.getContentResolver().insert(uri_5, cv_2);
+					int pos_btn_like = (Integer)v.getTag();
 					
-					//-------
-					Likes_Inbox_Upload liu = new Likes_Inbox_Upload();
-					liu.setAlarm(activity);					
-					//-------
-				//} else {
-					//cv_2.put(DatabaseHelper.KEY_FLAG_ACTION, "WAIT");
-					//Log.i(TAG,"KEY_FLAG_ACTION: " + "WAIT");
-                	//DatabaseHelper mDatabaseHelper;
-                	//mDatabaseHelper = new DatabaseHelper(activity);
-                	//mDatabaseHelper.resetLikes_upload();
-				//}
-				
-
-				//------------------------------------------------------------
-				//------------------------------------------------------------
-
-				//---------------
-				feedItems.clear();
-				//---------------------------
-				Cursor newsfeed = activity.getContentResolver().query(uri_1, null, null, null, null);
-				
-				for (int i = 0; i < newsfeed.getCount(); i++) {
-
-					newsfeed.moveToPosition(i);
+					//Uri uri_1 = SqliteProvider.CONTENT_URI_NEWSFEED;
+					Uri uri_1 = SqliteProvider.CONTENT_URI_NEWSFEED_BY_HASHTAG;
+					Cursor data_newsfeed = activity.getContentResolver().query(uri_1, null, null, null, null);				 
+					data_newsfeed.moveToPosition(pos_btn_like);
+					//------------------------------------------------------------
+					//------------------------------------------------------------
+					//Uri uri_2 = SqliteProvider.CONTENT_URI_NEWSFEED_update;
+					Uri uri_2 = SqliteProvider.CONTENT_URI_NEWSFEED_BY_HASHTAG_update;
+					Uri uri_2_b = SqliteProvider.CONTENT_URI_NEWSFEED_update;
+					//------------------------------------------------------------				
+					ContentValues cv_1 = new ContentValues();
 					
-					FeedItem item = new FeedItem();
+					int like_stats = Integer.parseInt(data_newsfeed.getString(KEY_LIKE_STATS));
 					
-					item.setId(newsfeed.getInt(KEY_ID));
-					item.setName(newsfeed.getString(KEY_NAME));
-
-					// Image might be null sometimes
-					String image = newsfeed.isNull(KEY_IMAGE) ? null : newsfeed
-							.getString(KEY_IMAGE);
+					cv_1.put(DatabaseHelper.KEY_LIKE_STATS, String.valueOf(like_stats + 1));
+					//------
+					cv_1.put(DatabaseHelper.KEY_YOU_LIKE_THIS, "YES");
+					//-----
+					activity.getContentResolver().update(uri_2, 
+							cv_1, 
+							DatabaseHelper.KEY_ID + " = " + data_newsfeed.getString(KEY_ID), null);
+					//-----
+					activity.getContentResolver().update(uri_2_b, 
+							cv_1, 
+							DatabaseHelper.KEY_ID + " = " + data_newsfeed.getString(KEY_ID), null);
+	
+					//------------------------------------------------------------
+					//------------------------------------------------------------
+					Uri uri_3 = SqliteProvider.CONTENT_URI_USER_PROFILE;
+					Cursor data_profile = activity.getContentResolver().query(uri_3, null, null, null, null);				 
+					data_profile.moveToFirst();
 					
-					item.setImge(image);
-
-					item.setStatus(newsfeed.getString(KEY_STATUS));
-					item.setProfilePic(newsfeed.getString(KEY_PICURL));
-
-					// like, comments stats
-					item.setLike_stats(newsfeed.getString(KEY_LIKE_STATS));
-					item.setComment_stats(newsfeed.getString(KEY_COMMENT_STATS));
+					Uri uri_4 = SqliteProvider.CONTENT_URI_LIKES_UPLOAD;
+					Cursor data_likes = activity.getContentResolver().query(uri_4, null, null, null, null);
 					
-					//you_like_this
-					item.setYou_like_this(newsfeed.getString(KEY_YOU_LIKE_THIS));
+					ContentValues cv_2 = new ContentValues();
 					
-				
-					if (newsfeed.isNull(KEY_CUSTOM_TIME_STAMP)) {
-						item.setTimeStamp(newsfeed.getString(KEY_TIME_STAMP));
-					} else {
-						item.setTimeStamp(newsfeed.getString(KEY_CUSTOM_TIME_STAMP));
+					//feed_id
+					cv_2.put(DatabaseHelper.KEY_ID, data_newsfeed.getString(KEY_ID));				
+					//user_id
+					cv_2.put(DatabaseHelper.KEY_U_ID, data_profile.getString(KEY_ID_PROFILE));
+					// flag_action
+					cv_2.put(DatabaseHelper.KEY_FLAG_ACTION, "ADD");
+					// time_stamp
+					Support support = new Support();
+					cv_2.put(DatabaseHelper.KEY_TIME_STAMP, support.getDateTime());
+					//sender
+					cv_2.put(DatabaseHelper.KEY_SENDER, data_newsfeed.getString(KEY_SENDER));
+					//status
+					cv_2.put(DatabaseHelper.KEY_STATUS, data_newsfeed.getString(KEY_STATUS));
+					//feed_type
+					cv_2.put(DatabaseHelper.KEY_FEED_TYPE, data_newsfeed.getString(KEY_FEED_TYPE));
+	
+					//---------------------------------------
+					//-----------------------------
+			    	Intent intent=new Intent("feedfragmentupdater");
+			    	activity.sendBroadcast(intent);
+					//-----------------------------
+					//---------------------------------------
+					
+					//if (data_likes.getCount() == 0) {
+						//cv_2.put(DatabaseHelper.KEY_FLAG_ACTION, "ADD");
+						Log.e(TAG,"KEY_FLAG_ACTION: " + "ADD");
+						//-------
+						Uri uri_5 = SqliteProvider.CONTENT_URI_LIKES_UPLOAD_insert;
+						activity.getContentResolver().insert(uri_5, cv_2);
+						
+						//-------
+						Likes_Inbox_Upload liu = new Likes_Inbox_Upload();
+						liu.setAlarm(activity);					
+						//-------
+					//} else {
+						//cv_2.put(DatabaseHelper.KEY_FLAG_ACTION, "WAIT");
+						//Log.i(TAG,"KEY_FLAG_ACTION: " + "WAIT");
+	                	//DatabaseHelper mDatabaseHelper;
+	                	//mDatabaseHelper = new DatabaseHelper(activity);
+	                	//mDatabaseHelper.resetLikes_upload();
+					//}
+					
+	
+					//------------------------------------------------------------
+					//------------------------------------------------------------
+	
+					//---------------
+					feedItems.clear();
+					//---------------------------
+					Cursor newsfeed = activity.getContentResolver().query(uri_1, null, null, null, null);
+					
+					for (int i = 0; i < newsfeed.getCount(); i++) {
+	
+						newsfeed.moveToPosition(i);
+						
+						FeedItem item = new FeedItem();
+						
+						item.setId(newsfeed.getInt(KEY_ID));
+						item.setName(newsfeed.getString(KEY_NAME));
+	
+						// Image might be null sometimes
+						String image = newsfeed.isNull(KEY_IMAGE) ? null : newsfeed
+								.getString(KEY_IMAGE);
+						
+						item.setImge(image);
+	
+						item.setStatus(newsfeed.getString(KEY_STATUS));
+						item.setProfilePic(newsfeed.getString(KEY_PICURL));
+	
+						// like, comments stats
+						item.setLike_stats(newsfeed.getString(KEY_LIKE_STATS));
+						item.setComment_stats(newsfeed.getString(KEY_COMMENT_STATS));
+						
+						//you_like_this
+						item.setYou_like_this(newsfeed.getString(KEY_YOU_LIKE_THIS));
+						
+					
+						if (newsfeed.isNull(KEY_CUSTOM_TIME_STAMP)) {
+							item.setTimeStamp(newsfeed.getString(KEY_TIME_STAMP));
+						} else {
+							item.setTimeStamp(newsfeed.getString(KEY_CUSTOM_TIME_STAMP));
+						}
+						
+						// url might be null sometimes
+						String feedUrl = newsfeed.isNull(KEY_URL) ? null : newsfeed
+								.getString(KEY_URL);
+	
+						item.setUrl(feedUrl);
+						
+						// hashtag might be null sometimes
+						String hashtag = newsfeed.isNull(KEY_HASHTAG) ? null : newsfeed
+								.getString(KEY_HASHTAG);
+						
+						item.setHashtag_1(hashtag);						
+	
+						feedItems.add(item);
 					}
 					
-					// url might be null sometimes
-					String feedUrl = newsfeed.isNull(KEY_URL) ? null : newsfeed
-							.getString(KEY_URL);
-
-					item.setUrl(feedUrl);
-					
-					// hashtag might be null sometimes
-					String hashtag = newsfeed.isNull(KEY_HASHTAG) ? null : newsfeed
-							.getString(KEY_HASHTAG);
-					
-					item.setHashtag_1(hashtag);						
-
-					feedItems.add(item);
-				}
-				
-				//---------------------------
-				notifyDataSetChanged();
-				//---------------
-				
+					//---------------------------
+					notifyDataSetChanged();
+					//---------------
+		        }				
 			}
 		});
 		//-------------------
@@ -346,27 +365,39 @@ public class HashtagListAdapter extends BaseAdapter {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				
-				int pos_btn_comment = (Integer)v.getTag();
-				Log.e(TAG,"pos_btn_comment: " + pos_btn_comment);
-
-				Uri uri = SqliteProvider.CONTENT_URI_NEWSFEED;
-				Cursor data_newsfeed = activity.getContentResolver().query(uri, null, null, null, null);
-				 
-				data_newsfeed.moveToPosition(pos_btn_comment);
+				cd = new ConnectionDetector(activity.getApplicationContext());
 				
-			    Bundle args = new Bundle();				    
-			    args.putInt("position", pos_btn_comment);
-			    
-			    args.putString("feed_id", data_newsfeed.getString(KEY_ID));
-			    args.putString("adapter", "hashtag");
-			    
-			    Intent intent = new Intent(activity, Relationship.class);				    	 
-			    intent.putExtras(args);
-			    
-			    activity.startActivity(intent);
-			    //-------------
-			    //activity.finish();
-			    //-------------
+				// Check if Internet present
+				if (!cd.isConnectingToInternet()) {
+		 		       	
+			        //----do something---
+					Toast.makeText(activity.getApplicationContext(), activity.getString(R.string.internet_connection), Toast.LENGTH_SHORT).show();
+		        	
+		        } else {
+
+				
+					int pos_btn_comment = (Integer)v.getTag();
+					Log.e(TAG,"pos_btn_comment: " + pos_btn_comment);
+	
+					Uri uri = SqliteProvider.CONTENT_URI_NEWSFEED;
+					Cursor data_newsfeed = activity.getContentResolver().query(uri, null, null, null, null);
+					 
+					data_newsfeed.moveToPosition(pos_btn_comment);
+					
+				    Bundle args = new Bundle();				    
+				    args.putInt("position", pos_btn_comment);
+				    
+				    args.putString("feed_id", data_newsfeed.getString(KEY_ID));
+				    args.putString("adapter", "hashtag");
+				    
+				    Intent intent = new Intent(activity, Relationship.class);				    	 
+				    intent.putExtras(args);
+				    
+				    activity.startActivity(intent);
+				    //-------------
+				    //activity.finish();
+				    //-------------
+		        }
 			}
 		});
 		

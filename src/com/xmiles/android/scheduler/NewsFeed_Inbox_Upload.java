@@ -7,6 +7,7 @@ import org.json.JSONObject;
 
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
+import com.xmiles.android.support.ConnectionDetector;
 import com.xmiles.android.webservice.UserFunctions;
 
 import android.app.AlarmManager;
@@ -32,7 +33,8 @@ public class NewsFeed_Inbox_Upload extends WakefulBroadcastReceiver {
 		private static String sender;
 	    
 		// The minimum time between updates in milliseconds
-	    private static final long MIN_TIME_BW_UPDATES = 1000 * 1 * 3600; // 3600 seconds
+	    //private static final long MIN_TIME_BW_UPDATES = 1000 * 1 * 3600; // 3600 seconds
+	    private static final long MIN_TIME_BW_UPDATES = 1000 * 1 * 360; // 360 seconds
 	
 		protected static JSONArray jsonArray;
 		protected static JSONObject json;
@@ -53,14 +55,22 @@ public class NewsFeed_Inbox_Upload extends WakefulBroadcastReceiver {
 		private static final Integer KEY_FLAG_ACTION = 12;
 		private static final Integer KEY_HASHTAG = 13;
 		
+		// Connection detector
+		ConnectionDetector cd;
+
 		
 	   public void onReceive(Context context, Intent intent) {   
 
 	    	
 	    	Log.i(TAG, "NewsFeed_Inbox_Update onReceive");
 
-			    
-	    	NewsFeed_Inbox_Handler(context);
+			cd = new ConnectionDetector(context.getApplicationContext());
+			
+			// Check if Internet present
+			if (cd.isConnectingToInternet()) {
+			
+				NewsFeed_Inbox_Handler(context);
+			} 
 	    	
 	    }
 

@@ -1,6 +1,7 @@
 package com.xmiles.android;
 
 import com.xmiles.android.fragment.Feed_Fragment;
+import com.xmiles.android.fragment.NoInternetConnection_Fragment;
 
 import com.xmiles.android.fragment.Ranking_Fragment;
 
@@ -8,6 +9,7 @@ import com.xmiles.android.pushnotifications.ServerUtilities;
 import com.xmiles.android.pushnotifications.WakeLocker;
 import com.xmiles.android.slidingmenu.adapter.SlidingMenuLazyAdapter;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
+import com.xmiles.android.support.ConnectionDetector;
 import com.xmiles.android.support.GPSTracker;
 
 
@@ -67,6 +69,7 @@ public class MainActivity extends FragmentActivity {
 	DrawerLayout mDrawerLayout;
 	ActionBarDrawerToggle mDrawerToggle;
 	//-----------------------------
+	//cities boundaries
 	private LatLngBounds xmiles_bounds = new LatLngBounds(
 			new LatLng(-23.079425, -43.741027), new LatLng(-22.7600, -43.1303));//,
 			//new LatLng(-30, -51), new LatLng(-29, -50));
@@ -78,9 +81,12 @@ public class MainActivity extends FragmentActivity {
 	private LatLngBounds PortoAlegre = new LatLngBounds(
 			new LatLng(-30.261530, -51.306411), new LatLng(-29.960472, -51.009013));
 
-	
-	//-----------------------------
-	
+	//-----------------------------	
+
+	// Connection detector
+	ConnectionDetector cd;
+
+
 	
 	private static final String TAG = "FACEBOOK";
 	//-------------
@@ -105,15 +111,9 @@ public class MainActivity extends FragmentActivity {
 		setContentView(R.layout.activity_main);
 		
 
-		//Action TAB
-		
-		//*******
 	    Fragment fgmt_newsfeed 	= new Feed_Fragment();
-	    //Fragment fgmt_ranking 	= new Ranking_Fragment();
-	    //*******
 	    
 	    ActionBar actionBar = getActionBar();
-	    //actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 	    
 	    // set Color
 	    //actionBar.setBackgroundDrawable(new ColorDrawable(R.color.facebook));
@@ -126,35 +126,12 @@ public class MainActivity extends FragmentActivity {
 	    */	    
 	    //actionBar.setTitle(Html.fromHtml("<b><font color='#ffffff'> &nbsp xMiles</font></b>"));
 
-	    /*
-	    // Enable Action Bar
-	    actionBar.show();
 
-	    Tab tab2 = actionBar
-	    	   .newTab()
-	    	   .setText("FEED")
-	    	   //.setIcon(R.drawable.nav_news_feed)	
-	    	   .setTabListener(new MyTabsListener(fgmt_newsfeed));
-	    	  
-	      actionBar.addTab(tab2);
-	      actionBar.selectTab(tab2);
-	      
-	    Tab tab3 = actionBar
-	              .newTab()
-	              .setText("RANKING")
-	              //.setIcon(R.drawable.computer)
-	              .setTabListener(new MyTabsListener(fgmt_ranking));
-	          
-	          actionBar.addTab(tab3);
-	          
-	    */
-	    
 	    android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
 	    android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();
 	    fragmentTransaction.replace(R.id.frame_container, fgmt_newsfeed);
 	    fragmentTransaction.commit();
-
-	    
+    
 	    
 	    //Sliding Menu
 	  	actionBar.setDisplayHomeAsUpEnabled(true);
@@ -165,10 +142,9 @@ public class MainActivity extends FragmentActivity {
 	          
 	    mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 	    mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
-	    
+	    //----
 	    runThread();
-        //adapter=new SlidingMenuLazyAdapter(getApplicationContext());        
-        //mDrawerList.setAdapter(adapter);
+	    //----	    
 	    mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
 	    
 	    
@@ -302,28 +278,6 @@ public class MainActivity extends FragmentActivity {
 		return true;
 	}
 
-	/*
-	  protected class MyTabsListener implements ActionBar.TabListener{
-		    private Fragment fragment;
-
-		    public MyTabsListener(Fragment fragment2){
-		        this.fragment = fragment2;
-		    }
-		    public void onTabSelected(Tab tab, FragmentTransaction ft){
-
-		    	  android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-		          android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();        
-		          fragmentTransaction.replace(R.id.frame_container, fragment);
-		          fragmentTransaction.commit();
-
-		    }
-		    public void onTabReselected(Tab tab, FragmentTransaction ft) {
-		    }
-		    public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-		        //ft.remove(fragment);
-		    }
-		}
-		*/
 	  
 		@Override
 		public boolean onOptionsItemSelected(MenuItem item) {
@@ -339,54 +293,26 @@ public class MainActivity extends FragmentActivity {
 
 			case R.id.buscode_search:
 				
+				cd = new ConnectionDetector(getApplicationContext());
 				
-		        //Check Service Location
-				gps = new GPSTracker(getApplicationContext());
-				gps.getLocation(0);
-				
-				
-	            Uri uri_1 = SqliteProvider.CONTENT_URI_USER_LOCATION;
-	        	Cursor data_UserLocation = getApplicationContext().getContentResolver().query(uri_1, null, null, null, null);			        	
-
-
-		        if(!gps.canGetGPSLocation() || !gps.canGetNW_Location()){	
-					//gps.showSettingsAlert();
-		        	Toast.makeText(getApplicationContext(), getString(R.string.location_service), Toast.LENGTH_SHORT).show();
-				} else{
-					gps.getLocation(2);
-					
-					GeoPoint curGeoPoint = new GeoPoint(
-			                (int) (gps.getLatitude()  * 1E6),
-			                (int) (gps.getLongitude() * 1E6));
-					
-	                if (!xmiles_bounds.contains(new LatLng(curGeoPoint.getLatitudeE6() / 1E6,curGeoPoint.getLongitudeE6() / 1E6))){
-
-	                    Toast.makeText(getApplicationContext(), getString(R.string.city_out_of_scope), Toast.LENGTH_LONG).show();
-	                
-	                } else if (SaoPaulo.contains(new LatLng(curGeoPoint.getLatitudeE6() / 1E6,curGeoPoint.getLongitudeE6() / 1E6))){
-	                	
-	                    Toast.makeText(getApplicationContext(), getString(R.string.saopaulo_out_of_scope), Toast.LENGTH_LONG).show();
-	                    
-	                } else if (PortoAlegre.contains(new LatLng(curGeoPoint.getLatitudeE6() / 1E6,curGeoPoint.getLongitudeE6() / 1E6))){
-	                	
-	                    Toast.makeText(getApplicationContext(), getString(R.string.portoalegre_out_of_scope), Toast.LENGTH_LONG).show();
-	                    
-	                    
-	                } else if (xmiles_bounds.contains(new LatLng(curGeoPoint.getLatitudeE6() / 1E6,curGeoPoint.getLongitudeE6() / 1E6))){					
-					
-						if (data_UserLocation.getCount() == 0) {
-						
-			                Intent intent = new Intent(getApplicationContext(), Gmaps.class);                
-			                startActivity(intent);
-						} else {
+				// Check if Internet present
+				if (!cd.isConnectingToInternet()) {
+		 
+			        //----hide action bar---
+			        getActionBar().hide();
 	
-				        	Toast.makeText(getApplicationContext(), getString(R.string.busmsg2), Toast.LENGTH_SHORT).show();
-	
-							
-						}
-	                }
-				}
+				    android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+				    android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();
+				    fragmentTransaction.replace(R.id.frame_container, new NoInternetConnection_Fragment());
+				    fragmentTransaction.commit();
+
+		        	
+		        } else {
+		        	
+		        	go2Gmaps();
 				
+		        }
+
 				return true;	
 				
 			default:
@@ -394,6 +320,59 @@ public class MainActivity extends FragmentActivity {
 			}
 		}
 
+		
+		public void go2Gmaps(){
+			
+	        //Check Service Location
+			gps = new GPSTracker(getApplicationContext());
+			gps.getLocation(0);
+			
+			
+            Uri uri_1 = SqliteProvider.CONTENT_URI_USER_LOCATION;
+        	Cursor data_UserLocation = getApplicationContext().getContentResolver().query(uri_1, null, null, null, null);			        	
+
+
+	        if(!gps.canGetGPSLocation() || !gps.canGetNW_Location()){	
+				//gps.showSettingsAlert();
+	        	Toast.makeText(getApplicationContext(), getString(R.string.location_service), Toast.LENGTH_SHORT).show();
+			} else{
+				gps.getLocation(2);
+				
+				GeoPoint curGeoPoint = new GeoPoint(
+		                (int) (gps.getLatitude()  * 1E6),
+		                (int) (gps.getLongitude() * 1E6));
+				
+                if (!xmiles_bounds.contains(new LatLng(curGeoPoint.getLatitudeE6() / 1E6,curGeoPoint.getLongitudeE6() / 1E6))){
+
+                    Toast.makeText(getApplicationContext(), getString(R.string.city_out_of_scope), Toast.LENGTH_LONG).show();
+                
+                } else if (SaoPaulo.contains(new LatLng(curGeoPoint.getLatitudeE6() / 1E6,curGeoPoint.getLongitudeE6() / 1E6))){
+                	
+                    Toast.makeText(getApplicationContext(), getString(R.string.saopaulo_out_of_scope), Toast.LENGTH_LONG).show();
+                    
+                } else if (PortoAlegre.contains(new LatLng(curGeoPoint.getLatitudeE6() / 1E6,curGeoPoint.getLongitudeE6() / 1E6))){
+                	
+                    Toast.makeText(getApplicationContext(), getString(R.string.portoalegre_out_of_scope), Toast.LENGTH_LONG).show();
+                    
+                    
+                } else if (xmiles_bounds.contains(new LatLng(curGeoPoint.getLatitudeE6() / 1E6,curGeoPoint.getLongitudeE6() / 1E6))){					
+				
+					if (data_UserLocation.getCount() == 0) {
+					
+		                Intent intent = new Intent(getApplicationContext(), Gmaps.class);                
+		                startActivity(intent);
+					} else {
+
+			        	Toast.makeText(getApplicationContext(), getString(R.string.busmsg2), Toast.LENGTH_SHORT).show();
+
+						
+					}
+                }
+
+			}
+			
+		}
+		
 		/* *
 		 * Called when invalidateOptionsMenu() is triggered
 		 */
@@ -432,37 +411,55 @@ public class MainActivity extends FragmentActivity {
 				// display view for selected nav drawer item
 				//displayView(position);
 				if (position > 1){
+				
 
+					cd = new ConnectionDetector(getApplicationContext());
 					
-				    new Handler().postDelayed(new Runnable() {
+					// Check if Internet present
+					if (!cd.isConnectingToInternet()) {
+			 
+						mDrawerLayout.closeDrawer(Gravity.LEFT);
+						//----hide action bar---
+				        getActionBar().hide();				        
+		
+					    android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+					    android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();
+					    fragmentTransaction.replace(R.id.frame_container, new NoInternetConnection_Fragment());
+					    fragmentTransaction.commit();
 
-				        @Override
-				        public void run() {
-				            if (!isFinishing()) {
-				            	
-				            	mDrawerLayout.closeDrawer(Gravity.LEFT);
-				            	
-				            }
-				        }
-				    }, 1500);
+			        	
+			        } else {
+			        	
+					    new Handler().postDelayed(new Runnable() {
 
-					
-					Uri uri_2b = SqliteProvider.CONTENT_URI_RANKING;
-					Cursor rank = getApplicationContext().getContentResolver().query(uri_2b, null, null, null, null);
-					//rank.moveToFirst();
-					rank.moveToPosition(position - 2);
-					int KEY_ID_PROFILE = 0;
-					
-					Intent intent = new Intent(getApplicationContext(),Hashtag.class);
+					        @Override
+					        public void run() {
+					            if (!isFinishing()) {
+					            	
+					            	mDrawerLayout.closeDrawer(Gravity.LEFT);
+					            	
+					            }
+					        }
+					    }, 1500);
 
-					Bundle args = new Bundle();				    
-					args.putString("hashtag", "#histórico_pontuação");			    
-					args.putString("user_id", rank.getString(KEY_ID_PROFILE));
-					
-					intent.putExtras(args);
-			    
-					startActivity(intent);
+				    
+						Uri uri_2b = SqliteProvider.CONTENT_URI_RANKING;
+						Cursor rank = getApplicationContext().getContentResolver().query(uri_2b, null, null, null, null);
 
+						rank.moveToPosition(position - 2);
+						int KEY_ID_PROFILE = 0;
+						
+						Intent intent = new Intent(getApplicationContext(),Hashtag.class);
+	
+						Bundle args = new Bundle();				    
+						args.putString("hashtag", "#histórico_pontuação");			    
+						args.putString("user_id", rank.getString(KEY_ID_PROFILE));
+						
+						intent.putExtras(args);
+				    
+						startActivity(intent);
+
+			        }				    
 					
 					
 				}

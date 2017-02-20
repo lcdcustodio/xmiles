@@ -13,6 +13,7 @@ import com.xmiles.android.facebook_api_support.SessionEvents;
 import com.xmiles.android.facebook_api_support.SessionStore;
 import com.xmiles.android.facebook_api_support.SessionEvents.AuthListener;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
+import com.xmiles.android.support.ConnectionDetector;
 
 import android.app.ProgressDialog;
 import android.os.Bundle;
@@ -44,6 +45,10 @@ public class FbLogin_Fragment extends Fragment {
 	Button Fb_login;
 	TextView txtHelp;
 	
+	// Connection detector
+	ConnectionDetector cd;
+
+	
 	public FbLogin_Fragment() {
 	}
 
@@ -60,8 +65,23 @@ public class FbLogin_Fragment extends Fragment {
 		    @Override
 		    public void onClick(View v) {
 
+		    	
+		    	cd = new ConnectionDetector(getActivity().getApplicationContext());
+		    	
+				// Check if Internet present
+				if (!cd.isConnectingToInternet()) {
+		 		       	
+				    
+				    android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
+				    android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();
+				    fragmentTransaction.replace(R.id.frame_container, new NoInternetConnection_Fragment());
+				    fragmentTransaction.commit();
 
-		    	Fblogin();
+		        	
+		        } else {
+		    	
+		        	Fblogin();
+		        }
 		    }
 		});
 		

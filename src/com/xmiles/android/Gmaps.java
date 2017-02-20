@@ -26,10 +26,12 @@ import com.google.android.maps.GeoPoint;
 import com.xmiles.android.backup.FbPlaces_Download;
 import com.xmiles.android.facebook_api_support.Utility;
 import com.xmiles.android.facebook_places.Facebook_Places;
+import com.xmiles.android.fragment.NoInternetConnection_Fragment;
 import com.xmiles.android.fragment.Push_Fragment;
 
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
+import com.xmiles.android.support.ConnectionDetector;
 import com.xmiles.android.support.GPSTracker;
 import com.xmiles.android.support.GetDistance;
 import com.xmiles.android.support.GetGpsToken;
@@ -132,6 +134,10 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 	Score_Algorithm sca;
 
 
+	// Connection detector
+	ConnectionDetector cd;
+
+	
 	public Gmaps(){}
 
 	@Override
@@ -209,140 +215,155 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
                 if ((event.getAction() == KeyEvent.ACTION_DOWN) &&
                         (keyCode == KeyEvent.KEYCODE_ENTER)) {
 
-                	//Progress Dialog
-                    progressBar = new ProgressDialog(Gmaps.this);
-            		progressBar.setCancelable(true);
-            		progressBar.setMessage(Gmaps.this.getString(R.string.please_wait));
-            		progressBar.show();
+                	
+    				cd = new ConnectionDetector(getApplicationContext());
+    				
+    				// Check if Internet present
+    				if (!cd.isConnectingToInternet()) {
+    		 
+    			        //----do something---
+    					Toast.makeText(getApplicationContext(), getString(R.string.internet_connection), Toast.LENGTH_SHORT).show();
+    					finish();
+    
+    		        	
+    		        } else {
+
+                	
+	                	//Progress Dialog
+	                    progressBar = new ProgressDialog(Gmaps.this);
+	            		progressBar.setCancelable(true);
+	            		progressBar.setMessage(Gmaps.this.getString(R.string.please_wait));
+	            		progressBar.show();
            		
             		
-                	//Hide keyboard
-                    InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(
-                            Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(buscode_search.getWindowToken(), 0);
+	                	//Hide keyboard
+	                    InputMethodManager imm = (InputMethodManager) getApplicationContext().getSystemService(
+	                            Context.INPUT_METHOD_SERVICE);
+	                    imm.hideSoftInputFromWindow(buscode_search.getWindowToken(), 0);
+	
+	                    //get buscode digits
+	                    String buscode_digits = getBuscode_digits(searchContent);
+	
+	            		// get Buscode Details
+	            		//runBuscodeDetails_thread(searchContent);
+	
+	                    //Check Service Location
+	            		gps.getLocation(0);
+	
+	                    if(!gps.canGetGPSLocation()){
+	            			gps.showSettingsAlert();
+	            		} else {
+	            			
+	            			
+	            			sca = new Score_Algorithm(getApplicationContext());
+	
+	            			String buscode_uppercase = searchContent.toUpperCase();
+	
+	            			JSONObject json = sca.getApiBusPosition(buscode_digits, buscode_uppercase);
 
-                    //get buscode digits
-                    String buscode_digits = getBuscode_digits(searchContent);
-
-            		// get Buscode Details
-            		//runBuscodeDetails_thread(searchContent);
-
-                    //Check Service Location
-            		gps.getLocation(0);
-
-                    if(!gps.canGetGPSLocation()){
-            			gps.showSettingsAlert();
-            		} else {
-            			
-            			
-            			sca = new Score_Algorithm(getApplicationContext());
-
-            			String buscode_uppercase = searchContent.toUpperCase();
-
-            			JSONObject json = sca.getApiBusPosition(buscode_digits, buscode_uppercase);
-
-            			try {
-
-            				//-----------------------
-            				progressBar.dismiss();
-            				mMap.clear();
-            				//-----------------------
-
-            				/*
-            				 * If Login success = 1 then GET Blabla and later
-            				 */
-                            if(Integer.parseInt(json.getString("success")) == 1){
-                            	JSONArray jArray = new JSONArray(json.getString("api_buscode"));
-
-      					        LatLng loc = new LatLng(Double.parseDouble(jArray.getJSONObject(0).getString("latitude")),
-			        						Double.parseDouble(jArray.getJSONObject(0).getString("longitude")));
-
-						   		// Adding a marker
-      					        String bus_type = jArray.getJSONObject(0).getString("bus_type");
-
-      					        if (bus_type.equals("BUS")){
-      					        	bus_type = "ônibus";
-      					        }
-
-								Marker marker = mMap.addMarker(new MarkerOptions().position(loc)
-												.title(bus_type + " " + jArray.getJSONObject(0).getString("buscode") + " localizado")
-												.snippet(getApplicationContext().getString(R.string.busmsg1))
-												.icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_gmaps_icon_blue)));
-
-								mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, 11.0f));
-
-
-								marker.showInfoWindow();
-
-								// Add a circle
-								mMap.addCircle(new CircleOptions()
-								     .center(loc)
-								     .radius(3000)  //set radius in meters
-								     .strokeWidth(0)
-									 .fillColor(Color.argb(50, 0, 0, 0)));
-
-								//----------------------
-      							//----------------------
-      							ContentValues cV = new ContentValues();
-      							cV.put(DatabaseHelper.KEY_BUSCODE, jArray.getJSONObject(0).getString("buscode"));
-      							//cV.put(DatabaseHelper.KEY_URL, url);
-
-      							cV.put(DatabaseHelper.KEY_BUS_TYPE, bus_type);
-      							//----------------------------
-      							cV.put(DatabaseHelper.KEY_FLAG, 0);
-      							//----------------------------
-      							//----------------------
-      					        Uri uri_0 = SqliteProvider.CONTENT_URI_USER_PROFILE;
-      					        Cursor data_profile = getApplicationContext().getContentResolver().query(uri_0, null, null, null, null);
-      					        data_profile.moveToFirst();      							
-      							//hashcode - android side      							
-      							GetGpsToken gt = new GetGpsToken();
-      							cV.put(DatabaseHelper.KEY_HASHCODE, gt.md5(data_profile.getString(KEY_ID) + System.currentTimeMillis()));
-      							//----------------------
-      							//----------------------
-      							getApplicationContext().getContentResolver().insert(SqliteProvider.CONTENT_URI_BUS_GPS_URL_insert, cV);
-      							//----------------------
-
-      							rel_body.setBackgroundColor(getResources().getColor(R.color.feed_item_bg));
-      							
-      							final int sdk = android.os.Build.VERSION.SDK_INT;
-      							if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-          							footer.setBackgroundDrawable( getResources().getDrawable(R.drawable.bg_parent_rounded_corner_botton));
-          							header.setBackgroundDrawable( getResources().getDrawable(R.drawable.bg_parent_rounded_corner_top));      							
-      							} else {
-          							footer.setBackground( getResources().getDrawable(R.drawable.bg_parent_rounded_corner_botton));
-          							header.setBackground( getResources().getDrawable(R.drawable.bg_parent_rounded_corner_top));      							
-      							}
-
-      						} else {
-
-      							rel_body.setBackgroundColor(getResources().getColor(R.color.red));
-      							
-      							tv_bug_msg.setText("Veículo " + searchContent + " não localizado!");
-      							
-      							final int sdk = android.os.Build.VERSION.SDK_INT;
-      							if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
-          							footer.setBackgroundDrawable( getResources().getDrawable(R.drawable.bg_parent_rounded_corner_botton_red));
-          							header.setBackgroundDrawable( getResources().getDrawable(R.drawable.bg_parent_rounded_corner_top_red));      							
-      							} else {
-          							footer.setBackground( getResources().getDrawable(R.drawable.bg_parent_rounded_corner_botton_red));
-          							header.setBackground( getResources().getDrawable(R.drawable.bg_parent_rounded_corner_top_red));      							
-      							}
-      							
-      							//sca.GpsNotFound(url, searchContent);
-      							sca.GpsNotFound("xMiles_ApiBus", searchContent);
-      							//-----------------------
-
-
-      						}
-
-      					} catch (JSONException e) {
-      						// TODO Auto-generated catch block
-      						e.printStackTrace();
-      					}
-            		}
-
-
+	            			try {
+	
+	            				//-----------------------
+	            				progressBar.dismiss();
+	            				mMap.clear();
+	            				//-----------------------
+	
+	            				/*
+	            				 * If Login success = 1 then GET Blabla and later
+	            				 */
+	                            if(Integer.parseInt(json.getString("success")) == 1){
+	                            	JSONArray jArray = new JSONArray(json.getString("api_buscode"));
+	
+	      					        LatLng loc = new LatLng(Double.parseDouble(jArray.getJSONObject(0).getString("latitude")),
+				        						Double.parseDouble(jArray.getJSONObject(0).getString("longitude")));
+	
+							   		// Adding a marker
+	      					        String bus_type = jArray.getJSONObject(0).getString("bus_type");
+	
+	      					        if (bus_type.equals("BUS")){
+	      					        	bus_type = "ônibus";
+	      					        }
+	
+									Marker marker = mMap.addMarker(new MarkerOptions().position(loc)
+													.title(bus_type + " " + jArray.getJSONObject(0).getString("buscode") + " localizado")
+													.snippet(getApplicationContext().getString(R.string.busmsg1))
+													.icon(BitmapDescriptorFactory.fromResource(R.drawable.bus_gmaps_icon_blue)));
+	
+									mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, 11.0f));
+	
+	
+									marker.showInfoWindow();
+	
+									// Add a circle
+									mMap.addCircle(new CircleOptions()
+									     .center(loc)
+									     .radius(3000)  //set radius in meters
+									     .strokeWidth(0)
+										 .fillColor(Color.argb(50, 0, 0, 0)));
+	
+									//----------------------
+	      							//----------------------
+	      							ContentValues cV = new ContentValues();
+	      							cV.put(DatabaseHelper.KEY_BUSCODE, jArray.getJSONObject(0).getString("buscode"));
+	      							//cV.put(DatabaseHelper.KEY_URL, url);
+	
+	      							cV.put(DatabaseHelper.KEY_BUS_TYPE, bus_type);
+	      							//----------------------------
+	      							cV.put(DatabaseHelper.KEY_FLAG, 0);
+	      							//----------------------------
+	      							//----------------------
+	      					        Uri uri_0 = SqliteProvider.CONTENT_URI_USER_PROFILE;
+	      					        Cursor data_profile = getApplicationContext().getContentResolver().query(uri_0, null, null, null, null);
+	      					        data_profile.moveToFirst();      							
+	      							//hashcode - android side      							
+	      							GetGpsToken gt = new GetGpsToken();
+	      							cV.put(DatabaseHelper.KEY_HASHCODE, gt.md5(data_profile.getString(KEY_ID) + System.currentTimeMillis()));
+	      							//----------------------
+	      							//----------------------
+	      							getApplicationContext().getContentResolver().insert(SqliteProvider.CONTENT_URI_BUS_GPS_URL_insert, cV);
+	      							//----------------------
+	
+	      							rel_body.setBackgroundColor(getResources().getColor(R.color.feed_item_bg));
+	      							
+	      							final int sdk = android.os.Build.VERSION.SDK_INT;
+	      							if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+	          							footer.setBackgroundDrawable( getResources().getDrawable(R.drawable.bg_parent_rounded_corner_botton));
+	          							header.setBackgroundDrawable( getResources().getDrawable(R.drawable.bg_parent_rounded_corner_top));      							
+	      							} else {
+	          							footer.setBackground( getResources().getDrawable(R.drawable.bg_parent_rounded_corner_botton));
+	          							header.setBackground( getResources().getDrawable(R.drawable.bg_parent_rounded_corner_top));      							
+	      							}
+	
+	      						} else {
+	
+	      							rel_body.setBackgroundColor(getResources().getColor(R.color.red));
+	      							
+	      							tv_bug_msg.setText("Veículo " + searchContent + " não localizado!");
+	      							
+	      							final int sdk = android.os.Build.VERSION.SDK_INT;
+	      							if(sdk < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+	          							footer.setBackgroundDrawable( getResources().getDrawable(R.drawable.bg_parent_rounded_corner_botton_red));
+	          							header.setBackgroundDrawable( getResources().getDrawable(R.drawable.bg_parent_rounded_corner_top_red));      							
+	      							} else {
+	          							footer.setBackground( getResources().getDrawable(R.drawable.bg_parent_rounded_corner_botton_red));
+	          							header.setBackground( getResources().getDrawable(R.drawable.bg_parent_rounded_corner_top_red));      							
+	      							}
+	      							
+	      							//sca.GpsNotFound(url, searchContent);
+	      							sca.GpsNotFound("xMiles_ApiBus", searchContent);
+	      							//-----------------------
+	
+	
+	      						}
+	
+	      					} catch (JSONException e) {
+	      						// TODO Auto-generated catch block
+	      						e.printStackTrace();
+	      					}
+	            		}
+	                //---
+    		        }
+    				//---
                 }
                 return false;
             }
@@ -355,112 +376,126 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 	public void onInfoWindowClick(Marker marker) {
 		// TODO Auto-generated method stub
 		
-        //-------------------
-		Getting_GpsBusData gbd = new Getting_GpsBusData();
-		gbd.setAlarm(getApplicationContext());
-		//-------------------
-        Uri uri_1 = SqliteProvider.CONTENT_URI_USER_PROFILE;
-        Cursor data_profile = getApplicationContext().getContentResolver().query(uri_1, null, null, null, null);
-        data_profile.moveToFirst();
-
-        Uri uri_2 = SqliteProvider.CONTENT_URI_BUS_GPS_URL;
-		Cursor bus_gps_url = getApplicationContext().getContentResolver().query(uri_2, null, null, null, null);
-		bus_gps_url.moveToLast();
-
-
-        Uri uri_3 = SqliteProvider.CONTENT_URI_USER_PLACES;
-		Cursor fb_places = getApplicationContext().getContentResolver().query(uri_3, null, null, null, null);
-		fb_places.moveToFirst();
-		/*
-        Uri uri_4 = SqliteProvider.CONTENT_URI_BUSCODE;
-		Cursor buscode_info = getApplicationContext().getContentResolver().query(uri_4, null, null, null, null);
-		buscode_info.moveToFirst();
-		*/
-
-        Support support = new Support();
-
-		ContentValues contentValues = new ContentValues();
-
-		contentValues.put(DatabaseHelper.KEY_ID, "-1");
-		contentValues.put(DatabaseHelper.KEY_NAME, data_profile.getString(KEY_NAME));
-		//---------------
-		//*
+		cd = new ConnectionDetector(getApplicationContext());
 		
-		String status_buscode = "Conectado(a) ao " + bus_gps_url.getString(KEY_BUS_TYPE) + " <bold>" + bus_gps_url.getString(KEY_BUSCODE) + "<bold>";
-		//String status_buscode = "Conectado ao ônibus <bold>" + bus_gps_url.getString(KEY_BUSCODE) + "<bold>";
-		String status_nearby = "";
-		String status_buscode_details = "";
-		//----------------
+		// Check if Internet present
+		if (!cd.isConnectingToInternet()) {
+ 
+	        //----do something---
+			Toast.makeText(getApplicationContext(), getString(R.string.internet_connection), Toast.LENGTH_SHORT).show();
 
-		//----------------
-		if (fb_places.getCount() > 0){
-			//status_nearby = " próximo ao " + fb_places.getString(KEY_NEARBY);
-			status_nearby = " próximo - " + fb_places.getString(KEY_NEARBY);
-		}
-		/*
-		if (buscode_info.getCount() > 0){
-			status_buscode = "Conectado(a) ao " + bus_gps_url.getString(KEY_BUS_TYPE) + " <bold>" + bus_gps_url.getString(KEY_BUSCODE);
-			//status_buscode = "Conectado ao ônibus <bold>" + bus_gps_url.getString(KEY_BUSCODE);		
-			status_buscode_details = " da linha " + buscode_info.getString(KEY_BUSLINE) + "<bold>";
-		}
-		*/
+        	
+        } else {
 
-		String status = status_buscode + status_buscode_details + status_nearby;
 
-		if (status_buscode_details.equals("")){
-			contentValues.put(DatabaseHelper.KEY_HASHTAG, "#" + bus_gps_url.getString(KEY_BUSCODE).toUpperCase());
-			//contentValues.put(DatabaseHelper.KEY_HASHTAG, "#" + bus_gps_url.getString(KEY_BUSCODE).toLowerCase());
-		}/* else {
-			contentValues.put(DatabaseHelper.KEY_HASHTAG, "#" + bus_gps_url.getString(KEY_BUSCODE).toUpperCase() +
-			//contentValues.put(DatabaseHelper.KEY_HASHTAG, "#" + bus_gps_url.getString(KEY_BUSCODE).toLowerCase() +
-					"," + buscode_info.getString(KEY_HASHTAG));
-		}
-		*/
-		contentValues.put(DatabaseHelper.KEY_STATUS, status);
-
-		contentValues.put(DatabaseHelper.KEY_PICURL, data_profile.getString(KEY_PICTURE));
-		contentValues.put(DatabaseHelper.KEY_TIME_STAMP, support.getDateTime());
-		//----------------------------
-
-		String checkin = "http://maps.googleapis.com/maps/api/staticmap?zoom=16&size=560x240&markers=size:mid|color:red|"
-		         + mMap.getMyLocation().getLatitude() + "," + mMap.getMyLocation().getLongitude() + "&sensor=false";
 		
-		//*/
-		contentValues.put(DatabaseHelper.KEY_IMAGE, checkin);
-
-
-		//----------------------------
-		//News Feed Upload
-		//----------------------------
-		//contentValues.put(DatabaseHelper.KEY_FLAG_ACTION, "ADD");
-		//contentValues.put(DatabaseHelper.KEY_FEED_TYPE, "User gets into the bus");
-		//contentValues.put(DatabaseHelper.KEY_LIKE_STATS, "0");
-		//contentValues.put(DatabaseHelper.KEY_COMMENT_STATS, "0");
-		//----------------------------
-		// like, comments stats
-		contentValues.put(DatabaseHelper.KEY_LIKE_STATS, "0");
-		contentValues.put(DatabaseHelper.KEY_COMMENT_STATS, "0");
-
-		//sender
-		contentValues.put(DatabaseHelper.KEY_SENDER, data_profile.getString(KEY_ID));
-
-		//you_like_this
-		contentValues.put(DatabaseHelper.KEY_YOU_LIKE_THIS, "NO");
-
-		//feed_type
-		contentValues.put(DatabaseHelper.KEY_FEED_TYPE, "User gets into the bus");
-
-		getApplicationContext().getContentResolver().insert(SqliteProvider.CONTENT_URI_NEWSFEED_insert, contentValues);
-		getApplicationContext().getContentResolver().insert(SqliteProvider.CONTENT_URI_NEWSFEED_UPLOAD_insert, contentValues);
-
-		//---------------------------------------
-		//-----------------------------
-    	Intent intent=new Intent("feedfragmentupdater");
-    	getApplicationContext().sendBroadcast(intent);
-		//-----------------------------
-		//---------------------------------------
-		NewsFeed_Inbox_Upload nfi = new NewsFeed_Inbox_Upload();
-		nfi.setAlarm(getApplicationContext());
+	        //-------------------
+			Getting_GpsBusData gbd = new Getting_GpsBusData();
+			gbd.setAlarm(getApplicationContext());
+			//-------------------
+	        Uri uri_1 = SqliteProvider.CONTENT_URI_USER_PROFILE;
+	        Cursor data_profile = getApplicationContext().getContentResolver().query(uri_1, null, null, null, null);
+	        data_profile.moveToFirst();
+	
+	        Uri uri_2 = SqliteProvider.CONTENT_URI_BUS_GPS_URL;
+			Cursor bus_gps_url = getApplicationContext().getContentResolver().query(uri_2, null, null, null, null);
+			bus_gps_url.moveToLast();
+	
+	
+	        Uri uri_3 = SqliteProvider.CONTENT_URI_USER_PLACES;
+			Cursor fb_places = getApplicationContext().getContentResolver().query(uri_3, null, null, null, null);
+			fb_places.moveToFirst();
+			/*
+	        Uri uri_4 = SqliteProvider.CONTENT_URI_BUSCODE;
+			Cursor buscode_info = getApplicationContext().getContentResolver().query(uri_4, null, null, null, null);
+			buscode_info.moveToFirst();
+			*/
+	
+	        Support support = new Support();
+	
+			ContentValues contentValues = new ContentValues();
+	
+			contentValues.put(DatabaseHelper.KEY_ID, "-1");
+			contentValues.put(DatabaseHelper.KEY_NAME, data_profile.getString(KEY_NAME));
+			//---------------
+			//*
+			
+			String status_buscode = "Conectado(a) ao " + bus_gps_url.getString(KEY_BUS_TYPE) + " <bold>" + bus_gps_url.getString(KEY_BUSCODE) + "<bold>";
+			//String status_buscode = "Conectado ao ônibus <bold>" + bus_gps_url.getString(KEY_BUSCODE) + "<bold>";
+			String status_nearby = "";
+			String status_buscode_details = "";
+			//----------------
+	
+			//----------------
+			if (fb_places.getCount() > 0){
+				//status_nearby = " próximo ao " + fb_places.getString(KEY_NEARBY);
+				status_nearby = " próximo - " + fb_places.getString(KEY_NEARBY);
+			}
+			/*
+			if (buscode_info.getCount() > 0){
+				status_buscode = "Conectado(a) ao " + bus_gps_url.getString(KEY_BUS_TYPE) + " <bold>" + bus_gps_url.getString(KEY_BUSCODE);
+				//status_buscode = "Conectado ao ônibus <bold>" + bus_gps_url.getString(KEY_BUSCODE);		
+				status_buscode_details = " da linha " + buscode_info.getString(KEY_BUSLINE) + "<bold>";
+			}
+			*/
+	
+			String status = status_buscode + status_buscode_details + status_nearby;
+	
+			if (status_buscode_details.equals("")){
+				contentValues.put(DatabaseHelper.KEY_HASHTAG, "#" + bus_gps_url.getString(KEY_BUSCODE).toUpperCase());
+				//contentValues.put(DatabaseHelper.KEY_HASHTAG, "#" + bus_gps_url.getString(KEY_BUSCODE).toLowerCase());
+			}/* else {
+				contentValues.put(DatabaseHelper.KEY_HASHTAG, "#" + bus_gps_url.getString(KEY_BUSCODE).toUpperCase() +
+				//contentValues.put(DatabaseHelper.KEY_HASHTAG, "#" + bus_gps_url.getString(KEY_BUSCODE).toLowerCase() +
+						"," + buscode_info.getString(KEY_HASHTAG));
+			}
+			*/
+			contentValues.put(DatabaseHelper.KEY_STATUS, status);
+	
+			contentValues.put(DatabaseHelper.KEY_PICURL, data_profile.getString(KEY_PICTURE));
+			contentValues.put(DatabaseHelper.KEY_TIME_STAMP, support.getDateTime());
+			//----------------------------
+	
+			String checkin = "http://maps.googleapis.com/maps/api/staticmap?zoom=16&size=560x240&markers=size:mid|color:red|"
+			         + mMap.getMyLocation().getLatitude() + "," + mMap.getMyLocation().getLongitude() + "&sensor=false";
+			
+			//*/
+			contentValues.put(DatabaseHelper.KEY_IMAGE, checkin);
+	
+	
+			//----------------------------
+			//News Feed Upload
+			//----------------------------
+			//contentValues.put(DatabaseHelper.KEY_FLAG_ACTION, "ADD");
+			//contentValues.put(DatabaseHelper.KEY_FEED_TYPE, "User gets into the bus");
+			//contentValues.put(DatabaseHelper.KEY_LIKE_STATS, "0");
+			//contentValues.put(DatabaseHelper.KEY_COMMENT_STATS, "0");
+			//----------------------------
+			// like, comments stats
+			contentValues.put(DatabaseHelper.KEY_LIKE_STATS, "0");
+			contentValues.put(DatabaseHelper.KEY_COMMENT_STATS, "0");
+	
+			//sender
+			contentValues.put(DatabaseHelper.KEY_SENDER, data_profile.getString(KEY_ID));
+	
+			//you_like_this
+			contentValues.put(DatabaseHelper.KEY_YOU_LIKE_THIS, "NO");
+	
+			//feed_type
+			contentValues.put(DatabaseHelper.KEY_FEED_TYPE, "User gets into the bus");
+	
+			getApplicationContext().getContentResolver().insert(SqliteProvider.CONTENT_URI_NEWSFEED_insert, contentValues);
+			getApplicationContext().getContentResolver().insert(SqliteProvider.CONTENT_URI_NEWSFEED_UPLOAD_insert, contentValues);
+	
+			//---------------------------------------
+			//-----------------------------
+	    	Intent intent=new Intent("feedfragmentupdater");
+	    	getApplicationContext().sendBroadcast(intent);
+			//-----------------------------
+			//---------------------------------------
+			NewsFeed_Inbox_Upload nfi = new NewsFeed_Inbox_Upload();
+			nfi.setAlarm(getApplicationContext());
+	    }	
 		//---------------------------------------
 		//---------------------------------------
 		finish();

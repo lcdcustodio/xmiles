@@ -27,6 +27,7 @@ import com.xmiles.android.scheduler.Comments_Inbox_Upload;
 import com.xmiles.android.scheduler.Likes_Inbox_Upload;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
+import com.xmiles.android.support.ConnectionDetector;
 import com.xmiles.android.support.GPSTracker;
 import com.xmiles.android.support.Score_Algorithm;
 import com.xmiles.android.support.Support;
@@ -122,6 +123,10 @@ public class Rel_Fragment extends Fragment {
 	private String adapter;
 
 	
+	// Connection detector
+	ConnectionDetector cd;
+
+	
 	public Rel_Fragment(){}
 	
 	@Override
@@ -170,96 +175,108 @@ public class Rel_Fragment extends Fragment {
                     //CleanUp text
                     add_cmts.setText("");
                     
-            		listAdapter = new RelListAdapter(getActivity(), feedItems, likeItems, commentItems, supportreladapterItems);
-            		
-	        		CommentItem comment_item = new CommentItem();
-	        		
-    		    	//Your code goes here
-    		    	//------------			        	
-		            Uri uri = SqliteProvider.CONTENT_URI_USER_PROFILE;
-		            Cursor data_profile = getActivity().getContentResolver().query(uri, null, null, null, null);
-		            
-		            data_profile.moveToLast();
+                    
+                    cd = new ConnectionDetector(getActivity().getApplicationContext());
+                    
+    				// Check if Internet present
+    				if (!cd.isConnectingToInternet()) {
+    		 		       	
+    			        //----do something---
+    					Toast.makeText(getActivity().getApplicationContext(), getActivity().getString(R.string.internet_connection), Toast.LENGTH_SHORT).show();
+    		        	
+    		        } else {
 
-		            Support support = new Support();
-		            		            
-	        		comment_item.setName(data_profile.getString(KEY_NAME_PROFILE));        		
-	        		comment_item.setProfilePic(data_profile.getString(KEY_PICURL_PROFILE));
-	        		comment_item.setTimeStamp(support.getDateTime());
-	        		comment_item.setComment(searchContent);
-	        		
-	        		commentItems.add(comment_item);
-            		//-----------------
-	        		Log.i(TAG, "supportreladapterItems.size(): " + supportreladapterItems.size());
-	        		
-	        		//header_comments
-	        		boolean header_comments = false;
-	        		
-	        		for (int j = 0; j < supportreladapterItems.size(); j++) {
-	        			if (supportreladapterItems.get(j).getType_action().equals("header_comments")){
-	        				header_comments = true;
-	        				break;
-	        			}
-	        		}
-	        		
-	        		if (!header_comments){
-	        			
-	        			SupportRelAdapterItem supportreladapter_hc_item = new SupportRelAdapterItem();
-	        			supportreladapter_hc_item.setType_action("header_comments");
-	        			supportreladapterItems.add(supportreladapter_hc_item);
-	        			
-	        		}
-            		//-----------------	        		
-            		SupportRelAdapterItem supportreladapter_comments_item = new SupportRelAdapterItem();	        		
-	        		supportreladapter_comments_item.setType_action("comments");
-	        		supportreladapterItems.add(supportreladapter_comments_item);
-                            			
-        			listAdapter.notifyDataSetChanged();
-            		//-----------------	 
-            		//-----------------
-        			Log.i(TAG, "feed_id " + feed_id);
-        			Log.d(TAG, "data_newsfeed.getString(KEY_ID): " + data_newsfeed.getString(KEY_ID));
-
-    				Uri uri_2 = SqliteProvider.CONTENT_URI_NEWSFEED_update;
+                    
+	            		listAdapter = new RelListAdapter(getActivity(), feedItems, likeItems, commentItems, supportreladapterItems);
+	            		
+		        		CommentItem comment_item = new CommentItem();
+		        		
+	    		    	//Your code goes here
+	    		    	//------------			        	
+			            Uri uri = SqliteProvider.CONTENT_URI_USER_PROFILE;
+			            Cursor data_profile = getActivity().getContentResolver().query(uri, null, null, null, null);
+			            
+			            data_profile.moveToLast();
+	
+			            Support support = new Support();
+			            		            
+		        		comment_item.setName(data_profile.getString(KEY_NAME_PROFILE));        		
+		        		comment_item.setProfilePic(data_profile.getString(KEY_PICURL_PROFILE));
+		        		comment_item.setTimeStamp(support.getDateTime());
+		        		comment_item.setComment(searchContent);
+		        		
+		        		commentItems.add(comment_item);
+	            		//-----------------
+		        		Log.i(TAG, "supportreladapterItems.size(): " + supportreladapterItems.size());
+		        		
+		        		//header_comments
+		        		boolean header_comments = false;
+		        		
+		        		for (int j = 0; j < supportreladapterItems.size(); j++) {
+		        			if (supportreladapterItems.get(j).getType_action().equals("header_comments")){
+		        				header_comments = true;
+		        				break;
+		        			}
+		        		}
+		        		
+		        		if (!header_comments){
+		        			
+		        			SupportRelAdapterItem supportreladapter_hc_item = new SupportRelAdapterItem();
+		        			supportreladapter_hc_item.setType_action("header_comments");
+		        			supportreladapterItems.add(supportreladapter_hc_item);
+		        			
+		        		}
+	            		//-----------------	        		
+	            		SupportRelAdapterItem supportreladapter_comments_item = new SupportRelAdapterItem();	        		
+		        		supportreladapter_comments_item.setType_action("comments");
+		        		supportreladapterItems.add(supportreladapter_comments_item);
+	                            			
+	        			listAdapter.notifyDataSetChanged();
+	            		//-----------------	 
+	            		//-----------------
+	        			Log.i(TAG, "feed_id " + feed_id);
+	        			Log.d(TAG, "data_newsfeed.getString(KEY_ID): " + data_newsfeed.getString(KEY_ID));
+	
+	    				Uri uri_2 = SqliteProvider.CONTENT_URI_NEWSFEED_update;
+	    				
+	    				ContentValues cv_1 = new ContentValues();
+	    				
+	    				int comments_stats = Integer.parseInt(data_newsfeed.getString(KEY_COMMENT_STATS));    				
+	    				cv_1.put(DatabaseHelper.KEY_COMMENT_STATS, String.valueOf(comments_stats + 1));
+	    				//-----
+	    				getActivity().getContentResolver().update(uri_2, 
+	    						cv_1,
+	    						DatabaseHelper.KEY_ID + " = " + feed_id, null);
+	            		//-----------------	 
+	            		//-----------------    								 
+	    				data_profile.moveToFirst();
+	
+	    				ContentValues cv_2 = new ContentValues();
+	    				
+	    				//feed_id
+	    				cv_2.put(DatabaseHelper.KEY_ID, data_newsfeed.getString(KEY_ID));				
+	    				//user_id
+	    				cv_2.put(DatabaseHelper.KEY_U_ID, data_profile.getString(KEY_ID_PROFILE));
+	    				// flag_action
+	    				cv_2.put(DatabaseHelper.KEY_FLAG_ACTION, "ADD");
+	    				// time_stamp    				
+	    				cv_2.put(DatabaseHelper.KEY_TIME_STAMP, support.getDateTime());
+	    				//sender
+	    				cv_2.put(DatabaseHelper.KEY_SENDER, data_newsfeed.getString(KEY_SENDER));
+	    				//status
+	    				cv_2.put(DatabaseHelper.KEY_STATUS, data_newsfeed.getString(KEY_STATUS));
+	    				//feed_type
+	    				cv_2.put(DatabaseHelper.KEY_FEED_TYPE, data_newsfeed.getString(KEY_FEED_TYPE));
+	    				//comment
+	    				cv_2.put(DatabaseHelper.KEY_COMMENT, searchContent);
+	    				
+						Uri uri_5 = SqliteProvider.CONTENT_URI_COMMENTS_UPLOAD_insert;
+						getActivity().getContentResolver().insert(uri_5, cv_2);
+						//---------------------
+						Comments_Inbox_Upload ciu = new Comments_Inbox_Upload();
+						ciu.setAlarm(getActivity());	
     				
-    				ContentValues cv_1 = new ContentValues();
-    				
-    				int comments_stats = Integer.parseInt(data_newsfeed.getString(KEY_COMMENT_STATS));    				
-    				cv_1.put(DatabaseHelper.KEY_COMMENT_STATS, String.valueOf(comments_stats + 1));
-    				//-----
-    				getActivity().getContentResolver().update(uri_2, 
-    						cv_1,
-    						DatabaseHelper.KEY_ID + " = " + feed_id, null);
-            		//-----------------	 
-            		//-----------------    								 
-    				data_profile.moveToFirst();
-
-    				ContentValues cv_2 = new ContentValues();
-    				
-    				//feed_id
-    				cv_2.put(DatabaseHelper.KEY_ID, data_newsfeed.getString(KEY_ID));				
-    				//user_id
-    				cv_2.put(DatabaseHelper.KEY_U_ID, data_profile.getString(KEY_ID_PROFILE));
-    				// flag_action
-    				cv_2.put(DatabaseHelper.KEY_FLAG_ACTION, "ADD");
-    				// time_stamp    				
-    				cv_2.put(DatabaseHelper.KEY_TIME_STAMP, support.getDateTime());
-    				//sender
-    				cv_2.put(DatabaseHelper.KEY_SENDER, data_newsfeed.getString(KEY_SENDER));
-    				//status
-    				cv_2.put(DatabaseHelper.KEY_STATUS, data_newsfeed.getString(KEY_STATUS));
-    				//feed_type
-    				cv_2.put(DatabaseHelper.KEY_FEED_TYPE, data_newsfeed.getString(KEY_FEED_TYPE));
-    				//comment
-    				cv_2.put(DatabaseHelper.KEY_COMMENT, searchContent);
-    				
-					Uri uri_5 = SqliteProvider.CONTENT_URI_COMMENTS_UPLOAD_insert;
-					getActivity().getContentResolver().insert(uri_5, cv_2);
-					//---------------------
-					Comments_Inbox_Upload ciu = new Comments_Inbox_Upload();
-					ciu.setAlarm(getActivity());	
-    				
-    				
+    		        }    				
                 }
                 return false;
             }

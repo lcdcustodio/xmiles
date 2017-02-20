@@ -294,68 +294,7 @@ public class Splash_Fragment_backup_20170113 extends Fragment {
 
     }
 
-    public JSONObject xMiles_favoritesRoutes(String username, String user_id) {
-		//Your code goes here
-    	//------------
-    	ContentValues[] valueList;
-    	JSONArray jsonArray;
-    	//-----------
-		UserFunctions userFunc = new UserFunctions();
-		JSONObject json = userFunc.favoritesRoutes(user_id);
 
-        try {
-
-        	if (json.getString("success") != null) {
-
-			    String res = json.getString("success");
-			    if(Integer.parseInt(res) == 1){
-
-			    	jsonArray = new JSONArray(json.getString("user"));
-			    	valueList = new ContentValues[jsonArray.length()];
-
-		        	//Log.e(TAG, "jsonArray.length(): " + jsonArray.length());
-
-					for (int position = 0; position < jsonArray.length(); position++) {
-
-						JSONObject jsonObject = null;
-
-						try {
-							ContentValues values = new ContentValues();
-							jsonObject = jsonArray.getJSONObject(position);
-
-							values.put(DatabaseHelper.KEY_ID, user_id);
-							values.put(DatabaseHelper.KEY_NAME, username);
-							values.put(DatabaseHelper.KEY_BUSLINE, jsonObject.getString("busline"));
-							values.put(DatabaseHelper.KEY_CITY, jsonObject.getString("city"));
-							values.put(DatabaseHelper.KEY_UF, jsonObject.getString("uf"));
-							values.put(DatabaseHelper.KEY_FROM, jsonObject.getString("_from"));
-							values.put(DatabaseHelper.KEY_FROM_BUS_STOP_ID, jsonObject.getString("_from_bus_stop_id"));
-							values.put(DatabaseHelper.KEY_TO, jsonObject.getString("_to"));
-							values.put(DatabaseHelper.KEY_TO_BUS_STOP_ID, jsonObject.getString("_to_bus_stop_id"));
-							values.put(DatabaseHelper.KEY_BD_UPDATED, "NO");
-							values.put(DatabaseHelper.KEY_CREATED_AT, jsonObject.getString("created_at"));
-
-							valueList[position] = values;
-							//-----------
-
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-
-					}
-
-					getActivity().getContentResolver().bulkInsert(SqliteProvider.CONTENT_URI_USER_FAVORITES_create, valueList);
-
-			    }
-			}
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-    	return json;
-    }
     
     public void xMiles_getNewsfeed(String user_id){
     	
