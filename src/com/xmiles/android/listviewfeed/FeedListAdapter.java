@@ -474,8 +474,10 @@ public class FeedListAdapter extends BaseAdapter {
 	     //Like Button
 	     if (item.getYou_like_this().equals("YES")){
 	    	 
-	    	 like.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_icon_active_new_green, 0, 0, 0);	    	 
-	    	 like.setTextColor(activity.getResources().getColor(R.color.green_dark));
+	    	 //like.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_icon_active_new_green, 0, 0, 0);	    	 
+	    	 like.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_icon_active_new_orange_20, 0, 0, 0);
+	    	 //like.setTextColor(activity.getResources().getColor(R.color.green_dark));
+	    	 like.setTextColor(activity.getResources().getColor(R.color.ab_mid));
 	    	 like.setText("Curtiu");
 	    	 like.setTextSize(TypedValue.COMPLEX_UNIT_DIP,14);
 	    	 like.setEnabled(false);
@@ -494,6 +496,12 @@ public class FeedListAdapter extends BaseAdapter {
 	    	 } else {
 	    		 like.setEnabled(false);	
 	    		 comment.setEnabled(false);
+	    		 //like.setVisibility(View.GONE);
+	    		 //comment.setVisibility(View.GONE);	    		 
+	    		 like.setText("");
+	    		 like.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+	    		 comment.setText("");
+	    		 comment.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 	    	 }
 	     }
 	     

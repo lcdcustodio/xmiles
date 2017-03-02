@@ -64,10 +64,10 @@ import com.google.android.maps.GeoPoint;
 public class MainActivity extends FragmentActivity {
 
 	//-----------------------------
-	SlidingMenuLazyAdapter adapter;
-	ListView mDrawerList;
-	DrawerLayout mDrawerLayout;
-	ActionBarDrawerToggle mDrawerToggle;
+	//SlidingMenuLazyAdapter adapter;
+	//ListView mDrawerList;
+	//DrawerLayout mDrawerLayout;
+	//ActionBarDrawerToggle mDrawerToggle;
 	//-----------------------------
 	//cities boundaries
 	private LatLngBounds xmiles_bounds = new LatLngBounds(
@@ -119,7 +119,7 @@ public class MainActivity extends FragmentActivity {
 	    //actionBar.setBackgroundDrawable(new ColorDrawable(R.color.facebook));
 	    
 	    // set Title
-	    actionBar.setDisplayShowTitleEnabled(true);
+	    //actionBar.setDisplayShowTitleEnabled(true);
 
 	    /*
 	     * Line below is commented due to crash on LG-P875h device
@@ -134,20 +134,21 @@ public class MainActivity extends FragmentActivity {
     
 	    
 	    //Sliding Menu
-	  	actionBar.setDisplayHomeAsUpEnabled(true);
-	  	actionBar.setHomeButtonEnabled(true);
+	  	//actionBar.setDisplayHomeAsUpEnabled(true);
+	  	//actionBar.setHomeButtonEnabled(true);
+	  	//--
 	  	//actionBar.setTitle("");
-	  	
+	  	//--
 	    
 	          
-	    mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-	    mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
+	    //mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+	    //mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
 	    //----
 	    runThread();
 	    //----	    
-	    mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
+	    //mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
 	    
-	    
+	    /*
 		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
 				//R.drawable.ic_drawer_rev03, //nav menu toggle icon
 				R.drawable.ic_menu, //nav menu toggle icon
@@ -165,9 +166,9 @@ public class MainActivity extends FragmentActivity {
 				// calling onPrepareOptionsMenu() to hide action bar icons
 				invalidateOptionsMenu();
 			}
-		};//*/
+		};
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
-
+		*/
 
 
 	}
@@ -178,8 +179,8 @@ public class MainActivity extends FragmentActivity {
 		 //new Thread() {
 	         public void run() {
 
-	        	 adapter=new SlidingMenuLazyAdapter(getApplicationContext());        
-	             mDrawerList.setAdapter(adapter);
+	        	 //adapter=new SlidingMenuLazyAdapter(getApplicationContext());        
+	             //mDrawerList.setAdapter(adapter);
 	             
 	             try {
 					Thread.sleep(50);
@@ -282,10 +283,11 @@ public class MainActivity extends FragmentActivity {
 		@Override
 		public boolean onOptionsItemSelected(MenuItem item) {
 			// toggle nav drawer on selecting action bar app icon/title
-			
+			/*
 			if (mDrawerToggle.onOptionsItemSelected(item)) {
 				return true;
 			}
+			*/
 			
 			// Handle action bar actions click
 			//*
@@ -379,7 +381,7 @@ public class MainActivity extends FragmentActivity {
 		@Override
 		public boolean onPrepareOptionsMenu(Menu menu) {
 			// if nav drawer is opened, hide the action items
-			boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+			//boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
 			
 			//menu.findItem(R.id.about_it).setVisible(!drawerOpen);
 			return super.onPrepareOptionsMenu(menu);
@@ -389,20 +391,20 @@ public class MainActivity extends FragmentActivity {
 		protected void onPostCreate(Bundle savedInstanceState) {
 			super.onPostCreate(savedInstanceState);
 			// Sync the toggle state after onRestoreInstanceState has occurred.
-			mDrawerToggle.syncState();
+			//mDrawerToggle.syncState();
 		}
 
 		@Override
 		public void onConfigurationChanged(Configuration newConfig) {
 			super.onConfigurationChanged(newConfig);
 			// Pass any configuration change to the drawer toggls
-			mDrawerToggle.onConfigurationChanged(newConfig);
+			//mDrawerToggle.onConfigurationChanged(newConfig);
 		}
 
 		/**
 		 * Slide menu item click listener
 		 * */
-		//*
+		/*
 		private class SlideMenuClickListener implements
 				ListView.OnItemClickListener {
 			@Override
@@ -418,7 +420,7 @@ public class MainActivity extends FragmentActivity {
 					// Check if Internet present
 					if (!cd.isConnectingToInternet()) {
 			 
-						mDrawerLayout.closeDrawer(Gravity.LEFT);
+						//mDrawerLayout.closeDrawer(Gravity.LEFT);
 						//----hide action bar---
 				        getActionBar().hide();				        
 		
@@ -465,7 +467,7 @@ public class MainActivity extends FragmentActivity {
 				}
 			}
 		}
-		//*/
+		*/
 		//-------------
 		//BEGIN TEST - PUSH NOTIFICATION By GCM (androidhive example)
 		  	

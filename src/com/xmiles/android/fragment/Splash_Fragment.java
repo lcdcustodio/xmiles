@@ -75,8 +75,10 @@ public class Splash_Fragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View rootView = inflater.inflate(R.layout.splash, container,
+		View rootView = inflater.inflate(R.layout.splash_fragment, container,
 				false);
+		
+
 		new PrefetchData().execute();
 
 

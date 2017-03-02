@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">xMiles</string>
+    <string name="app_name">xmiles</string>
     <string name="please_wait">Por Favor, Aguarde!</string>    
     <string name="phone">Phone</string>
     <string name="rotas">Rotas</string>
@@ -38,6 +38,7 @@
     <string name="city_out_of_scope">Em breve xMiles estará na sua cidade!</string>
     <string name="saopaulo_out_of_scope">Em breve xMiles estará em São Paulo!</string>
     <string name="portoalegre_out_of_scope">Em breve xMiles estará em Porto Alegre!</string>
-    <string name="internet_connection">Sem conexão com a internet!</string>    
+    <string name="internet_connection">Sem conexão com a internet!</string>
+    <string name="slogan">Ande de ônibus, acumule pontos e troque por recompensas.</string>        
         
 </resources>

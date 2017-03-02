@@ -4,10 +4,13 @@
     <color name="black">#000000</color>
     <color name="green">#23cf34</color>
     <color name="green_dark">#2EB53B</color>        
+    <color name="green_dark_2">#227a2a</color>
+    <color name="green_dark_3">#17511c</color>
     <color name="orange_2">#FFA500</color>
     <color name="lite_blue">#4E78A0</color>
     <color name="blue">#0000FF</color>
     <color name="grey">#FF909090</color>
+    <color name="grey_appname">#5b5b5b</color>
     <color name="facebook">#3B5998</color>
     <color name="silver">#E6E8FA</color>
     <color name="background_white">#ffffffff</color>
@@ -50,6 +53,16 @@
     <color name="navigationBarColor">#000000</color>
     <color name="colorAccent">#c8e8ff</color>
     <color name="red">#FF0000</color>
+    
+    <!--  Action Bar Gradient Colors -->
+    <color name="ab_up">#dc1400</color>
+    <color name="ab_mid">#e85c00</color>
+    <color name="ab_down">#f19c00</color>
+    
+    <color name="youtube">#cd201f</color>
+	<!--
+	<color name="youtube">#e52d27</color>
+	-->
         										 
     
 </resources>

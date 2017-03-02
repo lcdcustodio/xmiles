@@ -12,6 +12,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.google.android.gcm.GCMBaseIntentService;
+import com.google.android.gms.appdatasearch.GetRecentContextCall;
 import com.xmiles.android.R;
 import com.xmiles.android.R.drawable;
 import com.xmiles.android.R.string;
@@ -108,7 +109,8 @@ public class GCMIntentService extends GCMBaseIntentService {
      * Issues a notification to inform the user that server has sent a message.
      */
     private static void generateNotification(Context context, String message) {
-        int icon = R.drawable.xmiles_logo_rev05_transparente;
+        //int icon = R.drawable.xmiles_logo_push;
+        int icon = R.drawable.xmiles_new_logo_9;
 
         long when = System.currentTimeMillis();
         NotificationManager notificationManager = (NotificationManager)
@@ -122,6 +124,19 @@ public class GCMIntentService extends GCMBaseIntentService {
         
         // Local to add picture from sender too
         Notification notification = new Notification(icon, msg, when);
+        /*
+        Notification.Builder nb = new Notification.Builder(context)
+	        .setContentTitle("title")
+	        .setContentText("content")
+	        .setAutoCancel(true)
+	        //.setLargeIcon(icon)
+	        .setSmallIcon(R.drawable.xmiles_logo_push)
+	        .setTicker("ticker text");
+	        NotificationManager nm = (NotificationManager)context.getSystemService(Context.NOTIFICATION_SERVICE);
+	        nm.notify(100, nb.build());
+		*/
+		        
+        
         
         String title = context.getString(R.string.app_name);
         
@@ -150,6 +165,7 @@ public class GCMIntentService extends GCMBaseIntentService {
         // Vibrate if vibrate is enabled
         notification.defaults |= Notification.DEFAULT_VIBRATE;
         notificationManager.notify(0, notification);      
+
 
     }
 

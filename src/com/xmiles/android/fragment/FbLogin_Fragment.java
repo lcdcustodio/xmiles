@@ -86,13 +86,13 @@ public class FbLogin_Fragment extends Fragment {
 		});
 		
 
-		txtHelp = (TextView) rootView.findViewById(R.id.txtHelp);
+		//txtHelp = (TextView) rootView.findViewById(R.id.txtHelp);
 		
-		txtHelp.setText(Html.fromHtml("<a href=\"" + "https://www.youtube.com/embed/OvgtMaMftZw" + "\">"
-				+ "Veja como funciona" + "</a> "));
+		//txtHelp.setText(Html.fromHtml("<a href=\"" + "https://www.youtube.com/embed/OvgtMaMftZw" + "\">"
+		//		+ "Veja como funciona" + "</a> "));
 
 		// Making url clickable
-		txtHelp.setMovementMethod(LinkMovementMethod.getInstance());
+		//txtHelp.setMovementMethod(LinkMovementMethod.getInstance());
 
 		//--------
 		//((ViewGroup) rootView).addView(custom);

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/feed_bg"    
+    android:orientation="horizontal" >
+    <!-- android:background="@color/feed_bg" -->
+    
+	         
+         		<RelativeLayout       		     
+		    	android:id="@+id/frame_logo"		    	
+		    	android:layout_width="wrap_content"		    	
+		        android:layout_height="match_parent">
+		        <!-- 
+		        android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"		        
+		         -->
+		
+			    <ImageView
+
+			        android:layout_width="match_parent"
+    				android:layout_height="match_parent"
+    				android:scaleType="fitXY"			        
+			        android:src="@drawable/splash_background" />
+			    
+				 <ImageView					        
+					android:id="@+id/logo"	
+					android:layout_width="wrap_content"  
+					android:layout_height="wrap_content"  
+					android:layout_centerHorizontal="true"	
+					android:maxWidth="10dp"  
+					android:maxHeight="10dp"  
+					android:scaleType="fitCenter"  
+					android:paddingTop="60dp"
+					android:layout_marginBottom="80dp"		  		       
+					android:src="@drawable/splash_logo" />
+				    
+				 
+				 <Button      	    
+	        	    android:layout_below="@id/logo"
+			        android:background="@drawable/bg_state_pressed"
+			        android:id="@+id/fblogin"
+			        android:layout_width="wrap_content"
+			        android:layout_height="wrap_content"
+			        android:text="   Entrar com Facebook"
+					android:layout_centerHorizontal="true"			        	
+			        android:drawableLeft="@drawable/fb_logo"		        
+			        style="@style/fb_login_button_text" /> 
+			        <!--
+			            android:background="@drawable/blue_button"
+    	            	android:layout_centerVertical="true"	
+			        	android:layout_marginTop="200dp"
+			        	android:paddingTop="60dp" -->
+
+	       		<TextView
+	        	    android:layout_below="@id/fblogin"
+		            android:id="@+id/txtHelp"		            
+		            android:layout_width="fill_parent"
+		            android:layout_height="wrap_content"
+		            android:linksClickable="true"	            
+		            android:layout_centerHorizontal="true"
+		            android:layout_marginTop="5dp"
+		            android:gravity="center"	         
+		            android:background="@drawable/bg_state_pressed"  
+		            android:textColorLink="@color/link" />	        
+	        		<!-- android:textColorLink="@color/greenlink" 
+	        			 android:text="Facebook Login"	  -->
+				 
+			        
+				</RelativeLayout>
+				
+         		
+			
+  
+        		
+ 
+ </RelativeLayout>

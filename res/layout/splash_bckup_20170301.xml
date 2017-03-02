@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:gravity="bottom"
+    android:orientation="horizontal" >
+
+    <!-- android:background="@color/standard_gray_e2e2e0" 
+    	android:background="@color/feed_bg" -->
+    
+	         
+               
+        		<RelativeLayout       		     
+		    	android:id="@+id/frame_logo"		    	
+		        android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"		    	
+		    	android:layout_width="wrap_content"
+		    	
+		        android:layout_height="match_parent">
+		        <!-- android:layout_marginBottom="50dp"
+		         android:background="@color/feed_bg"
+		         android:background="@color/standard_gray_e2e2e0" -->
+		
+			    <ImageView
+
+			        android:layout_width="match_parent"
+    				android:layout_height="match_parent"
+    				android:scaleType="fitXY"
+			        
+			        android:src="@drawable/splash_background" />
+			        <!-- android:layout_marginTop="24dp"
+			        	 android:layout_alignParentTop="true"
+			             android:layout_centerHorizontal="true"			        
+			        	 android:layout_width="wrap_content"
+			             android:layout_height="wrap_content"
+			             android:src="@drawable/arpoador_3"			          
+			             android:src="@drawable/bg_image" />-->
+			       <!-- --> 
+				    <ImageView					        
+					        android:id="@+id/logo"	
+							  android:layout_width="wrap_content"  
+							  android:layout_height="wrap_content"  
+							  android:layout_centerHorizontal="true"	
+							  android:maxWidth="5dp"  
+							  android:maxHeight="5dp"  
+							  android:scaleType="fitCenter"  
+					          android:paddingTop="60dp"		  		       
+					        android:src="@drawable/splash_logo" />
+				    
+			    <ProgressBar
+	        	    android:layout_below="@id/logo" 
+			        android:layout_width="fill_parent"
+			        android:layout_height="wrap_content"
+			        android:paddingTop="150dp"
+			        android:layout_centerHorizontal="true"		        
+			        android:indeterminate="true"/>   
+			        <!-- android:layout_below="@id/logo"  -->
+		        
+			</RelativeLayout>      
+			<!-- 
+        	<ProgressBar
+        	    android:paddingTop="25dp"
+		        android:layout_width="fill_parent"
+		        android:layout_height="wrap_content"		        
+		        android:indeterminate="true"/> -->
+        		<!-- 
+        		  android:layout_below="@id/frame_logo"
+        		  android:paddingBottom="10dp"
+        		  android:paddingTop="10dp"
+        		  style="@android:style/Widget.ProgressBar.Horizontal"
+        		  android:paddingLeft="20dp"
+		          android:paddingRight="20dp"        		   
+        		  style="?android:attr/progressBarStyleHorizontal"--> 
+        
+ </RelativeLayout>
