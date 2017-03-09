@@ -1225,24 +1225,25 @@ Toolbar Hive example
         public static final int profile_score_button=0x7f03003a;
         public static final int push_item=0x7f03003b;
         public static final int ranking_fgmt=0x7f03003c;
-        public static final int ranking_header_item=0x7f03003d;
-        public static final int ranking_item=0x7f03003e;
-        public static final int rel_fgmt=0x7f03003f;
-        public static final int search_buscode_autocomplete_textview=0x7f030040;
-        public static final int search_buscode_button=0x7f030041;
-        public static final int sliding_menu_profile=0x7f030042;
-        public static final int sliding_menu_rewards=0x7f030043;
-        public static final int sliding_menu_rewards_header=0x7f030044;
-        public static final int splash=0x7f030045;
-        public static final int splash_bckup_20170221=0x7f030046;
-        public static final int splash_bckup_20170225=0x7f030047;
-        public static final int splash_bckup_20170301=0x7f030048;
-        public static final int splash_bckup_20170302=0x7f030049;
-        public static final int splash_fragment=0x7f03004a;
-        public static final int user_header=0x7f03004b;
-        public static final int users_custom_listview=0x7f03004c;
-        public static final int users_items=0x7f03004d;
-        public static final int webview_temp=0x7f03004e;
+        public static final int ranking_footer_item=0x7f03003d;
+        public static final int ranking_header_item=0x7f03003e;
+        public static final int ranking_item=0x7f03003f;
+        public static final int rel_fgmt=0x7f030040;
+        public static final int search_buscode_autocomplete_textview=0x7f030041;
+        public static final int search_buscode_button=0x7f030042;
+        public static final int sliding_menu_profile=0x7f030043;
+        public static final int sliding_menu_rewards=0x7f030044;
+        public static final int sliding_menu_rewards_header=0x7f030045;
+        public static final int splash=0x7f030046;
+        public static final int splash_bckup_20170221=0x7f030047;
+        public static final int splash_bckup_20170225=0x7f030048;
+        public static final int splash_bckup_20170301=0x7f030049;
+        public static final int splash_bckup_20170302=0x7f03004a;
+        public static final int splash_fragment=0x7f03004b;
+        public static final int user_header=0x7f03004c;
+        public static final int users_custom_listview=0x7f03004d;
+        public static final int users_items=0x7f03004e;
+        public static final int webview_temp=0x7f03004f;
     }
     public static final class menu {
         public static final int drawer=0x7f0c0000;
@@ -1471,7 +1472,7 @@ Toolbar Hive example
         <item name="colorAccent">@color/colorAccent</item>
          
          */
-        public static final int MyActionBarStyle=0x7f09001b;
+        public static final int MyActionBarStyle=0x7f09001c;
         /**  
     <style name="Theme.Example" parent="@android:style/Theme.Holo.Light">    
         <item name="android:actionBarItemBackground">@drawable/selectable_background_example</item>
@@ -1581,9 +1582,9 @@ item name="android:textColor">@color/white</item>
     </style>
      
          */
-        public static final int MyMaterialTheme=0x7f090019;
-        public static final int MyMaterialTheme_Base=0x7f09001a;
-        public static final int MyTheme_ActionBar_TabBar=0x7f09001c;
+        public static final int MyMaterialTheme=0x7f09001a;
+        public static final int MyMaterialTheme_Base=0x7f09001b;
+        public static final int MyTheme_ActionBar_TabBar=0x7f09001d;
         /** 
         Base application theme, dependent on API level. This theme is replaced
         by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
@@ -1601,7 +1602,7 @@ item name="android:textColor">@color/white</item>
 	 
          */
         public static final int NusProfileUserName=0x7f090008;
-        public static final int PopupMenu=0x7f09001d;
+        public static final int PopupMenu=0x7f09001e;
         public static final int Theme_IAPTheme=0x7f090003;
         public static final int WalletFragmentDefaultButtonTextAppearance=0x7f090006;
         public static final int WalletFragmentDefaultDetailsHeaderTextAppearance=0x7f090005;
@@ -1612,35 +1613,36 @@ item name="android:textColor">@color/white</item>
     
          */
         public static final int WalletFragmentDefaultStyle=0x7f090007;
-        public static final int add_comment=0x7f090015;
-        public static final int busline_info=0x7f090018;
-        public static final int button_gmaps=0x7f090013;
+        public static final int add_comment=0x7f090016;
+        public static final int busline_info=0x7f090019;
+        public static final int button_gmaps=0x7f090014;
         /**  
 	    <item name="android:layout_width" >fill_parent</item>
 	    <item name="android:layout_height" >wrap_content</item>
 	    	     
 	      
          */
-        public static final int button_text=0x7f09000c;
+        public static final int button_text=0x7f09000d;
         public static final int com_facebook_loginview_default_style=0x7f090000;
         public static final int com_facebook_loginview_silver_style=0x7f090001;
-        /**  <item name="android:textStyle">italic</item> 
-         */
-        public static final int fb_login_app_name_text=0x7f09000a;
-        public static final int fb_login_button_text=0x7f09000b;
-        public static final int reward_header=0x7f09000f;
-        public static final int score_text_1=0x7f09000e;
-        public static final int score_text_2=0x7f090012;
-        public static final int score_text_3=0x7f090010;
-        public static final int score_text_4=0x7f090011;
-        public static final int search_buscode=0x7f090014;
+        public static final int fb_login_app_name_text=0x7f09000b;
+        public static final int fb_login_button_text=0x7f09000c;
+        public static final int reward_header=0x7f090010;
+        public static final int score_text_1=0x7f09000f;
+        public static final int score_text_2=0x7f090013;
+        public static final int score_text_3=0x7f090011;
+        public static final int score_text_4=0x7f090012;
+        public static final int search_buscode=0x7f090015;
         /**  <item name="android:layout_margin">10dp</item>
              <item name="android:layout_margin">@dimen/feed_item_margin</item>
               																  
          */
-        public static final int search_buscode_button=0x7f090016;
-        public static final int search_buscode_button_find_bus=0x7f090017;
-        public static final int status_text=0x7f09000d;
+        public static final int search_buscode_button=0x7f090017;
+        public static final int search_buscode_button_find_bus=0x7f090018;
+        /**  <item name="android:textStyle">italic</item> 
+         */
+        public static final int splash_app_name_text=0x7f09000a;
+        public static final int status_text=0x7f09000e;
         public static final int tooltip_bubble_text=0x7f090002;
     }
     public static final class xml {

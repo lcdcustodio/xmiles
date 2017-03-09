@@ -71,7 +71,7 @@
             android:layout_height="wrap_content"
             android:onClick="onClick"            
             android:textStyle="bold"
-            android:paddingBottom="1dp"
+            android:paddingBottom="3dp"
             android:paddingLeft="@dimen/feed_item_status_pad_left_right"
             android:paddingRight="@dimen/feed_item_status_pad_left_right"
             android:paddingTop="1dp" />

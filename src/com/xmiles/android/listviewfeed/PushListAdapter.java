@@ -295,9 +295,14 @@ public class PushListAdapter extends BaseAdapter {
 					
 					//hashtag_1.setText(item.getHashtag_1());
 					vi1_hashtag_1ab.setText(feed_item.getHashtag_1().split(",")[0]);
-					vi1_hashtag_1ab.setVisibility(View.VISIBLE);
 					
-						
+					if (vi1_hashtag_1ab.getText().toString().equals(INVITE)){
+						vi1_hashtag_1ab.setVisibility(View.VISIBLE);	
+					} else{
+						vi1_hashtag_1ab.setVisibility(View.GONE);
+					}	
+					
+											
 					vi1_hashtag_1ab.setOnClickListener(new View.OnClickListener() {
 						@Override
 						public void onClick(View v) {
@@ -389,7 +394,11 @@ public class PushListAdapter extends BaseAdapter {
 					                                    }
 					                                });
 					                builder.build().show();
-					             }
+					             } //else{
+									//vi1_hashtag_1ab.setVisibility(View.GONE);
+									//vi1_hashtag_2.setVisibility(View.GONE);					            	 
+					            	 
+					             //}
 					        }
 						}							
 							
@@ -401,8 +410,8 @@ public class PushListAdapter extends BaseAdapter {
 
 						
 						vi1_hashtag_2.setText(feed_item.getHashtag_1().split(",")[1]);
-						vi1_hashtag_2.setVisibility(View.VISIBLE);
-						
+						//vi1_hashtag_2.setVisibility(View.VISIBLE);
+						vi1_hashtag_2.setVisibility(View.GONE);
 						vi1_hashtag_2.setOnClickListener(new View.OnClickListener() {
 							@Override
 							public void onClick(View v) {

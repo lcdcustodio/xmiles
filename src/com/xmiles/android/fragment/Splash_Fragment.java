@@ -16,6 +16,7 @@ import com.xmiles.android.MainActivity;
 
 import com.xmiles.android.R;
 
+import com.xmiles.android.facebook_api_support.GetFacebookFriends;
 import com.xmiles.android.facebook_api_support.GetFacebookProfile;
 import com.xmiles.android.facebook_api_support.Utility;
 
@@ -55,6 +56,8 @@ public class Splash_Fragment extends Fragment {
 	private static final String TAG = "FACEBOOK";
 
 	JSONObject facebook_profile;
+	
+	JSONObject facebook_friends;
 
 	private static final Integer KEY_USER_ID 	= 0;
 	private static final Integer KEY_NAME 		= 1;
@@ -68,6 +71,9 @@ public class Splash_Fragment extends Fragment {
 	private static String gender;
 	private static String time_stamp;
 	private static boolean flag_picurl;
+	
+	private static StringBuilder fb_friends_id;
+	private static boolean flag_fb_friends = false;
 
 	public Splash_Fragment() {
 	}
@@ -136,7 +142,8 @@ public class Splash_Fragment extends Fragment {
 			Log.v(TAG, "delta_days: " + delta_days);
 
 
-			if (data_profile.getCount() > 0 && delta_days < 3){
+			//if (data_profile.getCount() > 0 && delta_days < 0){
+			if (data_profile.getCount() > 0 && delta_days < 5){	
 			
 
 				Log.d(TAG, "facebook profile from SQLite");
@@ -155,6 +162,11 @@ public class Splash_Fragment extends Fragment {
 				// facebook profile
 				facebook_profile = new GetFacebookProfile().GetResult(Utility.mFacebook.getAccessToken());
 				Log.i(TAG, "facebook_profile: " + facebook_profile);
+				
+				// facebook friends
+				facebook_friends = new GetFacebookFriends().GetResult(Utility.mFacebook.getAccessToken());
+				Log.e(TAG, "facebook_friends: " + facebook_friends);
+				
 				try {
 				
 					user_id   = facebook_profile.getString("id");
@@ -164,7 +176,27 @@ public class Splash_Fragment extends Fragment {
 					time_stamp = support.getDateTime();
 					flag_picurl = false;
 					
-					Log.w(TAG, "picurl: " + picurl);
+					//Log.w(TAG, "picurl: " + picurl);					
+					
+					//--------------------------------------
+					//NECESSÁRIO TESTAR COM PERFIL DO KUKI QUE NÃO POSSUI AMIGOS DO FB NO XMILES
+					//--------------------------------------
+					
+					JSONArray friends = facebook_friends.getJSONArray("data");
+					fb_friends_id = new StringBuilder();
+					
+					for (int i = 0; i< friends.length(); i++) {
+						
+						fb_friends_id.append(friends.getJSONObject(i).getString("id"));
+						flag_fb_friends = true;
+						
+						if (i < friends.length() - 1) {
+							fb_friends_id.append(";");
+						}
+						
+					}
+					Log.e(TAG, "fb_friends_id: " + fb_friends_id);
+					
 				
 				} catch (JSONException e) {
 					//} catch (Exception e) {  	
@@ -175,8 +207,6 @@ public class Splash_Fragment extends Fragment {
 					
 				
 			}
-			
-
 			//------------------
 
 
@@ -187,10 +217,6 @@ public class Splash_Fragment extends Fragment {
 				contentValues.put(DatabaseHelper.KEY_ID, user_id);
 				contentValues.put(DatabaseHelper.KEY_NAME, user_name);
 				contentValues.put(DatabaseHelper.KEY_CREATED_AT, time_stamp);
-				//-------------
-            	//REWARDS
-            	//xMiles_getRewards();				
-
 				//-------------
             	//*
 				JSONObject json_login = xMiles_Login(user_name,
@@ -235,6 +261,11 @@ public class Splash_Fragment extends Fragment {
 
                 	//RANKING
                 	xMiles_getRanking();				
+                	
+                	//Upload Friends
+                	if (flag_fb_friends) {
+                		xMiles_upFriends(user_id);
+                	}
 
 
                 }
@@ -290,6 +321,13 @@ public class Splash_Fragment extends Fragment {
 			
 			         //RANKING
 			         xMiles_getRanking();				
+			         
+			         
+	                 //Upload Friends
+	                 if (flag_fb_friends) {
+	                	 xMiles_upFriends(id);
+	                 }
+
 
                 }
             }
@@ -301,85 +339,12 @@ public class Splash_Fragment extends Fragment {
 
     }
 
-    public void xMiles_userRoutes (String user_id, Integer total_routes){
-
-		//Your code goes here
-    	//------------
-		UserFunctions userFunc = new UserFunctions();
-
-		for (int favorite_id = 1; favorite_id <= total_routes; favorite_id++) {
-			//-----------
-	    	ContentValues[] valueList;
-	    	JSONArray jsonArray;
-	    	//-----------
-
-			JSONObject json = userFunc.userRoutes(user_id,Integer.toString(favorite_id));
-
-			try {
-
-	        	if (json.getString("success") != null) {
-
-				    String res = json.getString("success");
-				    if(Integer.parseInt(res) == 1){
-
-				    	jsonArray = new JSONArray(json.getString("user"));
-				    	valueList = new ContentValues[jsonArray.length()];
-				    	//------------
-
-
-						for (int position = 0; position < jsonArray.length(); position++) {
-
-							JSONObject jsonObject = null;
-
-							try {
-								ContentValues values = new ContentValues();
-								jsonObject = jsonArray.getJSONObject(position);
-
-								values.put(DatabaseHelper.KEY_ID, user_id);
-								values.put(DatabaseHelper.KEY_FAVORITE_ID, Integer.toString(favorite_id));
-								values.put(DatabaseHelper.KEY_BUSLINE, jsonObject.getString("busline"));
-								values.put(DatabaseHelper.KEY_BUS_STOP, jsonObject.getString("bus_stop"));
-								values.put(DatabaseHelper.KEY_BUS_STOP_ID, jsonObject.getString("bus_stop_id"));
-								values.put(DatabaseHelper.KEY_B_LATITUDE, jsonObject.getString("latitude"));
-								values.put(DatabaseHelper.KEY_B_LONGITUDE, jsonObject.getString("longitude"));
-								values.put(DatabaseHelper.KEY_M_DISTANCE_K, jsonObject.getString("max_distance_km"));
-								values.put(DatabaseHelper.KEY_FLAG, jsonObject.getString("from_or_to_flag"));
-								values.put(DatabaseHelper.KEY_CREATED_AT, jsonObject.getString("created_at"));
-
-								valueList[position] = values;
-								//-----------
-
-							} catch (JSONException e) {
-								// TODO Auto-generated catch block
-								e.printStackTrace();
-							}
-
-						}
-
-						if (favorite_id == 1) {
-							getActivity().getContentResolver().bulkInsert(SqliteProvider.CONTENT_URI_USER_ROUTES_create, valueList);
-
-						} else {
-							getActivity().getContentResolver().bulkInsert(SqliteProvider.CONTENT_URI_USER_ROUTES_insert, valueList);
-
-						}
-
-
-
-				    }
-
-				}
-
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
-		}
-
-
+    public void xMiles_upFriends(String user_id){
+    	
+    	UserFunctions userFunc = new UserFunctions();
+    	userFunc.uploadFriends(user_id, fb_friends_id);
+    	
     }
-
     
     public void xMiles_getNewsfeed(String user_id){
     	
@@ -473,60 +438,6 @@ public class Splash_Fragment extends Fragment {
 		}
     }
     
-    public void xMiles_getRewards() {
-		//Your code goes here
-    	//------------
-    	ContentValues[] valueList;
-    	JSONArray jsonArray;
-    	//-----------
-		UserFunctions userFunc = new UserFunctions();
-		JSONObject json = userFunc.getRewards();
-
-        try {
-
-        	if (json.getString("success") != null) {
-
-			    String res = json.getString("success");
-			    if(Integer.parseInt(res) == 1){
-
-			    	jsonArray = new JSONArray(json.getString("rewards"));
-			    	valueList = new ContentValues[jsonArray.length()];
-
-					for (int position = 0; position < jsonArray.length(); position++) {
-
-						JSONObject jsonObject = null;
-
-						try {
-							ContentValues values = new ContentValues();
-							jsonObject = jsonArray.getJSONObject(position);
-
-							values.put(DatabaseHelper.KEY_REWARD, jsonObject.getString("reward_name"));
-							values.put(DatabaseHelper.KEY_REWARD_TYPE, jsonObject.getString("reward_type"));
-							values.put(DatabaseHelper.KEY_SCORE, jsonObject.getString("score"));
-							values.put(DatabaseHelper.KEY_QUANTITY, jsonObject.getString("quantity"));
-							values.put(DatabaseHelper.KEY_PICURL, jsonObject.getString("picurl"));
-
-							valueList[position] = values;
-
-
-						} catch (JSONException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-
-					}
-
-					getActivity().getContentResolver().bulkInsert(SqliteProvider.CONTENT_URI_REWARDS_create, valueList);
-
-			    }
-			}
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-    	//return json;
-    }
     
     public void xMiles_getRanking() {
 		//Your code goes here

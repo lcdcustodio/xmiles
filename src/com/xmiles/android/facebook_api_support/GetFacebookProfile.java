@@ -47,7 +47,8 @@ public class GetFacebookProfile {
 		
 		urlString.append(a_token);
 		//urlString.append("&format=json&fields=name%2Cpicture%2Cgender");
-		urlString.append("&format=json&fields=name%2Cpicture%2Cbirthday%2Clocation%2Cgender%2Crelationship_status");
+		//urlString.append("&format=json&fields=name%2Cpicture%2Cbirthday%2Clocation%2Cgender%2Crelationship_status");
+		urlString.append("&format=json&fields=name%2Cpicture%2Cbirthday%2Clocation%2Cgender");
 		
 		Log.i(TAG, "urlString " + urlString);
 		

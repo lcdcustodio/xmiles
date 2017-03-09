@@ -42,6 +42,7 @@ public class UserFunctions {
     private static String news_feed_by_hashtagURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String inviteFriendsURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String api_buscodeURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
+    private static String upload_friendsURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     //------------------------------------    
     private static String login_tag 		= "login";
     private static String register_tag 		= "register";
@@ -64,6 +65,7 @@ public class UserFunctions {
     private static String news_feed_by_hashtag_tag = "newsfeed_by_hashtag";
     private static String invite_friends_tag = "invite_friends";
     private static String api_buscode_tag = "api_buscode";
+    private static String upload_friends_tag = "upload_friends";
     //------------------------------------     
     // constructor
     public UserFunctions(){
@@ -328,6 +330,24 @@ public class UserFunctions {
 		Log.e(TAG, "Invite_Friends " + json.toString());
 		return json;
 	}
+    
+    public JSONObject uploadFriends(String user_id, StringBuilder friends_id){
+    	
+		// Building Parameters
+		List<NameValuePair> params = new ArrayList<NameValuePair>();
+		
+		params.add(new BasicNameValuePair("tag", upload_friends_tag));
+		params.add(new BasicNameValuePair("user_id", user_id));
+		params.add(new BasicNameValuePair("friends_id", friends_id.toString()));
+		
+		JSONObject json = jsonParser.getJSONFromUrl(upload_friendsURL, params);
+		
+		Log.e(TAG, "Upload_Friends " + json.toString());
+		
+
+    	return json;
+    }
+    
     
     public JSONObject busGps(StringBuilder gps_bus_id, 
 			   				 StringBuilder user_id, 

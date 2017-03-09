@@ -64,11 +64,6 @@ import com.google.android.maps.GeoPoint;
 public class MainActivity extends FragmentActivity {
 
 	//-----------------------------
-	//SlidingMenuLazyAdapter adapter;
-	//ListView mDrawerList;
-	//DrawerLayout mDrawerLayout;
-	//ActionBarDrawerToggle mDrawerToggle;
-	//-----------------------------
 	//cities boundaries
 	private LatLngBounds xmiles_bounds = new LatLngBounds(
 			new LatLng(-23.079425, -43.741027), new LatLng(-22.7600, -43.1303));//,
@@ -108,18 +103,14 @@ public class MainActivity extends FragmentActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
+		setContentView(R.layout.activity_extra);
+		//setContentView(R.layout.activity_main);
 		
 
 	    Fragment fgmt_newsfeed 	= new Feed_Fragment();
 	    
-	    ActionBar actionBar = getActionBar();
+	    //ActionBar actionBar = getActionBar();
 	    
-	    // set Color
-	    //actionBar.setBackgroundDrawable(new ColorDrawable(R.color.facebook));
-	    
-	    // set Title
-	    //actionBar.setDisplayShowTitleEnabled(true);
 
 	    /*
 	     * Line below is commented due to crash on LG-P875h device
@@ -133,47 +124,15 @@ public class MainActivity extends FragmentActivity {
 	    fragmentTransaction.commit();
     
 	    
-	    //Sliding Menu
-	  	//actionBar.setDisplayHomeAsUpEnabled(true);
-	  	//actionBar.setHomeButtonEnabled(true);
-	  	//--
-	  	//actionBar.setTitle("");
-	  	//--
-	    
-	          
-	    //mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-	    //mDrawerList = (ListView) findViewById(R.id.list_slidermenu);
+
 	    //----
 	    runThread();
 	    //----	    
-	    //mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
-	    
-	    /*
-		mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout,
-				//R.drawable.ic_drawer_rev03, //nav menu toggle icon
-				R.drawable.ic_menu, //nav menu toggle icon
-				R.string.app_name, // nav drawer open - description for accessibility
-				R.string.app_name// nav drawer close - description for accessibility
-		) {
-			public void onDrawerClosed(View view) {
-				//getActionBar().setTitle(mTitle);
-				// calling onPrepareOptionsMenu() to show action bar icons
-				invalidateOptionsMenu();
-			}
-
-			public void onDrawerOpened(View drawerView) {
-				//getActionBar().setTitle(mDrawerTitle);
-				// calling onPrepareOptionsMenu() to hide action bar icons
-				invalidateOptionsMenu();
-			}
-		};
-		mDrawerLayout.setDrawerListener(mDrawerToggle);
-		*/
 
 
 	}
 	
-	
+	 //*
 	 private void runThread(){
 	     runOnUiThread (new Thread(new Runnable() {
 		 //new Thread() {
@@ -191,7 +150,7 @@ public class MainActivity extends FragmentActivity {
 	         }
 	     }));
 		 //}.start();
-	     
+	   //*/  
 	     
 	     
 			//-------------

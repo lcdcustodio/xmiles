@@ -5,6 +5,7 @@ package com.xmiles.android.listviewfeed;
 import com.xmiles.android.listviewfeed.FeedImageView;
 import com.xmiles.android.Hashtag;
 import com.xmiles.android.R;
+import com.xmiles.android.Ranking;
 import com.xmiles.android.Relationship;
 import com.xmiles.android.listviewfeed.AppController;
 import com.xmiles.android.listviewfeed.FeedItem;
@@ -61,6 +62,8 @@ public class FeedListAdapter extends BaseAdapter {
 	// Connection detector
 	ConnectionDetector cd;
 
+	
+	private static final String RANKING = "#ranking";
 	
 	//private static final String INVITE = "#convite_amigos";
 
@@ -138,23 +141,28 @@ public class FeedListAdapter extends BaseAdapter {
 					Toast.makeText(activity.getApplicationContext(), activity.getString(R.string.internet_connection), Toast.LENGTH_SHORT).show();
 		        	
 		        } else {
-
-
-					Intent intent = new Intent(activity, Hashtag.class);
-			     
-					Uri uri_3b = SqliteProvider.CONTENT_URI_USER_PROFILE;
-					Cursor d_profile = activity.getContentResolver().query(uri_3b, null, null, null, null);				 
-					d_profile.moveToFirst();
-										
-					
-					Bundle args = new Bundle();				    
-					args.putString("hashtag", hashtag_1.getText().toString());			    
-					args.putString("user_id", d_profile.getString(KEY_ID_PROFILE));
-					
-					intent.putExtras(args);
-			    
-					activity.startActivity(intent);
-			    
+		        	
+		        	if (hashtag_1.getText().toString().equals(RANKING)){
+		        		
+						Intent intent = new Intent(activity, Ranking.class);		        		
+						activity.startActivity(intent);
+						
+		        	} else{
+						Intent intent = new Intent(activity, Hashtag.class);
+				     
+						Uri uri_3b = SqliteProvider.CONTENT_URI_USER_PROFILE;
+						Cursor d_profile = activity.getContentResolver().query(uri_3b, null, null, null, null);				 
+						d_profile.moveToFirst();
+											
+						
+						Bundle args = new Bundle();				    
+						args.putString("hashtag", hashtag_1.getText().toString());			    
+						args.putString("user_id", d_profile.getString(KEY_ID_PROFILE));
+						
+						intent.putExtras(args);
+				    
+						activity.startActivity(intent);
+		        	}
 				}
 
 			}			
@@ -180,22 +188,31 @@ public class FeedListAdapter extends BaseAdapter {
 					Toast.makeText(activity.getApplicationContext(), activity.getString(R.string.internet_connection), Toast.LENGTH_SHORT).show();
 		        	
 		        } else {
-
-				    Intent intent = new Intent(activity, Hashtag.class);
-				    
-					Uri uri_3b = SqliteProvider.CONTENT_URI_USER_PROFILE;
-					Cursor d_profile = activity.getContentResolver().query(uri_3b, null, null, null, null);				 
-					d_profile.moveToFirst();
 		        	
-				     
-				    Bundle args = new Bundle();				    
-				    args.putString("hashtag", hashtag_2.getText().toString());			    
-					args.putString("user_id", d_profile.getString(KEY_ID_PROFILE));
+		        	if (hashtag_2.getText().toString().equals(RANKING)){
+		        		
+						Intent intent = new Intent(activity, Ranking.class);		        		
+						activity.startActivity(intent);
+						
+		        	} else{
+		        	
 
-				    
-				    intent.putExtras(args);
-				    
-				    activity.startActivity(intent);
+					    Intent intent = new Intent(activity, Hashtag.class);
+					    
+						Uri uri_3b = SqliteProvider.CONTENT_URI_USER_PROFILE;
+						Cursor d_profile = activity.getContentResolver().query(uri_3b, null, null, null, null);				 
+						d_profile.moveToFirst();
+			        	
+					     
+					    Bundle args = new Bundle();				    
+					    args.putString("hashtag", hashtag_2.getText().toString());			    
+						args.putString("user_id", d_profile.getString(KEY_ID_PROFILE));
+	
+					    
+					    intent.putExtras(args);
+					    
+					    activity.startActivity(intent);
+		        	}
 		        }				
 				
 			}			

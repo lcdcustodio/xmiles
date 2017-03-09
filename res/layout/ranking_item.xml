@@ -81,14 +81,22 @@
 		        android:id="@+id/duration"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
-		        android:layout_alignParentRight="true"
-		        android:layout_alignTop="@id/title"
-		        android:gravity="right"
+		        
+		        android:layout_toRightOf="@+id/thumbnail"
+		        android:layout_below="@id/artist"
+		        android:layout_marginTop="1dip"
+		        
 		        android:text="5:45"
 		        android:layout_marginRight="5dip"
 		        android:textSize="10dip"
 		        android:textColor="#10bcc9"
 		        android:textStyle="bold"/>
+		    	<!-- android:layout_alignTop="@id/title"
+		    		 android:layout_alignParentRight="true"
+		    		 android:gravity="right"
+		    		 android:textColor="#10bcc9"
+		    		 android:textColor="@color/ab_mid"
+		    	 -->
       </RelativeLayout>
 	</LinearLayout>
 </LinearLayout>
