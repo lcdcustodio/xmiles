@@ -19,7 +19,7 @@
           android:id="@+id/rnk_header_item"
            android:layout_width="fill_parent"
            android:layout_height="wrap_content"           
-           android:text="TOP 20"
+           android:text="Ranking - Top 20"
            android:paddingBottom="4dp"
            android:paddingTop="5dp"           
            android:layout_marginLeft="@dimen/feed_item_status_pad_left_right"

@@ -16,6 +16,8 @@ import com.xmiles.android.sqlite.helper.DatabaseHelper;
 import com.xmiles.android.support.ConnectionDetector;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
@@ -43,7 +45,8 @@ public class FbLogin_Fragment extends Fragment {
 	ProgressDialog progressBar;
 	//WebView webview;
 	Button Fb_login;
-	TextView txtHelp;
+	Button Youtube;
+	TextView termofuse;
 	
 	// Connection detector
 	ConnectionDetector cd;
@@ -85,14 +88,43 @@ public class FbLogin_Fragment extends Fragment {
 		    }
 		});
 		
-
-		//txtHelp = (TextView) rootView.findViewById(R.id.txtHelp);
 		
-		//txtHelp.setText(Html.fromHtml("<a href=\"" + "https://www.youtube.com/embed/OvgtMaMftZw" + "\">"
-		//		+ "Veja como funciona" + "</a> "));
+		Youtube = (Button) rootView.findViewById(R.id.helpbutton);
+		
+		Youtube.setOnClickListener(new View.OnClickListener() {
+		    @Override
+		    public void onClick(View v) {
+		    	
+		    	cd = new ConnectionDetector(getActivity().getApplicationContext());
+		    	
+				// Check if Internet present
+				if (!cd.isConnectingToInternet()) {
+		 		       	
+				    
+				    android.support.v4.app.FragmentManager fm = getActivity().getSupportFragmentManager();
+				    android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();
+				    fragmentTransaction.replace(R.id.frame_container, new NoInternetConnection_Fragment());
+				    fragmentTransaction.commit();
+
+		        	
+		        } else {
+		        	
+		        	Uri uri = Uri.parse("https://www.youtube.com/embed/OvgtMaMftZw"); 
+		        	Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+		        	startActivity(intent);
+		    	
+		        }				
+		    }
+		});
+		
+
+		termofuse = (TextView) rootView.findViewById(R.id.termofuse_2);
+		
+		termofuse.setText(Html.fromHtml("<a href=\"" + "http://www.xmiles.com.br/termo-de-uso" + "\">"
+				+ "Termo de Uso" + "</a> "));
 
 		// Making url clickable
-		//txtHelp.setMovementMethod(LinkMovementMethod.getInstance());
+		termofuse.setMovementMethod(LinkMovementMethod.getInstance());
 
 		//--------
 		//((ViewGroup) rootView).addView(custom);

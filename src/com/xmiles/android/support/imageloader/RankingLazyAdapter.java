@@ -145,6 +145,7 @@ public class RankingLazyAdapter extends BaseAdapter {
 	    
 	       case 1:	    
 	    	    profile_header.setText("Seu perfil");
+	    	    //profile_header.setText("Você");
 	    	    
 	    	    return vi_header_profile;
 	    	    
@@ -176,9 +177,9 @@ public class RankingLazyAdapter extends BaseAdapter {
 	       case 4:
 
 		    	if (ranking_info.getCount() < 6){
-		    		rnk_header.setText("TOP 5");
+		    		rnk_header.setText("Ranking - Top 5");
 		    	} else if (ranking_info.getCount() < 11){
-		    		rnk_header.setText("TOP 10");
+		    		rnk_header.setText("Ranking - Top 10");
 		    	}
 		    	   
 				return vi_header;

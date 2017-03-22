@@ -21,10 +21,10 @@ public class NoInternetConnection_Fragment extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		//View rootView = inflater.inflate(R.layout.no_internet_connection, container,
-		//		false);
-		View rootView = inflater.inflate(R.layout.fblogin_fragment, container,
+		View rootView = inflater.inflate(R.layout.no_internet_connection, container,
 				false);
+		//View rootView = inflater.inflate(R.layout.fblogin_fragment, container,
+		//		false);
 		
 		//View rootView = inflater.inflate(R.layout.splash_fragment, container,
 		//		false);

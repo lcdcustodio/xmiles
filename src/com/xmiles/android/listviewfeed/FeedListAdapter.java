@@ -496,6 +496,9 @@ public class FeedListAdapter extends BaseAdapter {
 	    	 //like.setTextColor(activity.getResources().getColor(R.color.green_dark));
 	    	 like.setTextColor(activity.getResources().getColor(R.color.ab_mid));
 	    	 like.setText("Curtiu");
+	    	 //---
+	    	 comment.setText("Comentar");
+	    	 //---	    	 
 	    	 like.setTextSize(TypedValue.COMPLEX_UNIT_DIP,14);
 	    	 like.setEnabled(false);
 	    	 
@@ -504,17 +507,25 @@ public class FeedListAdapter extends BaseAdapter {
 	    	 like.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_light_grey_l, 0, 0, 0);
 	    	 like.setTextColor(activity.getResources().getColor(R.color.timestamp));
 	    	 like.setText("Curtir");
+	    	 //---
+	    	 comment.setText("Comentar");
+	    	 //---	    	 
+
+	    	 
 	    	 like.setTextSize(TypedValue.COMPLEX_UNIT_DIP,13);
 	    	 //like.setEnabled(true);
 	    	 
 	    	 if (item.getId() > -1){
 	    		 like.setEnabled(true);
 	    		 comment.setEnabled(true);
-	    	 } else {
+
+	    	 //} else {
+	    	 } else if (item.getId() == -1){	 
 	    		 like.setEnabled(false);	
 	    		 comment.setEnabled(false);
 	    		 //like.setVisibility(View.GONE);
 	    		 //comment.setVisibility(View.GONE);	    		 
+	    		 //------------------
 	    		 like.setText("");
 	    		 like.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 	    		 comment.setText("");
@@ -594,9 +605,8 @@ public class FeedListAdapter extends BaseAdapter {
 		} 
 
 		// Checking for null hashtag
-		if (item.getHashtag_1() != null && !item.getHashtag_1().equals("")) {	
-		//if (item.getHashtag_1().split(",")[0] != null 
-		//		&& !item.getHashtag_1().split(",")[0].equals("")) {
+		if (item.getHashtag_1() != null && !item.getHashtag_1().equals("") && item.getId() > -1) {	
+		//if (item.getHashtag_1() != null && !item.getHashtag_1().equals("")) {	
 			
 			//hashtag_1.setText(item.getHashtag_1());
 			hashtag_1.setText(item.getHashtag_1().split(",")[0]);
