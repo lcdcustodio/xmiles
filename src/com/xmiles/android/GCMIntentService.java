@@ -109,8 +109,10 @@ public class GCMIntentService extends GCMBaseIntentService {
      * Issues a notification to inform the user that server has sent a message.
      */
     private static void generateNotification(Context context, String message) {
-        //int icon = R.drawable.xmiles_logo_push;
-        int icon = R.drawable.xmiles_new_logo_9;
+
+        //int icon = R.drawable.xmiles_new_logo_9;
+        int icon = R.drawable.xmiles_user_profile;
+        
 
         long when = System.currentTimeMillis();
         NotificationManager notificationManager = (NotificationManager)

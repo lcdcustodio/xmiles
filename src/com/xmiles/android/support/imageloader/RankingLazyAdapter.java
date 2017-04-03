@@ -58,15 +58,13 @@ public class RankingLazyAdapter extends BaseAdapter {
         
         ranking_info = data;
                 
-        Uri uri_1 = SqliteProvider.CONTENT_URI_USER_PROFILE;
-        users_info = ctx.getContentResolver().query(uri_1, null, null, null, null);
+        //Uri uri_1 = SqliteProvider.CONTENT_URI_USER_PROFILE;
+        //users_info = ctx.getContentResolver().query(uri_1, null, null, null, null);
         
     }
 
     public int getCount() {
-    	//return 1 + ranking_info.getCount();
-    	//return 3 + ranking_info.getCount();
-    	return 4 + ranking_info.getCount();
+    	return 1 + ranking_info.getCount();
     }
 
     public Object getItem(int position) {
@@ -78,28 +76,12 @@ public class RankingLazyAdapter extends BaseAdapter {
     }
     
     public int getItemViewType(int position) {
-    	/*
+
 		if (position == 0) {
 			return TYPE1;
 		} else {
 			return TYPE2;
 		}
-		*/
-    	
-	    switch(position){
-	       case 0:
-	    	   return TYPE1; 
-	       case 1:
-	    	   return TYPE2;
-	       case 2:
-	    	   return TYPE3;
-	       case 3:
-	    	   return TYPE4;	    	   
-	       default:
-	            break;
-	        	   
-	    }
-		return TYPE5;
 
     	
     	
@@ -111,8 +93,8 @@ public class RankingLazyAdapter extends BaseAdapter {
         View vi_header		   = convertView;
         View vi_footer		   = convertView;
         
-        View vi_header_profile = convertView;
-    	View vi_profile 	   = convertView;
+        //View vi_header_profile = convertView;
+    	//View vi_profile 	   = convertView;
         
         int viewType = this.getItemViewType(position);
 
@@ -120,8 +102,8 @@ public class RankingLazyAdapter extends BaseAdapter {
 
         vi 		  		  = inflater.inflate(R.layout.ranking_item, null);
         vi_header 		  = inflater.inflate(R.layout.ranking_header_item, null);
-        vi_header_profile = inflater.inflate(R.layout.ranking_header_item, null);
-        vi_profile 	   	  = inflater.inflate(R.layout.ranking_item, null);
+        //vi_header_profile = inflater.inflate(R.layout.ranking_header_item, null);
+        //vi_profile 	   	  = inflater.inflate(R.layout.ranking_item, null);
         vi_footer		  = inflater.inflate(R.layout.ranking_footer_item, null);
         
         TextView title = (TextView)vi.findViewById(R.id.title); // title
@@ -132,49 +114,10 @@ public class RankingLazyAdapter extends BaseAdapter {
         TextView rnk_header = (TextView)vi_header.findViewById(R.id.rnk_header_item); // title
         //-----------
         
-        TextView profile_header = (TextView)vi_header_profile.findViewById(R.id.rnk_header_item); // title
-
-        TextView  profile_name = (TextView)vi_profile.findViewById(R.id.title); // title
-        TextView  score = (TextView)vi_profile.findViewById(R.id.artist); // artist name
-        TextView  rnk = (TextView)vi_profile.findViewById(R.id.duration); // duration
-        ImageView profile_pic=(ImageView)vi_profile.findViewById(R.id.list_image); // thumb image
-
-        
-		//*
 	    switch(viewType){
 	    
-	       case 1:	    
-	    	    profile_header.setText("Seu perfil");
-	    	    //profile_header.setText("Você");
-	    	    
-	    	    return vi_header_profile;
-	    	    
-	       case 2:
-	    	    users_info.moveToLast();
-	    	    
-	    	    profile_name.setText(users_info.getString(KEY_NAME));
-	    	    
-		        if (users_info.isNull(KEY_SCORE)) {
-		        	score.setText(" ");
-		        } else {
-		        	score.setText(users_info.getString(KEY_SCORE) + " pontos");
-		        	//rnk.setText(users_info.getString(KEY_SCORE) + " pontos");
-		        }
-	    	    
-		        if (users_info.isNull(KEY_RANK)){
-		        	rnk.setText("0 pontos");
-		        } else {
-		        	//score.setText(users_info.getString(KEY_RANK) + "° lugar no ranking");
-		        	rnk.setText(users_info.getString(KEY_RANK) + "° lugar no ranking");
-		        }
-		        
-		        imageLoader.DisplayImage(users_info.getString(KEY_PICURL), profile_pic);
-		        
-		        return vi_profile;
-	       case 3:
-		        return vi_footer;
-		        
-	       case 4:
+
+	       case 1:
 
 		    	if (ranking_info.getCount() < 6){
 		    		rnk_header.setText("Ranking - Top 5");
@@ -184,16 +127,16 @@ public class RankingLazyAdapter extends BaseAdapter {
 		    	   
 				return vi_header;
 
-	       case 5:        
+	       case 2:        
 
-		        //ranking_info.moveToPosition(position - 1 );
-		        ranking_info.moveToPosition(position - 4 );
+		        ranking_info.moveToPosition(position - 1 );
+		        //ranking_info.moveToPosition(position - 4 );
 		        
 		        // Setting all values in listview
 		        title.setText(ranking_info.getString(KEY_NAME));
 		        artist.setText(ranking_info.getString(KEY_SCORE) + " pontos");     
-		        //duration.setText(position + 1 + " ° lugar");
-		        duration.setText(position - 3 + " ° lugar");
+		        duration.setText(position + " ° lugar");
+
 		        imageLoader.DisplayImage(ranking_info.getString(KEY_PICURL), thumb_image);
 		        //----------
 		        Log.e(TAG, "ranking_info.getString(KEY_NAME): " + ranking_info.getString(KEY_NAME));

@@ -3,7 +3,9 @@ package com.xmiles.android.listviewfeed;
 
 
 import com.xmiles.android.listviewfeed.FeedImageView;
+import com.xmiles.android.Gmaps;
 import com.xmiles.android.Hashtag;
+import com.xmiles.android.Profile;
 import com.xmiles.android.R;
 import com.xmiles.android.Ranking;
 import com.xmiles.android.Relationship;
@@ -22,12 +24,14 @@ import java.util.List;
 
 
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Html;
 import android.text.TextUtils;
 import android.text.format.DateUtils;
@@ -64,6 +68,7 @@ public class FeedListAdapter extends BaseAdapter {
 
 	
 	private static final String RANKING = "#ranking";
+	private static final String PROFILE = "#perfil";
 	
 	//private static final String INVITE = "#convite_amigos";
 
@@ -147,6 +152,37 @@ public class FeedListAdapter extends BaseAdapter {
 						Intent intent = new Intent(activity, Ranking.class);		        		
 						activity.startActivity(intent);
 						
+		        	}else if (hashtag_1.getText().toString().equals(PROFILE)){
+		        		//-----------------						
+		        	   	//Progress Dialog
+		        		final ProgressDialog pb;
+		        		pb = new ProgressDialog(activity);
+		        		pb.setCancelable(true);
+		        		pb.setMessage(activity.getString(R.string.please_wait));
+		        		pb.show();		        		
+		        		
+		        	    new Handler().postDelayed(new Runnable() {
+
+		        	        @Override
+		        	        public void run() {
+		        	            if (!isFinishing()) {
+		        	            	
+		        	            	pb.dismiss();
+		        	            	
+		        	            }
+		        	        }
+
+							private boolean isFinishing() {
+								// TODO Auto-generated method stub
+								return false;
+							}
+		        	    }, 3000);		        		
+		        		//-----------------
+		        		
+						//Intent intent = new Intent(activity, Ranking.class);	
+						Intent intent = new Intent(activity, Profile.class);
+						activity.startActivity(intent);						
+						
 		        	} else{
 						Intent intent = new Intent(activity, Hashtag.class);
 				     
@@ -193,6 +229,35 @@ public class FeedListAdapter extends BaseAdapter {
 		        		
 						Intent intent = new Intent(activity, Ranking.class);		        		
 						activity.startActivity(intent);
+						
+		        	}else if (hashtag_2.getText().toString().equals(PROFILE)){
+						//-----------------		        		
+		        	   	//Progress Dialog
+		        		final ProgressDialog pb;
+		        		pb = new ProgressDialog(activity);
+		        		pb.setCancelable(true);
+		        		pb.setMessage(activity.getString(R.string.please_wait));
+		        		pb.show();		        		
+		        		
+		        	    new Handler().postDelayed(new Runnable() {
+
+		        	        @Override
+		        	        public void run() {
+		        	            if (!isFinishing()) {
+		        	            	
+		        	            	pb.dismiss();
+		        	            	
+		        	            }
+		        	        }
+
+							private boolean isFinishing() {
+								// TODO Auto-generated method stub
+								return false;
+							}
+		        	    }, 3000);
+						//-----------------
+						Intent intent = new Intent(activity, Profile.class);		        		
+						activity.startActivity(intent);						
 						
 		        	} else{
 		        	

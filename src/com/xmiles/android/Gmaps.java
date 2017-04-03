@@ -85,9 +85,11 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 
 	private static final String TAG = "FACEBOOK";
 	private static GoogleMap mMap;
+	private static LatLng user_loc;
 
-	private static final Integer MAX_DIST 	  = 3; //3km
-	private static final Integer MAX_TIME_OFFSET = 300; //300secs = 5min
+	private static final Integer MAX_DIST 	  = 6; //6km
+	//private static final Integer MAX_DIST 	  = 50; //6km
+	
 
 
 	private static final Integer index_BUSCODE   = 1;
@@ -100,8 +102,8 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 
 	Spinner dialog_cities;
 	ProgressDialog progressBar;
-
-	
+	//Support support = new Support();
+	Double get_distance = null;
 
 	RelativeLayout rel_body;
 	LinearLayout header;
@@ -276,6 +278,15 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 	
 	      					        LatLng loc = new LatLng(Double.parseDouble(jArray.getJSONObject(0).getString("latitude")),
 				        						Double.parseDouble(jArray.getJSONObject(0).getString("longitude")));
+	      					        
+	      					        
+	      					        // Get Distance between bus/brt and user
+	      					        GetDistance dist_calc = new GetDistance();	      					        
+	      					        get_distance = dist_calc.calculo(loc.latitude, user_loc.latitude, 
+	      					        		loc.longitude, user_loc.longitude);
+	      					        
+	      					        Log.d(TAG,"get_distance: " + get_distance);
+	      					      
 	
 							   		// Adding a marker
 	      					        String bus_type = jArray.getJSONObject(0).getString("bus_type");
@@ -350,7 +361,7 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 	      							}
 	      							
 	      							//sca.GpsNotFound(url, searchContent);
-	      							sca.GpsNotFound("xMiles_ApiBus", searchContent);
+	      							sca.GpsNotFound("xmiles_ApiBus", searchContent);
 	      							//-----------------------
 	
 	
@@ -383,7 +394,18 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
  
 	        //----do something---
 			Toast.makeText(getApplicationContext(), getString(R.string.internet_connection), Toast.LENGTH_SHORT).show();
+			
+			finish();
 
+
+		} else if (get_distance > MAX_DIST){	
+			
+	        //----do something---
+			String msg_attr = marker.getTitle().split("localizado")[0];
+			Toast.makeText(getApplicationContext(), getString(R.string.distance_user_bus) + " " + msg_attr, Toast.LENGTH_LONG).show();
+			mMap.clear();
+			
+			
         	
         } else {
 
@@ -495,12 +517,10 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 			//---------------------------------------
 			NewsFeed_Inbox_Upload nfi = new NewsFeed_Inbox_Upload();
 			nfi.setAlarm(getApplicationContext());
+			
+			finish();
+
 	    }	
-		//---------------------------------------
-		//---------------------------------------
-		finish();
-		//---------------------------------------
-		//---------------------------------------
 		
 		
 		
@@ -611,7 +631,8 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 	    //public void onMyLocationChange(Location location) {
 	    public void onMyLocationChange(final Location location) {
 
-	        LatLng loc = new LatLng(location.getLatitude(), location.getLongitude());
+	        //LatLng loc = new LatLng(location.getLatitude(), location.getLongitude());
+	        user_loc = new LatLng(location.getLatitude(), location.getLongitude()); 
 
 	        // switch Off gmaps update
 	        mMap.setOnMyLocationChangeListener(null);
@@ -619,7 +640,8 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 	        //--------------------------
 	        if(mMap != null){
 
-	        	mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, 14.0f));
+	        	//mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, 14.0f));
+	        	mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(user_loc, 14.0f));
 	        	
 	        	progressBar.dismiss();
 	        	

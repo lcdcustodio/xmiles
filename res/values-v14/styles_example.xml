@@ -156,12 +156,25 @@
         <item name="android:background">@color/colorPrimary</item> 
         <item name="android:background">@color/green_dark_3</item> -->
         <item name="android:background">@drawable/action_bar_bg</item>
-        <!-- 
+        <item name="android:titleTextStyle">@style/MyTheme.ActionBar.TitleTextStyle</item>        
+        <!--
+        <item name="android:textStyle" >bold</item> 
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
          -->
 
     </style>
+    
+	<style name="MyTheme.ActionBar.TitleTextStyle" parent="@android:style/TextAppearance.Holo.Widget.ActionBar.Title">
+    	<item name="android:textColor">@color/white</item>    	
+    	<item name="android:typeface" >sans</item>
+    	<item name="android:textSize" >20dp</item>
+    	
+    	<!-- 
+    	<item name="android:textStyle" >bold</item>
+    	<item name="android:gravity" >center</item>
+    	 -->
+  	</style>
     
    <style name="MyTheme.ActionBar.TabBar" parent="android:style/Widget.Holo.Light.ActionBar.TabBar">   
     	<!-- TAB COLOR -->   
