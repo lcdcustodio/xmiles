@@ -169,7 +169,7 @@ public class HashtagListAdapter extends BaseAdapter {
 					    
 					     args.putInt("position", pos_rel_stats);
 					     
-					     Log.i(TAG,"feed_id: " + data_newsfeed.getString(KEY_ID));
+					     //Log.i(TAG,"feed_id: " + data_newsfeed.getString(KEY_ID));
 					    
 					     args.putString("feed_id", data_newsfeed.getString(KEY_ID));
 					     args.putString("adapter", "hashtag");
@@ -276,7 +276,7 @@ public class HashtagListAdapter extends BaseAdapter {
 					
 					//if (data_likes.getCount() == 0) {
 						//cv_2.put(DatabaseHelper.KEY_FLAG_ACTION, "ADD");
-						Log.e(TAG,"KEY_FLAG_ACTION: " + "ADD");
+						//Log.e(TAG,"KEY_FLAG_ACTION: " + "ADD");
 						//-------
 						Uri uri_5 = SqliteProvider.CONTENT_URI_LIKES_UPLOAD_insert;
 						activity.getContentResolver().insert(uri_5, cv_2);
@@ -287,7 +287,7 @@ public class HashtagListAdapter extends BaseAdapter {
 						//-------
 					//} else {
 						//cv_2.put(DatabaseHelper.KEY_FLAG_ACTION, "WAIT");
-						//Log.i(TAG,"KEY_FLAG_ACTION: " + "WAIT");
+						////Log.i(TAG,"KEY_FLAG_ACTION: " + "WAIT");
 	                	//DatabaseHelper mDatabaseHelper;
 	                	//mDatabaseHelper = new DatabaseHelper(activity);
 	                	//mDatabaseHelper.resetLikes_upload();
@@ -377,10 +377,14 @@ public class HashtagListAdapter extends BaseAdapter {
 
 				
 					int pos_btn_comment = (Integer)v.getTag();
-					Log.e(TAG,"pos_btn_comment: " + pos_btn_comment);
+					//Log.e(TAG,"pos_btn_comment: " + pos_btn_comment);
 	
-					Uri uri = SqliteProvider.CONTENT_URI_NEWSFEED;
+					//Uri uri = SqliteProvider.CONTENT_URI_NEWSFEED;
+					//Cursor data_newsfeed = activity.getContentResolver().query(uri, null, null, null, null);
+					Uri uri = SqliteProvider.CONTENT_URI_NEWSFEED_BY_HASHTAG;
 					Cursor data_newsfeed = activity.getContentResolver().query(uri, null, null, null, null);
+
+					
 					 
 					data_newsfeed.moveToPosition(pos_btn_comment);
 					
@@ -425,8 +429,11 @@ public class HashtagListAdapter extends BaseAdapter {
 	     //Like Button
 	     if (item.getYou_like_this().equals("YES")){
 	    	 
-	    	 like.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_icon_active_new_green, 0, 0, 0);	    	 
-	    	 like.setTextColor(activity.getResources().getColor(R.color.green_dark));
+	    	 //like.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_icon_active_new_green, 0, 0, 0);	    	 
+	    	 //like.setTextColor(activity.getResources().getColor(R.color.green_dark));	    	 
+	    	 like.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_icon_active_new_orange_20, 0, 0, 0);
+	    	 like.setTextColor(activity.getResources().getColor(R.color.ab_mid));
+	    	 
 	    	 like.setText("Curtiu");
 	    	 like.setTextSize(TypedValue.COMPLEX_UNIT_DIP,14);
 	    	 like.setEnabled(false);
@@ -532,7 +539,7 @@ public class HashtagListAdapter extends BaseAdapter {
 
 			if (item.getHashtag_1().split(",").length > 1) {
 
-				//Log.e(TAG,"item.gethashtag_1b().split(,)[1]: " + item.gethashtag_1b().split(",")[1]);
+				////Log.e(TAG,"item.gethashtag_1b().split(,)[1]: " + item.gethashtag_1b().split(",")[1]);
 				
 				hashtag_2.setText(item.getHashtag_1().split(",")[1]);
 				hashtag_2.setVisibility(View.VISIBLE);

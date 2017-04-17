@@ -35,15 +35,15 @@ public class GCMIntentService extends GCMBaseIntentService {
      **/
     @Override
     protected void onRegistered(Context context, String registrationId) {
-        Log.i(TAG, "Device registered: regId = " + registrationId);
+        ////Log.i(TAG, "Device registered: regId = " + registrationId);
         displayMessage(context, "Your device registred with GCM");
-        //Log.d("NAME", MainActivity.name);
+        
                 
         Uri uri_1 = SqliteProvider.CONTENT_URI_USER_PROFILE;        
         users_info = context.getContentResolver().query(uri_1, null, null, null, null);
         users_info.moveToLast();
         
-        Log.d(TAG, users_info.getString(KEY_NAME));
+        ////Log.d(TAG, users_info.getString(KEY_NAME));
         
         //ServerUtilities.register(context, MainActivity.name, MainActivity.email, registrationId);
 
@@ -55,7 +55,7 @@ public class GCMIntentService extends GCMBaseIntentService {
      * */
     @Override
     protected void onUnregistered(Context context, String registrationId) {
-        Log.i(TAG, "Device unregistered");
+        //Log.i(TAG, "Device unregistered");
         displayMessage(context, getString(R.string.gcm_unregistered));
         
         ServerUtilities.unregister(context, registrationId);
@@ -66,7 +66,7 @@ public class GCMIntentService extends GCMBaseIntentService {
      * */
     @Override
     protected void onMessage(Context context, Intent intent) {
-        Log.i(TAG, "Received message");
+        //Log.i(TAG, "Received message");
         String message = intent.getExtras().getString("price");
         
         displayMessage(context, message);
@@ -79,7 +79,7 @@ public class GCMIntentService extends GCMBaseIntentService {
      * */
     @Override
     protected void onDeletedMessages(Context context, int total) {
-        Log.i(TAG, "Received deleted messages notification");
+        //Log.i(TAG, "Received deleted messages notification");
         String message = getString(R.string.gcm_deleted, total);
         
         displayMessage(context, message);
@@ -92,14 +92,14 @@ public class GCMIntentService extends GCMBaseIntentService {
      * */
     @Override
     public void onError(Context context, String errorId) {
-        Log.i(TAG, "Received error: " + errorId);
+        //Log.i(TAG, "Received error: " + errorId);
         displayMessage(context, getString(R.string.gcm_error, errorId));
     }
 
     @Override
     protected boolean onRecoverableError(Context context, String errorId) {
         // log message
-        Log.i(TAG, "Received recoverable error: " + errorId);
+        //Log.i(TAG, "Received recoverable error: " + errorId);
         displayMessage(context, getString(R.string.gcm_recoverable_error,
                 errorId));
         return super.onRecoverableError(context, errorId);
@@ -111,7 +111,8 @@ public class GCMIntentService extends GCMBaseIntentService {
     private static void generateNotification(Context context, String message) {
 
         //int icon = R.drawable.xmiles_new_logo_9;
-        int icon = R.drawable.xmiles_user_profile;
+        //int icon = R.drawable.xmiles_user_profile;
+        int icon = R.drawable.xmiles_user_profile_push;
         
 
         long when = System.currentTimeMillis();
@@ -122,7 +123,7 @@ public class GCMIntentService extends GCMBaseIntentService {
         String feed_id = message.split(";")[0];
 
 
-        //Log.v(TAG,"feed_id: " + feed_id);
+        ////Log.v(TAG,"feed_id: " + feed_id);
         
         // Local to add picture from sender too
         Notification notification = new Notification(icon, msg, when);

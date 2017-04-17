@@ -50,7 +50,7 @@ public class Comments_Inbox_Upload extends WakefulBroadcastReceiver {
 	   public void onReceive(Context context, Intent intent) {   
 
 	    	
-	    	Log.i(TAG, "Comments_Inbox_Upload onReceive");
+	    	//Log.i(TAG, "Comments_Inbox_Upload onReceive");
 
 			    
 	    	Comments_Inbox_Handler(context);
@@ -74,7 +74,7 @@ public class Comments_Inbox_Upload extends WakefulBroadcastReceiver {
 	     */
 
 	    public void cancelAlarm(Context context) {
-	        	Log.d(TAG, "Comments_Inbox_Upload cancelAlarm");
+	        	//Log.d(TAG, "Comments_Inbox_Upload cancelAlarm");
 	        	
 	        	Intent intent = new Intent(context, Comments_Inbox_Upload.class);
 	        	alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
@@ -101,7 +101,7 @@ public class Comments_Inbox_Upload extends WakefulBroadcastReceiver {
 			        	//------------------
 
 			        	//------------------
-			        	Log.e(TAG,"data_comments.getString(KEY_COMMENT): " + data_comments.getString(KEY_COMMENT));
+			        	//Log.e(TAG,"data_comments.getString(KEY_COMMENT): " + data_comments.getString(KEY_COMMENT));
 			        	
 			        	//Your code goes here
 			        	//*

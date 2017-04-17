@@ -49,8 +49,8 @@ public class PicURL_Places_Service {
 		   //JSONArray array = object.getJSONArray("picture");
 		   //------------------------------------------------
 		   //-----------------------------------------------
-		   //Log.v(TAG, "array.length(): " + array.length());
-		   Log.v(TAG, "object.length(): " + object.length());
+		   ////Log.v(TAG, "array.length(): " + array.length());
+		   //Log.v(TAG, "object.length(): " + object.length());
 		   //---------------------------	 
 		   //return array;
 		   return object;
@@ -69,7 +69,7 @@ public class PicURL_Places_Service {
 	   urlString.append("?fields=picture.height(64).width(64)");
 	   urlString.append("&access_token=" +	Access_Token);
 
-	   Log.e(TAG, "urlString_PicURL_Places: " + urlString);
+	   //Log.e(TAG, "urlString_PicURL_Places: " + urlString);
 
 	  return urlString.toString();
 	 }

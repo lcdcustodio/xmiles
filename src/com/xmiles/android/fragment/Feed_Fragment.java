@@ -90,7 +90,6 @@ public class Feed_Fragment extends Fragment implements LoaderManager.LoaderCallb
 	private Cursor data_newsfeed;
 	//-----------------------	
 	private View rootView;
-	private View searchBus;
 	//-----------------------
     // GPSTracker class
 	GPSTracker gps;
@@ -104,13 +103,12 @@ public class Feed_Fragment extends Fragment implements LoaderManager.LoaderCallb
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
  
-		Log.i(TAG, "onCreateView Feed_fgmt");
+		//Log.i(TAG, "onCreateView Feed_fgmt");
 		
 		getActivity().registerReceiver(FeedFragmentReceiver, new IntentFilter("feedfragmentupdater"));
 		
 		rootView = inflater.inflate(R.layout.fgmt_background, container, false);
 
-		searchBus = inflater.inflate(R.layout.search_buscode_button, container, false);
 		
 		View custom = inflater.inflate(R.layout.feed_fgmt, null); 
 
@@ -138,29 +136,8 @@ public class Feed_Fragment extends Fragment implements LoaderManager.LoaderCallb
 		//--------------
 		
 		Feed_Query fq = new Feed_Query();
-		///*
-		buscode_button = (Button) searchBus.findViewById(R.id.search);
-	    buscode_button.setOnClickListener(new OnClickListener() {
 
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				
-				
-                //Hide searchBus Button
-                //((ViewGroup) rootView).removeView(searchBus);
-
-				
-                Intent intent = new Intent(getActivity(), Gmaps.class);                        
-                
-                startActivity(intent);
-
-			}	
-		});
-		//*/
-  
-		//---------------		
-		//((ViewGroup) rootView).addView(searchBus);		
+  	
 		((ViewGroup) rootView).addView(custom);
 		
 		
@@ -172,7 +149,7 @@ public class Feed_Fragment extends Fragment implements LoaderManager.LoaderCallb
 	    public void onDestroyView() {
 	        super.onDestroyView();
 	        
-	        Log.d(TAG, "onDestroy Feed_fgmt");
+	        //Log.d(TAG, "onDestroy Feed_fgmt");
 	        
 	        //-------------
 	        getActivity().unregisterReceiver(FeedFragmentReceiver);
@@ -251,7 +228,7 @@ public class Feed_Fragment extends Fragment implements LoaderManager.LoaderCallb
 		 * */
 		private void parseJsonFeed(Cursor newsfeed) {
 			
-			//Log.w(TAG, "newsfeed.getCount(): " + newsfeed.getCount());
+			////Log.w(TAG, "newsfeed.getCount(): " + newsfeed.getCount());
 			
 			for (int i = 0; i < newsfeed.getCount(); i++) {
 
@@ -327,7 +304,7 @@ public class Feed_Fragment extends Fragment implements LoaderManager.LoaderCallb
 		public void onLoadFinished(Loader<Cursor> arg0, Cursor arg1) {
 			// TODO Auto-generated method stub
 			
-			Log.d(TAG, "Feed_Fgmnt onLoadFinished");			
+			//Log.d(TAG, "Feed_Fgmnt onLoadFinished");			
 			
 			listView.setAdapter(null);
 			//---------------

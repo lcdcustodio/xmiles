@@ -64,6 +64,8 @@ public class Splash_Fragment extends Fragment {
 	private static final Integer KEY_PICTURE    = 2;
 	private static final Integer KEY_CREATED_AT = 5;
 	
+	private static final Integer KEY_LAST_UPDATE = 3;
+	
 	
 	private static String user_id;
 	private static String user_name;
@@ -102,7 +104,7 @@ public class Splash_Fragment extends Fragment {
 		protected void onPreExecute() {
 			super.onPreExecute();
 			// before making http calls
-			Log.e(TAG, "Pre execute");
+			//Log.e(TAG, "Pre execute");
 
 		}
 
@@ -113,7 +115,7 @@ public class Splash_Fragment extends Fragment {
 			 * before launching the app
 			 * example:
 			 */
-			Log.i(TAG, "Splash_Fragment - doInBackground");
+			//Log.i(TAG, "Splash_Fragment - doInBackground");
 			//------
 			Support support = new Support();
 			
@@ -139,14 +141,14 @@ public class Splash_Fragment extends Fragment {
 		    }
 
 
-			Log.v(TAG, "delta_days: " + delta_days);
+			//Log.v(TAG, "delta_days: " + delta_days);
 
 
 			//if (data_profile.getCount() > 0 && delta_days < 0){
 			if (data_profile.getCount() > 0 && delta_days < 5){	
 			
 
-				Log.d(TAG, "facebook profile from SQLite");
+				//Log.d(TAG, "facebook profile from SQLite");
 				
 				user_id   = data_profile.getString(KEY_USER_ID);
 				user_name = data_profile.getString(KEY_NAME);				
@@ -157,15 +159,15 @@ public class Splash_Fragment extends Fragment {
 				
 			} else {
 
-				Log.d(TAG, "facebook profile Facebook SDK");
+				//Log.d(TAG, "facebook profile Facebook SDK");
 				
 				// facebook profile
 				facebook_profile = new GetFacebookProfile().GetResult(Utility.mFacebook.getAccessToken());
-				Log.i(TAG, "facebook_profile: " + facebook_profile);
+				//Log.i(TAG, "facebook_profile: " + facebook_profile);
 				
 				// facebook friends
 				facebook_friends = new GetFacebookFriends().GetResult(Utility.mFacebook.getAccessToken());
-				Log.e(TAG, "facebook_friends: " + facebook_friends);
+				//Log.e(TAG, "facebook_friends: " + facebook_friends);
 				
 				try {
 				
@@ -176,7 +178,7 @@ public class Splash_Fragment extends Fragment {
 					time_stamp = support.getDateTime();
 					flag_picurl = false;
 					
-					//Log.w(TAG, "picurl: " + picurl);					
+					////Log.w(TAG, "picurl: " + picurl);					
 					
 					//--------------------------------------
 					//NECESSÁRIO TESTAR COM PERFIL DO KUKI QUE NÃO POSSUI AMIGOS DO FB NO XMILES
@@ -195,7 +197,7 @@ public class Splash_Fragment extends Fragment {
 						}
 						
 					}
-					Log.e(TAG, "fb_friends_id: " + fb_friends_id);
+					//Log.e(TAG, "fb_friends_id: " + fb_friends_id);
 					
 				
 				} catch (JSONException e) {
@@ -256,12 +258,40 @@ public class Splash_Fragment extends Fragment {
                 	
                 	//NEWSFEED
                 	xMiles_getNewsfeed(user_id);
-                	//xMiles_getNewsfeed(facebook_profile.getString("id"));
-                	//xMiles_getNewsfeed("783414521747915");
-
-                	//RANKING
-                	xMiles_getRanking();				
                 	
+        			Uri uri_2 = SqliteProvider.CONTENT_URI_HISTORY;
+        			Cursor data_history = getActivity().getApplicationContext().getContentResolver().query(uri_2, null, null, null, null);
+        			data_history.moveToFirst();
+        			//-----
+        			//-----
+        			long delta_hours;
+        			//-----			
+        			try {
+        				
+        				long diff = System.currentTimeMillis() -
+        						Long.parseLong(support.getDateTime_long(data_history.getString(KEY_LAST_UPDATE))); 
+        				
+        				delta_hours = TimeUnit.HOURS.convert(diff, TimeUnit.MILLISECONDS);
+
+
+        				
+        			} catch (Exception e) {  	
+        				// TODO Auto-generated catch block
+        				e.printStackTrace();
+        				
+        				delta_hours = 20;
+        		    }
+        			
+        			//Log.e(TAG, "delta_hours: " +  delta_hours);
+        			
+        			if (delta_hours > 14){
+
+	                	//RANKING
+	                	xMiles_getRanking();	
+	                	
+	                	//HISTORY
+	                	xMiles_getHistory(user_id);
+        			}
                 	//Upload Friends
                 	if (flag_fb_friends) {
                 		xMiles_upFriends(user_id);
@@ -285,7 +315,7 @@ public class Splash_Fragment extends Fragment {
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
 
-			Log.i(TAG, "Splash_Fragment - onPostExecute");
+			//Log.i(TAG, "Splash_Fragment - onPostExecute");
 			// After completing http call
 			// will close this activity and lauch main activity
 			// close this activity
@@ -321,6 +351,9 @@ public class Splash_Fragment extends Fragment {
 			
 			         //RANKING
 			         xMiles_getRanking();				
+			         
+	                 //HISTORY
+	                 xMiles_getHistory(id);
 			         
 			         
 	                 //Upload Friends
@@ -494,6 +527,65 @@ public class Splash_Fragment extends Fragment {
     	//return json;
     }
 
-    
+    public void xMiles_getHistory(String user_id) {
+		//Your code goes here
+    	//------------
+    	ContentValues[] valueList;
+    	JSONArray jsonArray;
+    	//-----------
+		UserFunctions userFunc = new UserFunctions();
+		String hashtag = "#histórico_pontuação";
+		JSONObject json = userFunc.getNewsfeed_by_hashtag(user_id,hashtag);
+
+        try {
+
+        	if (json.getString("success") != null) {
+
+			    String res = json.getString("success");
+			    if(Integer.parseInt(res) == 1){
+
+			    	jsonArray = new JSONArray(json.getString("feed"));
+			    	valueList = new ContentValues[jsonArray.length()];
+			    	
+			    	//Log.i(TAG, "getHistory: " + jsonArray.getJSONObject(0).getString("status"));
+			    	
+					for (int position = 0; position < jsonArray.length(); position++) {
+
+						JSONObject jsonObject = null;
+
+						try {
+							ContentValues values = new ContentValues();
+							jsonObject = jsonArray.getJSONObject(position);
+
+							values.put(DatabaseHelper.KEY_ID, jsonObject.getString("id"));
+							values.put(DatabaseHelper.KEY_STATUS, jsonObject.getString("status"));
+							values.put(DatabaseHelper.KEY_TIME_STAMP, jsonObject.getString("time_stamp"));
+							
+							Support support = new Support();							
+							
+							values.put(DatabaseHelper.KEY_LAST_UPDATE, support.getDateTime());
+							
+							valueList[position] = values;
+
+
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+					}
+
+					getActivity().getContentResolver().bulkInsert(SqliteProvider.CONTENT_URI_HISTORY_create, valueList);
+					
+
+			    }
+			}
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+    	//return json;
+    }
     
 }

@@ -41,7 +41,7 @@ public class Support {
 		}
 		catch (NameNotFoundException e)
 		{
-		    Log.e(TAG, e.getMessage());
+		    //Log.e(TAG, e.getMessage());
 		}
 		
 		return app_ver;
@@ -57,7 +57,7 @@ public class Support {
 		}
 		catch (NameNotFoundException e)
 		{
-		    Log.e(TAG, e.getMessage());
+		    //Log.e(TAG, e.getMessage());
 		}
 		
 		return Integer.toString(app_ver);
@@ -103,8 +103,8 @@ public class Support {
 			d = dateFormat.parse(time1);
 			milliseconds = d.getTime();
 			
-			//Log.e(TAG,"getDateTime(): " + getDateTime());
-			//Log.d(TAG,"milliseconds: " + milliseconds);
+			////Log.e(TAG,"getDateTime(): " + getDateTime());
+			////Log.d(TAG,"milliseconds: " + milliseconds);
 			
 
 
@@ -168,9 +168,9 @@ public class Support {
 		sdfBrazil.setTimeZone(tzInBrazil);					
 		String sDateBrazil = sdfBrazil.format(date); // Convert to String first
 		/*
-		Log.v(TAG, "UTCtime: " + UTCtime);
-		Log.i(TAG, "dateInBrazil: " + sDateBrazil);		
-		Log.v(TAG, "lala: " + getDateTime());
+		//Log.v(TAG, "UTCtime: " + UTCtime);
+		//Log.i(TAG, "dateInBrazil: " + sDateBrazil);		
+		//Log.v(TAG, "lala: " + getDateTime());
 		*/
 		
 		return sDateBrazil;

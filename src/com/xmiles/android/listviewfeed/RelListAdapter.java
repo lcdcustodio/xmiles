@@ -94,7 +94,7 @@ public class RelListAdapter extends BaseAdapter {
 		
 		SupportRelAdapterItem supportreladapter_item = supportreladapterItems.get(position);
 		
-		//Log.e(TAG, "supportreladapter_item.getType_action(): " + supportreladapter_item.getType_action());
+		////Log.e(TAG, "supportreladapter_item.getType_action(): " + supportreladapter_item.getType_action());
 		
 		if (supportreladapter_item.getType_action().equals("newsfeed")){
 			return TYPE1;
@@ -282,7 +282,7 @@ public class RelListAdapter extends BaseAdapter {
 					
 					if (feed_item.getHashtag_1().split(",").length > 1) {
 
-						//Log.e(TAG,"item.getHashtag_1().split(,)[1]: " + feed_item.getHashtag_1().split(",")[1]);
+						////Log.e(TAG,"item.getHashtag_1().split(,)[1]: " + feed_item.getHashtag_1().split(",")[1]);
 						
 						vi1_hashtag_2.setText(feed_item.getHashtag_1().split(",")[1]);
 						vi1_hashtag_2.setVisibility(View.VISIBLE);
@@ -354,8 +354,8 @@ public class RelListAdapter extends BaseAdapter {
 					
 					LikeItem like_item = likeItems.get(i);
 					//-------
-					Log.e(TAG,"like_item.getName(): " + like_item.getName());
-					Log.e(TAG,"like_item.getProfilePic(): " + like_item.getProfilePic());
+					//Log.e(TAG,"like_item.getName(): " + like_item.getName());
+					//Log.e(TAG,"like_item.getProfilePic(): " + like_item.getProfilePic());
 					//-------					
 				    switch(i){
 				       case 0:

@@ -5,8 +5,10 @@ import com.xmiles.android.fragment.Push_Fragment;
 
 import android.app.ActionBar;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.app.ActionBar.Tab;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
@@ -21,6 +23,32 @@ public class Push extends FragmentActivity {
 	      super.onCreate(savedInstanceState);
 
 	      setContentView(R.layout.activity_extra);
+	      
+ 	   	  //Progress Dialog
+	      /*
+  		  final ProgressDialog pb_push;
+  		  pb_push = new ProgressDialog(this);
+  		  pb_push.setCancelable(true);
+  		  pb_push.setMessage(this.getString(R.string.please_wait));
+  		  pb_push.show();		        		
+  		
+  	      new Handler().postDelayed(new Runnable() {
+
+  	          @Override
+  	          public void run() {
+  	              if (!isFinishing()) {
+  	            	
+  	            	  pb_push.dismiss();
+  	            	
+  	              }
+  	          }
+
+				  private boolean isFinishing() {
+					  // TODO Auto-generated method stub
+					  return false;
+				  }
+  	      }, 3000);
+  	      */	
 
 	      ActionBar actionBar = getActionBar();
 		  actionBar.setDisplayHomeAsUpEnabled(true);
@@ -39,6 +67,8 @@ public class Push extends FragmentActivity {
 
 	      // Enable Action Bar
 	      actionBar.show();
+	      
+ 
 
 	}
 	

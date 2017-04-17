@@ -16,6 +16,7 @@ import com.xmiles.android.scheduler.Likes_Inbox_Upload;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
 import com.xmiles.android.support.ConnectionDetector;
+import com.xmiles.android.support.GetGpsToken;
 import com.xmiles.android.support.Support;
 
 
@@ -155,6 +156,7 @@ public class FeedListAdapter extends BaseAdapter {
 		        	}else if (hashtag_1.getText().toString().equals(PROFILE)){
 		        		//-----------------						
 		        	   	//Progress Dialog
+		        		/*
 		        		final ProgressDialog pb;
 		        		pb = new ProgressDialog(activity);
 		        		pb.setCancelable(true);
@@ -177,7 +179,8 @@ public class FeedListAdapter extends BaseAdapter {
 								return false;
 							}
 		        	    }, 3000);		        		
-		        		//-----------------
+		        		//-----------------		        		 
+		        		*/
 		        		
 						//Intent intent = new Intent(activity, Ranking.class);	
 						Intent intent = new Intent(activity, Profile.class);
@@ -212,7 +215,7 @@ public class FeedListAdapter extends BaseAdapter {
 			public void onClick(View v) {
 				// TODO Auto-generated method stub
 				
-				Log.e(TAG,"hashtag_2: " + hashtag_2.getText().toString());
+				//Log.e(TAG,"hashtag_2: " + hashtag_2.getText().toString());
 				
 				
 				cd = new ConnectionDetector(activity.getApplicationContext());
@@ -233,6 +236,7 @@ public class FeedListAdapter extends BaseAdapter {
 		        	}else if (hashtag_2.getText().toString().equals(PROFILE)){
 						//-----------------		        		
 		        	   	//Progress Dialog
+		        		/*
 		        		final ProgressDialog pb;
 		        		pb = new ProgressDialog(activity);
 		        		pb.setCancelable(true);
@@ -255,6 +259,7 @@ public class FeedListAdapter extends BaseAdapter {
 								return false;
 							}
 		        	    }, 3000);
+		        	    */
 						//-----------------
 						Intent intent = new Intent(activity, Profile.class);		        		
 						activity.startActivity(intent);						
@@ -407,7 +412,7 @@ public class FeedListAdapter extends BaseAdapter {
 					
 					//if (data_likes.getCount() == 0) {
 						//cv_2.put(DatabaseHelper.KEY_FLAG_ACTION, "ADD");
-						Log.e(TAG,"KEY_FLAG_ACTION: " + "ADD");
+						//Log.e(TAG,"KEY_FLAG_ACTION: " + "ADD");
 						//-------
 						Uri uri_5 = SqliteProvider.CONTENT_URI_LIKES_UPLOAD_insert;
 						activity.getContentResolver().insert(uri_5, cv_2);
@@ -418,7 +423,7 @@ public class FeedListAdapter extends BaseAdapter {
 						//-------
 					//} else {
 						//cv_2.put(DatabaseHelper.KEY_FLAG_ACTION, "WAIT");
-						//Log.i(TAG,"KEY_FLAG_ACTION: " + "WAIT");
+						////Log.i(TAG,"KEY_FLAG_ACTION: " + "WAIT");
 	                	//DatabaseHelper mDatabaseHelper;
 	                	//mDatabaseHelper = new DatabaseHelper(activity);
 	                	//mDatabaseHelper.resetLikes_upload();
@@ -508,7 +513,7 @@ public class FeedListAdapter extends BaseAdapter {
 		        } else {
 				
 					int pos_btn_comment = (Integer)v.getTag();
-					Log.e(TAG,"pos_btn_comment: " + pos_btn_comment);
+					//Log.e(TAG,"pos_btn_comment: " + pos_btn_comment);
 	
 					Uri uri = SqliteProvider.CONTENT_URI_NEWSFEED;
 					Cursor data_newsfeed = activity.getContentResolver().query(uri, null, null, null, null);
@@ -547,58 +552,74 @@ public class FeedListAdapter extends BaseAdapter {
 	    	 rel_stats.setVisibility(View.GONE);
 	    	 
 	     } else {
-	    	 rel_stats.setVisibility(View.VISIBLE); 
+	    	//Test @april-11th disabling for MVP launching at April/17
+	    	//rel_stats.setVisibility(View.VISIBLE); 
 	 		// like, comments stats
-	 		rel_stats.setText(item.getLike_stats() + " curtida(s) " +  item.getComment_stats() + " comentário(s)");
+	    	//Test @april-11th disabling for MVP launching at April/17 
+	 		//rel_stats.setText(item.getLike_stats() + " curtida(s) " +  item.getComment_stats() + " comentário(s)");
 	    	 
 	     }
 	     
 	     //Like Button
 	     if (item.getYou_like_this().equals("YES")){
 	    	 
-	    	 //like.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_icon_active_new_green, 0, 0, 0);	    	 
-	    	 like.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_icon_active_new_orange_20, 0, 0, 0);
-	    	 //like.setTextColor(activity.getResources().getColor(R.color.green_dark));
-	    	 like.setTextColor(activity.getResources().getColor(R.color.ab_mid));
-	    	 like.setText("Curtiu");
+	    	 //Test @april-11th disabling for MVP launching at April/17
+	    	 //like.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_icon_active_new_orange_20, 0, 0, 0);
+	    	 //Test @april-11th disabling for MVP launching at April/17
+	    	 //like.setTextColor(activity.getResources().getColor(R.color.ab_mid));
+	    	 //Test @april-11th disabling for MVP launching at April/17
+	    	 //like.setText("Curtiu");
 	    	 //---
-	    	 comment.setText("Comentar");
-	    	 //---	    	 
-	    	 like.setTextSize(TypedValue.COMPLEX_UNIT_DIP,14);
+	    	 //Test @april-11th disabling for MVP launching at April/17
+	    	 //comment.setText("Comentar");
+	    	 //---
+	    	 //Test @april-11th disabling for MVP launching at April/17
+	    	 //like.setTextSize(TypedValue.COMPLEX_UNIT_DIP,14);
 	    	 like.setEnabled(false);
 	    	 
 	     } else {
-
-	    	 like.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_light_grey_l, 0, 0, 0);
-	    	 like.setTextColor(activity.getResources().getColor(R.color.timestamp));
-	    	 like.setText("Curtir");
+	    	 //Test @april-11th disabling for MVP launching at April/17
+	    	 //like.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_light_grey_l, 0, 0, 0);
+	    	 //Test @april-11th disabling for MVP launching at April/17
+	    	 //like.setTextColor(activity.getResources().getColor(R.color.timestamp));
+	    	 //Test @april-11th disabling for MVP launching at April/17
+	    	 //like.setText("Curtir");
 	    	 //---
-	    	 comment.setText("Comentar");
-	    	 //---	    	 
-
+	    	 //Test @april-11th disabling for MVP launching at April/17
+	    	 //comment.setText("Comentar");
+	    	 //---
+	    	 //Test @april-11th disabling for MVP launching at April/17
+	    	 //like.setTextSize(TypedValue.COMPLEX_UNIT_DIP,13);
 	    	 
-	    	 like.setTextSize(TypedValue.COMPLEX_UNIT_DIP,13);
-	    	 //like.setEnabled(true);
 	    	 
 	    	 if (item.getId() > -1){
-	    		 like.setEnabled(true);
-	    		 comment.setEnabled(true);
+	    		 //Test @april-11th disabling for MVP launching at April/17
+	    		 //like.setEnabled(true);
+	    		 //Test @april-11th disabling for MVP launching at April/17
+	    		 //comment.setEnabled(true);
 
-	    	 //} else {
 	    	 } else if (item.getId() == -1){	 
 	    		 like.setEnabled(false);	
 	    		 comment.setEnabled(false);
-	    		 //like.setVisibility(View.GONE);
-	    		 //comment.setVisibility(View.GONE);	    		 
-	    		 //------------------
 	    		 like.setText("");
 	    		 like.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 	    		 comment.setText("");
 	    		 comment.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
 	    	 }
 	     }
-	     
-	     
+	    //******************************************************** 
+	    //Test @april-11th disabling for MVP launching at April/17 
+	    rel_stats.setVisibility(View.GONE);
+	    View v1 = (View) convertView.findViewById(R.id.View01);
+	    v1.setVisibility(View.GONE);
+		like.setEnabled(false);	
+		comment.setEnabled(false);
+		like.setText("");
+		like.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+		comment.setText("");
+		comment.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+		//Test @april-11th disabling for MVP launching at April/17 
+	    //********************************************************
 		
 		Support support = new Support();
 		
@@ -642,8 +663,13 @@ public class FeedListAdapter extends BaseAdapter {
 		// Checking for null feed url
 		//if (item.getUrl() != null) {
 		if (item.getUrl() != null && !item.getUrl().equals("")) {	
+			//url.setText(Html.fromHtml("<a href=\"" + item.getUrl() + "\">"
+			//		+ item.getUrl() + "</a> "));
+			
+			GetGpsToken gt = new GetGpsToken();
+			
 			url.setText(Html.fromHtml("<a href=\"" + item.getUrl() + "\">"
-					+ item.getUrl() + "</a> "));
+					+ "xml.es/" + gt.md5(item.getUrl()).substring(0, 6) + "</a> "));
 
 			// Making url clickable
 			url.setMovementMethod(LinkMovementMethod.getInstance());
@@ -675,14 +701,35 @@ public class FeedListAdapter extends BaseAdapter {
 			
 			//hashtag_1.setText(item.getHashtag_1());
 			hashtag_1.setText(item.getHashtag_1().split(",")[0]);
-			hashtag_1.setVisibility(View.VISIBLE);
+			
+			//hashtag_1.setVisibility(View.VISIBLE);
+			//********************************************************
+			//Test @april-11th disabling for MVP launching at April/17
+			if(hashtag_1.getText().toString().equals(RANKING) || hashtag_1.getText().toString().equals(PROFILE)){
+				hashtag_1.setVisibility(View.VISIBLE);
+			}else{
+				hashtag_1.setVisibility(View.GONE);	
+			}
+			//Test @april-11th disabling for MVP launching at April/17
+			//********************************************************
 
 			if (item.getHashtag_1().split(",").length > 1) {
 
-				//Log.e(TAG,"item.getHashtag_1().split(,)[1]: " + item.getHashtag_1().split(",")[1]);
+				////Log.e(TAG,"item.getHashtag_1().split(,)[1]: " + item.getHashtag_1().split(",")[1]);
 				
 				hashtag_2.setText(item.getHashtag_1().split(",")[1]);
-				hashtag_2.setVisibility(View.VISIBLE);
+				//hashtag_2.setVisibility(View.VISIBLE);
+				//********************************************************
+				//Test @april-11th disabling for MVP launching at April/17
+				if(hashtag_2.getText().toString().equals(RANKING) || hashtag_2.getText().toString().equals(PROFILE)){
+					hashtag_2.setVisibility(View.VISIBLE);
+				}else{
+					hashtag_2.setVisibility(View.GONE);	
+				}
+				//Test @april-11th disabling for MVP launching at April/17
+				//********************************************************
+				
+				
 			} else {
 				hashtag_2.setVisibility(View.GONE);
 			}

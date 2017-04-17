@@ -66,7 +66,7 @@ public class Ranking_Fragment extends Fragment {
 	TextView Route;
 	protected static JSONArray jsonArray;
 	protected static JSONObject json;
-	ProgressDialog progressBar;
+	//ProgressDialog progressBar;
 	Cursor data_Ranking;
 	
 	//-----------------------
@@ -89,11 +89,11 @@ public class Ranking_Fragment extends Fragment {
 		list 		   = (ListView) custom.findViewById(R.id.list);
 		//---------------
 		
-        progressBar = new ProgressDialog(getActivity());
+        //progressBar = new ProgressDialog(getActivity());
 
-        progressBar.setCancelable(true);
-		progressBar.setMessage(getActivity().getString(R.string.please_wait));
-		progressBar.show();
+        //progressBar.setCancelable(true);
+		//progressBar.setMessage(getActivity().getString(R.string.please_wait));
+		//progressBar.show();
 
 
 		Ranking_Query rq = new Ranking_Query();
@@ -109,7 +109,7 @@ public class Ranking_Fragment extends Fragment {
 	    public void onDestroyView() {
 	        super.onDestroyView();
 	        
-	        Log.d(TAG, "onDestroy Ranking_fgmt");
+	        //Log.d(TAG, "onDestroy Ranking_fgmt");
 	    }
 	 
 	 public class Ranking_Query {
@@ -143,7 +143,7 @@ public class Ranking_Fragment extends Fragment {
 				e.printStackTrace();
 			}
 			//-----------
-			//progressBar.dismiss();
+
 			runThread();			 
 
 		 }
@@ -167,7 +167,7 @@ public class Ranking_Fragment extends Fragment {
 	                            });
 	                            //Thread.sleep(400);
 	                            Thread.sleep(50);
-	                            progressBar.dismiss();
+	                            //progressBar.dismiss();
 	                            
 	                        } catch (InterruptedException e) {
 	                            e.printStackTrace();

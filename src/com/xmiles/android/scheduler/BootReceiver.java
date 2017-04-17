@@ -33,7 +33,7 @@ public class BootReceiver extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		// TODO Auto-generated method stub
 
-		Log.v(TAG, "Boot Receiver");
+		//Log.v(TAG, "Boot Receiver");
 		
 		if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")){
 			
@@ -67,7 +67,7 @@ public class BootReceiver extends BroadcastReceiver {
 					}
 
 					String status = "O seu telefone foi desligado ou ficou sem bateria durante <bold>a conexão com o  " + bus_type + " " + bus_gps_url.getString(KEY_BUSCODE) + " <bold>." +
-									" Os pontos acumulados dessa rota foram descartados.";
+									" Logo os pontos acumulados dessa rota foram descartados.";
 
 					
 					DatabaseHelper mDatabaseHelper;

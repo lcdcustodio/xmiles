@@ -7,7 +7,8 @@ import com.xmiles.android.fragment.Ranking_Fragment;
 
 import com.xmiles.android.pushnotifications.ServerUtilities;
 import com.xmiles.android.pushnotifications.WakeLocker;
-import com.xmiles.android.slidingmenu.adapter.SlidingMenuLazyAdapter;
+
+
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.support.ConnectionDetector;
 import com.xmiles.android.support.GPSTracker;
@@ -189,7 +190,7 @@ public class MainActivity extends FragmentActivity {
  			if (GCMRegistrar.isRegisteredOnServer(getApplicationContext())) {
  				// Skips registration.				
  				//Toast.makeText(getApplicationContext(), "Already registered with GCM", Toast.LENGTH_LONG).show();
- 				Log.e(TAG, "Already registered with GCM");
+ 				//Log.e(TAG, "Already registered with GCM");
  			} else {
  				// Try to register again, but not in the UI thread.
  				// It's also necessary to cancel the thread onDestroy(),
@@ -254,6 +255,11 @@ public class MainActivity extends FragmentActivity {
 
 			case R.id.buscode_search:
 				
+				//new Chaos_Monkey_Test(getApplicationContext()).execute();
+				//Chaos_Monkey_SetAlarm cms = new Chaos_Monkey_SetAlarm();
+				//cms.setAlarm(getApplicationContext());
+				
+				//*
 				cd = new ConnectionDetector(getApplicationContext());
 				
 				// Check if Internet present
@@ -273,6 +279,7 @@ public class MainActivity extends FragmentActivity {
 		        	go2Gmaps();
 				
 		        }
+		        //*/
 
 				return true;	
 				
@@ -295,7 +302,8 @@ public class MainActivity extends FragmentActivity {
 
 	        if(!gps.canGetGPSLocation() || !gps.canGetNW_Location()){	
 				//gps.showSettingsAlert();
-	        	Toast.makeText(getApplicationContext(), getString(R.string.location_service), Toast.LENGTH_SHORT).show();
+	        	//Toast.makeText(getApplicationContext(), getString(R.string.location_service), Toast.LENGTH_SHORT).show();
+	        	Toast.makeText(getApplicationContext(), getString(R.string.content_notification_01), Toast.LENGTH_SHORT).show();
 			} else{
 				gps.getLocation(2);
 				
@@ -454,7 +462,7 @@ public class MainActivity extends FragmentActivity {
 		@Override
 		protected void onDestroy() {
 			
-			Log.i(TAG,"onDestroy MainActivity");
+			//Log.i(TAG,"onDestroy MainActivity");
 			
 			if (mRegisterTask != null) {
 				mRegisterTask.cancel(true);
@@ -463,7 +471,7 @@ public class MainActivity extends FragmentActivity {
 				unregisterReceiver(mHandleMessageReceiver);
 				GCMRegistrar.onDestroy(this);
 			} catch (Exception e) {
-				Log.e("UnRegister Receiver Error", "> " + e.getMessage());
+				//Log.e("UnRegister Receiver Error", "> " + e.getMessage());
 			}
 			super.onDestroy();
 		}

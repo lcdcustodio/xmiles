@@ -73,7 +73,7 @@ import android.util.Log;
 				Cursor fb_places = context.getContentResolver().query(uri_3, null, null, null, null);
 				fb_places.moveToFirst();
 		 		
-				Log.e(TAG,"fb_places.getCount(): " + fb_places.getCount());
+				//Log.e(TAG,"fb_places.getCount(): " + fb_places.getCount());
 				*/
 				//---------------------------
             	DatabaseHelper mDatabaseHelper;
@@ -84,7 +84,7 @@ import android.util.Log;
 				Cursor fb_places2 = context.getContentResolver().query(uri_3, null, null, null, null);
 				fb_places2.moveToFirst();            	
             	
-            	Log.e(TAG,"fb_places.getCount(): " + fb_places2.getCount());
+            	//Log.e(TAG,"fb_places.getCount(): " + fb_places2.getCount());
             	*/
 		 		//--------------------		 		
 			 	
@@ -153,7 +153,7 @@ import android.util.Log;
 		 } catch (NullPointerException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
-					Log.e(TAG, "findPlaces = null");
+					//Log.e(TAG, "findPlaces = null");
 
 		 }
 	   

@@ -28,7 +28,7 @@ public class HttpGetAsyncTask  extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {    	
 
-    	//Log.w("FACEBOOK", "result: " + result);
+    	////Log.w("FACEBOOK", "result: " + result);
     	
     	jsonArray = result;
     
@@ -56,7 +56,7 @@ public class HttpGetAsyncTask  extends AsyncTask<String, Void, String> {
 				result = "Did not work!";
 		
 		} catch (Exception e) {
-			Log.d("FACEBOOK", e.getLocalizedMessage());
+			//Log.d("FACEBOOK", e.getLocalizedMessage());
 		}
 		
 		return result;

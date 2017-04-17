@@ -13,7 +13,8 @@ import org.json.JSONObject;
 
 import com.google.android.maps.GeoPoint;
 import com.xmiles.android.R;
-import com.xmiles.android.backup.DataRioHttpGetAsyncTask;
+
+
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
 import com.xmiles.android.support.ConnectionDetector;
@@ -65,6 +66,7 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 	ConnectionDetector cd;
 	
 	private static boolean flag_internet_conn = true;
+	private static boolean gps_issue = true;
 
 	//private static final Integer MAX_POINTS = 4;
 	//# times criteria (dist > MAX_POINTS || time > MAX_TIME_OFFSET) is not fulfil
@@ -80,7 +82,7 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 	@Override
 	public void onReceive(Context ctx, Intent intent) {
 		// TODO Auto-generated method stub
-	 	Log.i(TAG, "GpsBusData onReceive");
+	 	//Log.i(TAG, "GpsBusData onReceive");
 	 		 			
 		try {
 			//DO something
@@ -119,7 +121,7 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 	*/
 	public void cancelAlarm(Context context) {
 
-		Log.d(TAG, "GpsBusData cancelAlarm");
+		//Log.d(TAG, "GpsBusData cancelAlarm");
 
 		//---------------
         // locationManager.removeUpdates
@@ -168,34 +170,42 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 			
-			Log.e(TAG, "Begin JSONException - InternetConnectionLost");
+			//Log.e(TAG, "Begin JSONException - InternetConnectionLost");
 			
 			cd = new ConnectionDetector(ctx.getApplicationContext());
 			
 			// Check if Internet present
 			if (!cd.isConnectingToInternet()) {
 				
-				flag_internet_conn = NoInternetConnection(ctx, buscode, bus_type);
+				String reason = "no_internet";
+				
+				flag_internet_conn = NoInternetConnection(ctx, buscode, bus_type, reason);
 			
 			}				
-			Log.i(TAG, "END JSONException - InternetConnectionLost");
+			//Log.i(TAG, "END JSONException - InternetConnectionLost");
 			 
 		 }
 
 	    //----------------------------------------
 		//***** Getting UserLocation *************
-	    //----------------------------------------
-		if (flag_internet_conn){
-	        //get Latitude/Longitude
-	        gps = new GPSTracker(ctx);
-	        //----------------------------
-	        // check isGPSEnabled
-	        gps.getLocation(0);
-	        if(!gps.canGetGPSLocation()) {
+	    //----------------------------------------		
+	    //get Latitude/Longitude
+	    gps = new GPSTracker(ctx);
+	    
+	    // check isGPSEnabled
+	    gps.getLocation(0);
+	    if(!gps.canGetGPSLocation()) {
 	        	
-	        	gps.Notification_MSG();
-	        }
+	        //gps.Notification_MSG();
+	        	
+			String reason = "no_gps";
+				
+			gps_issue = NoInternetConnection(ctx, buscode, bus_type, reason);
+
+	    }
 	        //-----------------------------
+	    if (flag_internet_conn && gps_issue){
+	    	
 	        gps.getLocation(2);
 	
 	        
@@ -263,7 +273,7 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 					}
 		   		cV.put(DatabaseHelper.KEY_FLAG, flag + 1);
 		   		
-		   		Log.w(TAG,"flag: " + flag);
+		   		//Log.w(TAG,"flag: " + flag);
 		   		//----------------------------								
 		   		ctx.getContentResolver().insert(SqliteProvider.CONTENT_URI_BUS_GPS_URL_insert, cV);
 		    
@@ -276,8 +286,11 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 		    		// cancel Getting GpsBusData
 		        	cancelAlarm(ctx);
 		
-		        	GpsBusData_Upload gbd = new GpsBusData_Upload();
-		        	gbd.setAlarm(ctx);	    		
+		        	//GpsBusData_Upload gbd = new GpsBusData_Upload();
+		        	//gbd.setAlarm(ctx);
+		        	//---------------------
+		        	new GpsBusData_Upload_AsyncTask(ctx).execute();
+		        	//---------------------
 		    	} else {
 			 
 				  //need to add inside else condition in order to avoid repetition
@@ -296,7 +309,7 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 		}
     }
 	
-	public boolean NoInternetConnection(Context ctx, String bus_code, String bus_type){
+	public boolean NoInternetConnection(Context ctx, String bus_code, String bus_type, String reason){
 		
     	
 		DatabaseHelper mDatabaseHelper;
@@ -310,9 +323,20 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 		if (bus_type.equals("BUS")){
 			bus_type = "ônibus";
 		}
+		String status;
+		if (reason.equals("no_internet")){
+			
+			status = "Durante <bold>a conexão com o  " + bus_type + " " + bus_code + " <bold> você ficou temporariamente sem acesso à internet." +
+					" Logo os pontos acumulados dessa rota foram descartados.";			
+		}else{
+			
+			//status = "Durante <bold>a conexão com o  " + bus_type + " " + bus_code + " <bold> seu GPS foi temporariamente desabilitado." +
+			status = "Durante <bold>a conexão com o  " + bus_type + " " + bus_code + " <bold> seu GPS parou de funcionar." +
+					" Logo os pontos acumulados dessa rota foram descartados.";			
 
-		String status = "Durante <bold>a conexão com o  " + bus_type + " " + bus_code + " <bold> você ficou temporariamente sem acesso à internet." +
-							" Logo os pontos acumulados dessa rota foram descartados.";
+			
+		}
+
 		  
 		Support support = new Support();
 			
@@ -334,7 +358,14 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 		contentValues.put(DatabaseHelper.KEY_IMAGE, "");
 			
 		//feed_type
-		contentValues.put(DatabaseHelper.KEY_FEED_TYPE, "Users score issue - internet");
+		if (reason.equals("no_internet")){
+			contentValues.put(DatabaseHelper.KEY_FEED_TYPE, "Users score issue - internet");			
+		} else {
+			contentValues.put(DatabaseHelper.KEY_FEED_TYPE, "Users score issue - GPS");
+		}
+
+		
+		
 			
 		ctx.getContentResolver().insert(SqliteProvider.CONTENT_URI_NEWSFEED_UPLOAD_insert, contentValues);
 		//--------

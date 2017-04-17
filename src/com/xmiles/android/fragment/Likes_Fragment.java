@@ -107,7 +107,7 @@ public class Likes_Fragment extends Fragment {
 	    public void onDestroyView() {
 	        super.onDestroyView();
 	        
-	        Log.d(TAG, "onDestroy Likes_fgmt");
+	        //Log.d(TAG, "onDestroy Likes_fgmt");
 	    }
 	 
 	 public class Ranking_Query {

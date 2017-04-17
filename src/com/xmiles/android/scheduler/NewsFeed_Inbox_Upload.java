@@ -34,7 +34,8 @@ public class NewsFeed_Inbox_Upload extends WakefulBroadcastReceiver {
 	    
 		// The minimum time between updates in milliseconds
 	    //private static final long MIN_TIME_BW_UPDATES = 1000 * 1 * 3600; // 3600 seconds
-	    private static final long MIN_TIME_BW_UPDATES = 1000 * 1 * 360; // 360 seconds
+	    //private static final long MIN_TIME_BW_UPDATES = 1000 * 1 * 360; // 360 seconds
+	    private static final long MIN_TIME_BW_UPDATES = 1000 * 1 * 60; // 60 seconds
 	
 		protected static JSONArray jsonArray;
 		protected static JSONObject json;
@@ -62,15 +63,24 @@ public class NewsFeed_Inbox_Upload extends WakefulBroadcastReceiver {
 	   public void onReceive(Context context, Intent intent) {   
 
 	    	
-	    	Log.i(TAG, "NewsFeed_Inbox_Update onReceive");
+	    	Log.i(TAG, "NewsFeed Inbox (No Internet) onReceive");
+	    	
+            Uri uri_2 = SqliteProvider.CONTENT_URI_NEWSFEED_UPLOAD;
+        	Cursor data_NewsFeed = context.getContentResolver().query(uri_2, null, null, null, null);
+        	//data_NewsFeed.moveToFirst();			        	
+        	
+        	if (data_NewsFeed.getCount() > 0) {
+        		
+        		new NewsFeed_Inbox_Upload_AsyncTask(context).execute();
+        		
+        	} else {
+        		
+            	cancelAlarm(context);
+        	}
 
-			cd = new ConnectionDetector(context.getApplicationContext());
+
 			
-			// Check if Internet present
-			if (cd.isConnectingToInternet()) {
-			
-				NewsFeed_Inbox_Handler(context);
-			} 
+			 
 	    	
 	    }
 
@@ -90,8 +100,8 @@ public class NewsFeed_Inbox_Upload extends WakefulBroadcastReceiver {
 	     * @param context
 	     */
 
-	    public void cancelAlarm(Context context) {
-	        	Log.d(TAG, "Newsfeed_Upload cancelAlarm");
+	    public void cancelAlarm(Context context) {	        	
+		    	Log.d(TAG, "NewsFeed Inbox (No Internet) cancelAlarm");
 	        	
 	        	Intent intent = new Intent(context, NewsFeed_Inbox_Upload.class);
 	        	alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
@@ -99,7 +109,7 @@ public class NewsFeed_Inbox_Upload extends WakefulBroadcastReceiver {
 	        	alarmMgr.cancel(alarmIntent);	
 	       
 	    }
-	    
+	    /*
 	    public void NewsFeed_Inbox_Handler(final Context c){
 	    	
 			 Thread thread = new Thread(new Runnable(){
@@ -174,7 +184,8 @@ public class NewsFeed_Inbox_Upload extends WakefulBroadcastReceiver {
 				 public void run() {
 
 					try {
-							Thread.sleep(800);
+							//Thread.sleep(800);
+							Thread.sleep(3200);
 					} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -187,9 +198,6 @@ public class NewsFeed_Inbox_Upload extends WakefulBroadcastReceiver {
 			                String res = json.getString("success");
 			                if(Integer.parseInt(res) == 1){
 			                	//------------------------
-			                	/*
-			                	 * Reset Newsfeed_Upload Table @ SQLite
-			                	 */
 			                	DatabaseHelper mDatabaseHelper;
 			                	mDatabaseHelper = new DatabaseHelper(c);
 			                	mDatabaseHelper.resetNewsfeed_Upload();
@@ -210,4 +218,5 @@ public class NewsFeed_Inbox_Upload extends WakefulBroadcastReceiver {
 			thread_2.start();
 
 	    }
+	    */
 }

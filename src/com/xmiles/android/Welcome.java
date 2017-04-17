@@ -71,7 +71,7 @@ public class Welcome extends FragmentActivity {
 	
 	        if (Utility.mFacebook.isSessionValid()) {
 	          	//----------
-	          	Log.i(TAG, "" + "FB Sessions " + Utility.mFacebook.isSessionValid());
+	          	//Log.i(TAG, "" + "FB Sessions " + Utility.mFacebook.isSessionValid());
 		    	
 			    android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
 			    android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();

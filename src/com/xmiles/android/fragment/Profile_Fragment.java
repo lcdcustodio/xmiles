@@ -77,8 +77,8 @@ public class Profile_Fragment extends Fragment {
 	TextView Route;
 	protected static JSONArray jsonArray;
 	protected static JSONObject json;
-	ProgressDialog progressBar;
-	Cursor data_Ranking;
+	//ProgressDialog progressBar;
+	Cursor data_History;
 	
 	//-----------------------
 	ProfileLazyAdapter listAdapter;
@@ -100,16 +100,16 @@ public class Profile_Fragment extends Fragment {
 
 		listView 		   = (ListView) custom.findViewById(R.id.list);
 		//---------------
-		feedItems = new ArrayList<FeedItem>();
-		listAdapter = new ProfileLazyAdapter(getActivity(), feedItems);
-		listView.setAdapter(listAdapter);
+		//feedItems = new ArrayList<FeedItem>();
+		//listAdapter = new ProfileLazyAdapter(getActivity(), feedItems);
+		//listView.setAdapter(listAdapter);
 		
 		//---------------
-        progressBar = new ProgressDialog(getActivity());
+        //progressBar = new ProgressDialog(getActivity());
 
-        progressBar.setCancelable(true);
-		progressBar.setMessage(getActivity().getString(R.string.please_wait));
-		progressBar.show();
+        //progressBar.setCancelable(true);
+		//progressBar.setMessage(getActivity().getString(R.string.please_wait));
+		//progressBar.show();
 
 
 		Ranking_Query rq = new Ranking_Query();
@@ -125,7 +125,7 @@ public class Profile_Fragment extends Fragment {
 	    public void onDestroyView() {
 	        super.onDestroyView();
 	        
-	        Log.d(TAG, "onDestroy Profile_fgmt");
+	        //Log.d(TAG, "onDestroy Profile_fgmt");
 	    }
 	 
 	 public class Ranking_Query {
@@ -138,148 +138,64 @@ public class Profile_Fragment extends Fragment {
 				        try {
 
 
-				            Uri uri = SqliteProvider.CONTENT_URI_RANKING;
-				            data_Ranking = getActivity().getContentResolver().query(uri, null, null, null, null);
-				            
-				            Uri uri_1 = SqliteProvider.CONTENT_URI_USER_PROFILE;
-				            Cursor data_profile = getActivity().getContentResolver().query(uri_1, null, null, null, null);
-				            data_profile.moveToFirst();				            
-
-				            UserFunctions userFunc = new UserFunctions();
-				            				            
-				            json = userFunc.getNewsfeed_by_hashtag(data_profile.getString(KEY_U_ID),hashtag);
-				            //json = userFunc.getNewsfeed_by_hashtag(user_id,hashtag);
-				            
+				            Uri uri = SqliteProvider.CONTENT_URI_HISTORY;
+				            data_History = getActivity().getContentResolver().query(uri, null, null, null, null);
+			            
+	
 
 				    		        	
 					    } catch (Exception e) {
-					            e.printStackTrace();
-					    }
-					}
-			});
+				            e.printStackTrace();
+				    }
+				}
+		});
 
-			thread.start();
-			//-----------
-			try {
-				thread.join();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			//-----------
-			//progressBar.dismiss();
-			runThread();			 
+		thread.start();
+		//-----------
+		try {
+			thread.join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		//-----------
 
-		 }
-		 
-	        private void runThread() {
-
-	            new Thread() {
-	                public void run() {
-
-	                        try {
-	                        	getActivity().runOnUiThread(new Runnable() {
-
-	                                @Override
-	                                public void run() {
-	                                	
-	                    		    	//Your code goes here            	
-	                    		    	try {
-											parseJsonFeed(new JSONArray(json.getString("feed")));
-										} catch (JSONException e) {
-											// TODO Auto-generated catch block
-											e.printStackTrace();
-										}
-	                                	
-
-	                                }
-	                            });
-	                            //Thread.sleep(400);
-	                            Thread.sleep(50);
-	                            progressBar.dismiss();
-	                            
-	                        } catch (InterruptedException e) {
-	                            e.printStackTrace();
-	                        }
-
-	                }
-	            }.start();
-	        }
+		runThread();			 
 
 	 }
 	 
+        private void runThread() {
 
-		private void parseJsonFeed(JSONArray newsfeed) {
-			
-			//ContentValues[] valueList;
-	    	//valueList = new ContentValues[newsfeed.length()];
+            new Thread() {
+                public void run() {
 
-			for (int i = 0; i < newsfeed.length(); i++) {
+                        try {
+                        	getActivity().runOnUiThread(new Runnable() {
 
-
-				try {
-					
-										
-					JSONObject newsfeedObj = (JSONObject) newsfeed.get(i);
-					
-					FeedItem item = new FeedItem();
-
-					item.setId(newsfeedObj.getInt("id"));
-					item.setName(newsfeedObj.getString("name"));
-
-					
-					// Image might be null sometimes
-					String image = newsfeedObj.isNull("image") ? null : newsfeedObj
-							.getString("image");
-					
-					item.setImge(image);
-					
-					item.setStatus(newsfeedObj.getString("status"));
-					item.setProfilePic(newsfeedObj.getString("profilepic"));
+                                @Override
+                                public void run() {
+                                	
+                                	listAdapter=new ProfileLazyAdapter(getActivity(), data_History);        
+                                	listView.setAdapter(listAdapter);
 
 
-					// like, comments stats
-					item.setLike_stats(newsfeedObj.getString("like_stats"));
-					item.setComment_stats(newsfeedObj.getString("comment_stats"));
-		
-					
-					//you_like_this
-					item.setYou_like_this(newsfeedObj.getString("you_like_this"));
+                                }
+                            });
+                            //Thread.sleep(400);
+                            Thread.sleep(50);
+                            //progressBar.dismiss();
+                            
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+
+                }
+            }.start();
+        }
+
+ }
+ 
 
 
-				
-					if (newsfeedObj.isNull("custom_time_stamp")) {
-						item.setTimeStamp(newsfeedObj.getString("time_stamp"));
-
-					} else {
-						item.setTimeStamp(newsfeedObj.getString("custom_time_stamp"));
-					}
-					
-					// url might be null sometimes
-					String feedUrl = newsfeedObj.isNull("url") ? null : newsfeedObj
-							.getString("url");
-					
-					item.setUrl(feedUrl);
-
-					// hashtag might be null sometimes
-					String hashtag = newsfeedObj.isNull("hashtag") ? null : newsfeedObj
-							.getString("hashtag");
-					
-					item.setHashtag_1(hashtag);									
-					
-					feedItems.add(item);
-
-					
-				} catch (JSONException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				
-				
-			}
-			
-			// notify data changes to list adapater
-			listAdapter.notifyDataSetChanged();
-		}
-	    
+    
 }

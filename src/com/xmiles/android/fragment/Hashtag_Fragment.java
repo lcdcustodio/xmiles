@@ -103,7 +103,7 @@ public class Hashtag_Fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
  
-		Log.i(TAG, "onCreateView Hashtag_fgmt");
+		//Log.i(TAG, "onCreateView Hashtag_fgmt");
 		
 		rootView = inflater.inflate(R.layout.fgmt_background, container, false);
 
@@ -147,7 +147,7 @@ public class Hashtag_Fragment extends Fragment {
 	    public void onDestroyView() {
 	        super.onDestroyView();
 	        
-	        Log.d(TAG, "onDestroy Hashtag_fgmt");
+	        //Log.d(TAG, "onDestroy Hashtag_fgmt");
 	        
 
 	    }

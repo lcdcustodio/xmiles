@@ -207,7 +207,7 @@ public class Rel_Fragment extends Fragment {
 		        		
 		        		commentItems.add(comment_item);
 	            		//-----------------
-		        		Log.i(TAG, "supportreladapterItems.size(): " + supportreladapterItems.size());
+		        		//Log.i(TAG, "supportreladapterItems.size(): " + supportreladapterItems.size());
 		        		
 		        		//header_comments
 		        		boolean header_comments = false;
@@ -234,8 +234,8 @@ public class Rel_Fragment extends Fragment {
 	        			listAdapter.notifyDataSetChanged();
 	            		//-----------------	 
 	            		//-----------------
-	        			Log.i(TAG, "feed_id " + feed_id);
-	        			Log.d(TAG, "data_newsfeed.getString(KEY_ID): " + data_newsfeed.getString(KEY_ID));
+	        			//Log.i(TAG, "feed_id " + feed_id);
+	        			//Log.d(TAG, "data_newsfeed.getString(KEY_ID): " + data_newsfeed.getString(KEY_ID));
 	
 	    				Uri uri_2 = SqliteProvider.CONTENT_URI_NEWSFEED_update;
 	    				
@@ -299,7 +299,7 @@ public class Rel_Fragment extends Fragment {
 	    public void onDestroyView() {
 	        super.onDestroyView();
 	        
-	        Log.d(TAG, "onDestroy Rel_Fragment");
+	        //Log.d(TAG, "onDestroy Rel_Fragment");
 	        
 		    //-------------
 	        /*
@@ -406,7 +406,7 @@ public class Rel_Fragment extends Fragment {
 		//private void parseJsonFeed(Cursor newsfeed, JSONArray likes) {
 	    private void parseJsonFeed(Cursor newsfeed, JSONArray likes, JSONArray comments) {	
 			
-			Log.w(TAG, "parseJsonFeed: " + newsfeed.getCount());
+			//Log.w(TAG, "parseJsonFeed: " + newsfeed.getCount());
 			
 
 			newsfeed.moveToPosition(position);

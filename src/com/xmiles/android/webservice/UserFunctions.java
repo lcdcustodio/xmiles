@@ -22,19 +22,21 @@ public class UserFunctions {
     
     private static String loginURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String registerURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
-    private static String favoritesURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
-    private static String insert_favoritesURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
+    
+    
     private static String buslineURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
-    private static String bus_stopURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
+    
     private static String user_routesURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String user_locationURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
-    private static String bus_gpsURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
+    //private static String bus_gpsURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
+    private static String bus_gpsURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/busgps_php/";
     private static String user_rewardsURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String gps_notfoundURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String user_rankingURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String news_feedURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String buscodeURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
-    private static String newsfeed_inboxURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
+    private static String newsfeed_inboxURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/newsfeed_inbox_php/";
+    //private static String newsfeed_inboxURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String post_actionsURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";  
     private static String likes_inboxURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
     private static String comments_inboxURL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/login/";
@@ -46,13 +48,13 @@ public class UserFunctions {
     //------------------------------------    
     private static String login_tag 		= "login";
     private static String register_tag 		= "register";
-    private static String favorites_tag 	= "favorites";
-    private static String insert_favorites_tag = "favorites_register";
+
     private static String busline_tag 		= "busline";
-    private static String bus_stop_tag 		= "bus_stop";
+
     private static String user_routes_tag 	= "user_routes";
     private static String user_location_tag = "userlocation_register";
-    private static String bus_gps_tag 		= "busgps_register";
+    //private static String bus_gps_tag 		= "busgps_register";
+    private static String bus_gps_tag 		= "busgps_txt";
     private static String user_rewards_tag  = "rewards";
     private static String gps_notfound_tag  = "gps_notfound";
     private static String user_ranking_tag  = "ranking";
@@ -99,7 +101,7 @@ public class UserFunctions {
         //------        
         JSONObject json = jsonParser.getJSONFromUrl(loginURL, params);
         // return json        
-        Log.i(TAG, "loginUser " + json.toString());
+        //Log.i(TAG, "loginUser " + json.toString());
         return json;
     }
     
@@ -115,7 +117,7 @@ public class UserFunctions {
         params.add(new BasicNameValuePair("created_at", created_at));
         JSONObject json = jsonParser.getJSONFromUrl(gps_notfoundURL, params);
         // return json        
-        Log.i(TAG, "gps_notfoundURL " + json.toString());
+        //Log.i(TAG, "gps_notfoundURL " + json.toString());
         return json;
     }
 
@@ -125,7 +127,7 @@ public class UserFunctions {
         params.add(new BasicNameValuePair("tag", user_ranking_tag));
         JSONObject json = jsonParser.getJSONFromUrl(user_rankingURL, params);
         // return json        
-        Log.w(TAG, "getRanking " + json.toString());
+        //Log.w(TAG, "getRanking " + json.toString());
         return json;
     }
     
@@ -136,7 +138,7 @@ public class UserFunctions {
         params.add(new BasicNameValuePair("tag", news_feed_tag));
         JSONObject json = jsonParser.getJSONFromUrl(news_feedURL, params);
         // return json        
-        Log.w(TAG, "getNewsfeed " + json.toString());
+        //Log.w(TAG, "getNewsfeed " + json.toString());
         return json;
     }
     
@@ -148,7 +150,7 @@ public class UserFunctions {
         params.add(new BasicNameValuePair("tag", news_feed_by_hashtag_tag));
         JSONObject json = jsonParser.getJSONFromUrl(news_feed_by_hashtagURL, params);
         // return json        
-        Log.w(TAG, "getNewsfeed_by_hashtag" + json.toString());
+        //Log.w(TAG, "getNewsfeed_by_hashtag" + json.toString());
         return json;
     }    
     
@@ -159,7 +161,7 @@ public class UserFunctions {
         params.add(new BasicNameValuePair("tag", post_actions_tag));
         JSONObject json = jsonParser.getJSONFromUrl(post_actionsURL, params);
         // return json        
-        Log.w(TAG, "getPost_actions " + json.toString());
+        //Log.w(TAG, "getPost_actions " + json.toString());
         return json;
     }    
 
@@ -170,7 +172,7 @@ public class UserFunctions {
         params.add(new BasicNameValuePair("tag", buscode_tag));
         JSONObject json = jsonParser.getJSONFromUrl(buscodeURL, params);
         // return json        
-        Log.w(TAG, "getBuscode Test" + json.toString());
+        //Log.w(TAG, "getBuscode Test" + json.toString());
         return json;
     }    
     
@@ -182,7 +184,7 @@ public class UserFunctions {
         params.add(new BasicNameValuePair("tag", api_buscode_tag));
         JSONObject json = jsonParser.getJSONFromUrl(api_buscodeURL, params);
         // return json        
-        Log.w(TAG, "getApiBuscode: " + json.toString());
+        //Log.w(TAG, "getApiBuscode: " + json.toString());
         return json;
     }    
     
@@ -193,23 +195,11 @@ public class UserFunctions {
         params.add(new BasicNameValuePair("tag", user_rewards_tag));
         JSONObject json = jsonParser.getJSONFromUrl(user_rewardsURL, params);
         // return json        
-        Log.w(TAG, "getRewards " + json.toString());
+        //Log.w(TAG, "getRewards " + json.toString());
         return json;
     }
 
-    public JSONObject favoritesRoutes(String id){
-        // Building Parameters
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("tag", favorites_tag));
-        //params.add(new BasicNameValuePair("email", email));
-        params.add(new BasicNameValuePair("fb_id", id));
-        JSONObject json = jsonParser.getJSONFromUrl(favoritesURL, params);
-
-        // return json        
-        Log.e(TAG, "favorites_Routes " + json.toString());
-        return json;
-    }
-
+    
     public JSONObject comments_inbox(String feed_id,
     								 String sender,
 								     String user_id,     					          
@@ -236,7 +226,7 @@ public class UserFunctions {
 		JSONObject json = jsonParser.getJSONFromUrl(comments_inboxURL, params);
 		
 		// return json        
-		Log.e(TAG, "comments_inbox " + json.toString());
+		//Log.e(TAG, "comments_inbox " + json.toString());
 		return json;
 	}    
     
@@ -265,7 +255,7 @@ public class UserFunctions {
 		JSONObject json = jsonParser.getJSONFromUrl(likes_inboxURL, params);
 		
 		// return json        
-		Log.e(TAG, "likes_inbox " + json.toString());
+		//Log.e(TAG, "likes_inbox " + json.toString());
 		return json;
 	}
     
@@ -306,7 +296,7 @@ public class UserFunctions {
         JSONObject json = jsonParser.getJSONFromUrl(newsfeed_inboxURL, params);
 
         // return json        
-        Log.e(TAG, "newsfeed_inbox " + json.toString());
+        //Log.e(TAG, "newsfeed_inbox " + json.toString());
         return json;
     }
     
@@ -327,7 +317,7 @@ public class UserFunctions {
 		
 		JSONObject json = jsonParser.getJSONFromUrl(inviteFriendsURL, params);
 		
-		Log.e(TAG, "Invite_Friends " + json.toString());
+		//Log.e(TAG, "Invite_Friends " + json.toString());
 		return json;
 	}
     
@@ -342,7 +332,7 @@ public class UserFunctions {
 		
 		JSONObject json = jsonParser.getJSONFromUrl(upload_friendsURL, params);
 		
-		Log.e(TAG, "Upload_Friends " + json.toString());
+		//Log.e(TAG, "Upload_Friends " + json.toString());
 		
 
     	return json;
@@ -412,7 +402,7 @@ public class UserFunctions {
 		
 	JSONObject json = jsonParser.getJSONFromUrl(bus_gpsURL, params);
 	
-	Log.e(TAG, "Bus_Gps " + json.toString());
+	//Log.e(TAG, "Bus_Gps " + json.toString());
 	return json;
 	}
     
@@ -448,7 +438,7 @@ public class UserFunctions {
         
         JSONObject json = jsonParser.getJSONFromUrl(user_locationURL, params);
         
-        Log.e(TAG, "USer_Location " + json.toString());
+        //Log.e(TAG, "USer_Location " + json.toString());
         return json;
     }
 
@@ -462,35 +452,12 @@ public class UserFunctions {
         params.add(new BasicNameValuePair("favorite_id", favorite_id));
         JSONObject json = jsonParser.getJSONFromUrl(user_routesURL, params);
         
-        Log.e(TAG, "USer_Routes " + json.toString());
+        //Log.e(TAG, "USer_Routes " + json.toString());
         return json;
     }
 
     
-    public JSONObject insert_favoritesRoutes(String user_id, String name, String busline, String _from, String _to,
-    	    String city, String uf, String _to_bus_stop_id, String _from_bus_stop_id, String favorite_id){
-
-        // Building Parameters
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("tag", insert_favorites_tag));
-        params.add(new BasicNameValuePair("user_id", user_id));
-        params.add(new BasicNameValuePair("name", name));
-        params.add(new BasicNameValuePair("busline", busline));
-        params.add(new BasicNameValuePair("_from", _from));
-        params.add(new BasicNameValuePair("_to", _to));
-        params.add(new BasicNameValuePair("city", city));
-        params.add(new BasicNameValuePair("uf", uf));
-        params.add(new BasicNameValuePair("_to_bus_stop_id", _to_bus_stop_id));
-        params.add(new BasicNameValuePair("_from_bus_stop_id", _from_bus_stop_id));
-        params.add(new BasicNameValuePair("favorite_id", favorite_id));
-        // getting JSON Object
-        JSONObject json = jsonParser.getJSONFromUrl(insert_favoritesURL, params);
-
-        // return json
-        Log.e(TAG, "insert_favoritesRoutes " + json.toString());        
-        return json;
-    }
-
+    
     
     public JSONObject busline(String id){
         // Building Parameters
@@ -499,21 +466,10 @@ public class UserFunctions {
         params.add(new BasicNameValuePair("city", id));
         JSONObject json = jsonParser.getJSONFromUrl(buslineURL, params);
         // return json        
-        Log.e(TAG, "Busline " + json.toString());
+        //Log.e(TAG, "Busline " + json.toString());
         return json;
     }
 
-    public JSONObject bus_stop(String bl, String id){
-        // Building Parameters
-        List<NameValuePair> params = new ArrayList<NameValuePair>();
-        params.add(new BasicNameValuePair("tag", bus_stop_tag));
-        params.add(new BasicNameValuePair("busline", bl));
-        params.add(new BasicNameValuePair("city", id));
-        JSONObject json = jsonParser.getJSONFromUrl(bus_stopURL, params);
-        // return json        
-        Log.e(TAG, "Bus Stop " + json.toString());
-        return json;
-    }
     
     
     /**
@@ -535,7 +491,7 @@ public class UserFunctions {
         // getting JSON Object
         JSONObject json = jsonParser.getJSONFromUrl(registerURL, params);
         // return json
-        Log.e(TAG, "registerUser " + json.toString());        
+        //Log.e(TAG, "registerUser " + json.toString());        
         return json;
     }
 

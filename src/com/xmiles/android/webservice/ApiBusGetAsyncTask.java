@@ -13,8 +13,8 @@ public class ApiBusGetAsyncTask  extends AsyncTask<String, Void, JSONObject> {
 	@Override
     protected JSONObject doInBackground(String... buscode) {
 		
-		Log.w("FACEBOOK", "buscode[0]: " + buscode[0]);
-		Log.w("FACEBOOK", "buscode[1]: " + buscode[1]);
+		//Log.w("FACEBOOK", "buscode[0]: " + buscode[0]);
+		//Log.w("FACEBOOK", "buscode[1]: " + buscode[1]);
           
         return GET(buscode[0],buscode[1]);
     }
@@ -22,7 +22,7 @@ public class ApiBusGetAsyncTask  extends AsyncTask<String, Void, JSONObject> {
     @Override
     protected void onPostExecute(JSONObject result) {    	
 
-    	Log.w("FACEBOOK", "API BUS result: " + result);
+    	//Log.w("FACEBOOK", "API BUS result: " + result);
     	
     
    }
@@ -39,7 +39,7 @@ public class ApiBusGetAsyncTask  extends AsyncTask<String, Void, JSONObject> {
 			result = userFunc.getApiBuscode(buscode_digits, buscode);	
 		
 		} catch (Exception e) {
-			Log.d("FACEBOOK", e.getLocalizedMessage());
+			//Log.d("FACEBOOK", e.getLocalizedMessage());
 		}
 		
 		return result;

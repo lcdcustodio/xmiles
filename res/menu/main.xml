@@ -3,12 +3,11 @@
  
     <item
         android:id="@+id/buscode_search"
-        android:title="@string/phone"
+    	android:title="@string/app_name"
         android:icon="@drawable/ic_directions_bus_white_24dp"
         android:showAsAction="ifRoom">
  	</item>
-    
-    
+ 	
     <!--item
         android:id="@+id/rotas"
         android:title="@string/rotas"

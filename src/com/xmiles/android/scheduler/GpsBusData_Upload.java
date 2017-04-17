@@ -301,7 +301,8 @@ public class GpsBusData_Upload extends WakefulBroadcastReceiver {
 					try {
 							//Thread.sleep(800);
 							//Thread.sleep(1600);
-							Thread.sleep(3200);
+							//Thread.sleep(3200);
+							Thread.sleep(6400);
 					} catch (InterruptedException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();

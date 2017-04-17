@@ -75,6 +75,8 @@
 					     android:layout_below="@+id/slogan"
 					     android:layout_below="@+id/app_name"
 					      -->
+					 <!-- disable button below until video solda -->    
+					 <!--     
 					 <Button
 					     android:id="@+id/helpbutton"
 					     android:layout_below="@+id/fblogin"
@@ -84,8 +86,20 @@
 					     android:layout_centerHorizontal="true"
 					     android:background="@drawable/youtube_button"
 					     android:drawableLeft="@drawable/youtube_logo_2"
+					     android:text="Veja como funciona" />					     
+					    -->
+					       
+					 <Button
+					     android:id="@+id/helpbutton"
+					     android:layout_below="@+id/fblogin"
+					     style="@style/disable_helpbutton"
+					     android:layout_width="260dp"
+					     android:layout_height="50dp"				     
+					     android:layout_centerHorizontal="true"
+					     android:background="#ffffff"
+					     
 					     android:text="Veja como funciona" />
-					     <!-- android:layout_margin="5dp" -->
+					     
 
 				        <View
 				            android:id="@+id/view02"

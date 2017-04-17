@@ -139,8 +139,8 @@ public class RankingLazyAdapter extends BaseAdapter {
 
 		        imageLoader.DisplayImage(ranking_info.getString(KEY_PICURL), thumb_image);
 		        //----------
-		        Log.e(TAG, "ranking_info.getString(KEY_NAME): " + ranking_info.getString(KEY_NAME));
-		        Log.w(TAG, "ranking_info.getString(KEY_PICURL): " + ranking_info.getString(KEY_PICURL));
+		        //Log.e(TAG, "ranking_info.getString(KEY_NAME): " + ranking_info.getString(KEY_NAME));
+		        //Log.w(TAG, "ranking_info.getString(KEY_PICURL): " + ranking_info.getString(KEY_PICURL));
 		        //----------
 		        return vi;
 	        

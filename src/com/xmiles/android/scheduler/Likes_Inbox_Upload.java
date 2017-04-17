@@ -49,7 +49,7 @@ public class Likes_Inbox_Upload extends WakefulBroadcastReceiver {
 	   public void onReceive(Context context, Intent intent) {   
 
 	    	
-	    	Log.i(TAG, "Likes_Inbox_Upload onReceive");
+	    	//Log.i(TAG, "Likes_Inbox_Upload onReceive");
 
 			    
 	    	NewsFeed_Inbox_Handler(context);
@@ -73,7 +73,7 @@ public class Likes_Inbox_Upload extends WakefulBroadcastReceiver {
 	     */
 
 	    public void cancelAlarm(Context context) {
-	        	Log.d(TAG, "Likes_Inbox_Upload cancelAlarm");
+	        	//Log.d(TAG, "Likes_Inbox_Upload cancelAlarm");
 	        	
 	        	Intent intent = new Intent(context, Likes_Inbox_Upload.class);
 	        	alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);

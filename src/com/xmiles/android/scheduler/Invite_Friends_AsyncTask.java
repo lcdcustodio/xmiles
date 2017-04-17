@@ -44,8 +44,8 @@ public class Invite_Friends_AsyncTask extends AsyncTask<Void,Void,String> {
 
 	   //----------------------------	   
 	   //jsonArray = result;
-	   //Log.i(TAG,"jsonArray: " + jsonArray);
-	   Log.i(TAG, "Invite_Friends - onPostExecute");
+	   ////Log.i(TAG,"jsonArray: " + jsonArray);
+	   //Log.i(TAG, "Invite_Friends - onPostExecute");
 	  
 	  }
 	 
@@ -71,7 +71,7 @@ public class Invite_Friends_AsyncTask extends AsyncTask<Void,Void,String> {
 
 					    String res = json.getString("success");
 					    if(Integer.parseInt(res) == 1){
-					    	//Log.v(TAG, "Invite_Friends: success");
+					    	////Log.v(TAG, "Invite_Friends: success");
 					    	result = "success";
 					    } else {					    	
 					    	result = "fail";

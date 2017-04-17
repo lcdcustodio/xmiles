@@ -18,10 +18,6 @@
         android:icon="@drawable/xmiles_new_logo_9"
         android:label="@string/app_name"      
         android:theme="@style/MyMaterialTheme">          
-        <!-- android:theme="@style/MyMaterialTheme">
-             android:hardwareAccelerated="true"
-             android:icon="@drawable/xmiles_logo_rev05_transparente"
-        	 android:theme="@style/Theme.Example" > -->        
         
         <uses-library android:name="com.google.android.maps" />
         
@@ -30,62 +26,25 @@
 			
             android:screenOrientation="portrait"
             android:name="com.xmiles.android.Welcome">            
-            <!--
-            android:name="com.xmiles.android.Fb_Sso_Login_Fragment">
-            android:name="com.xmiles.android.SplashActivity"-->
             <intent-filter >
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             
-            <!--meta-data android:name="android.support.UI_OPTIONS"
-                       android:value="splitActionBarWhenNarrow" />  -->  
         </activity>
         
         <activity
             android:label="@string/app_name"
             
             android:screenOrientation="portrait"
-            android:name="com.xmiles.android.MainActivity">
-
-
-            
-                           
-        </activity>
-        
-        
-        <activity
-            android:label="@string/app_name"
-            
-            android:screenOrientation="portrait"
-            android:name="com.xmiles.android.backup.Profile_Fragment">            
-            <!--
-            android:uiOptions="splitActionBarWhenNarrow"  
-            <meta-data android:name="android.support.UI_OPTIONS"
-                       android:value="splitActionBarWhenNarrow" />-->
-        </activity>
-
-        <activity
-            android:label="@string/app_name"
-            
-            android:screenOrientation="portrait"
-            android:name="com.xmiles.android.backup.Favorites_Fragment">            
-            <!--
-            android:uiOptions="splitActionBarWhenNarrow"
-            <meta-data android:name="android.support.UI_OPTIONS"
-                       android:value="splitActionBarWhenNarrow" />  -->
-        </activity>
-        
+            android:name="com.xmiles.android.MainActivity">                           
+        </activity>        
         
         <activity
             android:label="@string/app_name"
             
             android:screenOrientation="portrait"
             android:name="com.xmiles.android.fragment.Feed_Fragment">            
-            <!--
-            android:uiOptions="splitActionBarWhenNarrow"
-            <meta-data android:name="android.support.UI_OPTIONS"
-                       android:value="splitActionBarWhenNarrow" />  -->
         </activity>        
 
         <activity
@@ -95,19 +54,7 @@
             android:name="com.xmiles.android.fragment.Ranking_Fragment">            
 
         </activity>        
-        
-        <activity
-            android:label="@string/app_name"
-            
-            android:screenOrientation="portrait"
-            android:name="com.xmiles.android.backup.EmConstrucao_Fragment">            
-            <!--
-            android:uiOptions="splitActionBarWhenNarrow"  
-            <meta-data android:name="android.support.UI_OPTIONS"
-                       android:value="splitActionBarWhenNarrow" /> -->
-        </activity>
  
-
         <activity
             android:label="@string/app_name"
             android:screenOrientation="portrait"
@@ -118,9 +65,7 @@
             
             <intent-filter >
                 <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-            
-            
+            </intent-filter>            
         </activity>
         
         
@@ -175,13 +120,8 @@
             android:name="com.xmiles.android.Likes">
                         
         </activity>        
-        
-        <activity
-            android:label="@string/app_name"
-
-            android:screenOrientation="portrait"
-            android:name="com.xmiles.android.backup.Like_Fragment_backup">            
-        </activity>
+  
+  
 
 	        <meta-data android:name="com.google.android.gms.version" 
 		   		android:value="@integer/google_play_services_version" />
@@ -204,6 +144,7 @@
         <receiver android:name="com.xmiles.android.scheduler.NewsFeed_Inbox_Upload"></receiver>  
         <receiver android:name="com.xmiles.android.scheduler.Likes_Inbox_Upload"></receiver>
         <receiver android:name="com.xmiles.android.scheduler.Comments_Inbox_Upload"></receiver>     
+        
         
         <receiver android:name="com.xmiles.android.scheduler.BootReceiver"
                 android:enabled="true">
@@ -250,7 +191,7 @@
     
     	<!-- Connect to Internet Permissions -->
     
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"></uses-permission>    
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />  
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!--uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> ACCESS_COARSE_LOCATION includes permission only for NETWORK_PROVIDER-->    

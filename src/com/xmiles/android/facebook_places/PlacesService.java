@@ -42,7 +42,7 @@ public class PlacesService {
 	   JSONObject object = new JSONObject(json);	   
 	   JSONArray array = object.getJSONArray("data");
 
-	   Log.v(TAG, "array.length(): " + array.length());
+	   //Log.v(TAG, "array.length(): " + array.length());
 
 	   return array;
 	  } catch (JSONException ex) {
@@ -63,7 +63,7 @@ public class PlacesService {
 	   urlString.append("&distance=" +	Integer.toString(distance));	   
 	   urlString.append("&access_token=" +	Access_Token);
 
-	   Log.i(TAG, "urlString " + urlString);
+	   //Log.i(TAG, "urlString " + urlString);
 
 	  return urlString.toString();
 	 }

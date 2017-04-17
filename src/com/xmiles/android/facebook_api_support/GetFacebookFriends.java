@@ -49,7 +49,7 @@ public class GetFacebookFriends {
 		//urlString.append("&format=json&fields=name%2Cpicture%2Cgender");
 		
 		
-		Log.i(TAG, "urlString " + urlString);
+		//Log.i(TAG, "urlString " + urlString);
 		
 		return urlString.toString();
 	}

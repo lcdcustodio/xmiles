@@ -7,7 +7,7 @@ import com.xmiles.android.R;
 import com.xmiles.android.R.id;
 import com.xmiles.android.R.layout;
 
-import com.xmiles.android.backup.Scanning;
+
 import com.xmiles.android.facebook_api_support.Utility;
 import com.xmiles.android.facebook_api_support.SessionEvents;
 import com.xmiles.android.facebook_api_support.SessionStore;
@@ -117,6 +117,11 @@ public class FbLogin_Fragment extends Fragment {
 		    }
 		});
 		
+		//*****************************************
+		// Aguardando Vídeo da Solda Fria Produções
+		Youtube.setEnabled(false);
+		// Aguardando Vídeo da Solda Fria Produções
+		//*****************************************		
 
 		termofuse = (TextView) rootView.findViewById(R.id.termofuse_2);
 		

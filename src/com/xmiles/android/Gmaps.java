@@ -23,7 +23,6 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.maps.GeoPoint;
-import com.xmiles.android.backup.FbPlaces_Download;
 import com.xmiles.android.facebook_api_support.Utility;
 import com.xmiles.android.facebook_places.Facebook_Places;
 import com.xmiles.android.fragment.NoInternetConnection_Fragment;
@@ -88,7 +87,8 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 	private static LatLng user_loc;
 
 	private static final Integer MAX_DIST 	  = 6; //6km
-	//private static final Integer MAX_DIST 	  = 50; //6km
+	//private static final Integer MAX_DIST 	  = 7; //7km
+	//private static final Integer MAX_DIST 	  = 500; //500km
 	
 
 
@@ -285,7 +285,7 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 	      					        get_distance = dist_calc.calculo(loc.latitude, user_loc.latitude, 
 	      					        		loc.longitude, user_loc.longitude);
 	      					        
-	      					        Log.d(TAG,"get_distance: " + get_distance);
+	      					        //Log.d(TAG,"get_distance: " + get_distance);
 	      					      
 	
 							   		// Adding a marker
@@ -540,7 +540,7 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 
 
             			UserFunctions userFunc = new UserFunctions();
-            			Log.i(TAG, "buscode.toUpperCase(): " + buscode.toUpperCase());
+            			//Log.i(TAG, "buscode.toUpperCase(): " + buscode.toUpperCase());
             			json_buscode = userFunc.getBuscode_details(buscode.toUpperCase());
 
 				    } catch (Exception e) {
@@ -702,7 +702,7 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 	  @Override
 	  public void onDestroy() {
 
-		  Log.i(TAG, "onDestroy Gmaps");
+		  //Log.i(TAG, "onDestroy Gmaps");
 
 		super.onDestroy();
 	}

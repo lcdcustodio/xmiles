@@ -28,8 +28,6 @@ import android.widget.TextView;
 public class ProfileLazyAdapter extends BaseAdapter {
     
 	private Context ctx;
-	private List<FeedItem> feedItems;
-
     
     private static LayoutInflater inflater=null;
     //public ImageLoader imageLoader; 
@@ -48,16 +46,19 @@ public class ProfileLazyAdapter extends BaseAdapter {
 	private static final Integer TYPE4   = 4;
 	private static final Integer TYPE5   = 5;
 	//-----
+	private static final Integer KEY_STATUS = 1;
+	private static final Integer KEY_TIME_STAMP = 2;
+	
 	
 	//TAG
 	private static final String TAG = "FACEBOOK";
 
 	private Cursor users_info;
-
+	private Cursor history_info;
     
-    public ProfileLazyAdapter(Context context, List<FeedItem> feedItems) {
+    public ProfileLazyAdapter(Context context, Cursor data) {
     	this.ctx = context;
-    	this.feedItems = feedItems;
+
 
         inflater = (LayoutInflater)ctx.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         imageLoader=new ImageLoader(ctx.getApplicationContext());
@@ -66,16 +67,18 @@ public class ProfileLazyAdapter extends BaseAdapter {
         Uri uri_1 = SqliteProvider.CONTENT_URI_USER_PROFILE;
         users_info = ctx.getContentResolver().query(uri_1, null, null, null, null);
         
+        history_info = data;
+        
     }
 
     public int getCount() {
 
     	//return 3;
     	int count;
-    	if (feedItems.size() == 0){
+    	if (history_info.getCount() == 0){
     		count = 3;
     	} else {
-    		count = 4 + feedItems.size();
+    		count = 4 + history_info.getCount();
     	}
     	return count;
     }
@@ -188,13 +191,15 @@ public class ProfileLazyAdapter extends BaseAdapter {
 
 
 		        //----------
-	    	    FeedItem item = feedItems.get(position - 4);
+	    	    history_info.moveToPosition(position - 4);
+	    	    //FeedItem item = feedItems.get(position - 4);
 	    	   
 	    	   
-	    	    history_score.setText(item.getStatus().split("<bold>")[1]);
+	    	    //history_score.setText(item.getStatus().split("<bold>")[1]);
+	    	    history_score.setText(history_info.getString(KEY_STATUS).split("<bold>")[1]);
 	    	    
 	    		CharSequence timeAgo = DateUtils.getRelativeTimeSpanString(
-	    				Long.parseLong(support.getDateTime_long(item.getTimeStamp())),
+	    				Long.parseLong(support.getDateTime_long(history_info.getString(KEY_TIME_STAMP))),
 	    				System.currentTimeMillis(), DateUtils.SECOND_IN_MILLIS);
 
 	    	    timestamp.setText(timeAgo);

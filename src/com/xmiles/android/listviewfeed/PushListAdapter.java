@@ -17,6 +17,7 @@ import com.xmiles.android.listviewfeed.FeedItem;
 import com.xmiles.android.scheduler.Invite_Friends_AsyncTask;
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.support.ConnectionDetector;
+import com.xmiles.android.support.GetGpsToken;
 import com.xmiles.android.support.Support;
 //-----
 //import com.xmiles.android.support.imageloader.*;
@@ -120,7 +121,7 @@ public class PushListAdapter extends BaseAdapter {
 		
 		SupportRelAdapterItem supportreladapter_item = supportreladapterItems.get(position);
 		
-		//Log.e(TAG, "supportreladapter_item.getType_action(): " + supportreladapter_item.getType_action());
+		////Log.e(TAG, "supportreladapter_item.getType_action(): " + supportreladapter_item.getType_action());
 		
 		if (supportreladapter_item.getType_action().equals("newsfeed")){
 			return TYPE1;
@@ -226,6 +227,11 @@ public class PushListAdapter extends BaseAdapter {
 			 	
 				// like, comments stats
 				vi1_rel_stats.setText(feed_item.getLike_stats() + " curtida(s) " +  feed_item.getComment_stats() + " comentário(s)");
+				//********************************************************
+		    	//Test @april-11th disabling for MVP launching at April/17
+				vi1_rel_stats.setText("");
+		    	//Test @april-11th disabling for MVP launching at April/17
+				//********************************************************				
 				
 				// Making comments unclickable
 				vi1_rel_stats.setClickable(false);
@@ -278,9 +284,16 @@ public class PushListAdapter extends BaseAdapter {
 				// Checking for null feed url
 				//if (feed_item.getUrl() != null) {
 				if (feed_item.getUrl() != null && !feed_item.getUrl().equals("")) {	
-					vi1_url.setText(Html.fromHtml("<a href=\"" + feed_item.getUrl() + "\">"
-							+ feed_item.getUrl() + "</a> "));
+					//vi1_url.setText(Html.fromHtml("<a href=\"" + feed_item.getUrl() + "\">"
+					//		+ feed_item.getUrl() + "</a> "));
 		
+					
+					GetGpsToken gt = new GetGpsToken();
+					
+					vi1_url.setText(Html.fromHtml("<a href=\"" + feed_item.getUrl() + "\">"
+							+ "xml.es/" + gt.md5(feed_item.getUrl()).substring(0, 6) + "</a> "));
+					
+					
 					// Making url clickable
 					vi1_url.setMovementMethod(LinkMovementMethod.getInstance());
 					vi1_url.setVisibility(View.VISIBLE);
@@ -342,12 +355,12 @@ public class PushListAdapter extends BaseAdapter {
 					                                    @Override
 					                                    public void onComplete(Bundle values, FacebookException error) {
 					                                        if (error != null) {
-					                                            Log.w(TAG, "Web dialog encountered an error.", error);
+					                                            //Log.w(TAG, "Web dialog encountered an error.", error);
 					                                        } else {
-					                                            //Log.i(TAG, "Web dialog complete: " + values);
+					                                            ////Log.i(TAG, "Web dialog complete: " + values);
 	
 					                                            String request_id = values.getString("request");
-					                                            //Log.i(TAG, "request: " + request);
+					                                            ////Log.i(TAG, "request: " + request);
 	
 					                                            StringBuilder friends_id = new StringBuilder();
 					                                            int friends_count = 0;
@@ -359,7 +372,7 @@ public class PushListAdapter extends BaseAdapter {
 					                                            	friends_id.append(values.getString("to[" + i + "]"));
 					                                            	friends_count = friends_count + 1;
 					                                            }
-					                                            Log.i(TAG, "friends_count: " + friends_count);
+					                                            //Log.i(TAG, "friends_count: " + friends_count);
 					                                            
 					                                            //Invite_Friends
 					                                            try {
@@ -477,8 +490,8 @@ public class PushListAdapter extends BaseAdapter {
 					
 					LikeItem like_item = likeItems.get(i);
 					//-------
-					Log.e(TAG,"like_item.getName(): " + like_item.getName());
-					Log.e(TAG,"like_item.getProfilePic(): " + like_item.getProfilePic());
+					//Log.e(TAG,"like_item.getName(): " + like_item.getName());
+					//Log.e(TAG,"like_item.getProfilePic(): " + like_item.getProfilePic());
 					//-------					
 				    switch(i){
 				       case 0:

@@ -135,16 +135,14 @@ public class Push_Fragment extends Fragment {
 		
 		rootView = inflater.inflate(R.layout.fgmt_background, container, false);
 		
-		View custom_1 = inflater.inflate(R.layout.rel_fgmt, container, false);
+		View custom_1 = inflater.inflate(R.layout.push_fgmt, container, false);
 		listView 	= (ListView) custom_1.findViewById(R.id.list_items);
-		add_cmts = (AutoCompleteTextView) custom_1.findViewById(R.id.add_comment);
+		//Test @april-11th disabling for MVP launching at April/17
+		//add_cmts = (AutoCompleteTextView) custom_1.findViewById(R.id.add_comment);
 		
 		//position = getArguments().getInt("position");
 		feed_id = getArguments().getString("feed_id");
-		Log.i(TAG,"feed_id: " + feed_id);
-		//Toast.makeText(getActivity(), "feed_id: " + feed_id, Toast.LENGTH_LONG).show();
-		
-		//adapter = getArguments().getString("adapter");
+
 		//---------------
 		feedItems = new ArrayList<FeedItem>();
 		likeItems = new ArrayList<LikeItem>();
@@ -162,6 +160,9 @@ public class Push_Fragment extends Fragment {
 		progressBar.show();
 		//*/
 		//--------------
+		//********************************************************
+		//Test @april-11th disabling for MVP launching at April/17
+		/*
       	//HANDLE EVENT - TYPE COMMENTS
 		add_cmts.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -209,7 +210,7 @@ public class Push_Fragment extends Fragment {
 		        		
 		        		commentItems.add(comment_item);
 	            		//-----------------
-		        		Log.i(TAG, "supportreladapterItems.size(): " + supportreladapterItems.size());
+		        		//Log.i(TAG, "supportreladapterItems.size(): " + supportreladapterItems.size());
 		        		
 		        		//header_comments
 		        		boolean header_comments = false;
@@ -238,11 +239,11 @@ public class Push_Fragment extends Fragment {
 	            		//-----------------
 	        		    try {
 	
-	            			//Log.i(TAG, "feed_id " + feed_id);
-	            			//Log.v(TAG, "json.getString(feed) " + json.getString("feed"));
+	            			////Log.i(TAG, "feed_id " + feed_id);
+	            			////Log.v(TAG, "json.getString(feed) " + json.getString("feed"));
 	            			JSONArray newsfeed = new JSONArray(json.getString("feed"));
 	            			JSONObject nfObj = (JSONObject) newsfeed.get(0);
-	            			//Log.d(TAG, "newsfeed.get(0) " + newsfeed.get(0));
+	            			////Log.d(TAG, "newsfeed.get(0) " + newsfeed.get(0));
 	            			
 	        				data_profile.moveToFirst();
 	
@@ -286,8 +287,11 @@ public class Push_Fragment extends Fragment {
                 
             }
 
-        });    
-		
+        });
+		*/		
+		//Test @april-11th disabling for MVP launching at April/17
+		//********************************************************
+
 		//--------------
 		Feed_Query fq = new Feed_Query();
 		
@@ -303,7 +307,7 @@ public class Push_Fragment extends Fragment {
 	    public void onDestroyView() {
 	        super.onDestroyView();
 	        
-	        Log.d(TAG, "onDestroy Push_Fragment");
+	        //Log.d(TAG, "onDestroy Push_Fragment");
 	        
 		    //-------------
 	        /*
@@ -394,7 +398,7 @@ public class Push_Fragment extends Fragment {
 												      new JSONArray(json.getString("likes")),
 												      new JSONArray(json.getString("comments")));
 												      
-	                    		    		//Log.d(TAG, "JSONArray(json.getString(feed): " + new JSONArray(json.getString("feed")));
+	                    		    		////Log.d(TAG, "JSONArray(json.getString(feed): " + new JSONArray(json.getString("feed")));
 											
 										} catch (JSONException e) {
 											// TODO Auto-generated catch block

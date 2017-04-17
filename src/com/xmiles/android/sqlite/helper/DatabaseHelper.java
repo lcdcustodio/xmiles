@@ -44,6 +44,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	//-----------------
 	public static final String TABLE_NEWSFEED_BY_HASHTAG = "newsfeed_by_hashtag";
 	
+	public static final String TABLE_HISTORY = "history";
+	
 	// Common column names
 	public static final String KEY_ROW_ID = "_id";
 	public static final String KEY_ID = "id"; // (= USER_ID)
@@ -93,8 +95,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String KEY_FLAG = "flag";
 
 
-	// CITY BUSLINE Table - column names
-	public static final String KEY_CITY_BUSLINE = "city_busline";
+
 
 	// USER LOCATION Table - column names
 	public static final String KEY_LOCATION_PROVIDER = "location_provider";
@@ -143,6 +144,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	public static final String KEY_SENDER 	     = "sender";  //NewsFeed
 	public static final String KEY_FEED_TYPE 	 = "feed_type";  //NewsFeed
 
+	public static final String KEY_LAST_UPDATE   = "last_update"; //History
+	
 	// LIKE_UPLOAD Table - column names
 	public static final String KEY_U_ID = "user_id";
 
@@ -155,11 +158,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			+ " TEXT," + KEY_PICTURE + " TEXT," +
 			KEY_SCORE  + " TEXT," +
 			KEY_RANK   + " TEXT," +			
-			KEY_CREATED_AT	+ " DATETIME" + ")";
-
-	private static final String CREATE_TABLE_CITY_BUSLINE = "CREATE TABLE "
-			+ TABLE_CITY_BUSLINE + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
-			KEY_CITY_BUSLINE + " TEXT," +
 			KEY_CREATED_AT	+ " DATETIME" + ")";
 
 
@@ -187,33 +185,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			KEY_P_LATITUDE + " DOUBLE," +
 			KEY_P_LONGITUDE + " DOUBLE," +
 			KEY_CREATED_AT	+ " DATETIME" + ")";
+ 
 
-
-    /*
-	private static final String CREATE_TABLE_USER_FAVORITES = "CREATE TABLE "
-			+ TABLE_USER_FAVORITES + "(" + KEY_FAVORITE_ID + " integer primary key autoincrement ,"  +
-			KEY_ID + " TEXT," + KEY_NAME	+ " TEXT," +
-			KEY_BUSLINE + " TEXT," +
-			KEY_CITY + " TEXT," +
-			KEY_UF + " TEXT," +
-			KEY_FROM + " TEXT," +
-			KEY_FROM_BUS_STOP_ID + " integer," +
-			KEY_TO + " TEXT," +
-			KEY_TO_BUS_STOP_ID + " integer," +
-			KEY_BD_UPDATED + " TEXT," +
-			KEY_CREATED_AT	+ " DATETIME" + ")";
-    */
-	private static final String CREATE_TABLE_USER_ROUTES = "CREATE TABLE "
-			+ TABLE_USER_ROUTES + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
-			KEY_ID + " TEXT," + KEY_FAVORITE_ID	+ " TEXT," +
-			KEY_BUSLINE + " TEXT," +
-			KEY_BUS_STOP + " TEXT," +
-			KEY_BUS_STOP_ID + " integer," +
-			KEY_B_LATITUDE + "  DOUBLE," +
-			KEY_B_LONGITUDE + " DOUBLE," +
-			KEY_FLAG + " TEXT," +
-			KEY_M_DISTANCE_K + " TEXT," +
-			KEY_CREATED_AT	+ " DATETIME" + ")";
 
 	private static final String CREATE_TABLE_USER_LOCATION = "CREATE TABLE "
 			+ TABLE_USER_LOCATION + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
@@ -268,15 +241,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			KEY_BUSLINE_DESCRIPTION + " TEXT," +
 			KEY_BUSLINE_COMPANY + " TEXT" + ")";
 
-	
-	private static final String CREATE_TABLE_REWARDS = "CREATE TABLE "
-			+ TABLE_REWARDS + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
-			KEY_REWARD 		+ " TEXT," +
-			KEY_REWARD_TYPE + " TEXT," + 
-			KEY_PICURL 		+ " TEXT," +
-			KEY_QUANTITY 	+ " TEXT," +
-			KEY_SCORE 		+ " TEXT,"  +
-			KEY_CREATED_AT	+ " DATETIME" + ")";
+
 
 	private static final String CREATE_TABLE_RANKING = "CREATE TABLE "
 			+ TABLE_RANKING + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
@@ -305,6 +270,15 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 			KEY_URL     	  + " TEXT," +
 			KEY_SENDER     	  + " TEXT," +
 			KEY_YOU_LIKE_THIS + " TEXT" + ")";
+	
+	private static final String CREATE_TABLE_HISTORY = "CREATE TABLE "
+			+ TABLE_HISTORY + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
+			KEY_ID			+ " TEXT," +
+			KEY_STATUS		+ " TEXT," +			
+			KEY_TIME_STAMP 	+ " DATETIME," +
+			KEY_LAST_UPDATE + " DATETIME" + ")";
+
+	
 
 	private static final String CREATE_TABLE_NEWSFEED_UPLOAD = "CREATE TABLE "
 			+ TABLE_NEWSFEED_UPLOAD + "(" + KEY_ROW_ID + " integer primary key autoincrement ,"  +
@@ -413,15 +387,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL(CREATE_TABLE_USER_PROFILE);
 		db.execSQL(CREATE_TABLE_USER_PLACES);
 		db.execSQL(CREATE_TABLE_USER_FRIENDS);
-		//db.execSQL(CREATE_TABLE_USER_FAVORITES);
-		db.execSQL(CREATE_TABLE_CITY_BUSLINE);
-		db.execSQL(CREATE_TABLE_USER_ROUTES);
+
 		db.execSQL(CREATE_TABLE_USER_LOCATION);
 		//---------------------
 		db.execSQL(CREATE_TABLE_BUS_GPS_DATA);		
 		db.execSQL(CREATE_TABLE_BUS_GPS_URL);
 		//---------------------
-		db.execSQL(CREATE_TABLE_REWARDS);
+		db.execSQL(CREATE_TABLE_HISTORY);
 		db.execSQL(CREATE_TABLE_RANKING);
 		//---------------------
 		db.execSQL(CREATE_TABLE_NEWSFEED);
@@ -466,6 +438,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_COMMENTS_UPLOAD);
 		db.execSQL("DROP TABLE IF EXISTS " + TABLE_NEWSFEED_BY_HASHTAG);
 		//--------------------		
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_HISTORY);
 		// create new tables
 		onCreate(db);
 	}
@@ -526,42 +499,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 
 
-	public long createCityBusline(ContentValues contentValues) {
 
-		//-----------
-		resetCityBusline();
-		//-----------
-		long rowID = mDB.insert(TABLE_CITY_BUSLINE, null, contentValues);
-		return rowID;
-
-	}
-
-	public long insertCityBusline(ContentValues contentValues) {
-
-		//-----------
-		long rowID = mDB.insert(TABLE_CITY_BUSLINE, null, contentValues);
-		return rowID;
-
-	}
-	/*
-	public long createUserFavorites(ContentValues contentValues) {
-
-		resetUserFavorites();
-		//-----------
-		long rowID = mDB.insert(TABLE_USER_FAVORITES, null, contentValues);
-		return rowID;
-
-	}
-	
-
-	public long insertUserFavorites(ContentValues contentValues) {
-
-		//-----------
-		long rowID = mDB.insert(TABLE_USER_FAVORITES, null, contentValues);
-		return rowID;
-
-	}
-	*/
 
 	public long insertUserRoutes(ContentValues contentValues) {
 
@@ -612,14 +550,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
 	}
 	
-	
-	public long insertRewards(ContentValues contentValues) {
-
-		//-----------
-		long rowID = mDB.insert(TABLE_REWARDS, null, contentValues);
-		return rowID;
-
-	}
 
 	public long insertRanking(ContentValues contentValues) {
 
@@ -628,6 +558,14 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return rowID;
 
 	}
+	
+	public long insertHistory(ContentValues contentValues) {
+
+		//-----------
+		long rowID = mDB.insert(TABLE_HISTORY, null, contentValues);
+		return rowID;
+
+	}	
 	
 	public long insertNewsfeed(ContentValues contentValues) {
 
@@ -694,29 +632,6 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	}
 
 
-	public void resetCityBusline() {
-
-		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_CITY_BUSLINE);
-		mDB.execSQL(CREATE_TABLE_CITY_BUSLINE);
-
-	}
-    /*
-	public void resetUserFavorites() {
-		//-----------
-		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_FAVORITES);
-		mDB.execSQL(CREATE_TABLE_USER_FAVORITES);
-		//-----------
-
-	}
-	*/
-
-	public void resetUserRoutes() {
-		//-----------
-		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_ROUTES);
-		mDB.execSQL(CREATE_TABLE_USER_ROUTES);
-		//-----------
-
-	}
 
 	public void resetUserLocation() {
 		//-----------
@@ -747,12 +662,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		//-----------
 	}	
 
-	public void resetRewards() {
-		//-----------
-		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_REWARDS);
-		mDB.execSQL(CREATE_TABLE_REWARDS);
-		//-----------
-	}	
+
 	
 	public void resetRanking() {
 		//-----------
@@ -760,6 +670,13 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		mDB.execSQL(CREATE_TABLE_RANKING);
 		//-----------
 	}	
+	
+	public void resetHistory() {
+		//-----------
+		mDB.execSQL("DROP TABLE IF EXISTS " + TABLE_HISTORY);
+		mDB.execSQL(CREATE_TABLE_HISTORY);
+		//-----------
+	}		
 
 	public void resetNewsfeed() {
 		//-----------
@@ -816,30 +733,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return mDB.query(TABLE_USER_PROFILE, new String[] {KEY_ID, KEY_NAME, KEY_PICTURE, KEY_SCORE, KEY_RANK, KEY_CREATED_AT}, null, null, null, null, null);
 	}
 
-	public Cursor get_CityBusline(){
-        //return mDB.query(TABLE_USER_PLACES, new String[] { KEY_ROW_ID,  KEY_NAME , KEY_PHONE } , null, null, null, null, KEY_NAME + " asc ");
-		//return mDB.query(TABLE_USER_PLACES, new String[] {KEY_ROW_ID, KEY_NEARBY,KEY_CITY}, null, null, null, null, null);
-		return mDB.query(TABLE_CITY_BUSLINE, new String[] {KEY_CITY_BUSLINE}, null, null, null, null, null);
-	}
-    /*
-	public Cursor get_UserFavorites(){
-		//return mDB.query(TABLE_USER_FAVORITES, new String[] {KEY_ID, KEY_NAME}, null, null, null, null, null);
-		//return mDB.query(TABLE_USER_FAVORITES, new String[] {KEY_ID, KEY_NAME, KEY_BUSLINE, KEY_CITY, KEY_UF, KEY_FROM, KEY_TO,KEY_FROM_BUS_STOP_ID,KEY_TO_BUS_STOP_ID,KEY_FAVORITE_ID}, null, null, null, null, null);
-		return mDB.query(TABLE_USER_FAVORITES, new String[] {KEY_ID, KEY_NAME, KEY_BUSLINE, KEY_CITY, KEY_UF, KEY_FROM, KEY_TO,KEY_FROM_BUS_STOP_ID,KEY_TO_BUS_STOP_ID,KEY_FAVORITE_ID}, null, null, null, null, KEY_FAVORITE_ID + " DESC");
-	}
-	*/
 
-	public Cursor get_UserRoutes(){
 
-		return mDB.query(TABLE_USER_ROUTES, new String[] {KEY_ID, KEY_FAVORITE_ID, KEY_BUS_STOP, KEY_BUS_STOP_ID, KEY_B_LATITUDE, KEY_B_LONGITUDE, KEY_FLAG, KEY_M_DISTANCE_K}, null, null, null, null, null);
-	}
-
-	public Cursor get_UserRoutesFlag(){
-
-		//return mDB.query(TABLE_USER_ROUTES_FLAG, new String[] {KEY_FAVORITE_ID, KEY_BUS_STOP_ID, KEY_B_LATITUDE, KEY_B_LONGITUDE, KEY_FLAG, KEY_M_DISTANCE_K}, null, null, null, null, null);
-		String WHERE =  "flag= 'YES' ";
-		return mDB.query(TABLE_USER_ROUTES, new String[] {KEY_FAVORITE_ID, KEY_BUS_STOP_ID, KEY_B_LATITUDE, KEY_B_LONGITUDE, KEY_FLAG, KEY_M_DISTANCE_K}, WHERE, null, null, null, null);
-	}
 
 	public Cursor get_UserLocation(){
 
@@ -867,16 +762,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 		return mDB.query(TABLE_BUSCODE, new String[] {KEY_ROW_ID, KEY_BUSCODE, KEY_BUSLINE, KEY_BUSLINE_DESCRIPTION, KEY_BUSLINE_COMPANY, KEY_HASHTAG}, null, null, null, null, null);
 	}
 
-	
-	public Cursor get_Rewards(){
-
-		return mDB.query(TABLE_REWARDS, new String[] {KEY_REWARD, KEY_REWARD_TYPE, KEY_PICURL, KEY_SCORE, KEY_QUANTITY}, null, null, null, null, null);
-	}
-	
 	public Cursor get_Ranking(){
 
 		return mDB.query(TABLE_RANKING, new String[] {KEY_ID, KEY_NAME, KEY_PICURL, KEY_SCORE}, null, null, null, null, null);
 	}
+	
+	public Cursor get_History(){
+
+		return mDB.query(TABLE_HISTORY, new String[] {KEY_ROW_ID, KEY_STATUS, KEY_TIME_STAMP, KEY_LAST_UPDATE}, null, null, null, null, null);
+	}
+	
 
 	public Cursor get_Newsfeed(){
 

@@ -19,29 +19,29 @@ public abstract class BaseRequestListener implements RequestListener {
 
     @Override
     public void onFacebookError(FacebookError e, final Object state) {
-        //Log.e("Facebook", e.getMessage());
-        Log.e(TAG, "BaseRequestListener " + e.getMessage());
+        ////Log.e("Facebook", e.getMessage());
+        //Log.e(TAG, "BaseRequestListener " + e.getMessage());
         e.printStackTrace();
     }
 
     @Override
     public void onFileNotFoundException(FileNotFoundException e, final Object state) {
-        //Log.e("Facebook", e.getMessage());
-        Log.e(TAG, "BaseRequestListener " + e.getMessage());
+        ////Log.e("Facebook", e.getMessage());
+        //Log.e(TAG, "BaseRequestListener " + e.getMessage());
         e.printStackTrace();
     }
 
     @Override
     public void onIOException(IOException e, final Object state) {
-        //Log.e("Facebook", e.getMessage());
-        Log.e(TAG, "BaseRequestListener " + e.getMessage());
+        ////Log.e("Facebook", e.getMessage());
+        //Log.e(TAG, "BaseRequestListener " + e.getMessage());
         e.printStackTrace();
     }
 
     @Override
     public void onMalformedURLException(MalformedURLException e, final Object state) {
-        //Log.e("Facebook", e.getMessage());
-        Log.e(TAG, "BaseRequestListener " + e.getMessage());
+        ////Log.e("Facebook", e.getMessage());
+        //Log.e(TAG, "BaseRequestListener " + e.getMessage());
         e.printStackTrace();
     }
 

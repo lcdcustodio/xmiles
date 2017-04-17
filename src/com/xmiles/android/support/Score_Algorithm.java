@@ -4,7 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import com.xmiles.android.R;
-import com.xmiles.android.backup.DataRioHttpGetAsyncTask;
+
 import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.webservice.ApiBusGetAsyncTask;
 import com.xmiles.android.webservice.HttpGetAsyncTask;
@@ -29,21 +29,7 @@ public class Score_Algorithm {
 
 		
 	}
-	
-    public JSONObject getBusPosition(String url, String buscode) {
 
-    	//JSONArray jsonArray;
-    	JSONObject json;
-    	//String url = "http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/onibus/";
-    	try {
-    		
-    		json = new JSONObject(new DataRioHttpGetAsyncTask().execute(url + buscode).get());
-	     } catch (Exception e) {
-	         throw new RuntimeException(e);
-	     }
-
-    	return json;
-    }
 
     public JSONObject getApiBusPosition(String buscode_digits, String buscode) {
 
@@ -61,21 +47,7 @@ public class Score_Algorithm {
 
     	return json;
     }    
-    
-    public JSONObject getBrtPosition(String url, String buscode) {
-
-    	//JSONArray jsonArray;
-    	JSONObject json;
-    	//String url = "http://dadosabertos.rio.rj.gov.br/apiTransporte/apresentacao/rest/index.cfm/brt/";
-    	try {
-    		
-    		json = new JSONObject(new DataRioHttpGetAsyncTask().execute(url + buscode).get());
-	     } catch (Exception e) {
-	         throw new RuntimeException(e);
-	     }
-
-    	return json;
-    }
+ 
     
     public void GpsNotFound(final String url_gnf, final String buscode_gnf) {
     	

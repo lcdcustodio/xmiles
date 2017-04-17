@@ -97,7 +97,7 @@ public class GPSTracker extends Service implements LocationListener, android.loc
 							locationManager.requestLocationUpdates(
 									LocationManager.NETWORK_PROVIDER,
 									0, 0, this);
-							Log.d(TAG, "Network Provider");
+							//Log.d(TAG, "Network Provider");
 							if (locationManager != null) {
 								location = locationManager
 										.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
@@ -118,7 +118,7 @@ public class GPSTracker extends Service implements LocationListener, android.loc
 								locationManager.requestLocationUpdates(
 										LocationManager.GPS_PROVIDER,
 										0, 0, this);
-								Log.d(TAG, "GPS Enabled");
+								//Log.d(TAG, "GPS Enabled");
 								if (locationManager != null) {
 									location = locationManager
 											.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -245,7 +245,7 @@ public class GPSTracker extends Service implements LocationListener, android.loc
 	public void Notification_MSG(){
 		NotificationManager mNotificationManager = (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
 
-	    int icon = R.drawable.xmiles_logo_rev06;
+	    int icon = R.drawable.xmiles_user_profile;
 	    CharSequence tickerText = mContext.getString(R.string.location_service);
 	    long time = System.currentTimeMillis();
 
@@ -293,12 +293,12 @@ public class GPSTracker extends Service implements LocationListener, android.loc
         {
             case GpsStatus.GPS_EVENT_STARTED:            	
                 //Toast.makeText(mContext, "GPS_SEARCHING", Toast.LENGTH_SHORT).show();
-            	Log.w(TAG,"GPS_SEARCHING");
+            	//Log.w(TAG,"GPS_SEARCHING");
                 System.out.println("TAG - GPS searching: ");                        
                 break;
             case GpsStatus.GPS_EVENT_STOPPED:    
                 System.out.println("TAG - GPS Stopped");
-                Log.w(TAG,"GPS Stopped");
+                //Log.w(TAG,"GPS Stopped");
                 break;
             case GpsStatus.GPS_EVENT_FIRST_FIX:
 
@@ -306,7 +306,7 @@ public class GPSTracker extends Service implements LocationListener, android.loc
                  * GPS_EVENT_FIRST_FIX Event is called when GPS is locked            
                  */
                     //Toast.makeText(mContext, "GPS_LOCKED", Toast.LENGTH_SHORT).show();
-                    Log.w(TAG,"GPS_LOCKED");
+                    //Log.w(TAG,"GPS_LOCKED");
                     //Location gpslocation = locationManager
                     //        .getLastKnownLocation(LocationManager.GPS_PROVIDER);
 
