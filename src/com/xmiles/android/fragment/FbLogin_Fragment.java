@@ -109,7 +109,10 @@ public class FbLogin_Fragment extends Fragment {
 		        	
 		        } else {
 		        	
-		        	Uri uri = Uri.parse("https://www.youtube.com/embed/OvgtMaMftZw"); 
+		        	 
+		        	Uri uri = Uri.parse("https://www.youtube.com/embed/GGi3iWkjJos"); 
+		        	//Uri uri = Uri.parse("http://www.xmiles.com.br/youtube");
+		        	
 		        	Intent intent = new Intent(Intent.ACTION_VIEW, uri);
 		        	startActivity(intent);
 		    	
@@ -119,7 +122,7 @@ public class FbLogin_Fragment extends Fragment {
 		
 		//*****************************************
 		// Aguardando Vídeo da Solda Fria Produções
-		Youtube.setEnabled(false);
+		//Youtube.setEnabled(false);
 		// Aguardando Vídeo da Solda Fria Produções
 		//*****************************************		
 

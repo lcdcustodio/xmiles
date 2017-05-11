@@ -76,7 +76,7 @@
 					     android:layout_below="@+id/app_name"
 					      -->
 					 <!-- disable button below until video solda -->    
-					 <!--     
+					 <!-- -->     
 					 <Button
 					     android:id="@+id/helpbutton"
 					     android:layout_below="@+id/fblogin"
@@ -87,8 +87,8 @@
 					     android:background="@drawable/youtube_button"
 					     android:drawableLeft="@drawable/youtube_logo_2"
 					     android:text="Veja como funciona" />					     
-					    -->
-					       
+					 <!--   -->
+					 <!--        
 					 <Button
 					     android:id="@+id/helpbutton"
 					     android:layout_below="@+id/fblogin"
@@ -99,7 +99,7 @@
 					     android:background="#ffffff"
 					     
 					     android:text="Veja como funciona" />
-					     
+					  -->   
 
 				        <View
 				            android:id="@+id/view02"

@@ -86,7 +86,8 @@ public class Gmaps extends FragmentActivity implements OnInfoWindowClickListener
 	private static GoogleMap mMap;
 	private static LatLng user_loc;
 
-	private static final Integer MAX_DIST 	  = 6; //6km
+	//private static final Integer MAX_DIST 	  = 6; //6km
+	private static final Integer MAX_DIST 	  = 4; //4km	
 	//private static final Integer MAX_DIST 	  = 7; //7km
 	//private static final Integer MAX_DIST 	  = 500; //500km
 	

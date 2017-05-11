@@ -4,10 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 
 public final class CommonUtilities {
-	
-	// give your server registration url here     
-    //public static final String SERVER_URL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/old/gcm_server_php/register.php";
-    public static final String SERVER_URL = "http://ec2-54-209-160-58.compute-1.amazonaws.com/xmiles/gcm/register.php";
+
+	// give your server registration url here
+
+    public static final String SERVER_URL = "http://ec2-54-163-172-76.compute-1.amazonaws.com/xmiles/gcm/register.php";
 
     // Google project id
     public static final String SENDER_ID = "485149707692";  // SenderID from PUSH NOTIFICATION By GCM (androidhive example)
@@ -24,7 +24,7 @@ public final class CommonUtilities {
     public static final String DISPLAY_MESSAGE_ACTION =
             "com.xmiles.android.DISPLAY_MESSAGE";
 
-    
+
     public static final String EXTRA_MESSAGE = "message";
 
     /**

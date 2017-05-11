@@ -71,7 +71,8 @@ public class Getting_GpsBusData extends WakefulBroadcastReceiver{
 	//private static final Integer MAX_POINTS = 4;
 	//# times criteria (dist > MAX_POINTS || time > MAX_TIME_OFFSET) is not fulfil
 	private static final Integer MAX_POINTS = 1;  
-	private static final Integer MAX_DIST 	  = 3; //3km
+	//private static final Integer MAX_DIST 	  = 3; //3km
+	private static final Integer MAX_DIST 	  = 2; //2km	
 	private static final Integer MAX_TIME_OFFSET = 300; //300secs = 5min
 
 	
