@@ -7,7 +7,8 @@
         android:layout_height="fill_parent"
         android:fillViewport="true"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
--->            
+-->      
+  
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
@@ -19,7 +20,8 @@
 	    android:layout_height="fill_parent"
 	    android:background="@color/feed_bg"
 	    android:orientation="vertical" >
--->	      
+	     
+<HorizontalScrollView>-->
     <ListView
         android:id="@+id/list"
         android:layout_width="fill_parent"
@@ -28,9 +30,10 @@
         android:divider="@null" />
     	<!--android:layout_height="wrap_content"
     		android:layout_height="wrap_content" 
-    		 -->
-
+    		 
+</HorizontalScrollView> --> 
 </LinearLayout>
+
 <!--  
 </android.support.v4.widget.NestedScrollView>
 -->
