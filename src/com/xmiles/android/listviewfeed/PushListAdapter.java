@@ -228,9 +228,9 @@ public class PushListAdapter extends BaseAdapter {
 				// like, comments stats
 				vi1_rel_stats.setText(feed_item.getLike_stats() + " curtida(s) " +  feed_item.getComment_stats() + " comentário(s)");
 				//********************************************************
-		    	//Test @april-11th disabling for MVP launching at April/17
-				vi1_rel_stats.setText("");
-		    	//Test @april-11th disabling for MVP launching at April/17
+		    	//End @sep-09th:Test @april-11th disabling for MVP launching at April/17
+				//vi1_rel_stats.setText("");
+		    	//End @sep-09th:Test @april-11th disabling for MVP launching at April/17
 				//********************************************************				
 				
 				// Making comments unclickable

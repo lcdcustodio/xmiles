@@ -552,51 +552,52 @@ public class FeedListAdapter extends BaseAdapter {
 	    	 rel_stats.setVisibility(View.GONE);
 
 	     } else {
-	    	//Test @april-11th disabling for MVP launching at April/17
-	    	//rel_stats.setVisibility(View.VISIBLE);
+	    	 
+	    	//End @sep-09th: Test @april-11th disabling for MVP launching at April/17
+	    	rel_stats.setVisibility(View.VISIBLE);
 	 		// like, comments stats
-	    	//Test @april-11th disabling for MVP launching at April/17
-	 		//rel_stats.setText(item.getLike_stats() + " curtida(s) " +  item.getComment_stats() + " comentário(s)");
+	    	//End @sep-09th: Test @april-11th disabling for MVP launching at April/17
+	 		rel_stats.setText(item.getLike_stats() + " curtida(s) " +  item.getComment_stats() + " comentário(s)");
 
 	     }
 
 	     //Like Button
 	     if (item.getYou_like_this().equals("YES")){
 
-	    	 //Test @april-11th disabling for MVP launching at April/17
-	    	 //like.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_icon_active_new_orange_20, 0, 0, 0);
-	    	 //Test @april-11th disabling for MVP launching at April/17
-	    	 //like.setTextColor(activity.getResources().getColor(R.color.ab_mid));
-	    	 //Test @april-11th disabling for MVP launching at April/17
-	    	 //like.setText("Curtiu");
+	    	 //End @sep-09th:Test @april-11th disabling for MVP launching at April/17
+	    	 like.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_icon_active_new_orange_20, 0, 0, 0);
+	    	 //End @sep-09th:Test @april-11th disabling for MVP launching at April/17
+	    	 like.setTextColor(activity.getResources().getColor(R.color.ab_mid));
+	    	 //End @sep-09th:Test @april-11th disabling for MVP launching at April/17
+	    	 like.setText("Curtiu");
 	    	 //---
-	    	 //Test @april-11th disabling for MVP launching at April/17
-	    	 //comment.setText("Comentar");
+	    	 //End @sep-09th:Test @april-11th disabling for MVP launching at April/17
+	    	 comment.setText("Comentar");
 	    	 //---
-	    	 //Test @april-11th disabling for MVP launching at April/17
-	    	 //like.setTextSize(TypedValue.COMPLEX_UNIT_DIP,14);
+	    	 //End @sep-09th:Test @april-11th disabling for MVP launching at April/17
+	    	 like.setTextSize(TypedValue.COMPLEX_UNIT_DIP,14);
 	    	 like.setEnabled(false);
 
 	     } else {
-	    	 //Test @april-11th disabling for MVP launching at April/17
-	    	 //like.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_light_grey_l, 0, 0, 0);
-	    	 //Test @april-11th disabling for MVP launching at April/17
-	    	 //like.setTextColor(activity.getResources().getColor(R.color.timestamp));
-	    	 //Test @april-11th disabling for MVP launching at April/17
-	    	 //like.setText("Curtir");
+	    	 //End @sep-09th:Test @april-11th disabling for MVP launching at April/17
+	    	 like.setCompoundDrawablesWithIntrinsicBounds(R.drawable.like_light_grey_l, 0, 0, 0);
+	    	 //End @sep-09th:Test @april-11th disabling for MVP launching at April/17
+	    	 like.setTextColor(activity.getResources().getColor(R.color.timestamp));
+	    	 //End @sep-09th:Test @april-11th disabling for MVP launching at April/17
+	    	 like.setText("Curtir");
 	    	 //---
-	    	 //Test @april-11th disabling for MVP launching at April/17
-	    	 //comment.setText("Comentar");
+	    	 //End @sep-09th:Test @april-11th disabling for MVP launching at April/17
+	    	 comment.setText("Comentar");
 	    	 //---
-	    	 //Test @april-11th disabling for MVP launching at April/17
-	    	 //like.setTextSize(TypedValue.COMPLEX_UNIT_DIP,13);
+	    	 //End @sep-09th:Test @april-11th disabling for MVP launching at April/17
+	    	 like.setTextSize(TypedValue.COMPLEX_UNIT_DIP,13);
 
 
 	    	 if (item.getId() > -1){
-	    		 //Test @april-11th disabling for MVP launching at April/17
-	    		 //like.setEnabled(true);
-	    		 //Test @april-11th disabling for MVP launching at April/17
-	    		 //comment.setEnabled(true);
+	    		 //End @sep-09th: Test @april-11th disabling for MVP launching at April/17
+	    		 like.setEnabled(true);
+	    		 //End @sep-09th: Test @april-11th disabling for MVP launching at April/17
+	    		 comment.setEnabled(true);
 
 	    	 } else if (item.getId() == -1){
 	    		 like.setEnabled(false);
@@ -608,17 +609,17 @@ public class FeedListAdapter extends BaseAdapter {
 	    	 }
 	     }
 	    //********************************************************
-	    //Test @april-11th disabling for MVP launching at April/17
-	    rel_stats.setVisibility(View.GONE);
-	    View v1 = (View) convertView.findViewById(R.id.View01);
-	    v1.setVisibility(View.GONE);
-		like.setEnabled(false);
-		comment.setEnabled(false);
-		like.setText("");
-		like.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-		comment.setText("");
-		comment.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-		//Test @april-11th disabling for MVP launching at April/17
+	    //End @sep-09th:Test @april-11th disabling for MVP launching at April/17
+	    //rel_stats.setVisibility(View.GONE);
+	    //View v1 = (View) convertView.findViewById(R.id.View01);
+	    //v1.setVisibility(View.GONE);
+		//like.setEnabled(false);
+		//comment.setEnabled(false);
+		//like.setText("");
+		//like.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+		//comment.setText("");
+		//comment.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+		//End @sep-09th:Test @april-11th disabling for MVP launching at April/17
 	    //********************************************************
 
 		Support support = new Support();

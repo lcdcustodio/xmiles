@@ -137,8 +137,8 @@ public class Push_Fragment extends Fragment {
 		
 		View custom_1 = inflater.inflate(R.layout.push_fgmt, container, false);
 		listView 	= (ListView) custom_1.findViewById(R.id.list_items);
-		//Test @april-11th disabling for MVP launching at April/17
-		//add_cmts = (AutoCompleteTextView) custom_1.findViewById(R.id.add_comment);
+		//End @sep-09th:Test @april-11th disabling for MVP launching at April/17
+		add_cmts = (AutoCompleteTextView) custom_1.findViewById(R.id.add_comment);
 		
 		//position = getArguments().getInt("position");
 		feed_id = getArguments().getString("feed_id");
@@ -161,8 +161,8 @@ public class Push_Fragment extends Fragment {
 		//*/
 		//--------------
 		//********************************************************
-		//Test @april-11th disabling for MVP launching at April/17
-		/*
+		//End @sep-09th: Test @april-11th disabling for MVP launching at April/17
+		//*
       	//HANDLE EVENT - TYPE COMMENTS
 		add_cmts.setOnKeyListener(new View.OnKeyListener() {
             @Override
@@ -288,8 +288,8 @@ public class Push_Fragment extends Fragment {
             }
 
         });
-		*/		
-		//Test @april-11th disabling for MVP launching at April/17
+		//*/		
+		//End @sep-09th:Test @april-11th disabling for MVP launching at April/17
 		//********************************************************
 
 		//--------------
