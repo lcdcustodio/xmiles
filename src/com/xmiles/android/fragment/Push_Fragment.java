@@ -30,6 +30,7 @@ import com.xmiles.android.sqlite.helper.DatabaseHelper;
 import com.xmiles.android.support.ConnectionDetector;
 import com.xmiles.android.support.GPSTracker;
 import com.xmiles.android.support.GetDeviceName;
+import com.xmiles.android.support.GetUberPackageInfo;
 import com.xmiles.android.support.Score_Algorithm;
 import com.xmiles.android.support.Support;
 import com.xmiles.android.support.imageloader.RankingLazyAdapter;
@@ -349,7 +350,8 @@ public class Push_Fragment extends Fragment {
 														Integer.toString(android.os.Build.VERSION.SDK_INT),
 														support_v2.getAppversionName(getActivity().getApplicationContext()), 
 														support_v2.getAppversionCode(getActivity().getApplicationContext()), 
-														"push");
+														"push",
+														new GetUberPackageInfo(getActivity().getApplicationContext()).getUberPackageInfo());
 				            //------------
 				            //------------
 				    		        	

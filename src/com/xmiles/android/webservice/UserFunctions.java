@@ -83,9 +83,12 @@ public class UserFunctions {
      * @param password
      * */
     //public JSONObject loginUser(String id, String name, String picURL, String device, String android_api,
-    public JSONObject loginUser(String id, String name, String device, String android_api,
-    		String AppversionName, String AppversionCode, String access_type){
+    //public JSONObject loginUser(String id, String name, String device, String android_api,
+    //		String AppversionName, String AppversionCode, String access_type){
 
+    public JSONObject loginUser(String id, String name, String device, String android_api,
+    		String AppversionName, String AppversionCode, String access_type, String uber_package){    
+    
         // Building Parameters
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("tag", login_tag));
@@ -98,6 +101,8 @@ public class UserFunctions {
         params.add(new BasicNameValuePair("app_ver_name", AppversionName));
         params.add(new BasicNameValuePair("app_ver_code", AppversionCode));
         params.add(new BasicNameValuePair("access_type", access_type));
+        //------
+        params.add(new BasicNameValuePair("uber_package", uber_package));
         //------
         JSONObject json = jsonParser.getJSONFromUrl(loginURL, params);
         // return json

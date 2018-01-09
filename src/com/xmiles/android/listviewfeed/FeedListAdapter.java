@@ -9,6 +9,7 @@ import com.xmiles.android.Profile;
 import com.xmiles.android.R;
 import com.xmiles.android.Ranking;
 import com.xmiles.android.Relationship;
+import com.xmiles.android.Uber;
 import com.xmiles.android.listviewfeed.AppController;
 import com.xmiles.android.listviewfeed.FeedItem;
 import com.xmiles.android.scheduler.Likes_Inbox_Upload;
@@ -70,6 +71,7 @@ public class FeedListAdapter extends BaseAdapter {
 
 	private static final String RANKING = "#ranking";
 	private static final String PROFILE = "#perfil";
+	private static final String UBERNOXMILES = "#ubernoxmiles";
 
 	//private static final String INVITE = "#convite_amigos";
 
@@ -152,6 +154,12 @@ public class FeedListAdapter extends BaseAdapter {
 
 						Intent intent = new Intent(activity, Ranking.class);
 						activity.startActivity(intent);
+						
+		        	}else if (hashtag_1.getText().toString().equals(UBERNOXMILES)){	
+		        		
+						Intent intent = new Intent(activity, Uber.class);
+						activity.startActivity(intent);
+		        		
 
 		        	}else if (hashtag_1.getText().toString().equals(PROFILE)){
 		        		//-----------------
@@ -233,6 +241,13 @@ public class FeedListAdapter extends BaseAdapter {
 						Intent intent = new Intent(activity, Ranking.class);
 						activity.startActivity(intent);
 
+		        	}else if (hashtag_2.getText().toString().equals(UBERNOXMILES)){	
+		        		
+						Intent intent = new Intent(activity, Uber.class);
+						activity.startActivity(intent);
+						
+						
+						
 		        	}else if (hashtag_2.getText().toString().equals(PROFILE)){
 						//-----------------
 		        	   	//Progress Dialog
@@ -704,7 +719,9 @@ public class FeedListAdapter extends BaseAdapter {
 			//hashtag_1.setVisibility(View.VISIBLE);
 			//********************************************************
 			//Test @april-11th disabling for MVP launching at April/17
-			if(hashtag_1.getText().toString().equals(RANKING) || hashtag_1.getText().toString().equals(PROFILE)){
+			if(hashtag_1.getText().toString().equals(RANKING) || hashtag_1.getText().toString().equals(PROFILE)
+					|| hashtag_1.getText().toString().equals(UBERNOXMILES)){
+				
 				hashtag_1.setVisibility(View.VISIBLE);
 			}else{
 				hashtag_1.setVisibility(View.GONE);
@@ -720,7 +737,8 @@ public class FeedListAdapter extends BaseAdapter {
 				//hashtag_2.setVisibility(View.VISIBLE);
 				//********************************************************
 				//Test @april-11th disabling for MVP launching at April/17
-				if(hashtag_2.getText().toString().equals(RANKING) || hashtag_2.getText().toString().equals(PROFILE)){
+				if(hashtag_2.getText().toString().equals(RANKING) || hashtag_2.getText().toString().equals(PROFILE)
+						|| hashtag_2.getText().toString().equals(UBERNOXMILES)){
 					hashtag_2.setVisibility(View.VISIBLE);
 				}else{
 					hashtag_2.setVisibility(View.GONE);

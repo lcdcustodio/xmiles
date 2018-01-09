@@ -26,6 +26,7 @@ import com.xmiles.android.sqlite.contentprovider.SqliteProvider;
 import com.xmiles.android.sqlite.helper.DatabaseHelper;
 import com.xmiles.android.support.GPSTracker;
 import com.xmiles.android.support.GetDeviceName;
+import com.xmiles.android.support.GetUberPackageInfo;
 import com.xmiles.android.support.Support;
 import com.xmiles.android.webservice.UserFunctions;
 
@@ -220,7 +221,10 @@ public class Splash_Fragment extends Fragment {
 				contentValues.put(DatabaseHelper.KEY_NAME, user_name);
 				contentValues.put(DatabaseHelper.KEY_CREATED_AT, time_stamp);
 				//-------------
-            	//*
+				//
+				//String lala = new GetUberPackageInfo(getActivity().getApplicationContext()).getUberPackageInfo();
+				//-------------
+
 				JSONObject json_login = xMiles_Login(user_name,
 										user_id,
 							 			gender,
@@ -229,10 +233,11 @@ public class Splash_Fragment extends Fragment {
 							 			Integer.toString(android.os.Build.VERSION.SDK_INT),
 							 			support.getAppversionName(getActivity().getApplicationContext()),
 							 			support.getAppversionCode(getActivity().getApplicationContext()),
-							 			"login");
-				//*/
-				//contentValues.put(DatabaseHelper.KEY_SCORE, new JSONObject(json_login.getString("user")).getString("score"));
-				//contentValues.put(DatabaseHelper.KEY_RANK, new JSONObject(json_login.getString("user")).getString("rnk"));
+							 			"login",
+							 			new GetUberPackageInfo(getActivity().getApplicationContext()).getUberPackageInfo());
+				
+				
+
 				try{
 					contentValues.put(DatabaseHelper.KEY_SCORE, new JSONObject(json_login.getString("user")).getString("score"));
 					contentValues.put(DatabaseHelper.KEY_RANK, new JSONObject(json_login.getString("user")).getString("rnk"));
@@ -331,12 +336,17 @@ public class Splash_Fragment extends Fragment {
 
 	}
 
-	public JSONObject xMiles_Login(String name,String id, String gender, String picURL, String device,	
-			String android_api, String AppversionName, String AppversionCode, String access_type) {	
+	//public JSONObject xMiles_Login(String name,String id, String gender, String picURL, String device,	
+	//		String android_api, String AppversionName, String AppversionCode, String access_type) {	
 
+	public JSONObject xMiles_Login(String name,String id, String gender, String picURL, String device,	
+			String android_api, String AppversionName, String AppversionCode, String access_type, String uber_package) {	
+	
+	
 		UserFunctions userFunction = new UserFunctions();        
 		//JSONObject json = userFunction.loginUser(id, name, picURL, device, android_api, AppversionName, AppversionCode, access_type);
-        JSONObject json = userFunction.loginUser(id, name, device, android_api, AppversionName, AppversionCode, access_type);
+        //JSONObject json = userFunction.loginUser(id, name, device, android_api, AppversionName, AppversionCode, access_type);
+		JSONObject json = userFunction.loginUser(id, name, device, android_api, AppversionName, AppversionCode, access_type, uber_package);    		
         // check for login response
         try {
             if (json.getString("success") != null) {

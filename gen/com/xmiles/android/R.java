@@ -881,7 +881,7 @@ Toolbar Hive example
         public static final int Button_like=0x7f0a005f;
         public static final int LinearLayout02=0x7f0a005e;
         public static final int View01=0x7f0a004a;
-        public static final int about_it=0x7f0a0080;
+        public static final int about_it=0x7f0a0081;
         public static final int add_comment=0x7f0a0079;
         public static final int adjust_height=0x7f0a000a;
         public static final int adjust_width=0x7f0a000b;
@@ -893,7 +893,7 @@ Toolbar Hive example
         public static final int artist=0x7f0a006e;
         public static final int auto=0x7f0a0007;
         public static final int book_now=0x7f0a001a;
-        public static final int buscode_search=0x7f0a007e;
+        public static final int buscode_search=0x7f0a007f;
         public static final int buyButton=0x7f0a0016;
         public static final int buy_now=0x7f0a001b;
         public static final int buy_with=0x7f0a001c;
@@ -950,7 +950,7 @@ Toolbar Hive example
         public static final int helpbutton=0x7f0a0054;
         public static final int holo_dark=0x7f0a0010;
         public static final int holo_light=0x7f0a0011;
-        public static final int how_works=0x7f0a0081;
+        public static final int how_works=0x7f0a0082;
         public static final int hybrid=0x7f0a000d;
         public static final int icon_only=0x7f0a0004;
         public static final int large=0x7f0a0001;
@@ -963,13 +963,14 @@ Toolbar Hive example
         public static final int logo=0x7f0a0050;
         public static final int logo_only=0x7f0a0020;
         public static final int match_parent=0x7f0a0018;
-        public static final int menu_more=0x7f0a007f;
+        public static final int menu_more=0x7f0a0080;
         public static final int monochrome=0x7f0a0029;
         public static final int name=0x7f0a004c;
         public static final int none=0x7f0a000c;
         public static final int normal=0x7f0a0002;
+        public static final int pb=0x7f0a007b;
         public static final int picker_subtitle=0x7f0a003e;
-        public static final int policies=0x7f0a0082;
+        public static final int policies=0x7f0a0083;
         public static final int production=0x7f0a0012;
         public static final int profilePic=0x7f0a004b;
         public static final int profilePic_1=0x7f0a0071;
@@ -981,9 +982,9 @@ Toolbar Hive example
         public static final int rel_add_comment=0x7f0a0078;
         public static final int rel_stats=0x7f0a005d;
         public static final int rnk_header_item=0x7f0a006a;
-        public static final int rua=0x7f0a007c;
+        public static final int rua=0x7f0a007d;
         public static final int sandbox=0x7f0a0013;
-        public static final int satelite=0x7f0a007b;
+        public static final int satelite=0x7f0a007c;
         public static final int satellite=0x7f0a000e;
         public static final int score=0x7f0a0069;
         public static final int search=0x7f0a0065;
@@ -995,7 +996,7 @@ Toolbar Hive example
         public static final int termofuse_1=0x7f0a0056;
         public static final int termofuse_2=0x7f0a0057;
         public static final int terrain=0x7f0a000f;
-        public static final int terreno=0x7f0a007d;
+        public static final int terreno=0x7f0a007e;
         public static final int test=0x7f0a0015;
         public static final int thumbnail=0x7f0a006b;
         public static final int timestamp=0x7f0a004d;
@@ -1056,7 +1057,8 @@ Toolbar Hive example
         public static final int rel_fgmt=0x7f030028;
         public static final int splash=0x7f030029;
         public static final int splash_fragment=0x7f03002a;
-        public static final int webview_temp=0x7f03002b;
+        public static final int webview=0x7f03002b;
+        public static final int webview_temp=0x7f03002c;
     }
     public static final class menu {
         public static final int gmaps_type=0x7f0c0000;
