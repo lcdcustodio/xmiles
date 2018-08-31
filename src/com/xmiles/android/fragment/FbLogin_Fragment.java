@@ -39,7 +39,8 @@ public class FbLogin_Fragment extends Fragment {
 	//public String[] permissions = { "read_stream", "publish_actions", "user_photos", "user_location" };
 	//public String[] permissions = { "read_stream", "publish_actions", "user_photos", "user_location", "user_friends" };
 	//public String[] permissions = { "read_stream", "publish_actions", "user_photos", "user_location", "user_friends", "user_birthday" };
-	public String[] permissions = { "publish_actions", "user_photos", "user_location", "user_friends", "user_birthday" };
+	//public String[] permissions = { "publish_actions", "user_photos", "user_location", "user_friends", "user_birthday" };
+	public String[] permissions = { "user_photos", "user_location", "user_friends", "user_birthday" };
 	//TAG
 	private static final String TAG = "FACEBOOK";
 	

@@ -123,6 +123,10 @@ public class RankingLazyAdapter extends BaseAdapter {
 		    		rnk_header.setText("Ranking - Top 5");
 		    	} else if (ranking_info.getCount() < 11){
 		    		rnk_header.setText("Ranking - Top 10");
+		    	} else if (ranking_info.getCount() < 21){
+		    		rnk_header.setText("Ranking - Top 20");		    		
+		    	} else if (ranking_info.getCount() < 51){
+		    		rnk_header.setText("Ranking - Top 50");
 		    	}
 		    	   
 				return vi_header;

@@ -22,7 +22,9 @@ public class UserFunctions {
 
     private static String loginURL = "http://ec2-54-163-172-76.compute-1.amazonaws.com/xmiles/login/";
     private static String registerURL = "http://ec2-54-163-172-76.compute-1.amazonaws.com/xmiles/login/";
-
+    
+    private static String uberURL = "http://ec2-54-163-172-76.compute-1.amazonaws.com/xmiles/login/";
+    								
 
     private static String buslineURL = "http://ec2-54-163-172-76.compute-1.amazonaws.com/xmiles/login/";
 
@@ -68,6 +70,8 @@ public class UserFunctions {
     private static String invite_friends_tag = "invite_friends";
     private static String api_buscode_tag = "api_buscode";
     private static String upload_friends_tag = "upload_friends";
+    
+    private static String uber_token_tag = "uber_token";
     //------------------------------------
     // constructor
     public UserFunctions(){
@@ -110,6 +114,8 @@ public class UserFunctions {
         return json;
     }
 
+
+    
     public JSONObject gps_Notfound(String user_id, String name, String url, String buscode, String created_at){
 
         // Building Parameters
@@ -325,6 +331,21 @@ public class UserFunctions {
 		//Log.e(TAG, "Invite_Friends " + json.toString());
 		return json;
 	}
+    
+    public JSONObject uberToken(String id, String uber_code){
+       	
+        
+        // Building Parameters
+        List<NameValuePair> params = new ArrayList<NameValuePair>();
+        params.add(new BasicNameValuePair("tag", uber_token_tag));
+        
+        params.add(new BasicNameValuePair("user_id", id));
+        params.add(new BasicNameValuePair("uber_code", uber_code));
+        
+        JSONObject json = jsonParser.getJSONFromUrl(uberURL, params);
+
+        return json;
+    }        
 
     public JSONObject uploadFriends(String user_id, StringBuilder friends_id){
 

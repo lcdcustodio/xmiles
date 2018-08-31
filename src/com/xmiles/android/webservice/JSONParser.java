@@ -41,6 +41,8 @@ public class JSONParser {
             //httpPost.setEntity(new UrlEncodedFormEntity(params));
             httpPost.setEntity(new UrlEncodedFormEntity(params, "utf-8"));
             //-----
+            //String lala1 = httpPost.getURI().toString();
+            //String lala2 = httpPost.getRequestLine().toString();
             /*
             Log.i("FACEBOOK ", "httpPost.getURI(): " + httpPost.getURI().toString());
             Log.w("FACEBOOK", "httpPost.getRequestLine(): " + httpPost.getRequestLine().toString());

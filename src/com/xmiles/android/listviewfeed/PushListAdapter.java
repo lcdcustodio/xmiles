@@ -12,6 +12,7 @@ import com.xmiles.android.listviewfeed.FeedImageView;
 import com.xmiles.android.Likes;
 import com.xmiles.android.R;
 import com.xmiles.android.Relationship;
+import com.xmiles.android.Uber;
 import com.xmiles.android.listviewfeed.AppController;
 import com.xmiles.android.listviewfeed.FeedItem;
 import com.xmiles.android.scheduler.Invite_Friends_AsyncTask;
@@ -76,6 +77,7 @@ public class PushListAdapter extends BaseAdapter {
 	
 	
 	private static final String INVITE = "#convite_amigos";
+	private static final String UBERNOXMILES = "#ubernoxmiles";
 	
 	
 	private static final Integer KEY_ID_PROFILE  = 0;
@@ -309,7 +311,8 @@ public class PushListAdapter extends BaseAdapter {
 					//hashtag_1.setText(item.getHashtag_1());
 					vi1_hashtag_1ab.setText(feed_item.getHashtag_1().split(",")[0]);
 					
-					if (vi1_hashtag_1ab.getText().toString().equals(INVITE)){
+					if (vi1_hashtag_1ab.getText().toString().equals(INVITE) ||
+							vi1_hashtag_1ab.getText().toString().equals(UBERNOXMILES)){
 						vi1_hashtag_1ab.setVisibility(View.VISIBLE);	
 					} else{
 						vi1_hashtag_1ab.setVisibility(View.GONE);
@@ -330,8 +333,12 @@ public class PushListAdapter extends BaseAdapter {
 					        	
 					        } else {
 
-						
-								if (vi1_hashtag_1ab.getText().toString().equals(INVITE)){
+					        	if (vi1_hashtag_1ab.getText().toString().equals(UBERNOXMILES)){
+
+									Intent intent = new Intent(activity, Uber.class);
+									activity.startActivity(intent);
+					        		
+					        	}else if (vi1_hashtag_1ab.getText().toString().equals(INVITE)){
 	
 									//****************************************************************
 							  	    // Create the Facebook Object using the app id.

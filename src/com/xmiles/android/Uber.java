@@ -34,37 +34,12 @@ public class Uber extends FragmentActivity {
 		  actionBar.setTitle("#ubernoxmiles");
 
 
-		  //WebView webView = (WebView) findViewById(R.id.web);
 
-		  //---TEMP-----
-		  /*
-		  webView.setWebViewClient(new WebViewClient() {
-			    public boolean shouldOverrideUrlLoading(WebView view, String url){
-			        // do your handling codes here, which url is the requested url
-			        // probably you need to open that url rather than redirect:
-			        view.loadUrl(url);
-			        
-			        Toast.makeText(getApplicationContext(), url, Toast.LENGTH_LONG).show();
-			        
-			        return false; // then it is not handled by default action
-			   }
-			});
-			*/
-		  //---TEMP-----		  
-		  //webView.getSettings().setJavaScriptEnabled(true);
-		  //webView.loadUrl("https://login.uber.com/oauth/v2/authorize?client_id=qimwuhpaW1P1i-XuskE7Z0z7_5iM4Eb1&response_type=code");
-
-		  		  
-		  // set Fragmentclass Arguments
-		  //*
-		  Fragment fgmt_rnk = new Uber_Fragment();
-		  //Fragment fgmt_rnk = new NoInternetConnection_Fragment();
-
-
+		  Fragment fgmt_uber = new Uber_Fragment();
 		  
   	      android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
   	      android.support.v4.app.FragmentTransaction fragmentTransaction = fm.beginTransaction();
-  	      fragmentTransaction.replace(R.id.frame_container, fgmt_rnk);
+  	      fragmentTransaction.replace(R.id.frame_container, fgmt_uber);
   	      fragmentTransaction.commit();
   	      //*/
 
