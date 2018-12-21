@@ -20,33 +20,33 @@ public class UserFunctions {
     //----------------------------------
     private static final String TAG = "FACEBOOK";
 
-    private static String loginURL = "http://ec2-54-163-172-76.compute-1.amazonaws.com/xmiles/login/";
-    private static String registerURL = "http://ec2-54-163-172-76.compute-1.amazonaws.com/xmiles/login/";
+    private static String loginURL = "http://ec2-52-90-92-199.compute-1.amazonaws.com/xmiles/login/";
+    private static String registerURL = "http://ec2-52-90-92-199.compute-1.amazonaws.com/xmiles/login/";
     
-    private static String uberURL = "http://ec2-54-163-172-76.compute-1.amazonaws.com/xmiles/login/";
+    private static String uberURL = "http://ec2-52-90-92-199.compute-1.amazonaws.com/xmiles/login/";
     								
 
-    private static String buslineURL = "http://ec2-54-163-172-76.compute-1.amazonaws.com/xmiles/login/";
+    private static String buslineURL = "http://ec2-52-90-92-199.compute-1.amazonaws.com/xmiles/login/";
 
-    private static String user_routesURL = "http://ec2-54-163-172-76.compute-1.amazonaws.com/xmiles/login/";
-    private static String user_locationURL = "http://ec2-54-163-172-76.compute-1.amazonaws.com/xmiles/login/";
-    //private static String bus_gpsURL = "http://ec2-54-163-172-76.compute-1.amazonaws.com/xmiles/login/";
-    private static String bus_gpsURL = "http://ec2-54-163-172-76.compute-1.amazonaws.com/xmiles/busgps_php/";
-    private static String user_rewardsURL = "http://ec2-54-163-172-76.compute-1.amazonaws.com/xmiles/login/";
-    private static String gps_notfoundURL = "http://ec2-54-163-172-76.compute-1.amazonaws.com/xmiles/login/";
-    private static String user_rankingURL = "http://ec2-54-163-172-76.compute-1.amazonaws.com/xmiles/login/";
-    private static String news_feedURL = "http://ec2-54-163-172-76.compute-1.amazonaws.com/xmiles/login/";
-    private static String buscodeURL = "http://ec2-54-163-172-76.compute-1.amazonaws.com/xmiles/login/";
-    private static String newsfeed_inboxURL = "http://ec2-54-163-172-76.compute-1.amazonaws.com/xmiles/newsfeed_inbox_php/";
-    //private static String newsfeed_inboxURL = "http://ec2-54-163-172-76.compute-1.amazonaws.com/xmiles/login/";
-    private static String post_actionsURL = "http://ec2-54-163-172-76.compute-1.amazonaws.com/xmiles/login/";
-    private static String likes_inboxURL = "http://ec2-54-163-172-76.compute-1.amazonaws.com/xmiles/login/";
-    private static String comments_inboxURL = "http://ec2-54-163-172-76.compute-1.amazonaws.com/xmiles/login/";
+    private static String user_routesURL = "http://ec2-52-90-92-199.compute-1.amazonaws.com/xmiles/login/";
+    private static String user_locationURL = "http://ec2-52-90-92-199.compute-1.amazonaws.com/xmiles/login/";
+    //private static String bus_gpsURL = "http://ec2-52-90-92-199.compute-1.amazonaws.com/xmiles/login/";
+    private static String bus_gpsURL = "http://ec2-52-90-92-199.compute-1.amazonaws.com/xmiles/busgps_php/";
+    private static String user_rewardsURL = "http://ec2-52-90-92-199.compute-1.amazonaws.com/xmiles/login/";
+    private static String gps_notfoundURL = "http://ec2-52-90-92-199.compute-1.amazonaws.com/xmiles/login/";
+    private static String user_rankingURL = "http://ec2-52-90-92-199.compute-1.amazonaws.com/xmiles/login/";
+    private static String news_feedURL = "http://ec2-52-90-92-199.compute-1.amazonaws.com/xmiles/login/";
+    private static String buscodeURL = "http://ec2-52-90-92-199.compute-1.amazonaws.com/xmiles/login/";
+    private static String newsfeed_inboxURL = "http://ec2-52-90-92-199.compute-1.amazonaws.com/xmiles/newsfeed_inbox_php/";
+    //private static String newsfeed_inboxURL = "http://ec2-52-90-92-199.compute-1.amazonaws.com/xmiles/login/";
+    private static String post_actionsURL = "http://ec2-52-90-92-199.compute-1.amazonaws.com/xmiles/login/";
+    private static String likes_inboxURL = "http://ec2-52-90-92-199.compute-1.amazonaws.com/xmiles/login/";
+    private static String comments_inboxURL = "http://ec2-52-90-92-199.compute-1.amazonaws.com/xmiles/login/";
     //------------------------------------
-    private static String news_feed_by_hashtagURL = "http://ec2-54-163-172-76.compute-1.amazonaws.com/xmiles/login/";
-    private static String inviteFriendsURL = "http://ec2-54-163-172-76.compute-1.amazonaws.com/xmiles/login/";
-    private static String api_buscodeURL = "http://ec2-54-163-172-76.compute-1.amazonaws.com/xmiles/login/";
-    private static String upload_friendsURL = "http://ec2-54-163-172-76.compute-1.amazonaws.com/xmiles/login/";
+    private static String news_feed_by_hashtagURL = "http://ec2-52-90-92-199.compute-1.amazonaws.com/xmiles/login/";
+    private static String inviteFriendsURL = "http://ec2-52-90-92-199.compute-1.amazonaws.com/xmiles/login/";
+    private static String api_buscodeURL = "http://ec2-52-90-92-199.compute-1.amazonaws.com/xmiles/login/";
+    private static String upload_friendsURL = "http://ec2-52-90-92-199.compute-1.amazonaws.com/xmiles/login/";
     //------------------------------------
     private static String login_tag 		= "login";
     private static String register_tag 		= "register";
