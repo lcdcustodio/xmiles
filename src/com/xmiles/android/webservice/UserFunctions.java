@@ -136,6 +136,10 @@ public class UserFunctions {
         // Building Parameters
         List<NameValuePair> params = new ArrayList<NameValuePair>();
         params.add(new BasicNameValuePair("tag", user_ranking_tag));
+        //String ranking_tag  = "ranking";
+        //String ranking_tag  = "jogos";
+        //params.add(new BasicNameValuePair("tag", ranking_tag));
+        
         JSONObject json = jsonParser.getJSONFromUrl(user_rankingURL, params);
         // return json
         //Log.w(TAG, "getRanking " + json.toString());
