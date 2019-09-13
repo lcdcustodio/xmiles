@@ -1,4 +1,4 @@
-# README #
+# xmiles #
 
 This README would normally document whatever steps are necessary to get your application up and running.
 
@@ -6,7 +6,7 @@ This README would normally document whatever steps are necessary to get your app
 
 * Quick summary
 * Version
-* [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
+* [Learn Markdown](https://play.google.com/store/apps/details?id=com.xmiles.android)
 
 ### How do I get set up? ###
 
